@@ -1142,7 +1142,7 @@ export default function VisioObjectPalette({
                             title={object.description ? object.description : object.nameRu}
                           >
                             {/* Icon */}
-                            <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-50 group-hover:bg-white transition-colors">
+                            <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-50 group-hover:bg-white transition-colors" style={{minWidth: 32}}>
                               {object.icon}
                             </div>
                             {/* Label */}
