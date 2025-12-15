@@ -920,13 +920,13 @@ export default function Stage1CalculationParams({
                 <tbody>
                   {customSpeedLimits.map((limit) => (
                     <tr key={limit.id} className="bg-white">
-                      <td className="text-gray-600 bg-white border border-gray-400 p-4">
+                      <td className="text-gray-600 bg-white border border-gray-400" style={{paddingLeft: 12}}>
                         {limit.startCoord}
                       </td>
-                      <td className="text-gray-600 bg-white border border-gray-400 p-4">
+                      <td className="text-gray-600 bg-white border border-gray-400" style={{paddingLeft: 12}}>
                         {limit.endCoord}
                       </td>
-                      <td className="text-gray-600 bg-white border border-gray-400 p-4">
+                      <td className="text-gray-600 bg-white border border-gray-400" style={{paddingLeft: 12}}>
                         {limit.allowedSpeed}
                       </td>
                       <td className="p-2 bg-white border border-gray-400" style={{textAlign: 'center'}}>
@@ -946,8 +946,8 @@ export default function Stage1CalculationParams({
                     </tr>
                   ))}
                   {/* Add new row */}
-                  <tr className="bg-gray-50" style={{paddingLeft: 4}}>
-                    <td className="bg-white border border-gray-400 pl-4">
+                  <tr className="bg-gray-50" >
+                    <td className="bg-white border border-gray-400" style={{paddingLeft: 4}}>
                       <Input
                         type="number"
                         min="0"
