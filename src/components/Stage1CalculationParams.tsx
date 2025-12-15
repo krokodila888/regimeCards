@@ -727,49 +727,6 @@ export default function Stage1CalculationParams({
             </span>
           </div>
         </div>
-
-        {/* Date range */}
-        {/*<div className="relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 z-10">
-            <CalendarIcon className="w-4 h-4" />
-          </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left bg-white border-gray-400 text-gray-600 hover:bg-gray-100 pl-10"
-                title="с ... по"
-              >
-                {dateRange.from && dateRange.to
-                  ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
-                  : "Выбрать дату/период"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-auto p-0"
-              align="start"
-            >
-              <Calendar
-                mode="range"
-                selected={{
-                  from: dateRange.from || undefined,
-                  to: dateRange.to || undefined,
-                }}
-                onSelect={(range) => {
-                  onUpdateWorkflow({
-                    dateRange: {
-                      from: range?.from || null,
-                      to: range?.to || null,
-                    },
-                  });
-                }}
-                numberOfMonths={1}
-              />
-            </PopoverContent>
-          </Popover>
-              </div>*/}
-
-        {/* Speed Limits */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-sm text-gray-700">
@@ -802,8 +759,8 @@ export default function Stage1CalculationParams({
         open={wagonGroupsModalOpen}
         onOpenChange={setWagonGroupsModalOpen}
       >
-        <DialogContent className="max-w-[65vw] max-h-[75vh] w-[65vw]">
-          <DialogHeader>
+        <DialogContent className="max-w-[65vw] max-h-[75vh] w-[65vw]" >
+          <DialogHeader >
             <DialogTitle>Группы вагонов</DialogTitle>
             <DialogDescription>
               Добавьте или удалите группы вагонов для состава
@@ -822,7 +779,7 @@ export default function Stage1CalculationParams({
                     <th className="text-left p-4 text-gray-500 bg-white border border-gray-400">
                       Количество
                     </th>
-                    <th className="text-left p-4 text-gray-500 border">
+                    <th className="text-left p-4 text-gray-500 bg-white border border-gray-400">
                       Масса вагона, брутто, т.
                     </th>
                     <th className="text-left p-4 text-gray-500 bg-white border border-gray-400">
@@ -833,16 +790,16 @@ export default function Stage1CalculationParams({
                 <tbody>
                   {wagonGroups.map((group) => (
                     <tr key={group.id} className="bg-white">
-                      <td className="p-4 text-gray-600 bg-white border border-gray-400">
+                      <td className="pl-4 text-gray-600 bg-white border border-gray-400 border" style={{paddingLeft: 12}}>
                         {group.wagonType}
                       </td>
-                      <td className="p-4 text-gray-600 bg-white border-gray-400 border">
+                      <td className="pl-4 text-gray-600 bg-white border-gray-400 border" style={{paddingLeft: 12}}>
                         {group.quantity}
                       </td>
-                      <td className="p-4 text-gray-600 bg-white border-gray-400 border">
+                      <td className="pl-4 text-gray-600 bg-white border-gray-400 border" style={{paddingLeft: 12}}>
                         {group.mass}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 border-gray-400 border" style={{textAlign: 'center'}}>
                         <Button
                           size="sm"
                           variant="ghost"
@@ -859,7 +816,7 @@ export default function Stage1CalculationParams({
                   ))}
                   {/* Add new row */}
                   <tr className="bg-gray-50">
-                    <td className="p-4 bg-white">
+                    <td className="bg-white border border-gray-400">
                       <Select
                         value={newWagonType}
                         onValueChange={setNewWagonType}
@@ -879,7 +836,7 @@ export default function Stage1CalculationParams({
                         </SelectContent>
                       </Select>
                     </td>
-                    <td className="p-4">
+                    <td className="bg-white border border-gray-400" style={{paddingLeft: 4}}>
                       <Input
                         type="number"
                         min="1"
@@ -889,10 +846,11 @@ export default function Stage1CalculationParams({
                             parseInt(e.target.value) || 1,
                           )
                         }
-                        className="h-9"
+                        className="h-9 bg-white"
+                        style={{borderRadius: 0, boxShadow: 'none', border: 'none'}}
                       />
                     </td>
-                    <td className="p-4">
+                    <td className="bg-white border border-gray-400" style={{paddingLeft: 4}}>
                       <Input
                         type="number"
                         min="0"
@@ -902,16 +860,18 @@ export default function Stage1CalculationParams({
                             parseFloat(e.target.value) || 0,
                           )
                         }
-                        className="h-9"
+                        className="h-9 bg-white"
+                        style={{borderRadius: 0, boxShadow: 'none', border: 'none'}}
                       />
                     </td>
-                    <td className="p-4">
+                    <td className="bg-white border border-gray-400 p-1" style={{textAlign: 'center'}}>
                       <Button
                         size="sm"
                         onClick={handleAddWagonGroup}
                         disabled={!newWagonType}
                         title="Добавить"
                         className="h-9 bg-blue-600 hover:bg-blue-700"
+
                       >
                         <Plus className="w-4 h-4" />
                       </Button>
@@ -929,9 +889,9 @@ export default function Stage1CalculationParams({
         open={speedLimitsModalOpen}
         onOpenChange={setSpeedLimitsModalOpen}
       >
-        <DialogContent className="max-w-[75vw] max-h-[75vh] w-[75vw] h-[75vh]">
+        <DialogContent className="max-w-[65vw] max-h-[75vh] w-[65vw]" >
           <DialogHeader>
-            <DialogTitle>Ограничения скорости</DialogTitle>
+            <DialogTitle style={{color: '#374151 !important'}} className="text-grey-700">Ограничения скорости</DialogTitle>
             <DialogDescription>
               Добавьте или удалите ограничения скорости для
               участка
@@ -943,16 +903,16 @@ export default function Stage1CalculationParams({
               <table className="w-full text-sm">
                 <thead className="bg-white ">
                   <tr>
-                    <th className="text-left p-4 text-gray-600 border-gray-400">
+                    <th className="text-left p-4 text-gray-600 bg-white border border-gray-400">
                       Кордината начала ограничения
                     </th>
-                    <th className="text-left p-4 text-gray-600 border-gray-400">
+                    <th className="text-left p-4 text-gray-600 bg-white border border-gray-400">
                       Кордината конца ограничения
                     </th>
-                    <th className="text-left p-4 text-gray-600 border-gray-400">
+                    <th className="text-left p-4 text-gray-600 bg-white border border-gray-400">
                       Допустимое значение скорости, км/ч
                     </th>
-                    <th className="text-left p-4 text-gray-600 border-gray-400">
+                    <th className="text-left p-4 text-gray-600 bg-white border border-gray-400">
                       Действие
                     </th>
                   </tr>
@@ -960,16 +920,16 @@ export default function Stage1CalculationParams({
                 <tbody>
                   {customSpeedLimits.map((limit) => (
                     <tr key={limit.id} className="bg-white">
-                      <td className="p-4 text-gray-600 border-gray-400">
+                      <td className="text-gray-600 bg-white border border-gray-400 p-4">
                         {limit.startCoord}
                       </td>
-                      <td className="p-4 text-gray-600 border-gray-400">
+                      <td className="text-gray-600 bg-white border border-gray-400 p-4">
                         {limit.endCoord}
                       </td>
-                      <td className="p-4 text-gray-600 border-gray-400">
+                      <td className="text-gray-600 bg-white border border-gray-400 p-4">
                         {limit.allowedSpeed}
                       </td>
-                      <td className="p-4 border-gray-400">
+                      <td className="p-2 bg-white border border-gray-400" style={{textAlign: 'center'}}>
                         <Button
                           size="sm"
                           title="Удалить"
@@ -978,6 +938,7 @@ export default function Stage1CalculationParams({
                             handleRemoveSpeedLimit(limit.id)
                           }
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          style={{textAlign: 'center'}}
                         >
                           <X className="w-4 h-4" />
                         </Button>
@@ -985,8 +946,8 @@ export default function Stage1CalculationParams({
                     </tr>
                   ))}
                   {/* Add new row */}
-                  <tr className="bg-gray-50">
-                    <td className="p-4 bg-white border-gray-400 ">
+                  <tr className="bg-gray-50" style={{paddingLeft: 4}}>
+                    <td className="bg-white border border-gray-400 pl-4">
                       <Input
                         type="number"
                         min="0"
@@ -996,10 +957,11 @@ export default function Stage1CalculationParams({
                             parseFloat(e.target.value) || 0,
                           )
                         }
-                        className="h-9 bg-white  "
+                        className="h-9 bg-white pl-4 mr-4"
+                        style={{borderRadius: 0, boxShadow: 'none', border: 'none'}}
                       />
                     </td>
-                    <td className="p-4">
+                    <td className="bg-white border border-gray-400" style={{paddingLeft: 4}}>
                       <Input
                         type="number"
                         min="0"
@@ -1009,10 +971,11 @@ export default function Stage1CalculationParams({
                             parseFloat(e.target.value) || 0,
                           )
                         }
-                        className="h-9"
+                        className="h-9 bg-white pl-4 mr-4"
+                        style={{borderRadius: 0, boxShadow: 'none', border: 'none'}}
                       />
                     </td>
-                    <td className="p-4 bg-white border-gray-400 ">
+                    <td className="bg-white border border-gray-400" style={{paddingLeft: 4}}>
                       <Input
                         type="number"
                         min="0"
@@ -1022,10 +985,11 @@ export default function Stage1CalculationParams({
                             parseFloat(e.target.value) || 0,
                           )
                         }
-                        className="h-9 bg-white "
+                        className="h-9 bg-white pl-4 mr-4"
+                        style={{borderRadius: 0, boxShadow: 'none', border: 'none'}}
                       />
                     </td>
-                    <td className="p-4">
+                    <td className="p-2 bg-white border border-gray-400" style={{textAlign: 'center'}}>
                       <Button
                         size="sm"
                         onClick={handleAddSpeedLimit}
