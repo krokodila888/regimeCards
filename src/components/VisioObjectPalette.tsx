@@ -1146,7 +1146,7 @@ export default function VisioObjectPalette({
                               {object.icon}
                             </div>
                             {/* Label */}
-                            <span className="text-xs text-center text-gray-700 group-hover:text-blue-700 leading-tight line-clamp-2">
+                            <span className="text-xs text-gray-700 group-hover:text-blue-700 leading-tight line-clamp-2 pl-2">
                               {object.nameRu}
                             </span>
                           </div>
