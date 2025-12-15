@@ -184,7 +184,7 @@ const staticObjectCategories: ObjectCategory[] = [
         category: "control-modes",
         description: "Служебное пневматическое торможение",
       },
-      {
+      /*{
         id: "regenerative-braking",
         name: "Regenerative Braking",
         nameRu: "Рекуперативное торможение",
@@ -209,6 +209,18 @@ const staticObjectCategories: ObjectCategory[] = [
         ),
         category: "control-modes",
         description: "Электрическое торможение на реостаты",
+      },*/
+      {
+        id: "electric-braking",
+        name: "Electric Braking",
+        nameRu: "Электрическое торможение",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-500">
+            <path d="M2 10 L4 7 L6 13 L8 7 L10 13 L12 7 L14 13 L16 7 L18 10" fill="none" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
+        category: "control-modes",
+        description: "Электрическое торможение",
       },
       {
         id: "emergency-braking",
@@ -383,18 +395,172 @@ const staticObjectCategories: ObjectCategory[] = [
         description: "Пикетная отметка (100 м)",
       },
       {
-        id: "level-crossing",
-        name: "Level Crossing",
-        nameRu: "Переезд",
+        id: "level-crossing-guarded",
+        name: "Guarded Level Crossing",
+        nameRu: "Переезд с ограждением",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
+            {/* Крест - символ переезда */}
             <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" strokeWidth="2" />
             <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" strokeWidth="2" />
-            <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1" />
+            {/* Круг - ограждение */}
+            <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            {/* Шлагбаум */}
+            <line x1="3" y1="18" x2="17" y2="18" stroke="currentColor" strokeWidth="2" />
+            <line x1="4" y1="17" x2="4" y2="19" stroke="currentColor" strokeWidth="1" />
+            <line x1="16" y1="17" x2="16" y2="19" stroke="currentColor" strokeWidth="1" />
+          </svg>
+        ),
+        category: "track-objects", // Изменили с "structures"
+        description: "Переезд с ограждением",
+      },
+      {
+        id: "level-crossing-unguarded",
+        name: "Unguarded Level Crossing",
+        nameRu: "Переезд без ограждения",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-orange-600">
+            {/* Крест - символ переезда */}
+            <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" strokeWidth="2" />
+            {/* Треугольник (предупреждающий знак) */}
+            <path d="M10 3 L15 10 L5 10 Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            {/* Точки внутри треугольника */}
+            <circle cx="10" cy="7" r="0.8" fill="currentColor" />
+            <circle cx="8" cy="8.5" r="0.8" fill="currentColor" />
+            <circle cx="12" cy="8.5" r="0.8" fill="currentColor" />
+          </svg>
+        ),
+        category: "track-objects", // Изменили с "structures"
+        description: "Неохраняемый железнодорожный переезд",
+      },
+      {
+        id: "platform",
+        name: "Platform",
+        nameRu: "Платформа",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-700">
+            {/* Основание платформы */}
+            <rect x="3" y="10" width="14" height="4" fill="currentColor" />
+            {/* Навес/крыша */}
+            <line x1="4" y1="8" x2="16" y2="8" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="4" y1="8" x2="4" y2="10" stroke="currentColor" strokeWidth="1" />
+            <line x1="16" y1="8" x2="16" y2="10" stroke="currentColor" strokeWidth="1" />
+            {/* Обозначение */}
+            <text x="10" y="16" fontSize="4" fill="white" textAnchor="middle" fontWeight="bold">
+              ПЛ
+            </text>
+          </svg>
+        ),
+        category: "track-objects",
+        description: "Пассажирская платформа",
+      },
+      {
+        id: "ktsm",
+        name: "KTSM",
+        nameRu: "КТСМ",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
+            {/* Здание/пост */}
+            <rect x="6" y="6" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            {/* Антенна/вышка */}
+            <line x1="10" y1="2" x2="10" y2="6" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="8" y1="3" x2="12" y2="3" stroke="currentColor" strokeWidth="1" />
+            {/* Аббревиатура */}
+            <text x="10" y="13" fontSize="3.5" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              КТСМ
+            </text>
+          </svg>
+        ),
+        category: "track-objects",
+        description: "Контрольно-телеграфная станция магистральной связи",
+      },
+      {
+        id: "uksps",
+        name: "UKSPS",
+        nameRu: "УКСПС",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-700">
+            {/* Здание с антенной */}
+            <rect x="7" y="8" width="6" height="6" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            {/* Антенна (три линии) */}
+            <line x1="10" y1="4" x2="10" y2="8" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="8" y1="5" x2="12" y2="5" stroke="currentColor" strokeWidth="1" />
+            <line x1="9" y1="6" x2="11" y2="6" stroke="currentColor" strokeWidth="0.8" />
+            {/* Аббревиатура */}
+            <text x="10" y="15" fontSize="3" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              УКСПС
+            </text>
+          </svg>
+        ),
+        category: "track-objects",
+        description: "Устройство контроля схода подвижного состава",
+      },
+      {
+        id: "pedestrian-bridge",
+        name: "Pedestrian Bridge",
+        nameRu: "Пешеходный мост",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-800">
+            {/* Опоры моста */}
+            <line x1="6" y1="12" x2="6" y2="16" stroke="currentColor" strokeWidth="2" />
+            <line x1="14" y1="12" x2="14" y2="16" stroke="currentColor" strokeWidth="2" />
+            {/* Настил моста */}
+            <line x1="4" y1="12" x2="16" y2="12" stroke="currentColor" strokeWidth="3" />
+            {/* Перила */}
+            <line x1="4" y1="9" x2="16" y2="9" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="5" y1="9" x2="5" y2="12" stroke="currentColor" strokeWidth="1" />
+            <line x1="15" y1="9" x2="15" y2="12" stroke="currentColor" strokeWidth="1" />
+            {/* Человечек */}
+            <circle cx="10" cy="6" r="1.5" fill="currentColor" />
+            <line x1="10" y1="7.5" x2="10" y2="10" stroke="currentColor" strokeWidth="1.5" />
           </svg>
         ),
         category: "structures",
-        description: "Железнодорожный переезд",
+        description: "Пешеходный мост через пути",
+      },
+      {
+        id: "train-join-split",
+        name: "Train Join/Split Point",
+        nameRu: "Место соединения-разъединения поездов (МСРП)",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-purple-600">
+            {/* Стрелка разветвления */}
+            <line x1="4" y1="10" x2="10" y2="5" stroke="currentColor" strokeWidth="2" />
+            <line x1="4" y1="10" x2="10" y2="15" stroke="currentColor" strokeWidth="2" />
+            {/* Поезда */}
+            <rect x="10" y="3" width="6" height="4" rx="1" fill="currentColor" />
+            <rect x="10" y="13" width="6" height="4" rx="1" fill="currentColor" />
+            {/* Обозначение */}
+            <text x="5" y="18" fontSize="4" fill="currentColor" textAnchor="middle">
+              МСРП
+            </text>
+          </svg>
+        ),
+        category: "track-objects",
+        description: "Место для соединения или разъединения составов",
+      },
+      {
+        id: "braking-start",
+        name: "Braking Start",
+        nameRu: "Начало торможения (НТ)",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
+            {/* Стрелка направления торможения */}
+            <line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" strokeWidth="2" />
+            {/* Штриховка/тормозной путь */}
+            <line x1="8" y1="7" x2="10" y2="13" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="12" y1="7" x2="14" y2="13" stroke="currentColor" strokeWidth="1.5" />
+            {/* Обозначение НТ */}
+            <text x="10" y="18" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              НТ
+            </text>
+            {/* Треугольник-указатель */}
+            <path d="M16 10 L13 8 L13 12 Z" fill="currentColor" />
+          </svg>
+        ),
+        category: "track-objects",
+        description: "Точка начала торможения перед станцией или сигналом",
       },
     ],
   },
@@ -441,6 +607,54 @@ const staticObjectCategories: ObjectCategory[] = [
         ),
         category: "structures",
         description: "Мост",
+      },
+      {
+        id: "overpass",
+        name: "Overpass",
+        nameRu: "Путепровод",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-700">
+            {/* Дорога над путями */}
+            <line x1="3" y1="6" x2="17" y2="6" stroke="currentColor" strokeWidth="2.5" />
+            {/* Опоры путепровода */}
+            <line x1="6" y1="6" x2="6" y2="16" stroke="currentColor" strokeWidth="2" />
+            <line x1="14" y1="6" x2="14" y2="16" stroke="currentColor" strokeWidth="2" />
+            {/* Железнодорожные пути под путепроводом */}
+            <line x1="3" y1="14" x2="17" y2="14" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="3" y1="16" x2="17" y2="16" stroke="currentColor" strokeWidth="1.5" />
+            {/* Штриховка тени/подмостового пространства */}
+            <line x1="7" y1="12" x2="13" y2="12" stroke="currentColor" strokeWidth="1" strokeDasharray="1,1" />
+          </svg>
+        ),
+        category: "structures",
+        description: "Путепровод (дорога над железнодорожными путями)",
+      },
+      {
+        id: "gallery",
+        name: "Gallery",
+        nameRu: "Галерея",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-amber-800">
+            {/* Крыша галереи */}
+            <path d="M2 5 L18 5 Q 18 2, 15 2 Q 10 0, 5 2 Q 2 2, 2 5" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="1.5" />
+            {/* Стены галереи */}
+            <line x1="2" y1="5" x2="2" y2="12" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="18" y1="5" x2="18" y2="12" stroke="currentColor" strokeWidth="1.5" />
+            {/* Основание */}
+            <line x1="2" y1="12" x2="18" y2="12" stroke="currentColor" strokeWidth="2" />
+            {/* Железнодорожный путь внутри */}
+            <line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" strokeWidth="1" />
+            <line x1="4" y1="11" x2="16" y2="11" stroke="currentColor" strokeWidth="1" />
+            {/* Окна/отверстия в стенах */}
+            <rect x="3" y="6" width="2" height="2" fill="none" stroke="currentColor" strokeWidth="0.8" />
+            <rect x="15" y="6" width="2" height="2" fill="none" stroke="currentColor" strokeWidth="0.8" />
+          </svg>
+        ),
+        category: "structures",
+        description: "Галерея (закрытое сооружение для защиты пути)",
       },
     ],
   },
@@ -540,7 +754,95 @@ const staticObjectCategories: ObjectCategory[] = [
         category: "signals",
         description: "Проходной светофор автоблокировки",
       },
-      
+          {
+            id: "route-signal",
+            name: "Route Signal",
+            nameRu: "Маршрутный светофор",
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
+                {/* Основание (мачта) */}
+                <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
+                {/* Прямоугольник щита (как у входного/выходного) */}
+                <rect x="6" y="2" width="8" height="6" rx="1" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                {/* Синий круг с белой стрелкой внутри - маршрутное указание */}
+                <circle cx="10" cy="5" r="2" fill="currentColor" />
+                <path 
+                  d="M8 5 L10 7 L12 5 L10 4 Z" 
+                  fill="white" 
+                  stroke="white" 
+                  strokeWidth="0.5"
+                />
+              </svg>
+            ),
+            category: "signals",
+            description: "Маршрутный светофор для указания направления маршрута",
+          },
+          {
+            id: "barrier-signal",
+            name: "Barrier Signal",
+            nameRu: "Заградительный светофор",
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-700">
+                {/* Основание */}
+                <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
+                {/* Квадратный щит (отличие от прямоугольного) */}
+                <rect x="7" y="2" width="6" height="6" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                {/* Красный крест - знак заграждения */}
+                <line x1="8" y1="4" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5" />
+                <line x1="12" y1="4" x2="8" y2="8" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            ),
+            category: "signals",
+            description: "Заградительный светофор для полной остановки движения",
+          },
+          {
+            id: "repeater-signal",
+            name: "Repeater Signal",
+            nameRu: "Повторительный светофор",
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 20 20" className="text-yellow-600">
+                {/* Основание */}
+                <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
+                {/* Маленький прямоугольник (меньше основного) */}
+                <rect x="7" y="2.5" width="6" height="5" rx="0.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                {/* Треугольник - символ повторения */}
+                <path d="M8 5 L12 5 L10 7 Z" fill="currentColor" />
+              </svg>
+            ),
+            category: "signals",
+            description: "Повторительный светофор для дублирования показаний основного",
+          },
+          {
+            id: "conditional-signal",
+            name: "Conditional Signal",
+            nameRu: "Условно-разрешающий сигнал",
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-700">
+                {/* Основание */}
+                <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
+                {/* Ромбовидная форма - отличие для условных сигналов */}
+                <path 
+                  d="M10 2 L13 5 L10 8 L7 5 Z" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="1.5" 
+                />
+                {/* Белая буква "У" внутри (Условно) */}
+                <text 
+                  x="10" 
+                  y="6" 
+                  textAnchor="middle" 
+                  fontSize="4" 
+                  fontWeight="bold" 
+                fill="white"
+              >
+                У
+              </text>
+            </svg>
+          ),
+        category: "signals",
+        description: "Сигнал с условно-разрешающим значением",
+      },
     ],
   },
 ];
@@ -837,7 +1139,7 @@ export default function VisioObjectPalette({
                                 ? "border-gray-200 bg-gray-50 cursor-default opacity-60"
                                 : "border-gray-200 hover:border-blue-400 hover:bg-blue-50 cursor-move"
                             }`}
-                            title={object.description}
+                            title={object.description ? object.description : object.nameRu}
                           >
                             {/* Icon */}
                             <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-50 group-hover:bg-white transition-colors">
