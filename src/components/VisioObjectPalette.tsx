@@ -78,7 +78,7 @@ const staticObjectCategories: ObjectCategory[] = [
       {
         id: "train-movement-curve",
         name: "Train Movement Curve",
-        nameRu: "Кривая хода поезда V(S)",
+        nameRu: "Кривая скорости",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
             <path
@@ -105,7 +105,7 @@ const staticObjectCategories: ObjectCategory[] = [
           </svg>
         ),
         category: "speed-curve",
-        description: "Постоянное ограничение скорости на участке",
+        description: "Ограничение скорости (постоянное)",
       },
       {
         id: "speed-limit-temporary",
@@ -125,7 +125,7 @@ const staticObjectCategories: ObjectCategory[] = [
       {
         id: "permitted-speed",
         name: "Permitted Speed Line",
-        nameRu: "Допускаемая скорость",
+        nameRu: "Максимально допустимая скорость",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-600">
             <line x1="2" y1="6" x2="18" y2="6" stroke="currentColor" strokeWidth="2" />
@@ -145,7 +145,7 @@ const staticObjectCategories: ObjectCategory[] = [
   {
     id: "control-modes",
     name: "Control Modes",
-    nameRu: "Режимы управления",
+    nameRu: "Режимы управления поездом",
     icon: <Power className="size-4" />,
     objects: [
       {
@@ -244,10 +244,10 @@ const staticObjectCategories: ObjectCategory[] = [
   // ПРОДОЛЬНЫЙ ПРОФИЛЬ ПУТИ
   // Track longitudinal profile elements
   // -------------------------------------------------------------------------
-  {
+  /*{
     id: "track-profile",
     name: "Track Profile",
-    nameRu: "Продольный профиль пути",
+    nameRu: "План и профиль пути",
     icon: <TrendingUp className="size-4" />,
     objects: [
       {
@@ -309,7 +309,7 @@ const staticObjectCategories: ObjectCategory[] = [
         description: "Точка изменения уклона",
       },
     ],
-  },
+  },*/
 
   // -------------------------------------------------------------------------
   // РАЗДЕЛЬНЫЕ ПУНКТЫ И ПУТЕВЫЕ ОБЪЕКТЫ
@@ -458,7 +458,7 @@ const staticObjectCategories: ObjectCategory[] = [
       {
         id: "ktsm",
         name: "KTSM",
-        nameRu: "КТСМ",
+        nameRu: "КТСМ, ПОНАБ",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
             {/* Здание/пост */}
@@ -670,21 +670,23 @@ const staticObjectCategories: ObjectCategory[] = [
     icon: <Zap className="size-4" />,
     objects: [
       {
-        id: "neutral-section",
-        name: "Neutral Section",
+        id: "neutral-insert",
+        name: "Neutral Insert",
         nameRu: "Нейтральная вставка",
         icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-yellow-600">
-            <line x1="2" y1="10" x2="7" y2="10" stroke="currentColor" strokeWidth="2" />
-            <rect x="7" y="7" width="6" height="6" fill="none" stroke="currentColor" strokeWidth="2" />
-            <line x1="13" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="12" fontSize="5" fill="currentColor" textAnchor="middle">
-              Н
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-700">
+            {/* Прямоугольник знака */}
+            <rect x="6" y="4" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            {/* Буквы НВ (вместо NI) */}
+            <text x="10" y="10" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              НВ
             </text>
+            {/* Дополнительные элементы (если нужны) */}
+            <line x1="5" y1="16" x2="15" y2="16" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2,2" />
           </svg>
         ),
-        category: "power-supply",
-        description: "Нейтральная вставка (секционирование)",
+        category: "electrical",
+        description: "Нейтральная вставка (участок без напряжения)",
       },
       {
         id: "power-section-boundary",
@@ -712,6 +714,25 @@ const staticObjectCategories: ObjectCategory[] = [
     nameRu: "Сигналы",
     icon: <AlertTriangle className="size-4" />,
     objects: [
+          {
+            id: "auto-brake-test",
+            name: "Auto Brake Test Point",
+            nameRu: "Место проверки автотормозов",
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 20 20" className="text-black">
+                {/* Квадрат */}
+                <rect x="5" y="4" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                {/* Буквы НТ внутри квадрата */}
+                <text x="10" y="10.5" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
+                  НТ
+                </text>
+                {/* Отрезок вниз от середины нижней границы */}
+                <line x1="10" y1="14" x2="10" y2="17" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            ),
+            category: "signals",
+            description: "Место обязательной проверки автотормозов перед движением",
+          },
       {
         id: "entry-signal",
         name: "Entry Signal",
@@ -929,7 +950,7 @@ export default function VisioObjectPalette({
   const tractionModesCategory: ObjectCategory = {
     id: "traction-modes",
     name: "Traction Modes",
-    nameRu: selectedLocomotive ? `Режимы тяги (${selectedLocomotive.name})` : "Режимы тяги",
+    nameRu: selectedLocomotive ? `Локомотив (${selectedLocomotive.name})` : "Локомотив",
     icon: <Gauge className="size-4" />,
     objects: generateTractionModeObjects(selectedLocomotive),
   };
