@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ master ] # Или 'master' — имя вашей основной ветки
+    branches: [ master ] # Убедитесь, что ветка называется master
 
 # Разрешаем запись в репозиторий и создание страниц
 permissions:
@@ -10,8 +10,17 @@ permissions:
   pages: write
   id-token: write
 
+# 👇 ДОБАВЬТЕ ЭТИ СТРОКИ (конфигурация для всего workflow):
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
+    # 👇 ДОБАВЬТЕ ЭТОТ БЛОК environment:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }} # Опционально, но полезно для логирования
     runs-on: ubuntu-latest
     steps:
       # 1. Загружаем код репозитория
@@ -37,9 +46,10 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './build' # Папка сборки Vite по умолчанию
+          # Укажите путь к папке со сборкой (у вас это build)
+          path: './build'
 
       # 5. Деплоим на GitHub Pages
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deployment # 👈 Этот ID нужен для получения URL (см. выше в environment)
         uses: actions/deploy-pages@v4
