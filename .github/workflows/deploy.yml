@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ maыеук ] # Или 'master' — имя вашей основной ветки
+    branches: [ master ] # Или 'master' — имя вашей основной ветки
 
 # Разрешаем запись в репозиторий и создание страниц
 permissions:
