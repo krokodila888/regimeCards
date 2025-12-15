@@ -305,7 +305,7 @@ export default function CanvasScreenshot({
                 }
               />
               <Label htmlFor="gradientCurve" className="text-sm cursor-pointer">
-                Кривая уклонов (красная верхняя)
+                Динамика реализованная 
               </Label>
             </div>
 
@@ -321,7 +321,7 @@ export default function CanvasScreenshot({
                 }
               />
               <Label htmlFor="profileCurve" className="text-sm cursor-pointer">
-                Профиль пути (синяя кривая)
+                Профиль пути
               </Label>
             </div>
 
@@ -337,7 +337,7 @@ export default function CanvasScreenshot({
                 }
               />
               <Label htmlFor="limitCurve" className="text-sm cursor-pointer">
-                Ограничения скорости (красная)
+                Ограничения скорости
               </Label>
             </div>
 
@@ -353,7 +353,7 @@ export default function CanvasScreenshot({
                 }
               />
               <Label htmlFor="speedCurve" className="text-sm cursor-pointer">
-                Кривая скорости (зелёная)
+                Кривая скорости
               </Label>
             </div>
 
@@ -369,23 +369,7 @@ export default function CanvasScreenshot({
                 }
               />
               <Label htmlFor="regimeMarkers" className="text-sm cursor-pointer">
-                Маркеры режимов тяги
-              </Label>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Checkbox
-                id="stationMarkers"
-                checked={visibleLayers.stationMarkers}
-                onCheckedChange={(checked) =>
-                  setVisibleLayers({
-                    ...visibleLayers,
-                    stationMarkers: !!checked,
-                  })
-                }
-              />
-              <Label htmlFor="stationMarkers" className="text-sm cursor-pointer">
-                Подписи станций
+                Ленты режимов тяги
               </Label>
             </div>
           </div>

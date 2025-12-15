@@ -177,7 +177,7 @@ const staticObjectCategories: ObjectCategory[] = [
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-orange-600">
             <rect x="3" y="6" width="14" height="8" rx="1" fill="none" stroke="currentColor" strokeWidth="2" />
             <text x="10" y="13" fontSize="7" fill="currentColor" textAnchor="middle" fontWeight="bold">
-              ПТ
+              Т
             </text>
           </svg>
         ),
@@ -296,21 +296,6 @@ const staticObjectCategories: ObjectCategory[] = [
         category: "track-profile",
         description: "Точка изменения уклона",
       },
-      {
-        id: "curve-section",
-        name: "Curve Section",
-        nameRu: "Кривая",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-purple-600">
-            <path d="M2 16 Q 10 2, 18 16" fill="none" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="12" fontSize="5" fill="currentColor" textAnchor="middle">
-              R
-            </text>
-          </svg>
-        ),
-        category: "track-profile",
-        description: "Участок кривой (с указанием радиуса)",
-      },
     ],
   },
 
@@ -397,6 +382,20 @@ const staticObjectCategories: ObjectCategory[] = [
         category: "track-objects",
         description: "Пикетная отметка (100 м)",
       },
+      {
+        id: "level-crossing",
+        name: "Level Crossing",
+        nameRu: "Переезд",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
+            <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" strokeWidth="2" />
+            <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1" />
+          </svg>
+        ),
+        category: "structures",
+        description: "Железнодорожный переезд",
+      },
     ],
   },
 
@@ -443,35 +442,6 @@ const staticObjectCategories: ObjectCategory[] = [
         category: "structures",
         description: "Мост",
       },
-      {
-        id: "viaduct",
-        name: "Viaduct",
-        nameRu: "Виадук",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-amber-600">
-            <line x1="2" y1="6" x2="18" y2="6" stroke="currentColor" strokeWidth="2" />
-            <line x1="4" y1="6" x2="4" y2="18" stroke="currentColor" strokeWidth="1.5" />
-            <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="1.5" />
-            <line x1="16" y1="6" x2="16" y2="18" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-        ),
-        category: "structures",
-        description: "Виадук (эстакада)",
-      },
-      {
-        id: "level-crossing",
-        name: "Level Crossing",
-        nameRu: "Переезд",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
-            <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" strokeWidth="2" />
-            <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" strokeWidth="2" />
-            <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1" />
-          </svg>
-        ),
-        category: "structures",
-        description: "Железнодорожный переезд",
-      },
     ],
   },
 
@@ -505,7 +475,7 @@ const staticObjectCategories: ObjectCategory[] = [
       {
         id: "power-section-boundary",
         name: "Power Section Boundary",
-        nameRu: "Граница секции питания",
+        nameRu: "Токораздел",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-orange-500">
             <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="2" strokeDasharray="3,2" />
@@ -513,23 +483,7 @@ const staticObjectCategories: ObjectCategory[] = [
           </svg>
         ),
         category: "power-supply",
-        description: "Граница зоны питания тяговой подстанции",
-      },
-      {
-        id: "traction-substation",
-        name: "Traction Substation",
-        nameRu: "Тяговая подстанция",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
-            <rect x="4" y="6" width="12" height="10" fill="none" stroke="currentColor" strokeWidth="2" />
-            <line x1="10" y1="2" x2="10" y2="6" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="13" fontSize="5" fill="currentColor" textAnchor="middle">
-              ТП
-            </text>
-          </svg>
-        ),
-        category: "power-supply",
-        description: "Тяговая подстанция",
+        description: "Токораздел",
       },
     ],
   },
@@ -586,21 +540,7 @@ const staticObjectCategories: ObjectCategory[] = [
         category: "signals",
         description: "Проходной светофор автоблокировки",
       },
-      {
-        id: "speed-signal",
-        name: "Speed Signal",
-        nameRu: "Сигнальный знак скорости",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
-            <rect x="4" y="4" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="13" fontSize="8" fill="currentColor" textAnchor="middle" fontWeight="bold">
-              V
-            </text>
-          </svg>
-        ),
-        category: "signals",
-        description: "Знак ограничения скорости",
-      },
+      
     ],
   },
 ];
