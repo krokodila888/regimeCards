@@ -361,7 +361,7 @@ export default function WorkspaceSidebar({
                       onClick={() => {
                         setChartsExpanded(false);
                         setСhosenAction("choseOne");
-                        onSelectChart(chart);
+                        onSelectChart(charts[0]);
                       }}
                       className={`w-full text-left px-3 py-2 rounded transition-colors hover:bg-gray-300 text-gray-600 text-sm
              ${

@@ -1610,7 +1610,7 @@ const generateTractionModeObjects = (locomotive: Locomotive | null): PaletteObje
   return locomotive.tractionModes.map((mode) => ({
     id: `traction-${mode.id}`,
     name: `Traction Mode ${mode.label}`,
-    nameRu: `Тяга ${mode.label}`,
+    nameRu: `${mode.label}`,
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20">
         <line
