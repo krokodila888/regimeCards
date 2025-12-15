@@ -37,7 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # Папка сборки Vite по умолчанию
+          path: './build' # Папка сборки Vite по умолчанию
 
       # 5. Деплоим на GitHub Pages
       - name: Deploy to GitHub Pages
