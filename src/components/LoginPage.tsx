@@ -1,3 +1,4 @@
+// src/components/LoginPage.tsx
 import React, { useState } from "react";
 import {
   Card,
@@ -8,19 +9,25 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
-import { Train } from "lucide-react";
+import { Train, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
-interface LoginPageProps {
-  onLogin: () => void;
-}
-
-export default function LoginPage({ onLogin }: LoginPageProps) {
+export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const { login } = useAuth();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    onLogin();
+    setError("");
+    
+    const success = login(username, password);
+    
+    if (!success) {
+      setError("Неверный логин или пароль");
+    }
   };
 
   return (
@@ -161,9 +168,10 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               <Input
                 id="username"
                 type="text"
-                placeholder="IvanovII"
+                placeholder="Введите логин"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
               />
             </div>
             <div className="space-y-2">
@@ -173,20 +181,44 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               >
                 Пароль
               </Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Введите свой пароль"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Введите пароль"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+                  aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
             </div>
+            
+            {error && (
+              <div className="text-red-600 text-sm text-center bg-red-50 py-2 px-3 rounded">
+                {error}
+              </div>
+            )}
+            
             <Button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700"
             >
               Войти
             </Button>
+            
           </form>
         </CardContent>
       </Card>

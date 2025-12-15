@@ -5,7 +5,6 @@ import {
   ChevronDown,
   User,
   Plus,
-  Upload,
   LogOut,
 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -19,26 +18,12 @@ import {
 } from "./ui/accordion";
 import {
   Collapsible,
-  CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
-import DataTable from "./DataTable";
-import PlacedObjectsTable from "./PlacedObjectsTable";
-import Stage1TrackSection from "./Stage1TrackSection";
 import Stage1CalculationParams from "./Stage1CalculationParams";
-import Stage3RegimeEditing from "./Stage3RegimeEditing";
 import type {
   ChartData,
-  CanvasObject,
 } from "../types/chart-data";
-import { WAGON_TYPES } from "../types/consts";
-import { TrainComposition } from "../types/types";
 
 interface WorkspaceSidebarProps {
   collapsed: boolean;
@@ -213,10 +198,7 @@ export default function WorkspaceSidebar({
             Пользователь ТестТест
           </span>
         </div>
-        <TooltipProvider>
           <div className="flex items-center gap-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -227,13 +209,7 @@ export default function WorkspaceSidebar({
                 >
                   <LogOut className="w-4 h-4" />
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Выйти</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
+
                 <Button
                   variant="ghost"
                   size="icon"
@@ -244,13 +220,8 @@ export default function WorkspaceSidebar({
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Свернуть боковую панель</p>
-              </TooltipContent>
-            </Tooltip>
+
           </div>
-        </TooltipProvider>
       </div>
 
       {/* Scrollable Content Area */}
@@ -334,7 +305,7 @@ export default function WorkspaceSidebar({
                   setChartsExpanded(true);
                 }}
                 variant="outline"
-                className="justify-start bg-white text-gray-500 hover:bg-gray-600 border-gray-400 hover:text-white"
+                className="justify-start bg-white text-gray-500 flex-1 justify-center hover:bg-gray-600 border-gray-400 hover:text-white"
                 title="Мои режимные карты"
               >
                 Мои режимные карты
@@ -429,7 +400,6 @@ export default function WorkspaceSidebar({
                 className="bg-gray-700"
                 style={{ marginBottom: "0" }}
               />
-              <TooltipProvider>
                 <Accordion
                   type="multiple"
                   value={accordionValue}
@@ -555,7 +525,6 @@ export default function WorkspaceSidebar({
                     )}
                   </Tooltip>*/}
                 </Accordion>
-              </TooltipProvider>
             </>
           )}
         </div>

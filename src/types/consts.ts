@@ -1,4 +1,4 @@
-import type { Locomotive } from ".chart-data";
+import type { Locomotive } from './chart-data'
 // Sample locomotives with at least 5 variants each
 export const LOCOMOTIVES: Locomotive[] = [
   {

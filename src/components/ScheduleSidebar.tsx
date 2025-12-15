@@ -7,12 +7,6 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
 import type { ChartData } from "../types/chart-data";
 
 interface ScheduleSidebarProps {
@@ -98,9 +92,6 @@ export default function ScheduleSidebar({
         className="fixed top-0 right-0 h-full bg-gray-200 flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-50"
         style={{ width: "50px" }}
       >
-        <TooltipProvider delayDuration={300}>
-          <Tooltip>
-            <TooltipTrigger asChild>
               <button
                 onClick={handleToggle}
                 disabled={!isUnlocked}
@@ -122,16 +113,6 @@ export default function ScheduleSidebar({
                   <ChevronLeft className="w-5 h-5" />
                 )}
               </button>
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              <p>
-                {!isUnlocked
-                  ? "Выполните расчет"
-                  : "Развернуть расписание"}
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
       </div>
     );
   }
@@ -156,9 +137,6 @@ export default function ScheduleSidebar({
       <div className="flex-1 bg-gray-200 border-l border-gray-400 flex flex-col text-gray-600">
         {/* Header with separate toggle button and title */}
         <div className="flex-shrink-0 p-4 border-b border-gray-400 flex items-center justify-between">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
                 <button
                   onClick={handleToggle}
                   className="p-2 mr-2 hover:bg-gray-300 rounded transition-colors text-gray-700"
@@ -167,12 +145,6 @@ export default function ScheduleSidebar({
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Свернуть расписание</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
           <h3 className="text-gray-700 flex-1">
             Расписание движения поездов
           </h3>

@@ -24,12 +24,6 @@ import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -2946,7 +2940,7 @@ export default function ChartEditor({
   };
 
   return (
-    <TooltipProvider>
+    <>
       <div
         className="flex-1 bg-gray-50 overflow-hidden flex flex-row"
         style={{ width: "100%", height: "100%" }}
@@ -3387,6 +3381,6 @@ export default function ChartEditor({
           setPaletteCollapsed(!paletteCollapsed)
         }
       />
-    </TooltipProvider>
+    </>
   );
 }

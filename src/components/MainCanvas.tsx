@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import { Save, FileText } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
 import ChartEditor from "./ChartEditor";
+import demaImg from "./images/dema.png";
 import type { ChartData } from "../types/chart-data";
+import CanvasScreenshot from "./CanvasScreenshot";
+import { useAuth } from "../contexts/AuthContext";
 
 interface MainCanvasProps {
   sidebarCollapsed: boolean;
@@ -31,6 +28,8 @@ export default function MainCanvas({
   const [chartTitle, setChartTitle] = useState(
     activeChart?.title || "",
   );
+
+  const { user } = useAuth();
 
   React.useEffect(() => {
     if (activeChart) {
@@ -82,16 +81,13 @@ export default function MainCanvas({
         {activeChart ? (
           <>
             {/* Top Bar */}
-            <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0 pr-16">
+            <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
               <Input
                 value={chartTitle}
                 onChange={handleTitleChange}
                 className="max-w-md border-none shadow-none pl-3 focus-visible:ring-0"
               />
               <div className="flex items-center gap-2 mr-8">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
                       <span>
                         <Button
                           variant="outline"
@@ -103,16 +99,11 @@ export default function MainCanvas({
                           Сохранить
                         </Button>
                       </span>
-                    </TooltipTrigger>
                     {!isDataValid && (
-                      <TooltipContent>
                         <p className="max-w-xs">
                           Исправьте ошибки
                         </p>
-                      </TooltipContent>
                     )}
-                  </Tooltip>
-                </TooltipProvider>
                 <Button variant="outline" size="sm">
                   <FileText className="w-4 h-4 mr-2" />
                   Экспорт в PDF
@@ -120,13 +111,24 @@ export default function MainCanvas({
               </div>
             </div>
 
-            {/* Chart Editor */}
-            <ChartEditor
-              chartData={activeChart}
-              onUpdateChartData={
-                /*onUpdateChartData*/ handleUpdateChartData
-              }
-            />
+            {user?.role === "admin" ? (
+              <ChartEditor
+                chartData={activeChart}
+                onUpdateChartData={handleUpdateChartData}
+              />
+            ) : (
+              <CanvasScreenshot
+                imageUrl={demaImg}
+                visibleLayers={{
+                      speedCurve: true,
+                      limitCurve: true,
+                      profileCurve: true,
+                      gradientCurve: true,
+                      regimeMarkers: true,
+                      stationMarkers: true,
+                }}
+              />
+            )}
           </>
         ) : (
           /* Default/Welcome State */

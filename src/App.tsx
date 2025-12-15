@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+// src/App.tsx
+import React from 'react';
 import LoginPage from './components/LoginPage';
 import Workspace from './components/Workspace';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+// Внутренний компонент, который имеет доступ к AuthContext
+function AppContent() {
+  const { isAuthenticated, logout } = useAuth();
 
   return (
     <div className="h-screen w-screen overflow-hidden">
-      {!isLoggedIn ? (
-        <LoginPage onLogin={() => setIsLoggedIn(true)} />
+      {!isAuthenticated ? (
+        <LoginPage />
       ) : (
-        <Workspace onLogout={() => setIsLoggedIn(false)} />
+        <Workspace onLogout={logout} />
       )}
     </div>
+  );
+}
+
+// Главный компонент оборачивает всё в AuthProvider
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
