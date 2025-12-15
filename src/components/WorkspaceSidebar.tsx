@@ -353,7 +353,7 @@ export default function WorkspaceSidebar({
                 <></>
               )}
               {chartsExpanded ? (
-                <ScrollArea className="h-[150px] rounded border border-gray-400">
+                <ScrollArea className="h-[150px] rounded border border-gray-400" style={{height: 'fit-content'}}>
                   {charts.map((chart) => (
                     <button
                       key={chart.id}
@@ -413,15 +413,6 @@ export default function WorkspaceSidebar({
                   >
                     <AccordionTrigger className="text-gray-700 hover:text-gray-500 hover:no-underline">
                       <div className="flex items-center gap-2">
-                        <span
-                          className={`flex items-center justify-center w-6 h-6 rounded-md text-xs flex-shrink-0 ${
-                            activeChart.workflow?.trackSection
-                              ? "bg-green-600 text-white"
-                              : "bg-blue-600 text-white"
-                          }`}
-                        >
-                          1
-                        </span>
                         <span className="min-w-0">
                           Параметры задания на расчет
                         </span>
