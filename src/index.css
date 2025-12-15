@@ -53,31 +53,39 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --color-red-50: oklch(.971 .013 17.38);
-    --color-red-600: oklch(.577 .245 27.325);
-    --color-red-700: oklch(.505 .213 27.518);
-    --color-orange-600: oklch(.646 .222 41.116);
-    --color-yellow-600: oklch(.681 .162 75.834);
-    --color-green-600: oklch(.627 .194 149.214);
-    --color-green-700: oklch(.527 .154 150.069);
-    --color-blue-50: oklch(.97 .014 254.604);
-    --color-blue-100: oklch(.932 .032 255.585);
-    --color-blue-400: oklch(.707 .165 254.624);
-    --color-blue-500: oklch(.623 .214 259.815);
-    --color-blue-600: oklch(.546 .245 262.881);
-    --color-blue-700: oklch(.488 .243 264.376);
-    --color-indigo-600: oklch(.511 .262 276.966);
-    --color-purple-600: oklch(.558 .288 302.321);
-    --color-gray-50: oklch(.985 .002 247.839);
-    --color-gray-100: oklch(.967 .003 264.542);
-    --color-gray-200: oklch(.928 .006 264.531);
-    --color-gray-300: oklch(.872 .01 258.338);
-    --color-gray-400: oklch(.707 .022 261.325);
-    --color-gray-500: oklch(.551 .027 264.364);
-    --color-gray-600: oklch(.446 .03 256.802);
-    --color-gray-700: oklch(.373 .034 259.733);
-    --color-gray-800: oklch(.278 .033 256.848);
-    --color-gray-900: oklch(.21 .034 264.665);
+    --color-red-50: #fef2f2; --color-red-50: oklch(.971 .013 17.38);
+    --color-red-600: #dc2626; --color-red-600: oklch(.577 .245 27.325);
+    --color-red-700: #b91c1c; --color-red-700: oklch(.505 .213 27.518);
+    
+    /* Оранжевый, желтый, зеленый */
+    --color-orange-600: #ea580c; --color-orange-600: oklch(.646 .222 41.116);
+    --color-yellow-600: #ca8a04; --color-yellow-600: oklch(.681 .162 75.834);
+    --color-green-600: #16a34a; --color-green-600: oklch(.627 .194 149.214);
+    --color-green-700: #15803d; --color-green-700: oklch(.527 .154 150.069);
+    
+    /* Синие */
+    --color-blue-50: #eff6ff; --color-blue-50: oklch(.97 .014 254.604);
+    --color-blue-100: #dbeafe; --color-blue-100: oklch(.932 .032 255.585);
+    --color-blue-400: #60a5fa; --color-blue-400: oklch(.707 .165 254.624);
+    --color-blue-500: #3b82f6; --color-blue-500: oklch(.623 .214 259.815);
+    --color-blue-600: #155dfc; /* Уже hex в вашем коде */
+    --color-blue-700: #1d4ed8; --color-blue-700: oklch(.488 .243 264.376);
+    
+    /* Фиолетовые, серые */
+    --color-indigo-600: #4f46e5; --color-indigo-600: oklch(.511 .262 276.966);
+    --color-purple-600: #9333ea; --color-purple-600: oklch(.558 .288 302.321);
+    
+    /* Серые (Tailwind-совместимые) */
+    --color-gray-50: #f9fafb; --color-gray-50: oklch(.985 .002 247.839);
+    --color-gray-100: #f3f4f6; --color-gray-100: oklch(.967 .003 264.542);
+    --color-gray-200: #e5e7eb; --color-gray-200: oklch(.928 .006 264.531);
+    --color-gray-300: #d1d5db; --color-gray-300: oklch(.872 .01 258.338);
+    --color-gray-400: #9ca3af; --color-gray-400: oklch(.707 .022 261.325);
+    --color-gray-500: #6b7280; --color-gray-500: oklch(.551 .027 264.364);
+    --color-gray-600: #4b5563; --color-gray-600: oklch(.446 .03 256.802);
+    --color-gray-700: #374151; --color-gray-700: oklch(.373 .034 259.733);
+    --color-gray-800: #1f2937; --color-gray-800: oklch(.278 .033 256.848);
+    --color-gray-900: #111827; --color-gray-900: oklch(.21 .034 264.665);
     --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;

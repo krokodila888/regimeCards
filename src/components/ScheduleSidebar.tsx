@@ -20,6 +20,128 @@ interface StationSchedule {
   actualArrivalMinutes?: number;
 }
 
+
+const STATIONS_DATA: StationSchedule[] = [
+  {
+    stationName: "Ерал",
+    distanceKm: 1794,
+    idealArrivalMinutes: 16,
+    actualArrivalMinutes: 20 // из вашей Таблицы 2: 0:30 = 30 мин
+  },
+  {
+    stationName: "Симская", 
+    distanceKm: 1804,
+    idealArrivalMinutes: 25, // 16 + 9
+    actualArrivalMinutes: 28 // 0:28 = 28 мин
+  },
+  {
+    stationName: "Миньяр",
+    distanceKm: 1818,
+    idealArrivalMinutes: 40, // 25 + 15 (Симская-Биянка 9 + Биянка-Миньяр 6)
+    actualArrivalMinutes: 44 // 0:45 = 45 мин
+  },
+  {
+    stationName: "Аша",
+    distanceKm: 1840,
+    idealArrivalMinutes: 61, // 40 + 21
+    actualArrivalMinutes: 63 // 1:03 = 63 мин
+  },
+  {
+    stationName: "Казаяк",
+    distanceKm: 1848,
+    idealArrivalMinutes: 69, // 61 + 8 (часть Аша-Улу-Теляк 23 мин)
+    actualArrivalMinutes: 75 // 1:22 = 82 мин
+  },
+  {
+    stationName: "Улу-Теляк",
+    distanceKm: 1862,
+    idealArrivalMinutes: 84, // 69 + 15 (оставшаяся часть Аша-Улу-Теляк)
+    actualArrivalMinutes: 90 // 1:35 = 95 мин
+  },
+  {
+    stationName: "Кудеевка",
+    distanceKm: 1879,
+    idealArrivalMinutes: 90, // 84 + 6 (часть Улу-Теляк-Урман 10 мин)
+    actualArrivalMinutes: 100 // 1:45 = 105 мин
+  },
+  {
+    stationName: "Тавтиманово",
+    distanceKm: 1889,
+    idealArrivalMinutes: 113, // 90 + 23 (оставшаяся Улу-Теляк-Урман + Урман-Тавтиманово 19)
+    actualArrivalMinutes: 113 // 1:53 = 113 мин
+  },
+  {
+    stationName: "Иглино",
+    distanceKm: 1907,
+    idealArrivalMinutes: 132, // 113 + 19
+    actualArrivalMinutes: 135 // 2:20 = 140 мин
+  },
+  {
+    stationName: "Шакша",
+    distanceKm: 1920,
+    idealArrivalMinutes: 145, // 132 + 13
+    actualArrivalMinutes: 143 // 2:23 = 143 мин
+  },
+  {
+    stationName: "Черниковка",
+    distanceKm: 1929,
+    idealArrivalMinutes: 154, // 145 + 9
+    actualArrivalMinutes: 152 // 2:38 = 158 мин
+  },
+  {
+    stationName: "Воронки",
+    distanceKm: 1937,
+    idealArrivalMinutes: 159, // 154 + 5 (часть Черниковка-Уфа 15 мин)
+    actualArrivalMinutes: 164 // 2:57 = 177 мин
+  },
+  {
+    stationName: "Дема",
+    distanceKm: 1952,
+    idealArrivalMinutes: 183, // 159 + 24 (оставшаяся Черниковка-Уфа + Уфа-Дема 14)
+    actualArrivalMinutes: 192 // 3:27 = 207 мин
+  }
+];
+
+// Calculate travel time to reach a specific distance
+/*function calculateTravelTime(
+  speedCurve: { km: number; speed: number }[],
+  targetKm: number,
+): number {
+  if (speedCurve.length === 0) return 0;
+
+  let totalMinutes = 0;
+
+  for (let i = 0; i < speedCurve.length - 1; i++) {
+    const point1 = speedCurve[i];
+    const point2 = speedCurve[i + 1];
+
+    // If we've passed the target, calculate partial segment
+    if (point2.km > targetKm) {
+      const remainingDistance = targetKm - point1.km;
+      const avgSpeed = (point1.speed + point2.speed) / 2;
+      if (avgSpeed > 0) {
+        totalMinutes += (remainingDistance / avgSpeed) * 60;
+      }
+      break;
+    }
+
+    // Calculate time for this segment
+    const distance = point2.km - point1.km;
+    const avgSpeed = (point1.speed + point2.speed) / 2;
+
+    if (avgSpeed > 0) {
+      totalMinutes += (distance / avgSpeed) * 60;
+    }
+
+    // If we've reached the target exactly
+    if (point2.km === targetKm) {
+      break;
+    }
+  }
+
+  return totalMinutes;
+}*/
+
 export default function ScheduleSidebar({
   chartData,
 }: ScheduleSidebarProps) {
@@ -35,7 +157,7 @@ export default function ScheduleSidebar({
     chartData?.workflow?.optimalSpeedCurve !== undefined;
 
   // Generate schedule data
-  const schedule = generateSchedule(chartData);
+  //const schedule = generateSchedule(chartData);
 
   const handleResizeStart = (e: React.MouseEvent) => {
     if (isCollapsed) return;
@@ -79,25 +201,25 @@ export default function ScheduleSidebar({
     setIsCollapsed(!isCollapsed);
   };
 
-  const formatTime = (minutes: number): string => {
+  /*const formatTime = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const mins = Math.round(minutes % 60);
     return `${hours}:${mins.toString().padStart(2, "0")}`;
-  };
+  };*/
 
   // Collapsed state - vertical strip like left sidebar
   if (isCollapsed) {
     return (
       <div
-        className="fixed top-0 right-0 h-full bg-gray-200 flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-50"
-        style={{ width: "50px" }}
+        className="fixed top-0 right-0 h-full bg-gray-200 flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-50 bg-gray-300"
+        style={{ width: "50px", height: '100%'}}
       >
               <button
                 onClick={handleToggle}
                 disabled={!isUnlocked}
                 className={`p-2 rounded transition-colors ${
                   !isUnlocked
-                    ? "opacity-50 cursor-not-allowed text-gray-500"
+                    ? "cursor-not-allowed text-gray-500"
                     : "hover:bg-gray-500 text-gray-700"
                 }`}
                 aria-label="Expand schedule sidebar"
@@ -119,14 +241,16 @@ export default function ScheduleSidebar({
 
   return (
     <div
-      className="fixed top-0 right-0 h-full flex items-stretch z-30 transition-all duration-300 z-50"
+      className="fixed top-0 right-0 h-full flex items-stretch z-30 transition-all duration-300 z-50 bg-white"
       style={{
         width: `${sidebarWidth}px`,
+        height: '100%',
+        backgroundColor: 'white'
       }}
     >
       {/* Resize handle */}
       <div
-        className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex-shrink-0 transition-colors"
+        className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex-shrink-0 bg-white"
         onMouseDown={handleResizeStart}
         style={{
           cursor: isResizing ? "col-resize" : "col-resize",
@@ -134,12 +258,12 @@ export default function ScheduleSidebar({
       />
 
       {/* Sidebar content */}
-      <div className="flex-1 bg-gray-200 border-l border-gray-400 flex flex-col text-gray-600">
+      <div className="flex-1 border-l border-gray-400 flex flex-col text-gray-600" style={{backgroundColor: !isCollapsed ? 'white' : '#d1d5dc'}}>
         {/* Header with separate toggle button and title */}
         <div className="flex-shrink-0 p-4 border-b border-gray-400 flex items-center justify-between">
                 <button
                   onClick={handleToggle}
-                  className="p-2 mr-2 hover:bg-gray-300 rounded transition-colors text-gray-700"
+                  className="p-2 mr-2 hover:bg-gray-300 rounded text-gray-700"
                   aria-label="Collapse schedule sidebar"
                   title="Свернуть расписание"
                 >
@@ -158,8 +282,8 @@ export default function ScheduleSidebar({
           }}
         >
           {/* Subheader */}
-          <div className="flex-shrink-0 p-4 border-b border-gray-600">
-            <div className="flex items-center gap-2">
+          <div className="flex-shrink-0 p-4 border-b border-gray-600 bg-white">
+            <div className="flex items-center gap-2 bg-white">
               <Clock className="w-5 h-5 text-blue-700" />
               <h3 className="text-sm text-gray-700">
                 Расписание движения поездов
@@ -173,10 +297,10 @@ export default function ScheduleSidebar({
           </div>
 
           {/* Schedule table */}
-          <ScrollArea className="flex-1">
+          <ScrollArea className="flex-1 bg-white">
             <div className="p-4">
-              {schedule.length > 0 ? (
-                <table className="w-full text-sm">
+              {STATIONS_DATA.length > 0 ? (
+                <table className="w-full text-sm bg-white">
                   <thead>
                     <tr className="border-b border-gray-500">
                       <th className="text-left py-2 px-2 text-gray-600">
@@ -197,7 +321,7 @@ export default function ScheduleSidebar({
                     </tr>
                   </thead>
                   <tbody>
-                    {schedule.map((station, index) => (
+                    {STATIONS_DATA.map((station, index) => (
                       <tr
                         key={index}
                         className="border-b border-gray-700/50 hover:bg-gray-300"
@@ -209,18 +333,14 @@ export default function ScheduleSidebar({
                           {station.distanceKm}
                         </td>
                         <td className="text-right py-2 px-2 text-blue-700">
-                          {formatTime(
-                            station.idealArrivalMinutes,
-                          )}
+                          {station.idealArrivalMinutes}
                         </td>
                         {chartData?.workflow
                           ?.actualSpeedCurve &&
                           station.actualArrivalMinutes !==
                             undefined && (
                             <td className="text-right py-2 px-2 text-green-700">
-                              {formatTime(
-                                station.actualArrivalMinutes,
-                              )}
+                                {station.actualArrivalMinutes}
                             </td>
                           )}
                       </tr>
@@ -236,39 +356,33 @@ export default function ScheduleSidebar({
           </ScrollArea>
 
           {/* Footer info */}
-          {schedule.length > 0 && (
-            <div className="flex-shrink-0 p-4 border-t border-gray-400 bg-gray-300">
+          {STATIONS_DATA.length > 0 && (
+            <div className="flex-shrink-0 p-4 border-t border-gray-400 bg-white">
               <div className="text-xs text-gray-600">
                 <div className="flex justify-between mb-1">
                   <span>Общее расстояние:</span>
                   <span className="text-gray-600">
-                    {chartData?.workflow?.trackSection
-                      ?.length || 0}{" "}
-                    км
+                    171 км
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>T опт.</span>
                   <span className="text-blue-700">
-                    {formatTime(
-                      schedule[schedule.length - 1]
-                        ?.idealArrivalMinutes || 0,
-                    )}
+                   {STATIONS_DATA[STATIONS_DATA.length - 1].idealArrivalMinutes + ' мин.'} 
                   </span>
                 </div>
                 {chartData?.workflow?.actualSpeedCurve &&
-                  schedule[schedule.length - 1]
-                    ?.actualArrivalMinutes !== undefined && (
+                  STATIONS_DATA[STATIONS_DATA.length - 1]
+                    ?.actualArrivalMinutes !== undefined ? (
                     <div className="flex justify-between mt-1">
                       <span>T факт.</span>
                       <span className="text-green-700">
-                        {formatTime(
-                          schedule[schedule.length - 1]
-                            ?.actualArrivalMinutes || 0,
-                        )}
+                        
+                          {STATIONS_DATA[STATIONS_DATA.length - 1].actualArrivalMinutes + ' мин.'} 
+
                       </span>
                     </div>
-                  )}
+                  ): <></>}
               </div>
             </div>
           )}
@@ -345,42 +459,9 @@ function generateSchedule(
   return schedule;
 }
 
-// Calculate travel time to reach a specific distance
-function calculateTravelTime(
-  speedCurve: { km: number; speed: number }[],
-  targetKm: number,
-): number {
-  if (speedCurve.length === 0) return 0;
-
-  let totalMinutes = 0;
-
-  for (let i = 0; i < speedCurve.length - 1; i++) {
-    const point1 = speedCurve[i];
-    const point2 = speedCurve[i + 1];
-
-    // If we've passed the target, calculate partial segment
-    if (point2.km > targetKm) {
-      const remainingDistance = targetKm - point1.km;
-      const avgSpeed = (point1.speed + point2.speed) / 2;
-      if (avgSpeed > 0) {
-        totalMinutes += (remainingDistance / avgSpeed) * 60;
-      }
-      break;
-    }
-
-    // Calculate time for this segment
-    const distance = point2.km - point1.km;
-    const avgSpeed = (point1.speed + point2.speed) / 2;
-
-    if (avgSpeed > 0) {
-      totalMinutes += (distance / avgSpeed) * 60;
-    }
-
-    // If we've reached the target exactly
-    if (point2.km === targetKm) {
-      break;
-    }
-  }
-
-  return totalMinutes;
+interface StationSchedule {
+  stationName: string;
+  distanceKm: number;
+  idealArrivalMinutes: number;
+  actualArrivalMinutes?: number; // опционально, можно заполнить позже
 }

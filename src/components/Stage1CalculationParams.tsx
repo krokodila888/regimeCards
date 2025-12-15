@@ -7,14 +7,11 @@ import {
   Train,
   Zap,
   Package,
-  Users,
   Hash,
   Weight,
   Route,
   MapPin,
   Clock,
-  Calendar as CalendarIcon,
-  Gauge,
   Navigation,
 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -34,12 +31,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "./ui/dialog";
-import { Calendar } from "./ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "./ui/popover";
 import type { WorkflowState } from "../types/chart-data";
 import {
   LOCOMOTIVES,
@@ -738,7 +729,7 @@ export default function Stage1CalculationParams({
         </div>
 
         {/* Date range */}
-        <div className="relative">
+        {/*<div className="relative">
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 z-10">
             <CalendarIcon className="w-4 h-4" />
           </div>
@@ -776,7 +767,7 @@ export default function Stage1CalculationParams({
               />
             </PopoverContent>
           </Popover>
-        </div>
+              </div>*/}
 
         {/* Speed Limits */}
         <div className="space-y-2">

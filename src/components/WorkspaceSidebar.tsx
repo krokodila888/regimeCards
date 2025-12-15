@@ -176,7 +176,7 @@ export default function WorkspaceSidebar({
   return (
     <div
       ref={sidebarRef}
-      className="bg-gray-200 flex flex-col transition-all duration-300 relative h-full flex-shrink-0"
+      className="flex flex-col transition-all duration-300 relative h-full flex-shrink-0"
       style={{
         width: `${width}px`,
         zIndex: "3",
@@ -186,7 +186,7 @@ export default function WorkspaceSidebar({
     >
       {/* Resize handle */}
       <div
-        className="absolute right-0 top-0 bottom-0 w-1 hover:w-2 bg-transparent hover:bg-blue-500 cursor-col-resize transition-all z-10"
+        className="absolute right-0 top-0 bottom-0 w-1 hover:w-2 hover:bg-blue-500 cursor-col-resize transition-all z-10 bg-gray-300"
         onMouseDown={() => setIsResizing(true)}
       />
 
@@ -448,82 +448,6 @@ export default function WorkspaceSidebar({
                       />
                     </AccordionContent>
                   </AccordionItem>
-
-                  {/* STAGE 2: Regime Editing */}
-                  {/*<Tooltip>
-                    <TooltipTrigger asChild>
-                      <AccordionItem
-                        value="stage2"
-                        className="border-gray-700"
-                        disabled={
-                          !activeChart.workflow
-                            ?.optimalSpeedCurve
-                        }
-                      >
-                        <AccordionTrigger
-                          className={`hover:no-underline ${
-                            !activeChart.workflow
-                              ?.optimalSpeedCurve
-                              ? "text-gray-400 cursor-not-allowed opacity-50"
-                              : "text-gray-700 hover:text-gray-500"
-                          }`}
-                          disabled={
-                            !activeChart.workflow
-                              ?.optimalSpeedCurve
-                          }
-                        >
-                          <div className="flex items-center gap-2">
-                            <span
-                              className={`flex items-center justify-center w-6 h-6 rounded-md text-xs flex-shrink-0 ${
-                                activeChart.workflow
-                                  ?.actualSpeedCurve
-                                  ? "bg-green-600 text-white"
-                                  : activeChart.workflow
-                                        ?.optimalSpeedCurve
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-600 text-gray-400"
-                              }`}
-                            >
-                              2
-                            </span>
-                            <span className="min-w-0">
-                              Редактирование режимной карты
-                            </span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-1">
-                          <Stage3RegimeEditing
-                            workflow={
-                              activeChart.workflow || {
-                                currentStage: 1,
-                              }
-                            }
-                            onUpdateWorkflow={(updates) => {
-                              onUpdateChartData({
-                                workflow: {
-                                  ...(activeChart.workflow || {
-                                    currentStage: 1,
-                                  }),
-                                  ...updates,
-                                },
-                              });
-                            }}
-                            isLocked={
-                              !activeChart.workflow
-                                ?.optimalSpeedCurve
-                            }
-                            onShowLoading={onShowLoading}
-                          />
-                        </AccordionContent>
-                      </AccordionItem>
-                    </TooltipTrigger>
-                    {!activeChart.workflow
-                      ?.optimalSpeedCurve && (
-                      <TooltipContent>
-                        Завершите предыдущий этап
-                      </TooltipContent>
-                    )}
-                  </Tooltip>*/}
                 </Accordion>
             </>
           )}
