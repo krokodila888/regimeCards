@@ -773,16 +773,16 @@ export default function Stage1CalculationParams({
               <table className="w-full text-sm">
                 <thead className="bg-white">
                   <tr>
-                    <th className="text-left p-4 text-gray-500 bg-white border border-gray-400">
+                    <th className="text-left p-2 text-gray-500 bg-white border border-gray-400">
                       Наименование
                     </th>
-                    <th className="text-left p-4 text-gray-500 bg-white border border-gray-400">
+                    <th className="text-left p-2 text-gray-500 bg-white border border-gray-400">
                       Количество
                     </th>
-                    <th className="text-left p-4 text-gray-500 bg-white border border-gray-400">
+                    <th className="text-left p-2 text-gray-500 bg-white border border-gray-400">
                       Масса вагона, брутто, т.
                     </th>
-                    <th className="text-left p-4 text-gray-500 bg-white border border-gray-400">
+                    <th className="text-left p-2 text-gray-500 bg-white border border-gray-400">
                       Действие
                     </th>
                   </tr>
@@ -903,16 +903,16 @@ export default function Stage1CalculationParams({
               <table className="w-full text-sm">
                 <thead className="bg-white ">
                   <tr>
-                    <th className="text-left p-4 text-gray-600 bg-white border border-gray-400">
+                    <th className="text-left p-2 text-gray-600 bg-white border border-gray-400">
                       Кордината начала ограничения
                     </th>
-                    <th className="text-left p-4 text-gray-600 bg-white border border-gray-400">
+                    <th className="text-left p-2 text-gray-600 bg-white border border-gray-400">
                       Кордината конца ограничения
                     </th>
-                    <th className="text-left p-4 text-gray-600 bg-white border border-gray-400">
+                    <th className="text-left p-2 text-gray-600 bg-white border border-gray-400">
                       Допустимое значение скорости, км/ч
                     </th>
-                    <th className="text-left p-4 text-gray-600 bg-white border border-gray-400">
+                    <th className="text-left p-2 text-gray-600 bg-white border border-gray-400">
                       Действие
                     </th>
                   </tr>
