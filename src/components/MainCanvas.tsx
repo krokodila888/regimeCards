@@ -3,7 +3,7 @@ import { Save, FileText } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import ChartEditor from "./ChartEditor";
-import demaImg from "./images/dema.png";
+import demaImg from "/regimeCards/src/images/dema.png";
 import type { ChartData } from "../types/chart-data";
 import CanvasScreenshot from "./CanvasScreenshot";
 import { useAuth } from "../contexts/AuthContext";
