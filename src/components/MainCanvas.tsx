@@ -3,7 +3,8 @@ import { Save, FileText } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import ChartEditor from "./ChartEditor";
-import demaImg from '../images/dema.png';
+// @ts-ignore
+import demaImg from "./images/dema.png";
 import type { ChartData } from "../types/chart-data";
 import CanvasScreenshot from "./CanvasScreenshot";
 import { useAuth } from "../contexts/AuthContext";
@@ -76,7 +77,7 @@ export default function MainCanvas({
     <>
       <div
         className="flex-1 flex flex-col h-full overflow-hidden"
-        style={{ marginRight: "76px" }}
+        style={{ marginRight: "4px" }}
       >
         {activeChart ? (
           <>
@@ -87,7 +88,7 @@ export default function MainCanvas({
                 onChange={handleTitleChange}
                 className="max-w-md border-none shadow-none pl-3 focus-visible:ring-0"
               />
-              <div className="flex items-center gap-2 mr-8">
+              <div className="flex items-center gap-2">
                       <span>
                         <Button
                           variant="outline"
@@ -118,15 +119,15 @@ export default function MainCanvas({
               />
             ) : (
               <CanvasScreenshot
-                imageUrl={demaImg}
-                visibleLayers={{
-                      speedCurve: true,
-                      limitCurve: true,
-                      profileCurve: true,
-                      gradientCurve: true,
+                imageUrl={demaImg}                
+                /*visibleLayers={{
+                  speedCurve: true,
+                  limitCurve: true,
+                  profileCurve: true,
+                  gradientCurve: true,
                       regimeMarkers: true,
-                      stationMarkers: true,
-                }}
+                      stationMarkers: true,*/
+                //}}
               />
             )}
           </>
@@ -142,12 +143,12 @@ export default function MainCanvas({
               </h2>
               <p className="text-gray-500">
                 Создайте новую режимную карту или выберите
-                существующую, чтобы началь работу
+                существующую, чтобы начать работу
               </p>
             </div>
           </div>
         )}
       </div>
     </>
-  );
+  )
 }

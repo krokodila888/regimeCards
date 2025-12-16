@@ -214,27 +214,32 @@ export default function ScheduleSidebar({
         className="fixed top-0 right-0 h-full bg-gray-200 flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-50 bg-gray-300"
         style={{ width: "50px", height: '100%'}}
       >
-              <button
-                onClick={handleToggle}
-                disabled={!isUnlocked}
-                className={`p-2 rounded transition-colors ${
-                  !isUnlocked
-                    ? "cursor-not-allowed text-gray-500"
-                    : "hover:bg-gray-500 text-gray-700"
-                }`}
-                aria-label="Expand schedule sidebar"
-                title={
-                  !isUnlocked
-                    ? "Выполните расчет"
-                    : "Развернуть расписание"
-                }
-              >
-                {!isUnlocked ? (
-                  <Lock className="w-5 h-5" />
-                ) : (
-                  <ChevronLeft className="w-5 h-5" />
-                )}
-              </button>
+        <button
+          onClick={handleToggle}
+          disabled={!isUnlocked}
+          style={{ marginBottom: "20px" }}
+          className={`p-2 rounded transition-colors ${
+            !isUnlocked
+              ? "cursor-not-allowed text-gray-500"
+              : "hover:bg-gray-500 text-gray-700"
+          }`}
+          aria-label="Expand schedule sidebar"
+          title={
+            !isUnlocked
+              ? "Выполните расчет"
+              : "Развернуть расписание"
+          }
+        >
+          {!isUnlocked ? (
+            <Lock className="w-5 h-5" />
+          ) : (
+            <ChevronLeft className="w-5 h-5" />
+          )}
+        </button>
+        <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: 14, letterSpacing: 2, marginBottom: 8, color: '#222', whiteSpace: 'nowrap' }}>
+          Расписание движения поездов
+        </div>
+        
       </div>
     );
   }
@@ -321,30 +326,50 @@ export default function ScheduleSidebar({
                     </tr>
                   </thead>
                   <tbody>
-                    {STATIONS_DATA.map((station, index) => (
-                      <tr
-                        key={index}
-                        className="border-b border-gray-700/50 hover:bg-gray-300"
-                      >
-                        <td className="py-2 px-2 text-gray-600">
-                          {station.stationName}
-                        </td>
-                        <td className="text-right py-2 px-2 text-gray-600">
-                          {station.distanceKm}
-                        </td>
-                        <td className="text-right py-2 px-2 text-blue-700">
-                          {station.idealArrivalMinutes}
-                        </td>
-                        {chartData?.workflow
-                          ?.actualSpeedCurve &&
-                          station.actualArrivalMinutes !==
-                            undefined && (
-                            <td className="text-right py-2 px-2 text-green-700">
-                                {station.actualArrivalMinutes}
+                    {STATIONS_DATA.map((station, index) => {
+                      // Дельты времени и расстояния
+                      const prev = index > 0 ? STATIONS_DATA[index - 1] : null;
+                      const baseCoord = 1752;
+                      const deltaDistance = prev ? station.distanceKm - prev.distanceKm : station.distanceKm - baseCoord;
+                      const deltaIdeal = prev ? station.idealArrivalMinutes - prev.idealArrivalMinutes : station.idealArrivalMinutes;
+                      const deltaActual = prev && station.actualArrivalMinutes !== undefined && prev.actualArrivalMinutes !== undefined
+                        ? station.actualArrivalMinutes - prev.actualArrivalMinutes
+                        : station.actualArrivalMinutes !== undefined ? station.actualArrivalMinutes : null;
+                      return (
+                        <React.Fragment key={index}>
+                          <tr className="border-b border-gray-700/50 hover:bg-gray-300" style={{fontSize: 10}}>
+                            <td className="py-2 px-2 text-gray-600">
+                              {station.stationName}
                             </td>
-                          )}
-                      </tr>
-                    ))}
+                            <td className="text-right py-2 px-2 text-gray-600 text-blue-400">
+                              {station.distanceKm}
+                            </td>
+                            <td className="text-right py-2 px-2 text-blue-700">
+                              {station.idealArrivalMinutes}
+                            </td>
+                            {chartData?.workflow?.actualSpeedCurve && station.actualArrivalMinutes !== undefined && (
+                              <td className="text-right py-2 px-2 text-green-700">
+                                {station.actualArrivalMinutes}
+                              </td>
+                            )}
+                          </tr>
+                          <tr className="border-b border-gray-200 bg-gray-50">
+                            <td className="py-1 px-2"></td>
+                            <td className="text-right py-1 px-2 text-base text-gray-500 font-semibold">
+                              {deltaDistance !== null ? `${deltaDistance}` : ''}
+                            </td>
+                            <td className="text-right py-1 px-2 text-base text-blue-400 font-semibold">
+                              {deltaIdeal !== null ? `${deltaIdeal}` : ''}
+                            </td>
+                            {chartData?.workflow?.actualSpeedCurve && (
+                              <td className="text-right py-1 px-2 text-base text-green-500 font-semibold">
+                                {deltaActual !== null ? `${deltaActual}` : ''}
+                              </td>
+                            )}
+                          </tr>
+                        </React.Fragment>
+                      );
+                    })}
                   </tbody>
                 </table>
               ) : (

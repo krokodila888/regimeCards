@@ -75,7 +75,7 @@ const staticObjectCategories: ObjectCategory[] = [
     nameRu: "Кривая скорости и ограничения",
     icon: <Activity className="size-4" />,
     objects: [
-      {
+      /*{
         id: "train-movement-curve",
         name: "Train Movement Curve",
         nameRu: "Кривая скорости",
@@ -91,7 +91,7 @@ const staticObjectCategories: ObjectCategory[] = [
         ),
         category: "speed-curve",
         description: "Линия изменения скорости по пути следования",
-      },
+      },*/
       {
         id: "speed-limit-permanent",
         name: "Permanent Speed Limit",
@@ -326,12 +326,13 @@ const staticObjectCategories: ObjectCategory[] = [
         name: "Station",
         nameRu: "Станция",
         icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-indigo-600">
-            <rect x="3" y="8" width="14" height="6" fill="currentColor" />
-            <rect x="6" y="4" width="8" height="4" fill="none" stroke="currentColor" strokeWidth="1" />
-            <text x="10" y="13" fontSize="5" fill="white" textAnchor="middle">
-              СТ
-            </text>
+          <svg width="20" height="20" viewBox="0 0 20 20">
+            {/* Левая половина круга — белая */}
+            <path d="M10 4 a6 6 0 1 0 0 12" fill="#fff" stroke="#000" strokeWidth="1.5" />
+            {/* Правая половина круга — черная */}
+            <path d="M10 16 a6 6 0 1 0 0-12" fill="#111" stroke="#fff" strokeWidth="1.5" />
+            {/* Внешний черный контур по всему кругу */}
+            <circle cx="10" cy="10" r="6" fill="none" stroke="#000" strokeWidth="1.5" />
           </svg>
         ),
         category: "track-objects",
@@ -353,7 +354,7 @@ const staticObjectCategories: ObjectCategory[] = [
         category: "track-objects",
         description: "Разъезд (раздельный пункт)",
       },
-      {
+      /*{
         id: "block-post",
         name: "Block Post",
         nameRu: "Блок-пост",
@@ -393,7 +394,7 @@ const staticObjectCategories: ObjectCategory[] = [
         ),
         category: "track-objects",
         description: "Пикетная отметка (100 м)",
-      },
+      },*/
       {
         id: "level-crossing-guarded",
         name: "Guarded Level Crossing",
@@ -933,11 +934,11 @@ interface VisioObjectPaletteProps {
 
 export default function VisioObjectPalette({
   onDragStart,
-  collapsed = true,
+  collapsed = false,
   onToggleCollapse,
   selectedLocomotive = null,
 }: VisioObjectPaletteProps) {
-  const [sidebarWidth, setSidebarWidth] = useState(320);
+  const [sidebarWidth, setSidebarWidth] = useState(360);
   const [isResizing, setIsResizing] = useState(false);
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(0);
@@ -1031,28 +1032,32 @@ export default function VisioObjectPalette({
     return (
       <div
         style={{ width: "100px" }}
-        className="fixed top-0 right-0 h-full bg-gray-800 text-white flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-20"
+        className="top-0 right-0 h-full bg-gray-800 text-white flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-20"
       >
         <button
           onClick={handleToggle}
-          style={{ marginRight: "50px" }}
+          style={{  marginBottom: 20, marginRight: 50 }}
           className="p-2 hover:bg-gray-700 rounded transition-colors hover:text-white"
           aria-label="Expand object palette"
           title="Развернуть палитру объектов"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
+        <div style={{ marginRight: 50, writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: 14, letterSpacing: 2, marginBottom: 8, color: '#fff', whiteSpace: 'nowrap' }}>
+          Палитра объектов
+        </div>
       </div>
     );
   }
 
   return (
     <div
-      className="fixed top-0 right-0 h-full flex items-stretch z-20 transition-all duration-300"
+      className="top-0 right-0 h-full flex items-stretch z-20 transition-all duration-300"
       style={{
         width: `${sidebarWidth}px`,
-        marginRight: "80px",
         zIndex: 40,
+        marginRight: 50,
+        minWidth: 120
       }}
     >
       {/* Resize handle */}
@@ -1087,11 +1092,6 @@ export default function VisioObjectPalette({
             </div>
             <div className="flex-1">
               <p className="text-xs text-gray-500">Перетащите объекты на холст</p>
-              {selectedLocomotive && (
-                <p className="text-xs text-blue-600 font-medium mt-0.5">
-                  Локомотив: {selectedLocomotive.name}
-                </p>
-              )}
             </div>
           </div>
         </div>
@@ -1106,18 +1106,15 @@ export default function VisioObjectPalette({
               return (
                 <div
                   key={category.id}
-                  className={`rounded-lg border ${
-                    isTractionCategory ? "border-blue-300 bg-blue-50/30" : "border-gray-200"
-                  }`}
+                  className={isTractionCategory ? "rounded-lg border border-blue-300 bg-blue-50/30" : "rounded-lg border border-gray-200"}
                 >
                   {/* Category Header */}
                   <button
-                    onClick={() => toggleCategory(category.id)}
-                    className={`w-full flex items-center gap-2 p-2.5 transition-colors ${
-                      isTractionCategory
-                        ? "bg-blue-50 hover:bg-blue-100"
-                        : "bg-gray-50 hover:bg-gray-100"
-                    }`}
+                    onClick={() => toggleCategory(category.id) }
+                    className={isTractionCategory ? 
+                      "w-full flex items-center gap-2 p-2.5 transition-colors bg-blue-50 hover:bg-blue-100"
+                      : "w-full flex items-center gap-2 p-2.5 transition-colors bg-gray-50 hover:bg-gray-100"
+                    }
                   >
                     {isExpanded ? (
                       <ChevronDown className="size-4 text-gray-600 flex-shrink-0" />

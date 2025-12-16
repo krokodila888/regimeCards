@@ -37,10 +37,10 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
     }
   },
   // Для удобства тестирования
-  '99999': {
-    password: '99999',
+  user1: {
+    password: 'user',
     user: {
-      login: '99999',
+      login: 'user',
       role: 'user',
       name: 'Пользователь ТестТест'
     }

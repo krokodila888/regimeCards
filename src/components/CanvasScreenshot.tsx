@@ -1,8 +1,7 @@
 // src/components/CanvasScreenshot.tsx
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import { Button } from './ui/button';
-import VisioObjectPalette from './VisioObjectPalette';
 import {
   Dialog,
   DialogContent,
@@ -29,7 +28,7 @@ export default function CanvasScreenshot({
   const [dragStartX, setDragStartX] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
-  const [paletteCollapsed, setPaletteCollapsed] = useState(true);
+  const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   
   // Используем локомотив с id: "loc1"
   const locomotive = LOCOMOTIVES.find(loc => loc.id === "loc1") || LOCOMOTIVES[0];
@@ -95,7 +94,7 @@ export default function CanvasScreenshot({
             position: "absolute"
           }}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-2 px-3 py-1 bg-gray-100 rounded">
               <span className="text-sm">Zoom:</span>
               <span className="text-sm font-mono">
@@ -127,7 +126,7 @@ export default function CanvasScreenshot({
               Начальный масштаб
             </Button>
           </div>
-          <div style={{ paddingLeft: 10 }}>
+          <div style={{ paddingLeft: 10 }} className="mt-2">
             <Button
               size="sm"
               variant="outline"
@@ -145,6 +144,8 @@ export default function CanvasScreenshot({
           ref={containerRef}
           className="flex-1 overflow-x-auto overflow-y-hidden relative bg-gray-50"
           style={{
+            overflowY: 'scroll',
+            marginTop: 50,
             cursor: isDragging ? 'grabbing' : 'grab',
           }}
           onWheel={handleWheel}
@@ -181,95 +182,25 @@ export default function CanvasScreenshot({
               }}
             />
 
-            {/* SVG маски для скрытия слоёв */}
-            {imageLoaded && imageRef.current && (
-              <svg
-                style={{
-                  position: 'absolute',
-                  top: '0',
-                  left: '0',
-                  height: '100%',
-                  width: imageRef.current.naturalWidth * zoom,
-                  pointerEvents: 'none',
-                }}
-                viewBox={`0 0 ${imageRef.current.naturalWidth} ${imageRef.current.naturalHeight}`}
-                preserveAspectRatio="none"
-              >
-                {/* Скрыть красную верхнюю кривую уклонов */}
-                {!visibleLayers.gradientCurve && (
-                  <rect
-                    x="0"
-                    y="0"
-                    width={imageRef.current.naturalWidth}
-                    height={imageRef.current.naturalHeight * 0.15}
-                    fill="white"
-                    opacity="0.95"
-                  />
-                )}
-                
-                {/* Скрыть синюю кривую профиля */}
-                {!visibleLayers.profileCurve && (
-                  <rect
-                    x="0"
-                    y={imageRef.current.naturalHeight * 0.15}
-                    width={imageRef.current.naturalWidth}
-                    height={imageRef.current.naturalHeight * 0.15}
-                    fill="white"
-                    opacity="0.95"
-                  />
-                )}
-                
-                {/* Скрыть красную кривую ограничений */}
-                {!visibleLayers.limitCurve && (
-                  <rect
-                    x="0"
-                    y={imageRef.current.naturalHeight * 0.27}
-                    width={imageRef.current.naturalWidth}
-                    height={imageRef.current.naturalHeight * 0.08}
-                    fill="white"
-                    opacity="0.95"
-                  />
-                )}
-                
-                {/* Скрыть зелёную кривую скорости */}
-                {!visibleLayers.speedCurve && (
-                  <rect
-                    x="0"
-                    y={imageRef.current.naturalHeight * 0.27}
-                    width={imageRef.current.naturalWidth}
-                    height={imageRef.current.naturalHeight * 0.45}
-                    fill="white"
-                    opacity="0.95"
-                  />
-                )}
-                
-                {/* Скрыть цветные маркеры режимов */}
-                {!visibleLayers.regimeMarkers && (
-                  <rect
-                    x="0"
-                    y={imageRef.current.naturalHeight * 0.73}
-                    width={imageRef.current.naturalWidth}
-                    height={imageRef.current.naturalHeight * 0.10}
-                    fill="white"
-                    opacity="0.95"
-                  />
-                )}
-                
-                {/* Скрыть подписи станций */}
-                {!visibleLayers.stationMarkers && (
-                  <rect
-                    x="0"
-                    y={imageRef.current.naturalHeight * 0.83}
-                    width={imageRef.current.naturalWidth}
-                    height={imageRef.current.naturalHeight * 0.17}
-                    fill="white"
-                    opacity="0.95"
-                  />
-                )}
-              </svg>
-            )}
-          </div>
-        </div>
+                        {/* SVG маски для скрытия слоёв */}
+                        {imageLoaded && imageRef.current && (
+                          <svg
+                            style={{
+                              position: 'absolute',
+                              top: '0',
+                              left: '0',
+                              height: '100%',
+                              width: imageRef.current.naturalWidth * zoom,
+                              pointerEvents: 'none',
+                            }}
+                            viewBox={`0 0 ${imageRef.current.naturalWidth} ${imageRef.current.naturalHeight}`}
+                            preserveAspectRatio="none"
+                          >
+                          </svg>
+                        )}
+                      </div>
+                      
+                    </div>
 
         {/* Индикатор загрузки */}
         {!imageLoaded && (
@@ -377,11 +308,7 @@ export default function CanvasScreenshot({
       </Dialog>
 
       {/* Visio-like Object Palette - Right Sidebar с данными локомотива */}
-      <VisioObjectPalette
-        collapsed={paletteCollapsed}
-        onToggleCollapse={() => setPaletteCollapsed(!paletteCollapsed)}
-        selectedLocomotive={locomotive}
-      />
+      
     </div>
   );
 }
