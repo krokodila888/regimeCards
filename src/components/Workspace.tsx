@@ -6,11 +6,9 @@ import LoadingOverlay from "./LoadingOverlay";
 import ScheduleSidebar from "./ScheduleSidebar";
 import type {
   ChartData,
-  TrackSegment,
-  SpeedLimit,
-  PathProfile,
 } from "../types/chart-data";
-import { chartDataByID1 } from "../types/consts";
+import { chartDataByID1, LOCOMOTIVES } from "../types/consts";
+import VisioObjectPalette from "./VisioObjectPalette";
 
 interface WorkspaceProps {
   onLogout: () => void;
@@ -28,6 +26,7 @@ export default function Workspace({
   const [isDataValid, setIsDataValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
+  const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [charts] = useState<{ id: string; title: string }[]>([
     {
       id: "1",
@@ -64,6 +63,7 @@ export default function Workspace({
     // This simulates existing completed charts with full workflow data
 
     // Different data for each existing chart
+    //@ts-ignore
     const chartDataByID: { [key: string]: ChartData } = {
       ...chartDataByID1,
     };
@@ -126,6 +126,12 @@ export default function Workspace({
           isDataValid={isDataValid}
           onShowLoading={handleShowLoading}
         />
+        {activeChart && (
+        <VisioObjectPalette
+          collapsed={paletteCollapsed}
+          onToggleCollapse={() => setPaletteCollapsed(!paletteCollapsed)}
+          selectedLocomotive={LOCOMOTIVES[0]}
+      />)}
 
         {/* Import Visio Modal */}
         <ImportVisioModal
