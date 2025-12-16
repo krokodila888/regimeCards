@@ -326,12 +326,13 @@ const staticObjectCategories: ObjectCategory[] = [
         name: "Station",
         nameRu: "Станция",
         icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-indigo-600">
-            <rect x="3" y="8" width="14" height="6" fill="currentColor" />
-            <rect x="6" y="4" width="8" height="4" fill="none" stroke="currentColor" strokeWidth="1" />
-            <text x="10" y="13" fontSize="5" fill="white" textAnchor="middle">
-              СТ
-            </text>
+          <svg width="20" height="20" viewBox="0 0 20 20">
+            {/* Левая половина круга — белая */}
+            <path d="M10 4 a6 6 0 1 0 0 12" fill="#fff" stroke="#000" strokeWidth="1.5" />
+            {/* Правая половина круга — черная */}
+            <path d="M10 16 a6 6 0 1 0 0-12" fill="#111" stroke="#fff" strokeWidth="1.5" />
+            {/* Внешний черный контур по всему кругу */}
+            <circle cx="10" cy="10" r="6" fill="none" stroke="#000" strokeWidth="1.5" />
           </svg>
         ),
         category: "track-objects",
