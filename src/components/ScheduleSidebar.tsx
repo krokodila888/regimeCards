@@ -337,11 +337,11 @@ export default function ScheduleSidebar({
                         : station.actualArrivalMinutes !== undefined ? station.actualArrivalMinutes : null;
                       return (
                         <React.Fragment key={index}>
-                          <tr className="border-b border-gray-700/50 hover:bg-gray-300">
+                          <tr className="border-b border-gray-700/50 hover:bg-gray-300" style={{fontSize: 10}}>
                             <td className="py-2 px-2 text-gray-600">
                               {station.stationName}
                             </td>
-                            <td className="text-right py-2 px-2 text-gray-600">
+                            <td className="text-right py-2 px-2 text-gray-600 text-blue-400">
                               {station.distanceKm}
                             </td>
                             <td className="text-right py-2 px-2 text-blue-700">
@@ -356,14 +356,14 @@ export default function ScheduleSidebar({
                           <tr className="border-b border-gray-200 bg-gray-50">
                             <td className="py-1 px-2"></td>
                             <td className="text-right py-1 px-2 text-base text-gray-500 font-semibold">
-                              {deltaDistance !== null ? `${deltaDistance} км` : ''}
+                              {deltaDistance !== null ? `${deltaDistance}` : ''}
                             </td>
                             <td className="text-right py-1 px-2 text-base text-blue-400 font-semibold">
-                              {deltaIdeal !== null ? `${deltaIdeal} мин` : ''}
+                              {deltaIdeal !== null ? `${deltaIdeal}` : ''}
                             </td>
                             {chartData?.workflow?.actualSpeedCurve && (
                               <td className="text-right py-1 px-2 text-base text-green-500 font-semibold">
-                                {deltaActual !== null ? `${deltaActual} мин` : ''}
+                                {deltaActual !== null ? `${deltaActual}` : ''}
                               </td>
                             )}
                           </tr>

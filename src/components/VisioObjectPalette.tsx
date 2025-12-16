@@ -75,7 +75,7 @@ const staticObjectCategories: ObjectCategory[] = [
     nameRu: "Кривая скорости и ограничения",
     icon: <Activity className="size-4" />,
     objects: [
-      {
+      /*{
         id: "train-movement-curve",
         name: "Train Movement Curve",
         nameRu: "Кривая скорости",
@@ -91,7 +91,7 @@ const staticObjectCategories: ObjectCategory[] = [
         ),
         category: "speed-curve",
         description: "Линия изменения скорости по пути следования",
-      },
+      },*/
       {
         id: "speed-limit-permanent",
         name: "Permanent Speed Limit",
@@ -938,7 +938,7 @@ export default function VisioObjectPalette({
   onToggleCollapse,
   selectedLocomotive = null,
 }: VisioObjectPaletteProps) {
-  const [sidebarWidth, setSidebarWidth] = useState(320);
+  const [sidebarWidth, setSidebarWidth] = useState(360);
   const [isResizing, setIsResizing] = useState(false);
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(0);
@@ -1031,20 +1031,19 @@ export default function VisioObjectPalette({
   if (collapsed) {
     return (
       <div
-        style={{ width: "60px" }}
+        style={{ width: "100px" }}
         className="top-0 right-0 h-full bg-gray-800 text-white flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-20"
       >
-
         <button
           onClick={handleToggle}
-          style={{  marginBottom: 20 }}
+          style={{  marginBottom: 20, marginRight: 50 }}
           className="p-2 hover:bg-gray-700 rounded transition-colors hover:text-white"
           aria-label="Expand object palette"
           title="Развернуть палитру объектов"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
-                <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: 14, letterSpacing: 2, marginBottom: 8, color: '#fff', whiteSpace: 'nowrap' }}>
+        <div style={{ marginRight: 50, writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: 14, letterSpacing: 2, marginBottom: 8, color: '#fff', whiteSpace: 'nowrap' }}>
           Палитра объектов
         </div>
       </div>
@@ -1057,7 +1056,8 @@ export default function VisioObjectPalette({
       style={{
         width: `${sidebarWidth}px`,
         zIndex: 40,
-        marginRight: 10,
+        marginRight: 50,
+        minWidth: 120
       }}
     >
       {/* Resize handle */}
