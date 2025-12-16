@@ -1,8 +1,7 @@
 // src/components/CanvasScreenshot.tsx
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import { Button } from './ui/button';
-import VisioObjectPalette from './VisioObjectPalette';
 import {
   Dialog,
   DialogContent,
@@ -145,6 +144,8 @@ export default function CanvasScreenshot({
           ref={containerRef}
           className="flex-1 overflow-x-auto overflow-y-hidden relative bg-gray-50"
           style={{
+            overflowY: 'scroll',
+            marginTop: 50,
             cursor: isDragging ? 'grabbing' : 'grab',
           }}
           onWheel={handleWheel}
