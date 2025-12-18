@@ -1,4 +1,6 @@
-graph TB
+```mermaid
+    %%{init: {'theme': 'base', 'themeVariables': { 'background': '#FFFFFF' }}}%%
+    graph TB
     subgraph "ВХОДНЫЕ ДАННЫЕ"
         TS[TrackSection<br/>Участок пути]
         LOC[Locomotive<br/>Локомотив]
@@ -75,3 +77,4 @@ graph TB
     style CALC fill:#ffe1e1
     style RES fill:#e1ffe1
     style VIS fill:#f0e1ff
+```
