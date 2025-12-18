@@ -13,8 +13,8 @@ import { Train, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("user");
+  const [password, setPassword] = useState("user");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const { login } = useAuth();
@@ -172,6 +172,7 @@ export default function LoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 autoComplete="username"
+                defaultValue="user"
               />
             </div>
             <div className="space-y-2">
@@ -190,6 +191,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   className="pr-10"
+                  defaultValue="user"
                 />
                 <button
                   type="button"
