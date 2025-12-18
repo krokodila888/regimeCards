@@ -341,7 +341,7 @@ export default function ScheduleSidebar({
                             <td className="py-2 px-2 text-gray-600">
                               {station.stationName}
                             </td>
-                            <td className="text-right py-2 px-2 text-gray-600 text-blue-400">
+                            <td className="text-right py-2 px-2 text-gray-600">
                               {station.distanceKm}
                             </td>
                             <td className="text-right py-2 px-2 text-blue-700">
