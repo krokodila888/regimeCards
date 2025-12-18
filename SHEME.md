@@ -1,6 +1,18 @@
 ```mermaid
-    %%{init: {'theme': 'base', 'themeVariables': { 'background': '#FFFFFF' }}}%%
-    graph TB
+    %%{init: {
+  'theme': 'default',
+  'themeVariables': {
+    'background': '#FFFFFF',
+    'primaryColor': '#fff',
+    'primaryTextColor': '#000'
+  },
+  'flowchart': {
+    'useMaxWidth': false,
+    'htmlLabels': false,
+    'curve': 'basis'
+  }
+}}%%
+    graph LR
     subgraph "ВХОДНЫЕ ДАННЫЕ"
         TS[TrackSection<br/>Участок пути]
         LOC[Locomotive<br/>Локомотив]
