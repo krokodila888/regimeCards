@@ -296,7 +296,7 @@ export default function CanvasScreenshot({
                 : visibleLayers.regimeMarkers && visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopUrl
                 : visibleLayers.regimeMarkers && !visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopNoProfileUrl
                 : !visibleLayers.regimeMarkers && visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopNoRegimesUrl
-                : !visibleLayers.regimeMarkers && !visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoBottomUrl
+                : !visibleLayers.regimeMarkers && !visibleLayers.profileCurve && visibleLayers.gradientCurve ? imageNoBottomUrl
                 : !visibleLayers.regimeMarkers && !visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageSpeedOnlyUrl
                 : !visibleLayers.regimeMarkers && visibleLayers.profileCurve && visibleLayers.gradientCurve ? imageNoRegimesUrl
                 : visibleLayers.regimeMarkers && !visibleLayers.profileCurve && visibleLayers.gradientCurve ? imageNoProfileUrl : imageUrl}
@@ -376,11 +376,10 @@ export default function CanvasScreenshot({
                 id="profileCurve"
                 checked={visibleLayers.profileCurve}
                 onCheckedChange={handleProfileCurveChange}
-                disabled={!visibleLayers.regimeMarkers}
               />
               <Label 
                 htmlFor="profileCurve" 
-                className={`text-sm ${!visibleLayers.regimeMarkers ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                className="text-sm cursor-pointer"
               >
                 Профиль пути
               </Label>
