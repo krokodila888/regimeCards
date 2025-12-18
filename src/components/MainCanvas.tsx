@@ -5,6 +5,13 @@ import { Input } from "./ui/input";
 import ChartEditor from "./ChartEditor";
 // @ts-ignore
 import demaImg from "./images/dema.png";
+import demaNoBottomImg from "./images/dema_no_bottom.png";
+import demaNoProfileImg from "./images/dema_no_profile.png";
+import demaNoTopImg from "./images/dema_no_top.png";
+import demaNoRegimesImg from "./images/dema_no_regimes.png";
+import demaSpeedOnlyImg from "./images/dema_no_top_no_profile_no_regimes.png";
+import demaNoTopNoProfileImg from "./images/dema_no_top_no_profile.png";
+import demaNoTopNoRegimesImg from "./images/dema_no_top_no_regimes.png";
 import type { ChartData } from "../types/chart-data";
 import CanvasScreenshot from "./CanvasScreenshot";
 import { useAuth } from "../contexts/AuthContext";
@@ -119,7 +126,14 @@ export default function MainCanvas({
               />
             ) : (
               <CanvasScreenshot
-                imageUrl={demaImg}                
+                imageUrl={demaImg}
+                imageNoTopUrl={demaNoTopImg}
+                imageNoBottomUrl={demaNoBottomImg}
+                imageSpeedOnlyUrl={demaSpeedOnlyImg}
+                imageNoRegimesUrl={demaNoRegimesImg}
+                imageNoProfileUrl={demaNoProfileImg}
+                imageNoTopNoRegimesUrl={demaNoTopNoRegimesImg}
+                imageNoTopNoProfileUrl={demaNoTopNoProfileImg}             
                 /*visibleLayers={{
                   speedCurve: true,
                   limitCurve: true,

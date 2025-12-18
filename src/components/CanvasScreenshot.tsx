@@ -17,7 +17,7 @@ const Button = ({ children, onClick, size, variant, title }: any) => (
 const Dialog = ({ open, onOpenChange, children }: any) => {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backgroundColor: '#000000a1'}}>
       <div className="bg-white rounded-lg max-w-md w-full p-6 relative">
         <button
           onClick={() => onOpenChange(false)}
@@ -55,10 +55,23 @@ const Label = ({ htmlFor, children, className }: any) => (
 
 interface CanvasScreenshotProps {
   imageUrl: string;
+  imageNoTopUrl: string;
+  imageNoBottomUrl: string;
+  imageSpeedOnlyUrl: string;
+  imageNoRegimesUrl: string;
+  imageNoProfileUrl: string;
+  imageNoTopNoRegimesUrl: string;
+  imageNoTopNoProfileUrl: string;
 }
 
 export default function CanvasScreenshot({ 
-  imageUrl,
+  imageUrl, imageNoTopUrl,
+  imageNoBottomUrl,
+  imageSpeedOnlyUrl,
+  imageNoRegimesUrl,
+  imageNoProfileUrl,
+  imageNoTopNoRegimesUrl,
+  imageNoTopNoProfileUrl,
 }: CanvasScreenshotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -70,7 +83,7 @@ export default function CanvasScreenshot({
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
 
   // Процентные параметры областей изображения
-  const GRADIENT_HEIGHT_PERCENT = 22; // Верхняя область (Динамика реализованная) - увеличено
+  const GRADIENT_HEIGHT_PERCENT = 15; // Верхняя область (Динамика реализованная) - увеличено
   const REGIME_HEIGHT_PERCENT = 8;    // Средняя область (Ленты режимов тяги)
   const PROFILE_HEIGHT_PERCENT = 15;  // Нижняя область (Профиль пути)
 
@@ -88,23 +101,14 @@ export default function CanvasScreenshot({
       setVisibleLayers({
         ...visibleLayers,
         regimeMarkers: false,
-        profileCurve: false,
+        //profileCurve: false,
       });
     } else {
-      // Если профиль был отключен, включаем оба
-      if (!visibleLayers.profileCurve) {
-        setVisibleLayers({
-          ...visibleLayers,
-          regimeMarkers: true,
-          profileCurve: true,
-        });
-      } else {
         // Иначе просто включаем ленты режимов
         setVisibleLayers({
           ...visibleLayers,
           regimeMarkers: true,
         });
-      }
     }
   };
 
@@ -262,9 +266,11 @@ export default function CanvasScreenshot({
           ref={containerRef}
           className="flex-1 overflow-x-auto overflow-y-hidden relative bg-gray-50"
           style={{
-            overflowY: 'scroll',
             marginTop: 50,
             cursor: isDragging ? 'grabbing' : 'grab',
+            height: 'auto !important',
+            overflowY: 'hidden'
+
           }}
           onWheel={handleWheel}
           onMouseDown={handleMouseDown}
@@ -277,23 +283,32 @@ export default function CanvasScreenshot({
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              minHeight: '100%',
+              //minHeight: '100%',
               position: 'relative',
+              height: '100%',
+              overflowY: 'hidden'
             }}
           >
             {/* Изображение с динамическим масштабированием */}
             <img
               ref={imageRef}
-              src={imageUrl}
+              src={visibleLayers.gradientCurve && visibleLayers.profileCurve && visibleLayers.regimeMarkers ? imageUrl 
+                : visibleLayers.regimeMarkers && visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopUrl
+                : visibleLayers.regimeMarkers && !visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopNoProfileUrl
+                : !visibleLayers.regimeMarkers && visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopNoRegimesUrl
+                : !visibleLayers.regimeMarkers && !visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoBottomUrl
+                : !visibleLayers.regimeMarkers && !visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageSpeedOnlyUrl
+                : !visibleLayers.regimeMarkers && visibleLayers.profileCurve && visibleLayers.gradientCurve ? imageNoRegimesUrl
+                : visibleLayers.regimeMarkers && !visibleLayers.profileCurve && visibleLayers.gradientCurve ? imageNoProfileUrl : imageUrl}
               alt="Режимная карта"
               onLoad={() => setImageLoaded(true)}
               style={{
                 display: 'block',
                 // Масштабируем высоту, чтобы заполнить контейнер после обрезки
-                height: `${100 * displayParams.scaleY}%`,
+                height: `${100/* * displayParams.scaleY*/}%`,
                 width: 'auto',
                 // Применяем горизонтальный zoom и вертикальное смещение
-                transform: `scaleX(${zoom}) translateY(${displayParams.translateY}%)`,
+                /*transform: `scaleX(${zoom}) translateY(${displayParams.translateY}%)`,*/
                 transformOrigin: 'left top',
                 transition: isDragging ? 'none' : 'transform 0.3s ease-out, height 0.3s ease-out',
                 userSelect: 'none',
