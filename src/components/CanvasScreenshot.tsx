@@ -1,17 +1,57 @@
-// src/components/CanvasScreenshot.tsx
 import React, { useRef, useState } from 'react';
 import { ZoomIn, ZoomOut, Settings } from 'lucide-react';
-import { Button } from './ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from './ui/dialog';
-import { Checkbox } from './ui/checkbox';
-import { Label } from './ui/label';
-import { LOCOMOTIVES } from '../types/consts';
+
+// Заглушки для UI компонентов
+const Button = ({ children, onClick, size, variant, title }: any) => (
+  <button
+    onClick={onClick}
+    title={title}
+    className={`px-3 py-1 rounded border ${
+      variant === 'outline' ? 'border-gray-300 bg-white hover:bg-gray-50' : ''
+    }`}
+  >
+    {children}
+  </button>
+);
+
+const Dialog = ({ open, onOpenChange, children }: any) => {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+      <div className="bg-white rounded-lg max-w-md w-full p-6 relative">
+        <button
+          onClick={() => onOpenChange(false)}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          ✕
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const DialogContent = ({ children }: any) => <>{children}</>;
+const DialogHeader = ({ children }: any) => <div className="mb-4">{children}</div>;
+const DialogTitle = ({ children }: any) => <h2 className="text-xl font-semibold mb-2">{children}</h2>;
+const DialogDescription = ({ children }: any) => <p className="text-sm text-gray-600">{children}</p>;
+
+const Checkbox = ({ id, checked, onCheckedChange, disabled }: any) => (
+  <input
+    type="checkbox"
+    id={id}
+    checked={checked}
+    onChange={(e) => onCheckedChange(e.target.checked)}
+    disabled={disabled}
+    className="w-4 h-4 rounded border-gray-300 disabled:opacity-50"
+  />
+);
+
+const Label = ({ htmlFor, children, className }: any) => (
+  <label htmlFor={htmlFor} className={className}>
+    {children}
+  </label>
+);
 
 interface CanvasScreenshotProps {
   imageUrl: string;
@@ -28,20 +68,99 @@ export default function CanvasScreenshot({
   const [dragStartX, setDragStartX] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
-  const [paletteCollapsed, setPaletteCollapsed] = useState(false);
-  
-  // Используем локомотив с id: "loc1"
-  const locomotive = LOCOMOTIVES.find(loc => loc.id === "loc1") || LOCOMOTIVES[0];
 
-  // Настройки отображения слоёв
+  // Процентные параметры областей изображения
+  const GRADIENT_HEIGHT_PERCENT = 22; // Верхняя область (Динамика реализованная) - увеличено
+  const REGIME_HEIGHT_PERCENT = 8;    // Средняя область (Ленты режимов тяги)
+  const PROFILE_HEIGHT_PERCENT = 15;  // Нижняя область (Профиль пути)
+
+  // Настройки отображения слоёв - три активных
   const [visibleLayers, setVisibleLayers] = useState({
-    speedCurve: true,
-    limitCurve: true,
-    profileCurve: true,
-    gradientCurve: true,
-    regimeMarkers: true,
-    stationMarkers: true,
+    gradientCurve: true,   // Динамика реализованная (верхняя область)
+    regimeMarkers: true,   // Ленты режимов тяги (средняя область)
+    profileCurve: true,    // Профиль пути (нижняя область)
   });
+
+  // Обработчик изменения Лент режимов тяги
+  const handleRegimeMarkersChange = (checked: boolean) => {
+    if (!checked) {
+      // Отключаем и Ленты режимов, и Профиль пути
+      setVisibleLayers({
+        ...visibleLayers,
+        regimeMarkers: false,
+        profileCurve: false,
+      });
+    } else {
+      // Если профиль был отключен, включаем оба
+      if (!visibleLayers.profileCurve) {
+        setVisibleLayers({
+          ...visibleLayers,
+          regimeMarkers: true,
+          profileCurve: true,
+        });
+      } else {
+        // Иначе просто включаем ленты режимов
+        setVisibleLayers({
+          ...visibleLayers,
+          regimeMarkers: true,
+        });
+      }
+    }
+  };
+
+  // Обработчик изменения Профиля пути
+  const handleProfileCurveChange = (checked: boolean) => {
+    if (!checked) {
+      // Отключаем профиль (ленты режимов остаются как есть)
+      setVisibleLayers({
+        ...visibleLayers,
+        profileCurve: false,
+      });
+    } else {
+      // Включаем профиль
+      setVisibleLayers({
+        ...visibleLayers,
+        profileCurve: true,
+      });
+    }
+  };
+
+  // Вычисление параметров отображения на основе видимых слоёв
+  const getDisplayParams = () => {
+    let clipTop = 0;
+    let clipBottom = 0;
+
+    // Если скрыта динамика - обрезаем сверху
+    if (!visibleLayers.gradientCurve) {
+      clipTop = GRADIENT_HEIGHT_PERCENT;
+    }
+    
+    // Если скрыты ленты режимов - обрезаем средне-нижнюю область
+    if (!visibleLayers.regimeMarkers) {
+      clipBottom += REGIME_HEIGHT_PERCENT;
+    }
+
+    // Если скрыт профиль - обрезаем самую нижнюю область
+    if (!visibleLayers.profileCurve) {
+      clipBottom += PROFILE_HEIGHT_PERCENT;
+    }
+
+    // Вычисляем оставшийся процент видимой высоты
+    const visibleHeightPercent = 100 - clipTop - clipBottom;
+    
+    // Коэффициент масштабирования по Y для заполнения контейнера
+    const scaleY = 100 / visibleHeightPercent;
+
+    return {
+      clipTop,
+      clipBottom,
+      scaleY,
+      // Смещение для компенсации обрезанной верхней части
+      translateY: -clipTop
+    };
+  };
+
+  const displayParams = getDisplayParams();
 
   // Сброс к начальному состоянию
   const handleResetZoom = () => {
@@ -82,7 +201,7 @@ export default function CanvasScreenshot({
 
   return (
     <div className="flex-1 p-6 overflow-hidden flex flex-col">
-      <div className="bg-white rounded-lg shadow-sm p-6 flex-1 flex flex-col overflow-hidden" style={{overflowX: "scroll"}}>
+      <div className="bg-white rounded-lg shadow-sm p-6 flex-1 flex flex-col overflow-hidden">
         
         {/* Панель управления */}
         <div
@@ -132,7 +251,6 @@ export default function CanvasScreenshot({
               variant="outline"
               onClick={() => setShowDisplaySettings(true)}
               title="Настройки отображения"
-              
             >
               <Settings className="w-4 h-4" />
             </Button>
@@ -163,7 +281,7 @@ export default function CanvasScreenshot({
               position: 'relative',
             }}
           >
-            {/* Изображение */}
+            {/* Изображение с динамическим масштабированием */}
             <img
               ref={imageRef}
               src={imageUrl}
@@ -171,36 +289,22 @@ export default function CanvasScreenshot({
               onLoad={() => setImageLoaded(true)}
               style={{
                 display: 'block',
-                height: '100%',
+                // Масштабируем высоту, чтобы заполнить контейнер после обрезки
+                height: `${100 * displayParams.scaleY}%`,
                 width: 'auto',
-                transform: `scaleX(${zoom})`,
-                transformOrigin: 'left center',
-                transition: isDragging ? 'none' : 'transform 0.1s ease-out',
+                // Применяем горизонтальный zoom и вертикальное смещение
+                transform: `scaleX(${zoom}) translateY(${displayParams.translateY}%)`,
+                transformOrigin: 'left top',
+                transition: isDragging ? 'none' : 'transform 0.3s ease-out, height 0.3s ease-out',
                 userSelect: 'none',
                 pointerEvents: 'none',
-                maxWidth: "fit-content"
+                maxWidth: "fit-content",
+                objectFit: 'cover',
+                objectPosition: 'left top'
               }}
             />
-
-                        {/* SVG маски для скрытия слоёв */}
-                        {imageLoaded && imageRef.current && (
-                          <svg
-                            style={{
-                              position: 'absolute',
-                              top: '0',
-                              left: '0',
-                              height: '100%',
-                              width: imageRef.current.naturalWidth * zoom,
-                              pointerEvents: 'none',
-                            }}
-                            viewBox={`0 0 ${imageRef.current.naturalWidth} ${imageRef.current.naturalHeight}`}
-                            preserveAspectRatio="none"
-                          >
-                          </svg>
-                        )}
-                      </div>
-                      
-                    </div>
+          </div>
+        </div>
 
         {/* Индикатор загрузки */}
         {!imageLoaded && (
@@ -215,7 +319,7 @@ export default function CanvasScreenshot({
 
       {/* Модальное окно настроек отображения */}
       <Dialog open={showDisplaySettings} onOpenChange={setShowDisplaySettings}>
-        <DialogContent className="max-w-md">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Настройки отображения</DialogTitle>
             <DialogDescription>
@@ -224,67 +328,20 @@ export default function CanvasScreenshot({
           </DialogHeader>
 
           <div className="space-y-4 py-4">
+            {/* Активные чекбоксы */}
             <div className="flex items-center space-x-3">
               <Checkbox
                 id="gradientCurve"
                 checked={visibleLayers.gradientCurve}
-                onCheckedChange={(checked) =>
+                onCheckedChange={(checked: boolean) =>
                   setVisibleLayers({
                     ...visibleLayers,
-                    gradientCurve: !!checked,
+                    gradientCurve: checked,
                   })
                 }
               />
               <Label htmlFor="gradientCurve" className="text-sm cursor-pointer">
-                Динамика реализованная 
-              </Label>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Checkbox
-                id="profileCurve"
-                checked={visibleLayers.profileCurve}
-                onCheckedChange={(checked) =>
-                  setVisibleLayers({
-                    ...visibleLayers,
-                    profileCurve: !!checked,
-                  })
-                }
-              />
-              <Label htmlFor="profileCurve" className="text-sm cursor-pointer">
-                Профиль пути
-              </Label>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Checkbox
-                id="limitCurve"
-                checked={visibleLayers.limitCurve}
-                onCheckedChange={(checked) =>
-                  setVisibleLayers({
-                    ...visibleLayers,
-                    limitCurve: !!checked,
-                  })
-                }
-              />
-              <Label htmlFor="limitCurve" className="text-sm cursor-pointer">
-                Ограничения скорости
-              </Label>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Checkbox
-                id="speedCurve"
-                checked={visibleLayers.speedCurve}
-                onCheckedChange={(checked) =>
-                  setVisibleLayers({
-                    ...visibleLayers,
-                    speedCurve: !!checked,
-                  })
-                }
-              />
-              <Label htmlFor="speedCurve" className="text-sm cursor-pointer">
-                Кривая скорости
+                Динамика реализованная
               </Label>
             </div>
 
@@ -292,23 +349,53 @@ export default function CanvasScreenshot({
               <Checkbox
                 id="regimeMarkers"
                 checked={visibleLayers.regimeMarkers}
-                onCheckedChange={(checked) =>
-                  setVisibleLayers({
-                    ...visibleLayers,
-                    regimeMarkers: !!checked,
-                  })
-                }
+                onCheckedChange={handleRegimeMarkersChange}
               />
               <Label htmlFor="regimeMarkers" className="text-sm cursor-pointer">
                 Ленты режимов тяги
               </Label>
             </div>
+
+            <div className="flex items-center space-x-3">
+              <Checkbox
+                id="profileCurve"
+                checked={visibleLayers.profileCurve}
+                onCheckedChange={handleProfileCurveChange}
+                disabled={!visibleLayers.regimeMarkers}
+              />
+              <Label 
+                htmlFor="profileCurve" 
+                className={`text-sm ${!visibleLayers.regimeMarkers ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+              >
+                Профиль пути
+              </Label>
+            </div>
+
+            {/* Заблокированные чекбоксы */}
+            <div className="flex items-center space-x-3 opacity-50">
+              <Checkbox
+                id="limitCurve"
+                checked={true}
+                disabled={true}
+              />
+              <Label htmlFor="limitCurve" className="text-sm cursor-not-allowed">
+                Ограничения скорости
+              </Label>
+            </div>
+
+            <div className="flex items-center space-x-3 opacity-50">
+              <Checkbox
+                id="speedCurve"
+                checked={true}
+                disabled={true}
+              />
+              <Label htmlFor="speedCurve" className="text-sm cursor-not-allowed">
+                Кривая скорости
+              </Label>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Visio-like Object Palette - Right Sidebar с данными локомотива */}
-      
     </div>
   );
 }
