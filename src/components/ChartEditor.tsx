@@ -3346,7 +3346,7 @@ export default function ChartEditor({
             {/* Tooltip для объекта */}
             {hoveredObject && (
               <div
-                className="fixed bg-black text-white text-xs px-2 py-1 rounded pointer-events-none z-50"
+                className="fixed bg-black text-white text-xs px-2 py-1 rounded pointer-events-none z-150"
                 style={{
                   left: screenMousePos.x + 10,
                   top: screenMousePos.y + 10,
@@ -3361,7 +3361,7 @@ export default function ChartEditor({
             {/* Tooltip для данных */}
             {hoveredDataPoint && !hoveredObject && (
               <div
-                className="fixed bg-blue-600 text-white text-xs px-3 py-2 rounded shadow-lg pointer-events-none z-50"
+                className="fixed bg-blue-600 text-white text-xs px-3 py-2 rounded shadow-lg pointer-events-none z-150"
                 style={{
                   left: screenMousePos.x + 10,
                   top: screenMousePos.y + 10,

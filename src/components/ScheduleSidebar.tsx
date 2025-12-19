@@ -211,7 +211,7 @@ export default function ScheduleSidebar({
   if (isCollapsed) {
     return (
       <div
-        className="fixed top-0 right-0 h-full bg-gray-200 flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-50 bg-gray-300"
+        className="fixed top-0 right-0 h-full bg-gray-200 flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-150 bg-gray-300"
         style={{ width: "50px", height: '100%'}}
       >
         <button
@@ -246,7 +246,7 @@ export default function ScheduleSidebar({
 
   return (
     <div
-      className="fixed top-0 right-0 h-full flex items-stretch z-30 transition-all duration-300 z-50 bg-white"
+      className="fixed top-0 right-0 h-full flex items-stretch z-30 transition-all duration-300 z-150 bg-white"
       style={{
         width: `${sidebarWidth}px`,
         height: '100%',

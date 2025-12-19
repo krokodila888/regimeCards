@@ -1,57 +1,99 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ZoomIn, ZoomOut, Settings } from 'lucide-react';
+import { Button } from './ui/button';
+import { Checkbox } from './ui/checkbox';
+import { Label } from './ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from './ui/dialog';
+import type { TrackBounds, PlacedObject, PaletteObject } from '../types/types';
 
-// Заглушки для UI компонентов
-const Button = ({ children, onClick, size, variant, title }: any) => (
-  <button
-    onClick={onClick}
-    title={title}
-    className={`px-3 py-1 rounded border ${
-      variant === 'outline' ? 'border-gray-300 bg-white hover:bg-gray-50' : ''
-    }`}
-  >
-    {children}
-  </button>
-);
+// ============================================================================
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ПРЕОБРАЗОВАНИЯ КООРДИНАТ
+// ============================================================================
 
-const Dialog = ({ open, onOpenChange, children }: any) => {
-  if (!open) return null;
+/**
+ * Преобразование позиции X в пикселях в километровую отметку
+ * Учитывает отступы на изображении и ОБРАТНЫЙ порядок координат
+ */
+function pixelsToKilometers(
+  pixelX: number,
+  bounds: TrackBounds,
+  marginLeft: number,
+  marginRight: number
+): number {
+  const { startKm, endKm, imageWidth } = bounds;
+  
+  // Вычисляем область с координатной шкалой
+  const totalImageKm = Math.abs(endKm - startKm) + marginLeft + marginRight;
+  const scaleStartPx = (marginLeft / totalImageKm) * imageWidth;
+  const scaleEndPx = imageWidth - (marginRight / totalImageKm) * imageWidth;
+  const scaleWidthPx = scaleEndPx - scaleStartPx;
+  
+  // Если клик в отступе - возвращаем ближайшую границу
+  if (pixelX < scaleStartPx) {
+    return startKm;
+  }
+  if (pixelX > scaleEndPx) {
+    return endKm;
+  }
+  
+  // Преобразуем позицию в координату (ОБРАТНЫЙ отсчет!)
+  const positionInScale = (pixelX - scaleStartPx) / scaleWidthPx; // 0..1
+  const km = startKm - (positionInScale * Math.abs(startKm - endKm));
+  
+  // Округляем до 1 знака после запятой
+  return Math.round(km * 10) / 10;
+}
+
+/**
+ * Функция для получения иконки по ID объекта
+ * TODO: Заменить на import { getPaletteObjectById } from './VisioObjectPalette'
+ */
+function getIconForObjectType(objectType: PaletteObject): React.ReactNode {
+  // Временная реализация с hardcoded иконками
+  if (objectType.id === 'speed-limit-permanent') {
+    return (
+      <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
+        <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" />
+        <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">V</text>
+      </svg>
+    );
+  }
+  if (objectType.id === 'speed-limit-temporary') {
+    return (
+      <svg width="20" height="20" viewBox="0 0 20 20" className="text-yellow-600">
+        <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="3,2" />
+        <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">V</text>
+      </svg>
+    );
+  }
+  if (objectType.id === 'station') {
+    return (
+      <svg width="20" height="20" viewBox="0 0 20 20">
+        <path d="M10 4 a6 6 0 1 0 0 12" fill="#fff" stroke="#000" strokeWidth="1.5" />
+        <path d="M10 16 a6 6 0 1 0 0-12" fill="#111" stroke="#fff" strokeWidth="1.5" />
+        <circle cx="10" cy="10" r="6" fill="none" stroke="#000" strokeWidth="1.5" />
+      </svg>
+    );
+  }
+  
+  // Fallback иконка
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{backgroundColor: '#000000a1'}}>
-      <div className="bg-white rounded-lg max-w-md w-full p-6 relative">
-        <button
-          onClick={() => onOpenChange(false)}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-        >
-          ✕
-        </button>
-        {children}
-      </div>
-    </div>
+    <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-600">
+      <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="10" cy="10" r="2" fill="currentColor" />
+    </svg>
   );
-};
+}
 
-const DialogContent = ({ children }: any) => <>{children}</>;
-const DialogHeader = ({ children }: any) => <div className="mb-4">{children}</div>;
-const DialogTitle = ({ children }: any) => <h2 className="text-xl font-semibold mb-2">{children}</h2>;
-const DialogDescription = ({ children }: any) => <p className="text-sm text-gray-600">{children}</p>;
-
-const Checkbox = ({ id, checked, onCheckedChange, disabled }: any) => (
-  <input
-    type="checkbox"
-    id={id}
-    checked={checked}
-    onChange={(e) => onCheckedChange(e.target.checked)}
-    disabled={disabled}
-    className="w-4 h-4 rounded border-gray-300 disabled:opacity-50"
-  />
-);
-
-const Label = ({ htmlFor, children, className }: any) => (
-  <label htmlFor={htmlFor} className={className}>
-    {children}
-  </label>
-);
+// ============================================================================
+// КОМПОНЕНТ
+// ============================================================================
 
 interface CanvasScreenshotProps {
   imageUrl: string;
@@ -62,111 +104,215 @@ interface CanvasScreenshotProps {
   imageNoProfileUrl: string;
   imageNoTopNoRegimesUrl: string;
   imageNoTopNoProfileUrl: string;
+  placedObjects: PlacedObject[];
+  onPlacedObjectsChange: (objects: PlacedObject[]) => void;
+  selectedObjectId: string | null;
+  onSelectObject: (id: string | null) => void;
 }
 
 export default function CanvasScreenshot({ 
-  imageUrl, imageNoTopUrl,
+  imageUrl,
+  imageNoTopUrl,
   imageNoBottomUrl,
   imageSpeedOnlyUrl,
   imageNoRegimesUrl,
   imageNoProfileUrl,
   imageNoTopNoRegimesUrl,
   imageNoTopNoProfileUrl,
+  placedObjects,
+  onPlacedObjectsChange,
+  selectedObjectId,
+  onSelectObject,
 }: CanvasScreenshotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   
   const [zoom, setZoom] = useState(1);
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDraggingCanvas, setIsDraggingCanvas] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
+  
+  // Состояние для перетаскивания объектов
+  const [draggingObjectId, setDraggingObjectId] = useState<string | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [hoveredObjectId, setHoveredObjectId] = useState<string | null>(null);
 
-  // Процентные параметры областей изображения
-  const GRADIENT_HEIGHT_PERCENT = 15; // Верхняя область (Динамика реализованная) - увеличено
-  const REGIME_HEIGHT_PERCENT = 8;    // Средняя область (Ленты режимов тяги)
-  const PROFILE_HEIGHT_PERCENT = 15;  // Нижняя область (Профиль пути)
+  // ========================================================================
+  // ПАРАМЕТРЫ УЧАСТКА И КООРДИНАТ
+  // ========================================================================
+  
+  // ВАЖНО: На скрине координаты идут ОБРАТНО - слева больше, справа меньше
+  const TRACK_BOUNDS: TrackBounds = {
+    startKm: 1782,  // Левый край (начало)
+    endKm: 1611,    // Правый край (конец)
+    imageWidth: 0,  // Будет установлено после загрузки изображения
+  };
+  
+  // Отступы на изображении (в километрах)
+  // Измените эти значения для точной калибровки координат:
+  // - Если объект на 1781 км показывает 1780.9 → увеличьте MARGIN_LEFT_KM
+  // - Если объект на 1781 км показывает 1781.1 → уменьшите MARGIN_LEFT_KM
+  const MARGIN_LEFT_KM = 1.3;    // Отступ слева до начала шкалы
+  const MARGIN_RIGHT_KM = 0.19;   // Отступ справа после конца шкалы
 
-  // Настройки отображения слоёв - три активных
+  // Обновляем ширину изображения после загрузки
+  useEffect(() => {
+    if (imageLoaded && imageRef.current) {
+      TRACK_BOUNDS.imageWidth = imageRef.current.naturalWidth;
+    }
+  }, [imageLoaded]);
+
+  // Процентные параметры областей изображения для скрытия слоев
+  const GRADIENT_HEIGHT_PERCENT = 15;
+  const REGIME_HEIGHT_PERCENT = 8;
+  const PROFILE_HEIGHT_PERCENT = 15;
+
   const [visibleLayers, setVisibleLayers] = useState({
-    gradientCurve: true,   // Динамика реализованная (верхняя область)
-    regimeMarkers: true,   // Ленты режимов тяги (средняя область)
-    profileCurve: true,    // Профиль пути (нижняя область)
+    gradientCurve: true,
+    regimeMarkers: true,
+    profileCurve: true,
   });
 
-  // Обработчик изменения Лент режимов тяги
-  const handleRegimeMarkersChange = (checked: boolean) => {
-    if (!checked) {
-      // Отключаем и Ленты режимов, и Профиль пути
-      setVisibleLayers({
-        ...visibleLayers,
-        regimeMarkers: false,
-        //profileCurve: false,
-      });
-    } else {
-        // Иначе просто включаем ленты режимов
-        setVisibleLayers({
-          ...visibleLayers,
-          regimeMarkers: true,
-        });
-    }
-  };
+  // ========================================================================
+  // ОБРАБОТЧИКИ СОБЫТИЙ
+  // ========================================================================
 
-  // Обработчик изменения Профиля пути
-  const handleProfileCurveChange = (checked: boolean) => {
-    if (!checked) {
-      // Отключаем профиль (ленты режимов остаются как есть)
-      setVisibleLayers({
-        ...visibleLayers,
-        profileCurve: false,
-      });
-    } else {
-      // Включаем профиль
-      setVisibleLayers({
-        ...visibleLayers,
-        profileCurve: true,
-      });
-    }
-  };
-
-  // Вычисление параметров отображения на основе видимых слоёв
-  const getDisplayParams = () => {
-    let clipTop = 0;
-    let clipBottom = 0;
-
-    // Если скрыта динамика - обрезаем сверху
+  // Вычисление позиции Y для размещения объектов
+  const getObjectPlacementY = () => {
+    if (!imageRef.current) return 0;
+    const imageHeight = imageRef.current.clientHeight;
+    
+    let topOffset = 0;
     if (!visibleLayers.gradientCurve) {
-      clipTop = GRADIENT_HEIGHT_PERCENT;
+      topOffset = GRADIENT_HEIGHT_PERCENT;
     }
     
-    // Если скрыты ленты режимов - обрезаем средне-нижнюю область
-    if (!visibleLayers.regimeMarkers) {
-      clipBottom += REGIME_HEIGHT_PERCENT;
-    }
-
-    // Если скрыт профиль - обрезаем самую нижнюю область
-    if (!visibleLayers.profileCurve) {
-      clipBottom += PROFILE_HEIGHT_PERCENT;
-    }
-
-    // Вычисляем оставшийся процент видимой высоты
-    const visibleHeightPercent = 100 - clipTop - clipBottom;
-    
-    // Коэффициент масштабирования по Y для заполнения контейнера
-    const scaleY = 100 / visibleHeightPercent;
-
-    return {
-      clipTop,
-      clipBottom,
-      scaleY,
-      // Смещение для компенсации обрезанной верхней части
-      translateY: -clipTop
-    };
+    // Объекты размещаются в центре видимой области по вертикали
+    return imageHeight * 0.5;
   };
 
-  const displayParams = getDisplayParams();
+  // Обработчик drop для размещения объекта из палитры
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!imageRef.current || !containerRef.current) return;
+    
+    try {
+      const objectId = e.dataTransfer.getData('application/x-palette-object-id');
+      const objectDataJson = e.dataTransfer.getData('application/x-palette-object-data');
+      
+      if (!objectId || !objectDataJson) {
+        console.error('No object data in drop event');
+        return;
+      }
+      
+      const objectData = JSON.parse(objectDataJson);
+      
+      // Получаем позицию относительно изображения
+      const rect = imageRef.current.getBoundingClientRect();
+      const scrollLeft = containerRef.current.scrollLeft;
+      
+      const x = e.clientX - rect.left + scrollLeft;
+      const y = getObjectPlacementY();
+      
+      // Преобразуем X в километры с учетом отступов
+      const coordinate = pixelsToKilometers(
+        x,
+        { ...TRACK_BOUNDS, imageWidth: imageRef.current.naturalWidth },
+        MARGIN_LEFT_KM,
+        MARGIN_RIGHT_KM
+      );
+      
+      // Создаем новый размещенный объект
+      const newObject: PlacedObject = {
+        id: `placed_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        objectType: objectData,
+        coordinate,
+        position: { x, y }
+      };
+      
+      onPlacedObjectsChange([...placedObjects, newObject]);
+      onSelectObject(newObject.id);
+    } catch (error) {
+      console.error('Error placing object:', error);
+    }
+  };
 
-  // Сброс к начальному состоянию
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  };
+
+  // Обработчик начала перетаскивания размещенного объекта
+  const handleObjectMouseDown = (e: React.MouseEvent, objectId: string) => {
+    e.stopPropagation();
+    
+    const object = placedObjects.find(obj => obj.id === objectId);
+    if (!object || !imageRef.current) return;
+    
+    const rect = imageRef.current.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left - object.position.x;
+    
+    setDraggingObjectId(objectId);
+    setDragOffset({ x: offsetX, y: 0 });
+    onSelectObject(objectId);
+  };
+
+  // Обработчик движения мыши (для перетаскивания объектов и канваса)
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (draggingObjectId && imageRef.current && containerRef.current) {
+      e.preventDefault();
+      
+      const rect = imageRef.current.getBoundingClientRect();
+      const scrollLeft = containerRef.current.scrollLeft;
+      
+      let newX = e.clientX - rect.left - dragOffset.x + scrollLeft;
+      
+      // Ограничиваем перемещение в пределах изображения
+      newX = Math.max(0, Math.min(newX, imageRef.current.naturalWidth));
+      
+      // Обновляем позицию и координату объекта
+      const updatedObjects = placedObjects.map(obj => {
+        if (obj.id === draggingObjectId) {
+          const newCoordinate = pixelsToKilometers(
+            newX,
+            { ...TRACK_BOUNDS, imageWidth: imageRef.current!.naturalWidth },
+            MARGIN_LEFT_KM,
+            MARGIN_RIGHT_KM
+          );
+          
+          return {
+            ...obj,
+            position: { ...obj.position, x: newX },
+            coordinate: newCoordinate
+          };
+        }
+        return obj;
+      });
+      
+      onPlacedObjectsChange(updatedObjects);
+    } else if (isDraggingCanvas && containerRef.current) {
+      const newScrollX = dragStartX - e.clientX;
+      containerRef.current.scrollLeft = newScrollX;
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDraggingObjectId(null);
+    setIsDraggingCanvas(false);
+  };
+
+  // Обработчик клика по канвасу (для снятия выделения)
+  const handleCanvasMouseDown = (e: React.MouseEvent) => {
+    if (!containerRef.current || draggingObjectId) return;
+    setIsDraggingCanvas(true);
+    setDragStartX(e.clientX + containerRef.current.scrollLeft);
+    onSelectObject(null);
+    e.preventDefault();
+  };
+
   const handleResetZoom = () => {
     setZoom(1);
     if (containerRef.current) {
@@ -174,34 +320,30 @@ export default function CanvasScreenshot({
     }
   };
 
-  // Начало перетаскивания
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    setIsDragging(true);
-    setDragStartX(e.clientX + containerRef.current.scrollLeft);
-    e.preventDefault();
-  };
-
-  // Перетаскивание
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !containerRef.current) return;
-    
-    const newScrollX = dragStartX - e.clientX;
-    containerRef.current.scrollLeft = newScrollX;
-  };
-
-  // Конец перетаскивания
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  // Обработка колёсика мыши (горизонтальный скролл)
   const handleWheel = (e: React.WheelEvent) => {
     if (!containerRef.current) return;
-    
     e.preventDefault();
     containerRef.current.scrollLeft += e.deltaY;
   };
+
+  // Получение текущего изображения на основе видимых слоёв
+  const getCurrentImage = () => {
+    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
+    
+    if (gradientCurve && regimeMarkers && profileCurve) return imageUrl;
+    if (!gradientCurve && regimeMarkers && profileCurve) return imageNoTopUrl;
+    if (!gradientCurve && regimeMarkers && !profileCurve) return imageNoTopNoProfileUrl;
+    if (!gradientCurve && !regimeMarkers && profileCurve) return imageNoTopNoRegimesUrl;
+    if (gradientCurve && !regimeMarkers && !profileCurve) return imageNoBottomUrl;
+    if (!gradientCurve && !regimeMarkers && !profileCurve) return imageSpeedOnlyUrl;
+    if (gradientCurve && !regimeMarkers && profileCurve) return imageNoRegimesUrl;
+    if (gradientCurve && regimeMarkers && !profileCurve) return imageNoProfileUrl;
+    return imageUrl;
+  };
+
+  // ========================================================================
+  // RENDER
+  // ========================================================================
 
   return (
     <div className="flex-1 p-6 overflow-hidden flex flex-col">
@@ -261,56 +403,45 @@ export default function CanvasScreenshot({
           </div>
         </div>
 
-        {/* Canvas-контейнер с горизонтальным скроллом */}
+        {/* Canvas-контейнер */}
         <div
           ref={containerRef}
           className="flex-1 overflow-x-auto overflow-y-hidden relative bg-gray-50"
           style={{
             marginTop: 50,
-            cursor: isDragging ? 'grabbing' : 'grab',
+            cursor: isDraggingCanvas ? 'grabbing' : draggingObjectId ? 'grabbing' : 'grab',
             height: 'auto !important',
             overflowY: 'hidden'
-
           }}
           onWheel={handleWheel}
-          onMouseDown={handleMouseDown}
+          onMouseDown={handleCanvasMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
         >
-          {/* Wrapper для обеспечения ширины, больше контейнера (для скролла) */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              //minHeight: '100%',
               position: 'relative',
               height: '100%',
               overflowY: 'hidden'
             }}
           >
-            {/* Изображение с динамическим масштабированием */}
+            {/* Изображение */}
             <img
               ref={imageRef}
-              src={visibleLayers.gradientCurve && visibleLayers.profileCurve && visibleLayers.regimeMarkers ? imageUrl 
-                : visibleLayers.regimeMarkers && visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopUrl
-                : visibleLayers.regimeMarkers && !visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopNoProfileUrl
-                : !visibleLayers.regimeMarkers && visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageNoTopNoRegimesUrl
-                : !visibleLayers.regimeMarkers && !visibleLayers.profileCurve && visibleLayers.gradientCurve ? imageNoBottomUrl
-                : !visibleLayers.regimeMarkers && !visibleLayers.profileCurve && !visibleLayers.gradientCurve ? imageSpeedOnlyUrl
-                : !visibleLayers.regimeMarkers && visibleLayers.profileCurve && visibleLayers.gradientCurve ? imageNoRegimesUrl
-                : visibleLayers.regimeMarkers && !visibleLayers.profileCurve && visibleLayers.gradientCurve ? imageNoProfileUrl : imageUrl}
+              src={getCurrentImage()}
               alt="Режимная карта"
               onLoad={() => setImageLoaded(true)}
               style={{
                 display: 'block',
-                // Масштабируем высоту, чтобы заполнить контейнер после обрезки
-                height: `${100/* * displayParams.scaleY*/}%`,
+                height: '100%',
                 width: 'auto',
-                // Применяем горизонтальный zoom и вертикальное смещение
-                /*transform: `scaleX(${zoom}) translateY(${displayParams.translateY}%)`,*/
                 transformOrigin: 'left top',
-                transition: isDragging ? 'none' : 'transform 0.3s ease-out, height 0.3s ease-out',
+                transition: 'none',
                 userSelect: 'none',
                 pointerEvents: 'none',
                 maxWidth: "fit-content",
@@ -318,6 +449,97 @@ export default function CanvasScreenshot({
                 objectPosition: 'left top'
               }}
             />
+
+            {/* Размещенные объекты */}
+            {imageLoaded && placedObjects.map((obj) => {
+              const isSelected = obj.id === selectedObjectId;
+              const isHovered = obj.id === hoveredObjectId;
+              const isDragging = obj.id === draggingObjectId;
+              
+              return (
+                <div
+                  key={obj.id}
+                  style={{
+                    position: 'absolute',
+                    left: `${obj.position.x}px`,
+                    top: `${obj.position.y}px`,
+                    transform: 'translate(-50%, -50%)',
+                    cursor: 'move',
+                    zIndex: isDragging ? 1000 : isSelected ? 100 : 50,
+                    pointerEvents: 'auto'
+                  }}
+                  onMouseDown={(e) => handleObjectMouseDown(e, obj.id)}
+                  onMouseEnter={() => setHoveredObjectId(obj.id)}
+                  onMouseLeave={() => setHoveredObjectId(null)}
+                >
+                  {/* Вертикальная ножка */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '-16px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: '2px',
+                      height: '16px',
+                      backgroundColor: isSelected ? '#3b82f6' : isHovered ? '#60a5fa' : '#000',
+                      transition: 'background-color 0.2s',
+                    }}
+                  />
+                  
+                  {/* Иконка объекта без белого фона */}
+                  <div
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      filter: isSelected || isHovered 
+                        ? 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))' 
+                        : 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+                      transition: 'filter 0.2s',
+                    }}
+                  >
+                    <div style={{ 
+                      transform: 'scale(1.6)',
+                      filter: isSelected 
+                        ? 'drop-shadow(0 0 3px #3b82f6)' 
+                        : isHovered 
+                        ? 'drop-shadow(0 0 3px #60a5fa)' 
+                        : 'none',
+                      transition: 'filter 0.2s',
+                    }}>
+                      {getIconForObjectType(obj.objectType)}
+                    </div>
+                  </div>
+                  
+                  {/* Tooltip при наведении */}
+                  {isHovered && !isDragging && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '40px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        color: 'white',
+                        padding: '6px 10px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        whiteSpace: 'nowrap',
+                        pointerEvents: 'none',
+                        zIndex: 1001
+                      }}
+                    >
+                      <div style={{ fontWeight: 'bold' }}>{obj.objectType.nameRu}</div>
+                      <div style={{ fontSize: '11px', opacity: 0.9 }}>
+                        км {obj.coordinate.toFixed(1)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -343,16 +565,12 @@ export default function CanvasScreenshot({
           </DialogHeader>
 
           <div className="space-y-4 py-4">
-            {/* Активные чекбоксы */}
             <div className="flex items-center space-x-3">
               <Checkbox
                 id="gradientCurve"
                 checked={visibleLayers.gradientCurve}
                 onCheckedChange={(checked: boolean) =>
-                  setVisibleLayers({
-                    ...visibleLayers,
-                    gradientCurve: checked,
-                  })
+                  setVisibleLayers({ ...visibleLayers, gradientCurve: checked })
                 }
               />
               <Label htmlFor="gradientCurve" className="text-sm cursor-pointer">
@@ -364,7 +582,9 @@ export default function CanvasScreenshot({
               <Checkbox
                 id="regimeMarkers"
                 checked={visibleLayers.regimeMarkers}
-                onCheckedChange={handleRegimeMarkersChange}
+                onCheckedChange={(checked: boolean) =>
+                  setVisibleLayers({ ...visibleLayers, regimeMarkers: checked })
+                }
               />
               <Label htmlFor="regimeMarkers" className="text-sm cursor-pointer">
                 Ленты режимов тяги
@@ -375,34 +595,24 @@ export default function CanvasScreenshot({
               <Checkbox
                 id="profileCurve"
                 checked={visibleLayers.profileCurve}
-                onCheckedChange={handleProfileCurveChange}
+                onCheckedChange={(checked: boolean) =>
+                  setVisibleLayers({ ...visibleLayers, profileCurve: checked })
+                }
               />
-              <Label 
-                htmlFor="profileCurve" 
-                className="text-sm cursor-pointer"
-              >
+              <Label htmlFor="profileCurve" className="text-sm cursor-pointer">
                 Профиль пути
               </Label>
             </div>
 
-            {/* Заблокированные чекбоксы */}
             <div className="flex items-center space-x-3 opacity-50">
-              <Checkbox
-                id="limitCurve"
-                checked={true}
-                disabled={true}
-              />
+              <Checkbox id="limitCurve" checked={true} disabled={true} />
               <Label htmlFor="limitCurve" className="text-sm cursor-not-allowed">
                 Ограничения скорости
               </Label>
             </div>
 
             <div className="flex items-center space-x-3 opacity-50">
-              <Checkbox
-                id="speedCurve"
-                checked={true}
-                disabled={true}
-              />
+              <Checkbox id="speedCurve" checked={true} disabled={true} />
               <Label htmlFor="speedCurve" className="text-sm cursor-not-allowed">
                 Кривая скорости
               </Label>

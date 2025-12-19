@@ -1,63 +1,86 @@
-// Visio-like Object Palette for Regime Chart Editing
-// Палитра объектов для редактирования режимных карт ведения поездов
-// Provides categorized draggable objects for creating locomotive regime charts
-
 import React, { useState, useRef, useEffect } from "react";
 import {
   ChevronDown,
   ChevronRight,
   ChevronLeft,
-  TrendingUp,
-  TrendingDown,
-  Zap,
-  Power,
-  Circle,
+  Trash2,
+  Info,
   MapPin,
   Activity,
-  Move,
-  ArrowRight,
-  Gauge,
-  Route,
   AlertTriangle,
+  Power,
+  Route,
+  Zap,
 } from "lucide-react";
+import { ObjectCategory, PaletteObject, PlacedObject } from "../types/types";
 import { ScrollArea } from "./ui/scroll-area";
 import { LOCOMOTIVES } from "../types/consts";
+import { Locomotive } from "../types/chart-data";
+import { Button } from "./ui/button";
 
-// Object definition type
-export interface PaletteObject {
-  id: string;
-  name: string;
-  nameRu: string;
-  icon: React.ReactNode;
-  category: string;
-  description?: string;
-}
-
-// Category definition
-interface ObjectCategory {
-  id: string;
-  name: string;
-  nameRu: string;
-  icon: React.ReactNode;
-  objects: PaletteObject[];
-}
-
-// Traction mode from locomotive data
-interface TractionMode {
-  id: string;
-  label: string;
-  lineStyle: "solid" | "dashed" | "dotted";
-  color: string;
-}
-
-// Locomotive data structure
-interface Locomotive {
-  id: string;
-  name: string;
-  length: number;
-  mass: number;
-  tractionModes: TractionMode[];
-}
+// Примеры категорий объектов (сокращенная версия)
+/*const EXAMPLE_CATEGORIES: ObjectCategory[] = [
+  {
+    id: "speed-curve",
+    name: "Speed & Movement",
+    nameRu: "Кривая скорости и ограничения",
+    icon: <MapPin className="w-4 h-4" />,
+    objects: [
+      {
+        id: "speed-limit-permanent",
+        name: "Permanent Speed Limit",
+        nameRu: "Ограничение скорости (постоянное)",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
+            <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" />
+            <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              V
+            </text>
+          </svg>
+        ),
+        category: "speed-curve",
+        description: "Ограничение скорости (постоянное)",
+      },
+      {
+        id: "speed-limit-temporary",
+        name: "Temporary Speed Limit",
+        nameRu: "Ограничение скорости (временное)",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-yellow-600">
+            <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="3,2" />
+            <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              V
+            </text>
+          </svg>
+        ),
+        category: "speed-curve",
+        description: "Временное ограничение скорости",
+      },
+    ],
+  },
+  {
+    id: "track-objects",
+    name: "Track Objects",
+    nameRu: "Раздельные пункты и объекты",
+    icon: <MapPin className="w-4 h-4" />,
+    objects: [
+      {
+        id: "station",
+        name: "Station",
+        nameRu: "Станция",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20">
+            <path d="M10 4 a6 6 0 1 0 0 12" fill="#fff" stroke="#000" strokeWidth="1.5" />
+            <path d="M10 16 a6 6 0 1 0 0-12" fill="#111" stroke="#fff" strokeWidth="1.5" />
+            <circle cx="10" cy="10" r="6" fill="none" stroke="#000" strokeWidth="1.5" />
+          </svg>
+        ),
+        category: "track-objects",
+        description: "Железнодорожная станция",
+      },
+    ],
+  },
+];*/
 
 // =============================================================================
 // СТАТИЧЕСКИЕ КАТЕГОРИИ ОБЪЕКТОВ
@@ -239,77 +262,6 @@ const staticObjectCategories: ObjectCategory[] = [
       },
     ],
   },
-
-  // -------------------------------------------------------------------------
-  // ПРОДОЛЬНЫЙ ПРОФИЛЬ ПУТИ
-  // Track longitudinal profile elements
-  // -------------------------------------------------------------------------
-  /*{
-    id: "track-profile",
-    name: "Track Profile",
-    nameRu: "План и профиль пути",
-    icon: <TrendingUp className="size-4" />,
-    objects: [
-      {
-        id: "ascending-grade",
-        name: "Ascending Grade",
-        nameRu: "Подъём",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
-            <path d="M2 16 L18 4" fill="none" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="8" fontSize="6" fill="currentColor" textAnchor="middle">
-              ‰+
-            </text>
-          </svg>
-        ),
-        category: "track-profile",
-        description: "Участок подъёма (уклон вверх)",
-      },
-      {
-        id: "descending-grade",
-        name: "Descending Grade",
-        nameRu: "Спуск",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-600">
-            <path d="M2 4 L18 16" fill="none" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="8" fontSize="6" fill="currentColor" textAnchor="middle">
-              ‰−
-            </text>
-          </svg>
-        ),
-        category: "track-profile",
-        description: "Участок спуска (уклон вниз)",
-      },
-      {
-        id: "level-section",
-        name: "Level Section",
-        nameRu: "Площадка",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-600">
-            <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="7" fontSize="6" fill="currentColor" textAnchor="middle">
-              0‰
-            </text>
-          </svg>
-        ),
-        category: "track-profile",
-        description: "Горизонтальный участок пути",
-      },
-      {
-        id: "grade-break-point",
-        name: "Grade Break Point",
-        nameRu: "Точка перелома профиля",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-orange-600">
-            <path d="M2 14 L10 6 L18 14" fill="none" stroke="currentColor" strokeWidth="2" />
-            <circle cx="10" cy="6" r="2" fill="currentColor" />
-          </svg>
-        ),
-        category: "track-profile",
-        description: "Точка изменения уклона",
-      },
-    ],
-  },*/
 
   // -------------------------------------------------------------------------
   // РАЗДЕЛЬНЫЕ ПУНКТЫ И ПУТЕВЫЕ ОБЪЕКТЫ
@@ -925,44 +877,55 @@ const generateTractionModeObjects = (locomotive: Locomotive | null): PaletteObje
 // Object Palette Component
 // =============================================================================
 
+
+// Функция для получения полного объекта по ID (включая icon)
+export function getPaletteObjectById(objectId: string): PaletteObject | null {
+  for (const category of staticObjectCategories) {
+    const object = category.objects.find(obj => obj.id === objectId);
+    if (object) return object;
+  }
+  return null;
+}
+
 interface VisioObjectPaletteProps {
-  onDragStart?: (object: PaletteObject) => void;
+  selectedObjectId?: string | null;
+  placedObjects?: PlacedObject[];
+  onDeleteObject?: (id: string) => void;
+  onSelectObject?: (id: string | null) => void;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
-  selectedLocomotive?: Locomotive | null;
 }
 
 export default function VisioObjectPalette({
-  onDragStart,
+  selectedObjectId = null,
+  placedObjects = [],
+  onDeleteObject,
+  onSelectObject,
   collapsed = false,
   onToggleCollapse,
-  selectedLocomotive = null,
 }: VisioObjectPaletteProps) {
   const [sidebarWidth, setSidebarWidth] = useState(360);
   const [isResizing, setIsResizing] = useState(false);
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(0);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(["speed-curve", "traction-modes"]) // Start with speed and traction expanded
+    new Set(["speed-curve", "track-objects"])
   );
-  const [draggingObject, setDraggingObject] = useState<string | null>(null);
 
-  // Generate dynamic traction modes category
-  const tractionModesCategory: ObjectCategory = {
-    id: "traction-modes",
-    name: "Traction Modes",
-    nameRu: selectedLocomotive ? `Локомотив (${selectedLocomotive.name})` : "Локомотив",
-    icon: <Gauge className="size-4" />,
-    objects: generateTractionModeObjects(selectedLocomotive),
-  };
+  // Получаем выбранный объект или последний добавленный
+  const displayedObject = selectedObjectId
+    ? placedObjects.find(obj => obj.id === selectedObjectId)
+    : placedObjects.length > 0
+    ? placedObjects[placedObjects.length - 1]
+    : null;
 
-  // Combine static categories with dynamic traction modes
-  // Place traction modes after control-modes for logical grouping
-  const allCategories: ObjectCategory[] = [
-    ...staticObjectCategories.slice(0, 2), // speed-curve, control-modes
-    tractionModesCategory,
-    ...staticObjectCategories.slice(2), // remaining categories
-  ];
+  // Получаем полный объект с иконкой для отображения
+  const displayedObjectWithIcon = displayedObject 
+    ? {
+        ...displayedObject,
+        objectType: getPaletteObjectById(displayedObject.objectType.id) || displayedObject.objectType
+      }
+    : null;
 
   const handleResizeStart = (e: React.MouseEvent) => {
     if (collapsed) return;
@@ -975,7 +938,6 @@ export default function VisioObjectPalette({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isResizing) return;
-
       const deltaX = e.clientX - resizeStartX.current;
       const newWidth = Math.max(280, Math.min(500, resizeStartWidth.current - deltaX));
       setSidebarWidth(newWidth);
@@ -995,12 +957,6 @@ export default function VisioObjectPalette({
     }
   }, [isResizing]);
 
-  const handleToggle = () => {
-    if (onToggleCollapse) {
-      onToggleCollapse();
-    }
-  };
-
   const toggleCategory = (categoryId: string) => {
     const newExpanded = new Set(expandedCategories);
     if (newExpanded.has(categoryId)) {
@@ -1012,38 +968,51 @@ export default function VisioObjectPalette({
   };
 
   const handleDragStart = (e: React.DragEvent, object: PaletteObject) => {
-    // Set drag data
-    e.dataTransfer.setData("application/json", JSON.stringify(object));
+    // Передаем ID объекта
+    e.dataTransfer.setData("application/x-palette-object-id", object.id);
+    
+    // Передаем данные объекта БЕЗ поля icon (оно не сериализуется)
+    const objectDataWithoutIcon = {
+      id: object.id,
+      name: object.name,
+      nameRu: object.nameRu,
+      category: object.category,
+      description: object.description,
+    };
+    
+    e.dataTransfer.setData("application/x-palette-object-data", JSON.stringify(objectDataWithoutIcon));
     e.dataTransfer.effectAllowed = "copy";
+  };
 
-    setDraggingObject(object.id);
-
-    if (onDragStart) {
-      onDragStart(object);
+  const handleDeleteClick = () => {
+    if (displayedObjectWithIcon && onDeleteObject) {
+      onDeleteObject(displayedObjectWithIcon.id);
     }
   };
 
-  const handleDragEnd = () => {
-    setDraggingObject(null);
-  };
-
-  // Collapsed state - vertical dark strip on RIGHT side
+  // Collapsed state
   if (collapsed) {
     return (
       <div
         style={{ width: "100px" }}
-        className="top-0 right-0 h-full bg-gray-800 text-white flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-20"
+        className="h-full bg-gray-800 text-white flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-20"
       >
         <button
-          onClick={handleToggle}
-          style={{  marginBottom: 20, marginRight: 50 }}
-          className="p-2 hover:bg-gray-700 rounded transition-colors hover:text-white"
-          aria-label="Expand object palette"
+          onClick={onToggleCollapse}
+          style={{ marginBottom: 20, marginRight: 50 }}
+          className="p-2 hover:bg-gray-700 rounded transition-colors"
           title="Развернуть палитру объектов"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <div style={{ marginRight: 50, writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: 14, letterSpacing: 2, marginBottom: 8, color: '#fff', whiteSpace: 'nowrap' }}>
+        <div style={{ 
+          marginRight: 50, 
+          writingMode: 'vertical-rl', 
+          transform: 'rotate(180deg)', 
+          fontSize: 14, 
+          letterSpacing: 2, 
+          color: '#fff' 
+        }}>
           Палитра объектов
         </div>
       </div>
@@ -1052,92 +1021,64 @@ export default function VisioObjectPalette({
 
   return (
     <div
-      className="top-0 right-0 h-full flex items-stretch z-20 transition-all duration-300"
-      style={{
-        width: `${sidebarWidth}px`,
-        zIndex: 40,
-        marginRight: 50,
-        minWidth: 120
-      }}
+      className="h-full flex items-stretch z-20 transition-all duration-300"
+      style={{ width: `${sidebarWidth}px`, minWidth: 280 }}
     >
       {/* Resize handle */}
       <div
         className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex-shrink-0 transition-colors"
         onMouseDown={handleResizeStart}
-        style={{
-          cursor: isResizing ? "col-resize" : "col-resize",
-        }}
       />
 
       {/* Sidebar content */}
       <div className="flex-1 bg-white border-l border-gray-300 flex flex-col shadow-lg">
-        {/* Header with separate toggle button and title */}
+        {/* Header */}
         <div className="flex-shrink-0 p-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
           <button
-            onClick={handleToggle}
+            onClick={onToggleCollapse}
             className="p-2 mr-2 hover:bg-gray-200 rounded transition-colors text-gray-700"
-            aria-label="Collapse object palette"
             title="Свернуть палитру"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
-          <h3 className="text-gray-700 flex-1">Палитра объектов</h3>
+          <h3 className="text-gray-700 flex-1 font-medium">Палитра объектов</h3>
         </div>
 
-        {/* Subheader with locomotive info */}
+        {/* Subheader */}
         <div className="p-3 border-b border-gray-200 bg-gray-50">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-blue-100 rounded">
-              <Move className="size-4 text-blue-600" />
-            </div>
-            <div className="flex-1">
-              <p className="text-xs text-gray-500">Перетащите объекты на холст</p>
-            </div>
-          </div>
+          <p className="text-xs text-gray-500">
+            Перетащите объекты на холст для размещения
+          </p>
         </div>
 
         {/* Categories */}
-        <ScrollArea className="flex-1 scrollbar " style={{ overflow: "auto scroll" }}>
+        <ScrollArea className="flex-1" style={{ overflow: "auto" }}>
           <div className="p-2 space-y-1">
-            {allCategories.map((category) => {
+            {staticObjectCategories.map((category) => {
               const isExpanded = expandedCategories.has(category.id);
-              const isTractionCategory = category.id === "traction-modes";
 
               return (
                 <div
                   key={category.id}
-                  className={isTractionCategory ? "rounded-lg border border-blue-300 bg-blue-50/30" : "rounded-lg border border-gray-200"}
+                  className="rounded-lg border border-gray-200"
                 >
                   {/* Category Header */}
                   <button
-                    onClick={() => toggleCategory(category.id) }
-                    className={isTractionCategory ? 
-                      "w-full flex items-center gap-2 p-2.5 transition-colors bg-blue-50 hover:bg-blue-100"
-                      : "w-full flex items-center gap-2 p-2.5 transition-colors bg-gray-50 hover:bg-gray-100"
-                    }
+                    onClick={() => toggleCategory(category.id)}
+                    className="w-full flex items-center gap-2 p-2.5 transition-colors bg-gray-50 hover:bg-gray-100"
                   >
                     {isExpanded ? (
-                      <ChevronDown className="size-4 text-gray-600 flex-shrink-0" />
+                      <ChevronDown className="w-4 h-4 text-gray-600" />
                     ) : (
-                      <ChevronRight className="size-4 text-gray-600 flex-shrink-0" />
+                      <ChevronRight className="w-4 h-4 text-gray-600" />
                     )}
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div className={isTractionCategory ? "text-blue-600" : "text-gray-600"}>
-                        {category.icon}
-                      </div>
-                      <span
-                        className={`text-sm font-medium truncate ${
-                          isTractionCategory ? "text-blue-900" : "text-gray-900"
-                        }`}
-                      >
+                      <div className="text-gray-600">{category.icon}</div>
+                      <span className="text-sm font-medium truncate text-gray-900">
                         {category.nameRu}
                       </span>
                     </div>
-                    <span
-                      className={`text-xs px-1.5 py-0.5 rounded flex-shrink-0 ${
-                        isTractionCategory ? "text-blue-600 bg-blue-100" : "text-gray-500 bg-white"
-                      }`}
-                    >
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-white text-gray-500">
                       {category.objects.length}
                     </span>
                   </button>
@@ -1149,22 +1090,15 @@ export default function VisioObjectPalette({
                         {category.objects.map((object) => (
                           <div
                             key={object.id}
-                            draggable={object.id !== "no-locomotive"}
+                            draggable
                             onDragStart={(e) => handleDragStart(e, object)}
-                            onDragEnd={handleDragEnd}
-                            className={`flex items-center gap-1 p-2 rounded border transition-all group ${
-                              object.id === "no-locomotive"
-                                ? "border-gray-200 bg-gray-50 cursor-default opacity-60"
-                                : "border-gray-200 hover:border-blue-400 hover:bg-blue-50 cursor-move"
-                            }`}
-                            title={object.description ? object.description : object.nameRu}
+                            className="flex items-center gap-1 p-2 rounded border border-gray-200 hover:border-blue-400 hover:bg-blue-50 cursor-move transition-all"
+                            title={object.description || object.nameRu}
                           >
-                            {/* Icon */}
-                            <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-50 group-hover:bg-white transition-colors" style={{minWidth: 32}}>
+                            <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-50 group-hover:bg-white" style={{minWidth: 32}}>
                               {object.icon}
                             </div>
-                            {/* Label */}
-                            <span className="text-xs text-gray-700 group-hover:text-blue-700 leading-tight line-clamp-2 pl-2">
+                            <span className="text-xs text-gray-700 hover:text-blue-700 leading-tight line-clamp-2 pl-2">
                               {object.nameRu}
                             </span>
                           </div>
@@ -1178,12 +1112,63 @@ export default function VisioObjectPalette({
           </div>
         </ScrollArea>
 
-        {/* Footer with instructions */}
-        <div className="p-2 border-t border-gray-200 bg-gray-50">
-          <p className="text-xs text-gray-600 text-center">
-            Перетащите объект на холст для размещения
-          </p>
-        </div>
+        {/* Info panel for selected/last added object */}
+        {displayedObjectWithIcon && (
+          <div className="flex-shrink-0 border-t-2 border-blue-500 bg-blue-50 p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 w-10 h-10 bg-white rounded border-2 border-blue-500 flex items-center justify-center">
+                <div style={{ transform: 'scale(1.4)' }}>
+                  {displayedObjectWithIcon.objectType.icon}
+                </div>
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <h4 className="text-sm font-semibold text-gray-900">
+                    {selectedObjectId ? 'Выбранный объект' : 'Последний добавленный'}
+                  </h4>
+                </div>
+                
+                <p className="text-sm text-gray-700 font-medium mb-2">
+                  {displayedObjectWithIcon.objectType.nameRu}
+                </p>
+                
+                <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
+                  <MapPin className="w-3 h-3" />
+                  <span className="font-mono">
+                    км {displayedObjectWithIcon.coordinate.toFixed(3)}
+                  </span>
+                </div>
+
+                {displayedObjectWithIcon.objectType.description && (
+                  <p className="text-xs text-gray-500 mb-3 line-clamp-2">
+                    {displayedObjectWithIcon.objectType.description}
+                  </p>
+                )}
+                
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDeleteClick}
+                  className="w-full flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Удалить объект
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Footer hint */}
+        {!displayedObjectWithIcon && (
+          <div className="p-3 border-t border-gray-200 bg-gray-50">
+            <p className="text-xs text-gray-600 text-center">
+              Разместите объект на холсте, чтобы увидеть информацию
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

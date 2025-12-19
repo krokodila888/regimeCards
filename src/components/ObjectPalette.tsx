@@ -70,7 +70,7 @@ export default function ObjectPalette({
   ];
 
   return (
-    <Card className="fixed top-24 right-6 w-[420px] shadow-lg z-50 max-h-[80vh] overflow-auto bg-white">
+    <Card className="fixed top-24 right-6 w-[420px] shadow-lg z-150 max-h-[80vh] overflow-auto bg-white">
       <CardHeader className="pb-3 border-b">
         <div className="flex items-center justify-between">
           <CardTitle>Object Palette</CardTitle>
