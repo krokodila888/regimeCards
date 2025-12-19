@@ -13,6 +13,7 @@ import {
   MapPin,
   Clock,
   Navigation,
+  RefreshCw
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -389,30 +390,6 @@ export default function Stage1CalculationParams({
 
   return (
     <div className="space-y-3">
-      {/* Scale */}
-      <div className="relative" title="Масштаб">
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-          <Scale className="w-4 h-4" />
-        </div>
-        <Select
-          value={scale}
-          onValueChange={(value: any) =>
-            onUpdateWorkflow({ scale: value })
-          }
-        >
-          <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
-            <SelectValue placeholder="Масштаб" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="1:1">1:1</SelectItem>
-            <SelectItem value="1:5">1:5</SelectItem>
-            <SelectItem value="1:10">1:10</SelectItem>
-            <SelectItem value="1:50">1:50</SelectItem>
-            <SelectItem value="1:100">1:100</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
       {/* Movement Type */}
       <div className="relative" title="Тип движения">
         <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 z-10">
@@ -487,7 +464,7 @@ export default function Stage1CalculationParams({
       </div>
 
       {/* Number of units */}
-      <div className="relative" title="количество единиц">
+      <div className="relative" title="количество секций">
         <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
           <Hash className="w-4 h-4" />
         </div>
@@ -504,14 +481,22 @@ export default function Stage1CalculationParams({
             className="bg-white border-gray-400 text-gray-600 pl-10"
           />
           <span className="text-gray-500 text-sm whitespace-nowrap">
-            количество единиц
+            количество секций
           </span>
         </div>
       </div>
 
       {/* Composition Section */}
       <div className="pt-2 border-t border-gray-300">
-        <h3 className="text-sm text-gray-700 mb-3">Состав</h3>
+      <Button
+          onClick={handleFormSubmit}
+          className="w-full bg-white text-blue-600 border  hover:text-white mt-4 mb-4 hover:bg-blue-600"
+          style={{border: 'solid 2px var(--color-blue-500)'}}
+          disabled={!departureStation || !arrivalStation}
+        >
+          Загрузить состав
+          <RefreshCw className="w-4 h-4 ml-2" />
+        </Button>
 
         {/* Gross train mass */}
         <div
@@ -704,6 +689,24 @@ export default function Stage1CalculationParams({
             </SelectContent>
           </Select>
         </div>
+        <Button
+          onClick={handleFormSubmit}
+          className="w-full bg-white text-blue-600 border  hover:text-white mt-4 hover:bg-blue-600"
+          style={{border: 'solid 2px var(--color-blue-500)'}}
+          disabled={!departureStation || !arrivalStation}
+        >
+          Загрузить профиль
+          <RefreshCw className="w-4 h-4 ml-2" />
+        </Button>
+        <Button
+          onClick={handleFormSubmit}
+          className="w-full bg-white text-blue-600 border  hover:text-white mb-4 hover:bg-blue-600"
+          style={{border: 'solid 2px var(--color-blue-500)'}}
+          disabled={!departureStation || !arrivalStation}
+        >
+          Загрузить время хода НГДП
+          <RefreshCw className="w-4 h-4 ml-2" />
+        </Button>
 
         {/* Travel time */}
         <div className="relative" title="Время хода, мин.">
@@ -727,6 +730,15 @@ export default function Stage1CalculationParams({
             </span>
           </div>
         </div>
+        <Button
+          onClick={handleFormSubmit}
+          className="w-full bg-white text-blue-600 border hover:text-white mb-4 hover:bg-blue-600"
+          style={{border: 'solid 2px var(--color-blue-500)'}}
+          disabled={!departureStation || !arrivalStation}
+        >
+          Загрузить ограничения скорости
+          <RefreshCw className="w-4 h-4 ml-2" />
+        </Button>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label className="text-sm text-gray-700">
@@ -750,7 +762,7 @@ export default function Stage1CalculationParams({
           className="w-full bg-blue-600 hover:bg-blue-700 mt-4"
           disabled={!departureStation || !arrivalStation}
         >
-          Сформировать и рассчитать
+          Рассчитать скоростную кривую
         </Button>
       </div>
 

@@ -1021,8 +1021,8 @@ export default function VisioObjectPalette({
 
   return (
     <div
-      className="h-full flex items-stretch z-20 transition-all duration-300"
-      style={{ width: `${sidebarWidth}px`, minWidth: 280 }}
+      className="h-full flex items-stretch z-20 transition-all duration-300 z-150"
+      style={{ width: `${sidebarWidth}px`, minWidth: 280, marginRight: 50 }}
     >
       {/* Resize handle */}
       <div

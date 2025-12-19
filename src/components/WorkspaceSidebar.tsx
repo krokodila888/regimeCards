@@ -366,7 +366,7 @@ export default function WorkspaceSidebar({
                       className={`w-full text-left px-3 py-2 rounded transition-colors hover:bg-gray-300 text-gray-600 text-sm
              ${
                activeChart?.id === chart.id
-                 ? "bg-blue-600 text-white"
+                 ? "bg-gray-600 text-white"
                  : ""
              }`}
                     >
@@ -384,7 +384,7 @@ export default function WorkspaceSidebar({
           chosenAction !== "createNew" ? (
             <button
               style={{ fontSize: "14px" }}
-              className={`w-full text-left px-3 py-2 rounded bg-blue-600 text-white text-sm
+              className={`w-full text-left px-3 py-2 rounded background-color: var(--input-background); text-gray-800 text-sm border
              `}
             >
               {activeChart?.title}
