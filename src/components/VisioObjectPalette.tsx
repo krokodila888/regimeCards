@@ -1116,23 +1116,24 @@ export default function VisioObjectPalette({
         {displayedObjectWithIcon && (
           <div className="flex-shrink-0 border-t-2 border-blue-500 bg-blue-50 p-4">
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-10 h-10 bg-white rounded border-2 border-blue-500 flex items-center justify-center">
-                <div style={{ transform: 'scale(1.4)' }}>
-                  {displayedObjectWithIcon.objectType.icon}
-                </div>
-              </div>
+              
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
                   <h4 className="text-sm font-semibold text-gray-900">
                     {selectedObjectId ? 'Выбранный объект' : 'Последний добавленный'}
                   </h4>
                 </div>
+                <div className="w-10 h-10 bg-white rounded flex gap-10">
+                  <div style={{ transform: 'scale(1.4)' }} className="flex-shrink-0 w-10 h-6 bg-white rounded border-2 border-blue-500 flex justify-center mr-4">
+                    {displayedObjectWithIcon.objectType.icon}
+                  </div>
+                  <p className="text-sm text-gray-700 font-medium mb-2 pl-4">
+                    {displayedObjectWithIcon.objectType.nameRu}
+                  </p>
+              </div>
                 
-                <p className="text-sm text-gray-700 font-medium mb-2">
-                  {displayedObjectWithIcon.objectType.nameRu}
-                </p>
+                
                 
                 <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
                   <MapPin className="w-3 h-3" />
@@ -1141,11 +1142,11 @@ export default function VisioObjectPalette({
                   </span>
                 </div>
 
-                {displayedObjectWithIcon.objectType.description && (
+                {/*displayedObjectWithIcon.objectType.description && (
                   <p className="text-xs text-gray-500 mb-3 line-clamp-2">
                     {displayedObjectWithIcon.objectType.description}
                   </p>
-                )}
+                )*/}
                 
                 <Button
                   variant="destructive"
@@ -1158,15 +1159,6 @@ export default function VisioObjectPalette({
                 </Button>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Footer hint */}
-        {!displayedObjectWithIcon && (
-          <div className="p-3 border-t border-gray-200 bg-gray-50">
-            <p className="text-xs text-gray-600 text-center">
-              Разместите объект на холсте, чтобы увидеть информацию
-            </p>
           </div>
         )}
       </div>
