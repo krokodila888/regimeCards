@@ -171,8 +171,6 @@ export default function LoginPage() {
                 placeholder="Введите логин"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                autoComplete="username"
-                defaultValue="user"
               />
             </div>
             <div className="space-y-2">
@@ -189,9 +187,7 @@ export default function LoginPage() {
                   placeholder="Введите пароль"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
                   className="pr-10"
-                  defaultValue="user"
                 />
                 <button
                   type="button"
