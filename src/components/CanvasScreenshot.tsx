@@ -620,8 +620,8 @@ export default function CanvasScreenshot({
       </div>
 
       {/* Модальное окно настроек отображения */}
-      <Dialog open={showDisplaySettings} onOpenChange={setShowDisplaySettings}>
-        <DialogContent>
+      <Dialog open={showDisplaySettings} onOpenChange={setShowDisplaySettings} >
+        <DialogContent className="max-w-[520px] max-h-[75vh] w-[80%]">
           <DialogHeader>
             <DialogTitle>Настройки отображения</DialogTitle>
             <DialogDescription>
@@ -629,7 +629,7 @@ export default function CanvasScreenshot({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
+          <div className="space-y-4 py-4" >
             <div className="flex items-center space-x-3">
               <Checkbox
                 id="gradientCurve"
