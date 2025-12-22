@@ -74,8 +74,8 @@ export default function MainCanvas({
   };
 
   const handleSave = () => {
-    onShowLoading("Saving chart...");
-    console.log('Saving placed objects:', placedObjects);
+    onShowLoading("Сохранение...");
+    console.log('Идет сохранение:', placedObjects);
   };
 
   const handleUpdateChartData = (updates: Partial<ChartData>) => {

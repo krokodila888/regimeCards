@@ -105,7 +105,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     }, 2500);
   };
 
-  // Обработчики для размещенных объектов
+   // Обработчики для размещенных объектов
   const handlePlacedObjectsChange = (objects: PlacedObject[]) => {
     setPlacedObjects(objects);
   };

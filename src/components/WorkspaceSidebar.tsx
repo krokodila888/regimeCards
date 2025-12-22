@@ -436,6 +436,7 @@ export default function WorkspaceSidebar({
                           });
                         }}
                         isOld={activeChart?.age === "old"}
+                        onShowLoading={onShowLoading}
                       />
                     </AccordionContent>
                   </AccordionItem>

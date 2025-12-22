@@ -148,14 +148,14 @@ export default function CanvasScreenshot({
   // Рассчитано на основе реальных размеров изображений
   const PLACEMENT_HEIGHT_CONFIGS = {
     // gradientCurve, regimeMarkers, profileCurve
-    'true_true_true': 73.8,      // Все слои видны: 714/967 = 73.8%
-    'false_true_true': 66.1,     // Без верхнего слоя: 497/752 = 66.1%
-    'false_true_false': 82.7,    // Без верхнего и профиля: 497/601 = 76.8%
-    'false_false_true': 82.7,    // Без верхнего и режимов: 497/601 = 82.7%
-    'true_false_false': 97.4,    // Без профиля и режимов: 712/731 = 97.4%
-    'false_false_false': 97.3,   // Только скорость: 497/511 = 97.3%
-    'true_false_true': 81.7,     // Без режимов: 712/871 = 81.7%
-    'true_true_false': 86.0,     // Без профиля: 712/828 = 86.0%
+    'true_true_true': 71.8,      // Все слои видны: 714/967 = 73.8%
+    'false_true_true': 64.1,     // Без верхнего слоя: 497/752 = 66.1%
+    'false_true_false': 80.7,    // Без верхнего и профиля: 497/601 = 76.8%
+    'false_false_true': 74.7,    // Без верхнего и режимов: 497/601 = 82.7%
+    'true_false_false': 95.4,    // Без профиля и режимов: 712/731 = 97.4%
+    'false_false_false': 95.3,   // Только скорость: 497/511 = 97.3%
+    'true_false_true': 79.7,     // Без режимов: 712/871 = 81.7%
+    'true_true_false': 84.0,     // Без профиля: 712/828 = 86.0%
   };
 
   const [visibleLayers, setVisibleLayers] = useState({

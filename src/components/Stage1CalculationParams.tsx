@@ -43,6 +43,7 @@ import { tracks } from "../types/tracks";
 interface Stage1CalculationParamsProps {
   workflow: WorkflowState;
   onUpdateWorkflow: (updates: Partial<WorkflowState>) => void;
+  onShowLoading: (message: string) => void;
   isOld?: boolean;
 }
 
@@ -50,6 +51,7 @@ export default function Stage1CalculationParams({
   workflow,
   onUpdateWorkflow,
   isOld = false,
+  onShowLoading
 }: Stage1CalculationParamsProps) {
   const [wagonGroupsModalOpen, setWagonGroupsModalOpen] =
     useState(false);
@@ -73,6 +75,10 @@ export default function Stage1CalculationParams({
   const [previousScale, setPreviousScale] = useState(
     workflow.scale || "1:1",
   );
+
+  const handleLoad = () => {
+    onShowLoading("Идет загрузка...");
+  };
 
   // Auto-populate fields when predefined section data is available
   useEffect(() => {
@@ -489,7 +495,7 @@ export default function Stage1CalculationParams({
       {/* Composition Section */}
       <div className="pt-2 border-t border-gray-300">
       <Button
-          onClick={handleFormSubmit}
+          onClick={handleLoad}
           className="w-full bg-white text-blue-600 border  hover:text-white mt-4 mb-4 hover:bg-blue-600"
           style={{border: 'solid 2px var(--color-blue-500)'}}
           disabled={!departureStation || !arrivalStation}
@@ -690,7 +696,7 @@ export default function Stage1CalculationParams({
           </Select>
         </div>
         <Button
-          onClick={handleFormSubmit}
+          onClick={handleLoad}
           className="w-full bg-white text-blue-600 border  hover:text-white mt-4 hover:bg-blue-600"
           style={{border: 'solid 2px var(--color-blue-500)'}}
           disabled={!departureStation || !arrivalStation}
@@ -699,7 +705,7 @@ export default function Stage1CalculationParams({
           <RefreshCw className="w-4 h-4 ml-2" />
         </Button>
         <Button
-          onClick={handleFormSubmit}
+          onClick={handleLoad}
           className="w-full bg-white text-blue-600 border  hover:text-white mb-4 hover:bg-blue-600"
           style={{border: 'solid 2px var(--color-blue-500)'}}
           disabled={!departureStation || !arrivalStation}
@@ -731,7 +737,7 @@ export default function Stage1CalculationParams({
           </div>
         </div>
         <Button
-          onClick={handleFormSubmit}
+          onClick={handleLoad}
           className="w-full bg-white text-blue-600 border hover:text-white mb-4 hover:bg-blue-600"
           style={{border: 'solid 2px var(--color-blue-500)'}}
           disabled={!departureStation || !arrivalStation}
