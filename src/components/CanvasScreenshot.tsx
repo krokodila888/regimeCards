@@ -11,6 +11,7 @@ import {
   DialogDescription,
 } from './ui/dialog';
 import type { TrackBounds, PlacedObject, PaletteObject } from '../types/types';
+import { getPaletteObjectById } from './VisioObjectPalette';
 
 // ============================================================================
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ПРЕОБРАЗОВАНИЯ КООРДИНАТ
@@ -51,44 +52,27 @@ function pixelsToKilometers(
 }
 
 /**
- * Функция для получения иконки по ID объекта
- * TODO: Заменить на import { getPaletteObjectById } from './VisioObjectPalette'
+ * Преобразование километровой отметки в позицию X в пикселях
  */
-function getIconForObjectType(objectType: PaletteObject): React.ReactNode {
-  // Временная реализация с hardcoded иконками
-  if (objectType.id === 'speed-limit-permanent') {
-    return (
-      <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
-        <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" />
-        <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">V</text>
-      </svg>
-    );
-  }
-  if (objectType.id === 'speed-limit-temporary') {
-    return (
-      <svg width="20" height="20" viewBox="0 0 20 20" className="text-yellow-600">
-        <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="3,2" />
-        <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">V</text>
-      </svg>
-    );
-  }
-  if (objectType.id === 'station') {
-    return (
-      <svg width="20" height="20" viewBox="0 0 20 20">
-        <path d="M10 4 a6 6 0 1 0 0 12" fill="#fff" stroke="#000" strokeWidth="1.5" />
-        <path d="M10 16 a6 6 0 1 0 0-12" fill="#111" stroke="#fff" strokeWidth="1.5" />
-        <circle cx="10" cy="10" r="6" fill="none" stroke="#000" strokeWidth="1.5" />
-      </svg>
-    );
-  }
+function kilometersToPixels(
+  km: number,
+  bounds: TrackBounds,
+  marginLeft: number,
+  marginRight: number
+): number {
+  const { startKm, endKm, imageWidth } = bounds;
   
-  // Fallback иконка
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-600">
-      <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" />
-      <circle cx="10" cy="10" r="2" fill="currentColor" />
-    </svg>
-  );
+  // Вычисляем область с координатной шкалой
+  const totalImageKm = Math.abs(endKm - startKm) + marginLeft + marginRight;
+  const scaleStartPx = (marginLeft / totalImageKm) * imageWidth;
+  const scaleEndPx = imageWidth - (marginRight / totalImageKm) * imageWidth;
+  const scaleWidthPx = scaleEndPx - scaleStartPx;
+  
+  // Преобразуем километр в позицию (ОБРАТНЫЙ отсчет!)
+  const kmRange = Math.abs(startKm - endKm);
+  const positionInScale = (startKm - km) / kmRange; // 0..1
+  
+  return scaleStartPx + (positionInScale * scaleWidthPx);
 }
 
 // ============================================================================
@@ -150,9 +134,6 @@ export default function CanvasScreenshot({
   };
   
   // Отступы на изображении (в километрах)
-  // Измените эти значения для точной калибровки координат:
-  // - Если объект на 1781 км показывает 1780.9 → увеличьте MARGIN_LEFT_KM
-  // - Если объект на 1781 км показывает 1781.1 → уменьшите MARGIN_LEFT_KM
   const MARGIN_LEFT_KM = 1.3;    // Отступ слева до начала шкалы
   const MARGIN_RIGHT_KM = 0.19;   // Отступ справа после конца шкалы
 
@@ -163,10 +144,19 @@ export default function CanvasScreenshot({
     }
   }, [imageLoaded]);
 
-  // Процентные параметры областей изображения для скрытия слоев
-  const GRADIENT_HEIGHT_PERCENT = 15;
-  const REGIME_HEIGHT_PERCENT = 8;
-  const PROFILE_HEIGHT_PERCENT = 15;
+  // Процентные параметры высоты для разных комбинаций слоев
+  // Рассчитано на основе реальных размеров изображений
+  const PLACEMENT_HEIGHT_CONFIGS = {
+    // gradientCurve, regimeMarkers, profileCurve
+    'true_true_true': 73.8,      // Все слои видны: 714/967 = 73.8%
+    'false_true_true': 66.1,     // Без верхнего слоя: 497/752 = 66.1%
+    'false_true_false': 82.7,    // Без верхнего и профиля: 497/601 = 76.8%
+    'false_false_true': 82.7,    // Без верхнего и режимов: 497/601 = 82.7%
+    'true_false_false': 97.4,    // Без профиля и режимов: 712/731 = 97.4%
+    'false_false_false': 97.3,   // Только скорость: 497/511 = 97.3%
+    'true_false_true': 81.7,     // Без режимов: 712/871 = 81.7%
+    'true_true_false': 86.0,     // Без профиля: 712/828 = 86.0%
+  };
 
   const [visibleLayers, setVisibleLayers] = useState({
     gradientCurve: true,
@@ -178,19 +168,77 @@ export default function CanvasScreenshot({
   // ОБРАБОТЧИКИ СОБЫТИЙ
   // ========================================================================
 
-  // Вычисление позиции Y для размещения объектов
+  // Вычисление позиции Y для размещения объектов на основе видимых слоев
   const getObjectPlacementY = () => {
     if (!imageRef.current) return 0;
     const imageHeight = imageRef.current.clientHeight;
     
-    let topOffset = 0;
-    if (!visibleLayers.gradientCurve) {
-      topOffset = GRADIENT_HEIGHT_PERCENT;
-    }
+    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
+    const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
+    const heightPercent = PLACEMENT_HEIGHT_CONFIGS[configKey as keyof typeof PLACEMENT_HEIGHT_CONFIGS] || 73.8;
     
-    // Объекты размещаются в центре видимой области по вертикали
-    return imageHeight * 0.5;
+    return imageHeight * (heightPercent / 100);
   };
+
+  // Синхронизация позиций объектов при изменении видимых слоев или загрузке изображения
+  useEffect(() => {
+    if (!imageRef.current || !imageLoaded || placedObjects.length === 0) return;
+    
+    const newY = getObjectPlacementY();
+    const imageWidth = imageRef.current.naturalWidth;
+    
+    // Обновляем Y-позиции всех объектов и пересчитываем X из координат
+    const updatedObjects = placedObjects.map(obj => {
+      const newX = kilometersToPixels(
+        obj.coordinate,
+        { ...TRACK_BOUNDS, imageWidth },
+        MARGIN_LEFT_KM,
+        MARGIN_RIGHT_KM
+      );
+      
+      return {
+        ...obj,
+        position: { x: newX, y: newY }
+      };
+    });
+    
+    onPlacedObjectsChange(updatedObjects);
+  }, [visibleLayers, imageLoaded]);
+
+  // Отдельный useEffect для синхронизации позиций при изменении координат
+  useEffect(() => {
+    if (!imageRef.current || !imageLoaded || placedObjects.length === 0) return;
+    
+    const imageWidth = imageRef.current.naturalWidth;
+    const currentY = getObjectPlacementY();
+    let needsUpdate = false;
+    
+    // Проверяем, нужно ли обновить позиции X на основе координат
+    const updatedObjects = placedObjects.map(obj => {
+      const expectedX = kilometersToPixels(
+        obj.coordinate,
+        { ...TRACK_BOUNDS, imageWidth },
+        MARGIN_LEFT_KM,
+        MARGIN_RIGHT_KM
+      );
+      
+      // Проверяем, отличается ли текущая позиция от ожидаемой
+      if (Math.abs(obj.position.x - expectedX) > 1) {
+        needsUpdate = true;
+        return {
+          ...obj,
+          position: { x: expectedX, y: currentY }
+        };
+      }
+      
+      return obj;
+    });
+    
+    // Обновляем только если действительно нужно
+    if (needsUpdate) {
+      onPlacedObjectsChange(updatedObjects);
+    }
+  }, [placedObjects.map(obj => obj.coordinate).join(','), imageLoaded]);
 
   // Обработчик drop для размещения объекта из палитры
   const handleDrop = (e: React.DragEvent) => {
@@ -210,6 +258,9 @@ export default function CanvasScreenshot({
       
       const objectData = JSON.parse(objectDataJson);
       
+      // Получаем полный объект с иконками из палитры
+      const fullObjectData = getPaletteObjectById(objectId);
+      
       // Получаем позицию относительно изображения
       const rect = imageRef.current.getBoundingClientRect();
       const scrollLeft = containerRef.current.scrollLeft;
@@ -228,7 +279,7 @@ export default function CanvasScreenshot({
       // Создаем новый размещенный объект
       const newObject: PlacedObject = {
         id: `placed_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        objectType: objectData,
+        objectType: fullObjectData || objectData,
         coordinate,
         position: { x, y }
       };
@@ -455,6 +506,11 @@ export default function CanvasScreenshot({
               const isSelected = obj.id === selectedObjectId;
               const isHovered = obj.id === hoveredObjectId;
               const isDragging = obj.id === draggingObjectId;
+              const isStation = obj.objectType.id === 'station';
+              
+              // Получаем полный объект с иконками
+              const fullObject = getPaletteObjectById(obj.objectType.id);
+              const canvasIcon = fullObject?.canvasIcon || fullObject?.icon || obj.objectType.icon;
               
               return (
                 <div
@@ -472,21 +528,30 @@ export default function CanvasScreenshot({
                   onMouseEnter={() => setHoveredObjectId(obj.id)}
                   onMouseLeave={() => setHoveredObjectId(null)}
                 >
-                  {/* Вертикальная ножка */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: '-16px',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: '2px',
-                      height: '16px',
-                      backgroundColor: isSelected ? '#3b82f6' : isHovered ? '#60a5fa' : '#000',
-                      transition: 'background-color 0.2s',
-                    }}
-                  />
+                  {/* Название станции (если есть) */}
+                  {isStation && obj.stationName && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '45px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        backgroundColor: 'white',
+                        border: '2px solid #000',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '13px',
+                        fontWeight: 'bold',
+                        whiteSpace: 'nowrap',
+                        pointerEvents: 'none',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                      }}
+                    >
+                      {obj.stationName}
+                    </div>
+                  )}
                   
-                  {/* Иконка объекта без белого фона */}
+                  {/* Иконка объекта из canvasIcon */}
                   <div
                     style={{
                       width: '32px',
@@ -501,15 +566,15 @@ export default function CanvasScreenshot({
                     }}
                   >
                     <div style={{ 
-                      transform: 'scale(1.6)',
+                      transform: 'scale(1.0)',
                       filter: isSelected 
-                        ? 'drop-shadow(0 0 3px #3b82f6)' 
+                        ? 'drop-shadow(0 0 4px #3b82f6)' 
                         : isHovered 
-                        ? 'drop-shadow(0 0 3px #60a5fa)' 
+                        ? 'drop-shadow(0 0 4px #60a5fa)' 
                         : 'none',
                       transition: 'filter 0.2s',
                     }}>
-                      {getIconForObjectType(obj.objectType)}
+                      {canvasIcon}
                     </div>
                   </div>
                   
@@ -518,7 +583,7 @@ export default function CanvasScreenshot({
                     <div
                       style={{
                         position: 'absolute',
-                        bottom: '40px',
+                        bottom: isStation && obj.stationName ? '80px' : '45px',
                         left: '50%',
                         transform: 'translateX(-50%)',
                         backgroundColor: 'rgba(0, 0, 0, 0.9)',

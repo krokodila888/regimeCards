@@ -31,6 +31,7 @@ type PlacedObject = {
   objectType: PaletteObject;
   coordinate: number;
   position: { x: number; y: number };
+  stationName?: string; // Для названий станций
 };
 
 interface MainCanvasProps {

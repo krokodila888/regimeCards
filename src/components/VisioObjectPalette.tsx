@@ -11,76 +11,15 @@ import {
   Power,
   Route,
   Zap,
+  Gauge,
 } from "lucide-react";
 import { ObjectCategory, PaletteObject, PlacedObject } from "../types/types";
 import { ScrollArea } from "./ui/scroll-area";
 import { LOCOMOTIVES } from "../types/consts";
 import { Locomotive } from "../types/chart-data";
 import { Button } from "./ui/button";
-
-// Примеры категорий объектов (сокращенная версия)
-/*const EXAMPLE_CATEGORIES: ObjectCategory[] = [
-  {
-    id: "speed-curve",
-    name: "Speed & Movement",
-    nameRu: "Кривая скорости и ограничения",
-    icon: <MapPin className="w-4 h-4" />,
-    objects: [
-      {
-        id: "speed-limit-permanent",
-        name: "Permanent Speed Limit",
-        nameRu: "Ограничение скорости (постоянное)",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
-            <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">
-              V
-            </text>
-          </svg>
-        ),
-        category: "speed-curve",
-        description: "Ограничение скорости (постоянное)",
-      },
-      {
-        id: "speed-limit-temporary",
-        name: "Temporary Speed Limit",
-        nameRu: "Ограничение скорости (временное)",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-yellow-600">
-            <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="3,2" />
-            <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">
-              V
-            </text>
-          </svg>
-        ),
-        category: "speed-curve",
-        description: "Временное ограничение скорости",
-      },
-    ],
-  },
-  {
-    id: "track-objects",
-    name: "Track Objects",
-    nameRu: "Раздельные пункты и объекты",
-    icon: <MapPin className="w-4 h-4" />,
-    objects: [
-      {
-        id: "station",
-        name: "Station",
-        nameRu: "Станция",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20">
-            <path d="M10 4 a6 6 0 1 0 0 12" fill="#fff" stroke="#000" strokeWidth="1.5" />
-            <path d="M10 16 a6 6 0 1 0 0-12" fill="#111" stroke="#fff" strokeWidth="1.5" />
-            <circle cx="10" cy="10" r="6" fill="none" stroke="#000" strokeWidth="1.5" />
-          </svg>
-        ),
-        category: "track-objects",
-        description: "Железнодорожная станция",
-      },
-    ],
-  },
-];*/
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
 
 // =============================================================================
 // СТАТИЧЕСКИЕ КАТЕГОРИИ ОБЪЕКТОВ
@@ -98,23 +37,6 @@ const staticObjectCategories: ObjectCategory[] = [
     nameRu: "Кривая скорости и ограничения",
     icon: <Activity className="size-4" />,
     objects: [
-      /*{
-        id: "train-movement-curve",
-        name: "Train Movement Curve",
-        nameRu: "Кривая скорости",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
-            <path
-              d="M2 16 Q 6 4, 10 10 Q 14 16, 18 6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
-        ),
-        category: "speed-curve",
-        description: "Линия изменения скорости по пути следования",
-      },*/
       {
         id: "speed-limit-permanent",
         name: "Permanent Speed Limit",
@@ -125,6 +47,15 @@ const staticObjectCategories: ObjectCategory[] = [
             <text x="10" y="14" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">
               V
             </text>
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="24" height="32" viewBox="0 0 24 32" className="text-red-600">
+            <circle cx="12" cy="12" r="10" fill="white" stroke="currentColor" strokeWidth="2" />
+            <text x="12" y="17" fontSize="12" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              V
+            </text>
+            <line x1="12" y1="22" x2="12" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "speed-curve",
@@ -142,6 +73,15 @@ const staticObjectCategories: ObjectCategory[] = [
             </text>
           </svg>
         ),
+        canvasIcon: (
+          <svg width="24" height="32" viewBox="0 0 24 32" className="text-yellow-600">
+            <circle cx="12" cy="12" r="10" fill="white" stroke="currentColor" strokeWidth="2" strokeDasharray="4,2" />
+            <text x="12" y="17" fontSize="12" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              V
+            </text>
+            <line x1="12" y1="22" x2="12" y2="32" stroke="currentColor" strokeWidth="2" strokeDasharray="3,2" />
+          </svg>
+        ),
         category: "speed-curve",
         description: "Временное ограничение скорости (предупреждение)",
       },
@@ -153,6 +93,14 @@ const staticObjectCategories: ObjectCategory[] = [
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-600">
             <line x1="2" y1="6" x2="18" y2="6" stroke="currentColor" strokeWidth="2" />
             <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="1" strokeDasharray="4,2" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="24" height="32" viewBox="0 0 24 32" className="text-green-600">
+            <rect x="6" y="6" width="12" height="10" fill="white" stroke="currentColor" strokeWidth="2" rx="1" />
+            <line x1="9" y1="9" x2="15" y2="9" stroke="currentColor" strokeWidth="2" />
+            <line x1="9" y1="13" x2="15" y2="13" stroke="currentColor" strokeWidth="1" strokeDasharray="2,1" />
+            <line x1="12" y1="16" x2="12" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "speed-curve",
@@ -189,6 +137,22 @@ const staticObjectCategories: ObjectCategory[] = [
             </text>
           </svg>
         ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-gray-500">
+            <rect x="4" y="10" width="24" height="12" fill="white" stroke="currentColor" strokeWidth="2" rx="2" />
+            <path
+              d="M8 16 L24 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeDasharray="4,3"
+            />
+            <text x="16" y="21" fontSize="6" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              ВЫБ
+            </text>
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
         category: "control-modes",
         description: "Движение без тяги и торможения",
       },
@@ -204,35 +168,18 @@ const staticObjectCategories: ObjectCategory[] = [
             </text>
           </svg>
         ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-orange-600">
+            <rect x="6" y="6" width="20" height="12" rx="2" fill="white" stroke="currentColor" strokeWidth="2" />
+            <text x="16" y="15" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              Т
+            </text>
+            <line x1="16" y1="18" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
         category: "control-modes",
         description: "Служебное пневматическое торможение",
       },
-      /*{
-        id: "regenerative-braking",
-        name: "Regenerative Braking",
-        nameRu: "Рекуперативное торможение",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-600">
-            <path d="M2 14 Q 10 6, 18 14" fill="none" stroke="currentColor" strokeWidth="2" />
-            <path d="M15 11 L18 14 L15 17" fill="none" stroke="currentColor" strokeWidth="2" />
-            <circle cx="5" cy="12" r="2" fill="currentColor" />
-          </svg>
-        ),
-        category: "control-modes",
-        description: "Торможение с возвратом энергии в сеть",
-      },
-      {
-        id: "rheostatic-braking",
-        name: "Rheostatic Braking",
-        nameRu: "Реостатное торможение",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-500">
-            <path d="M2 10 L4 7 L6 13 L8 7 L10 13 L12 7 L14 13 L16 7 L18 10" fill="none" stroke="currentColor" strokeWidth="2" />
-          </svg>
-        ),
-        category: "control-modes",
-        description: "Электрическое торможение на реостаты",
-      },*/
       {
         id: "electric-braking",
         name: "Electric Braking",
@@ -240,6 +187,13 @@ const staticObjectCategories: ObjectCategory[] = [
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-500">
             <path d="M2 10 L4 7 L6 13 L8 7 L10 13 L12 7 L14 13 L16 7 L18 10" fill="none" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-red-500">
+            <rect x="4" y="8" width="24" height="12" fill="white" stroke="currentColor" strokeWidth="2" rx="2" />
+            <path d="M8 14 L10 11 L12 17 L14 11 L16 17 L18 11 L20 17 L22 11 L24 14" fill="none" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="20" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "control-modes",
@@ -255,6 +209,15 @@ const staticObjectCategories: ObjectCategory[] = [
             <text x="10" y="15" fontSize="10" fill="currentColor" textAnchor="middle" fontWeight="bold">
               !
             </text>
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-red-600">
+            <polygon points="16,4 28,22 4,22" fill="white" stroke="currentColor" strokeWidth="2" />
+            <text x="16" y="19" fontSize="12" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              !
+            </text>
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "control-modes",
@@ -279,12 +242,17 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Станция",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20">
-            {/* Левая половина круга — белая */}
             <path d="M10 4 a6 6 0 1 0 0 12" fill="#fff" stroke="#000" strokeWidth="1.5" />
-            {/* Правая половина круга — черная */}
             <path d="M10 16 a6 6 0 1 0 0-12" fill="#111" stroke="#fff" strokeWidth="1.5" />
-            {/* Внешний черный контур по всему кругу */}
             <circle cx="10" cy="10" r="6" fill="none" stroke="#000" strokeWidth="1.5" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="24" height="32" viewBox="0 0 24 32">
+            <path d="M12 2 a10 10 0 1 0 0 20" fill="#fff" stroke="#000" strokeWidth="2" />
+            <path d="M12 22 a10 10 0 1 0 0-20" fill="#111" stroke="#fff" strokeWidth="2" />
+            <circle cx="12" cy="12" r="10" fill="none" stroke="#000" strokeWidth="2" />
+            <line x1="12" y1="22" x2="12" y2="32" stroke="#000" strokeWidth="2" />
           </svg>
         ),
         category: "track-objects",
@@ -303,68 +271,46 @@ const staticObjectCategories: ObjectCategory[] = [
             </text>
           </svg>
         ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-blue-600">
+            <rect x="6" y="8" width="20" height="14" fill="white" stroke="currentColor" strokeWidth="2" rx="2" />
+            <line x1="10" y1="15" x2="22" y2="15" stroke="currentColor" strokeWidth="2" />
+            <path d="M12 15 Q 16 11, 20 15" fill="none" stroke="currentColor" strokeWidth="2" />
+            <text x="16" y="19" fontSize="6" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              РЗД
+            </text>
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
         category: "track-objects",
         description: "Разъезд (раздельный пункт)",
       },
-      /*{
-        id: "block-post",
-        name: "Block Post",
-        nameRu: "Блок-пост",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-700">
-            <rect x="8" y="4" width="4" height="12" fill="none" stroke="currentColor" strokeWidth="2" />
-            <circle cx="10" cy="8" r="2" fill="currentColor" />
-          </svg>
-        ),
-        category: "track-objects",
-        description: "Блок-пост (граница блок-участка)",
-      },
-      {
-        id: "kilometer-post",
-        name: "Kilometer Post",
-        nameRu: "Километровый столб",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-700">
-            <rect x="7" y="4" width="6" height="12" rx="1" fill="none" stroke="currentColor" strokeWidth="2" />
-            <text x="10" y="12" fontSize="6" fill="currentColor" textAnchor="middle">
-              км
-            </text>
-          </svg>
-        ),
-        category: "track-objects",
-        description: "Километровая отметка",
-      },
-      {
-        id: "picket-post",
-        name: "Picket Post",
-        nameRu: "Пикет",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-500">
-            <line x1="10" y1="4" x2="10" y2="16" stroke="currentColor" strokeWidth="2" />
-            <line x1="6" y1="6" x2="14" y2="6" stroke="currentColor" strokeWidth="1" />
-          </svg>
-        ),
-        category: "track-objects",
-        description: "Пикетная отметка (100 м)",
-      },*/
       {
         id: "level-crossing-guarded",
         name: "Guarded Level Crossing",
         nameRu: "Переезд с ограждением",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
-            {/* Крест - символ переезда */}
             <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" strokeWidth="2" />
             <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" strokeWidth="2" />
-            {/* Круг - ограждение */}
             <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            {/* Шлагбаум */}
             <line x1="3" y1="18" x2="17" y2="18" stroke="currentColor" strokeWidth="2" />
             <line x1="4" y1="17" x2="4" y2="19" stroke="currentColor" strokeWidth="1" />
             <line x1="16" y1="17" x2="16" y2="19" stroke="currentColor" strokeWidth="1" />
           </svg>
         ),
-        category: "track-objects", // Изменили с "structures"
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-red-600">
+            <circle cx="16" cy="12" r="10" fill="white" stroke="currentColor" strokeWidth="2" />
+            <line x1="10" y1="7" x2="22" y2="17" stroke="currentColor" strokeWidth="2" />
+            <line x1="22" y1="7" x2="10" y2="17" stroke="currentColor" strokeWidth="2" />
+            <line x1="8" y1="24" x2="24" y2="24" stroke="currentColor" strokeWidth="2" />
+            <line x1="9" y1="22" x2="9" y2="26" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="23" y1="22" x2="23" y2="26" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
+        category: "track-objects",
         description: "Переезд с ограждением",
       },
       {
@@ -373,18 +319,26 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Переезд без ограждения",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-orange-600">
-            {/* Крест - символ переезда */}
             <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" strokeWidth="2" />
             <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" strokeWidth="2" />
-            {/* Треугольник (предупреждающий знак) */}
             <path d="M10 3 L15 10 L5 10 Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            {/* Точки внутри треугольника */}
             <circle cx="10" cy="7" r="0.8" fill="currentColor" />
             <circle cx="8" cy="8.5" r="0.8" fill="currentColor" />
             <circle cx="12" cy="8.5" r="0.8" fill="currentColor" />
           </svg>
         ),
-        category: "track-objects", // Изменили с "structures"
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-orange-600">
+            <polygon points="16,2 26,16 6,16" fill="white" stroke="currentColor" strokeWidth="2" />
+            <line x1="10" y1="9" x2="22" y2="21" stroke="currentColor" strokeWidth="2" />
+            <line x1="22" y1="9" x2="10" y2="21" stroke="currentColor" strokeWidth="2" />
+            <circle cx="16" cy="10" r="1.2" fill="currentColor" />
+            <circle cx="13" cy="12" r="1.2" fill="currentColor" />
+            <circle cx="19" cy="12" r="1.2" fill="currentColor" />
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
+        category: "track-objects",
         description: "Неохраняемый железнодорожный переезд",
       },
       {
@@ -393,16 +347,25 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Платформа",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-700">
-            {/* Основание платформы */}
             <rect x="3" y="10" width="14" height="4" fill="currentColor" />
-            {/* Навес/крыша */}
             <line x1="4" y1="8" x2="16" y2="8" stroke="currentColor" strokeWidth="1.5" />
             <line x1="4" y1="8" x2="4" y2="10" stroke="currentColor" strokeWidth="1" />
             <line x1="16" y1="8" x2="16" y2="10" stroke="currentColor" strokeWidth="1" />
-            {/* Обозначение */}
             <text x="10" y="16" fontSize="4" fill="white" textAnchor="middle" fontWeight="bold">
               ПЛ
             </text>
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-gray-700">
+            <rect x="6" y="12" width="20" height="8" fill="currentColor" />
+            <line x1="8" y1="8" x2="24" y2="8" stroke="currentColor" strokeWidth="2" />
+            <line x1="8" y1="8" x2="8" y2="12" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="24" y1="8" x2="24" y2="12" stroke="currentColor" strokeWidth="1.5" />
+            <text x="16" y="18" fontSize="6" fill="white" textAnchor="middle" fontWeight="bold">
+              ПЛ
+            </text>
+            <line x1="16" y1="20" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "track-objects",
@@ -414,15 +377,23 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "КТСМ, ПОНАБ",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
-            {/* Здание/пост */}
             <rect x="6" y="6" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            {/* Антенна/вышка */}
             <line x1="10" y1="2" x2="10" y2="6" stroke="currentColor" strokeWidth="1.5" />
             <line x1="8" y1="3" x2="12" y2="3" stroke="currentColor" strokeWidth="1" />
-            {/* Аббревиатура */}
             <text x="10" y="13" fontSize="3.5" fill="currentColor" textAnchor="middle" fontWeight="bold">
               КТСМ
             </text>
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-blue-600">
+            <rect x="8" y="8" width="16" height="14" fill="white" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="2" x2="16" y2="8" stroke="currentColor" strokeWidth="2" />
+            <line x1="12" y1="4" x2="20" y2="4" stroke="currentColor" strokeWidth="1.5" />
+            <text x="16" y="17" fontSize="6" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              КТСМ
+            </text>
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "track-objects",
@@ -434,16 +405,25 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "УКСПС",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-700">
-            {/* Здание с антенной */}
             <rect x="7" y="8" width="6" height="6" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            {/* Антенна (три линии) */}
             <line x1="10" y1="4" x2="10" y2="8" stroke="currentColor" strokeWidth="1.5" />
             <line x1="8" y1="5" x2="12" y2="5" stroke="currentColor" strokeWidth="1" />
             <line x1="9" y1="6" x2="11" y2="6" stroke="currentColor" strokeWidth="0.8" />
-            {/* Аббревиатура */}
             <text x="10" y="15" fontSize="3" fill="currentColor" textAnchor="middle" fontWeight="bold">
               УКСПС
             </text>
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-green-700">
+            <rect x="10" y="10" width="12" height="12" fill="white" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="4" x2="16" y2="10" stroke="currentColor" strokeWidth="2" />
+            <line x1="12" y1="6" x2="20" y2="6" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="14" y1="7.5" x2="18" y2="7.5" stroke="currentColor" strokeWidth="1.2" />
+            <text x="16" y="18" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              УКСПС
+            </text>
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "track-objects",
@@ -455,18 +435,27 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Пешеходный мост",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-800">
-            {/* Опоры моста */}
             <line x1="6" y1="12" x2="6" y2="16" stroke="currentColor" strokeWidth="2" />
             <line x1="14" y1="12" x2="14" y2="16" stroke="currentColor" strokeWidth="2" />
-            {/* Настил моста */}
             <line x1="4" y1="12" x2="16" y2="12" stroke="currentColor" strokeWidth="3" />
-            {/* Перила */}
             <line x1="4" y1="9" x2="16" y2="9" stroke="currentColor" strokeWidth="1.5" />
             <line x1="5" y1="9" x2="5" y2="12" stroke="currentColor" strokeWidth="1" />
             <line x1="15" y1="9" x2="15" y2="12" stroke="currentColor" strokeWidth="1" />
-            {/* Человечек */}
             <circle cx="10" cy="6" r="1.5" fill="currentColor" />
             <line x1="10" y1="7.5" x2="10" y2="10" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-gray-800">
+            <line x1="10" y1="16" x2="10" y2="22" stroke="currentColor" strokeWidth="2" />
+            <line x1="22" y1="16" x2="22" y2="22" stroke="currentColor" strokeWidth="2" />
+            <line x1="8" y1="16" x2="24" y2="16" stroke="currentColor" strokeWidth="3" />
+            <line x1="8" y1="12" x2="24" y2="12" stroke="currentColor" strokeWidth="2" />
+            <line x1="9" y1="12" x2="9" y2="16" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="23" y1="12" x2="23" y2="16" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="16" cy="8" r="2" fill="currentColor" />
+            <line x1="16" y1="10" x2="16" y2="14" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "structures",
@@ -478,16 +467,26 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Место соединения-разъединения поездов (МСРП)",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-purple-600">
-            {/* Стрелка разветвления */}
             <line x1="4" y1="10" x2="10" y2="5" stroke="currentColor" strokeWidth="2" />
             <line x1="4" y1="10" x2="10" y2="15" stroke="currentColor" strokeWidth="2" />
-            {/* Поезда */}
             <rect x="10" y="3" width="6" height="4" rx="1" fill="currentColor" />
             <rect x="10" y="13" width="6" height="4" rx="1" fill="currentColor" />
-            {/* Обозначение */}
             <text x="5" y="18" fontSize="4" fill="currentColor" textAnchor="middle">
               МСРП
             </text>
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-purple-600">
+            <rect x="6" y="8" width="20" height="14" fill="white" stroke="currentColor" strokeWidth="2" rx="2" />
+            <line x1="10" y1="15" x2="16" y2="10" stroke="currentColor" strokeWidth="2" />
+            <line x1="10" y1="15" x2="16" y2="20" stroke="currentColor" strokeWidth="2" />
+            <rect x="16" y="8" width="6" height="4" rx="1" fill="currentColor" />
+            <rect x="16" y="18" width="6" height="4" rx="1" fill="currentColor" />
+            <text x="12" y="18" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              МСРП
+            </text>
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "track-objects",
@@ -499,17 +498,26 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Начало торможения (НТ)",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-600">
-            {/* Стрелка направления торможения */}
             <line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" strokeWidth="2" />
-            {/* Штриховка/тормозной путь */}
             <line x1="8" y1="7" x2="10" y2="13" stroke="currentColor" strokeWidth="1.5" />
             <line x1="12" y1="7" x2="14" y2="13" stroke="currentColor" strokeWidth="1.5" />
-            {/* Обозначение НТ */}
             <text x="10" y="18" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
               НТ
             </text>
-            {/* Треугольник-указатель */}
             <path d="M16 10 L13 8 L13 12 Z" fill="currentColor" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-red-600">
+            <rect x="6" y="10" width="20" height="12" fill="white" stroke="currentColor" strokeWidth="2" rx="2" />
+            <line x1="10" y1="16" x2="22" y2="16" stroke="currentColor" strokeWidth="2" />
+            <line x1="13" y1="12" x2="15" y2="20" stroke="currentColor" strokeWidth="2" />
+            <line x1="17" y1="12" x2="19" y2="20" stroke="currentColor" strokeWidth="2" />
+            <text x="16" y="19" fontSize="6" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              НТ
+            </text>
+            <path d="M22 16 L19 14 L19 18 Z" fill="currentColor" />
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "track-objects",
@@ -543,6 +551,18 @@ const staticObjectCategories: ObjectCategory[] = [
             <line x1="2" y1="18" x2="18" y2="18" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-gray-800">
+            <path
+              d="M6 28 L6 12 Q 6 4, 16 4 Q 26 4, 26 12 L26 28"
+              fill="white"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+            <line x1="6" y1="28" x2="26" y2="28" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="28" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
         category: "structures",
         description: "Тоннель",
       },
@@ -558,6 +578,15 @@ const staticObjectCategories: ObjectCategory[] = [
             <path d="M2 8 Q 10 4, 18 8" fill="none" stroke="currentColor" strokeWidth="1" />
           </svg>
         ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-amber-700">
+            <line x1="4" y1="12" x2="28" y2="12" stroke="currentColor" strokeWidth="3" />
+            <line x1="8" y1="12" x2="8" y2="24" stroke="currentColor" strokeWidth="2" />
+            <line x1="24" y1="12" x2="24" y2="24" stroke="currentColor" strokeWidth="2" />
+            <path d="M4 12 Q 16 6, 28 12" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="16" y1="24" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
         category: "structures",
         description: "Мост",
       },
@@ -567,16 +596,23 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Путепровод",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-700">
-            {/* Дорога над путями */}
             <line x1="3" y1="6" x2="17" y2="6" stroke="currentColor" strokeWidth="2.5" />
-            {/* Опоры путепровода */}
             <line x1="6" y1="6" x2="6" y2="16" stroke="currentColor" strokeWidth="2" />
             <line x1="14" y1="6" x2="14" y2="16" stroke="currentColor" strokeWidth="2" />
-            {/* Железнодорожные пути под путепроводом */}
             <line x1="3" y1="14" x2="17" y2="14" stroke="currentColor" strokeWidth="1.5" />
             <line x1="3" y1="16" x2="17" y2="16" stroke="currentColor" strokeWidth="1.5" />
-            {/* Штриховка тени/подмостового пространства */}
             <line x1="7" y1="12" x2="13" y2="12" stroke="currentColor" strokeWidth="1" strokeDasharray="1,1" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-gray-700">
+            <line x1="6" y1="10" x2="26" y2="10" stroke="currentColor" strokeWidth="3" />
+            <line x1="10" y1="10" x2="10" y2="24" stroke="currentColor" strokeWidth="2" />
+            <line x1="22" y1="10" x2="22" y2="24" stroke="currentColor" strokeWidth="2" />
+            <line x1="6" y1="20" x2="26" y2="20" stroke="currentColor" strokeWidth="2" />
+            <line x1="6" y1="22" x2="26" y2="22" stroke="currentColor" strokeWidth="2" />
+            <line x1="12" y1="17" x2="20" y2="17" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2,2" />
+            <line x1="16" y1="24" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "structures",
@@ -588,22 +624,33 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Галерея",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-amber-800">
-            {/* Крыша галереи */}
             <path d="M2 5 L18 5 Q 18 2, 15 2 Q 10 0, 5 2 Q 2 2, 2 5" 
                   fill="none" 
                   stroke="currentColor" 
                   strokeWidth="1.5" />
-            {/* Стены галереи */}
             <line x1="2" y1="5" x2="2" y2="12" stroke="currentColor" strokeWidth="1.5" />
             <line x1="18" y1="5" x2="18" y2="12" stroke="currentColor" strokeWidth="1.5" />
-            {/* Основание */}
             <line x1="2" y1="12" x2="18" y2="12" stroke="currentColor" strokeWidth="2" />
-            {/* Железнодорожный путь внутри */}
             <line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" strokeWidth="1" />
             <line x1="4" y1="11" x2="16" y2="11" stroke="currentColor" strokeWidth="1" />
-            {/* Окна/отверстия в стенах */}
             <rect x="3" y="6" width="2" height="2" fill="none" stroke="currentColor" strokeWidth="0.8" />
             <rect x="15" y="6" width="2" height="2" fill="none" stroke="currentColor" strokeWidth="0.8" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-amber-800">
+            <path d="M4 8 L28 8 Q 28 4, 24 4 Q 16 2, 8 4 Q 4 4, 4 8" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" />
+            <line x1="4" y1="8" x2="4" y2="20" stroke="currentColor" strokeWidth="2" />
+            <line x1="28" y1="8" x2="28" y2="20" stroke="currentColor" strokeWidth="2" />
+            <line x1="4" y1="20" x2="28" y2="20" stroke="currentColor" strokeWidth="2.5" />
+            <line x1="8" y1="16" x2="24" y2="16" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="8" y1="18" x2="24" y2="18" stroke="currentColor" strokeWidth="1.5" />
+            <rect x="6" y="10" width="3" height="3" fill="none" stroke="currentColor" strokeWidth="1.2" />
+            <rect x="23" y="10" width="3" height="3" fill="none" stroke="currentColor" strokeWidth="1.2" />
+            <line x1="16" y1="20" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "structures",
@@ -628,14 +675,21 @@ const staticObjectCategories: ObjectCategory[] = [
         nameRu: "Нейтральная вставка",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-700">
-            {/* Прямоугольник знака */}
             <rect x="6" y="4" width="8" height="8" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            {/* Буквы НВ (вместо NI) */}
             <text x="10" y="10" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
               НВ
             </text>
-            {/* Дополнительные элементы (если нужны) */}
             <line x1="5" y1="16" x2="15" y2="16" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2,2" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-gray-700">
+            <rect x="8" y="6" width="16" height="14" fill="white" stroke="currentColor" strokeWidth="2" />
+            <text x="16" y="16" fontSize="8" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              НВ
+            </text>
+            <line x1="6" y1="24" x2="26" y2="24" stroke="currentColor" strokeWidth="2" strokeDasharray="3,3" />
+            <line x1="16" y1="20" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "electrical",
@@ -649,6 +703,13 @@ const staticObjectCategories: ObjectCategory[] = [
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-orange-500">
             <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="2" strokeDasharray="3,2" />
             <circle cx="10" cy="10" r="3" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-orange-500">
+            <line x1="16" y1="4" x2="16" y2="28" stroke="currentColor" strokeWidth="2" strokeDasharray="4,3" />
+            <circle cx="16" cy="16" r="6" fill="white" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="28" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "power-supply",
@@ -667,25 +728,31 @@ const staticObjectCategories: ObjectCategory[] = [
     nameRu: "Сигналы",
     icon: <AlertTriangle className="size-4" />,
     objects: [
-          {
-            id: "auto-brake-test",
-            name: "Auto Brake Test Point",
-            nameRu: "Место проверки автотормозов",
-            icon: (
-              <svg width="20" height="20" viewBox="0 0 20 20" className="text-black">
-                {/* Квадрат */}
-                <rect x="5" y="4" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                {/* Буквы НТ внутри квадрата */}
-                <text x="10" y="10.5" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
-                  НТ
-                </text>
-                {/* Отрезок вниз от середины нижней границы */}
-                <line x1="10" y1="14" x2="10" y2="17" stroke="currentColor" strokeWidth="1.5" />
-              </svg>
-            ),
-            category: "signals",
-            description: "Место обязательной проверки автотормозов перед движением",
-          },
+      {
+        id: "auto-brake-test",
+        name: "Auto Brake Test Point",
+        nameRu: "Место проверки автотормозов",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-black">
+            <rect x="5" y="4" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <text x="10" y="10.5" fontSize="5" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              НТ
+            </text>
+            <line x1="10" y1="14" x2="10" y2="17" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-black">
+            <rect x="8" y="6" width="16" height="16" fill="white" stroke="currentColor" strokeWidth="2" />
+            <text x="16" y="17" fontSize="8" fill="currentColor" textAnchor="middle" fontWeight="bold">
+              НТ
+            </text>
+            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
+        category: "signals",
+        description: "Место обязательной проверки автотормозов перед движением",
+      },
       {
         id: "entry-signal",
         name: "Entry Signal",
@@ -695,6 +762,13 @@ const staticObjectCategories: ObjectCategory[] = [
             <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
             <rect x="6" y="2" width="8" height="6" rx="1" fill="none" stroke="currentColor" strokeWidth="1.5" />
             <circle cx="10" cy="5" r="2" fill="currentColor" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-red-600">
+            <rect x="10" y="4" width="12" height="10" rx="2" fill="white" stroke="currentColor" strokeWidth="2" />
+            <circle cx="16" cy="9" r="3" fill="currentColor" />
+            <line x1="16" y1="14" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
           </svg>
         ),
         category: "signals",
@@ -711,6 +785,13 @@ const staticObjectCategories: ObjectCategory[] = [
             <circle cx="10" cy="5" r="2" fill="currentColor" />
           </svg>
         ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-green-600">
+            <rect x="10" y="4" width="12" height="10" rx="2" fill="white" stroke="currentColor" strokeWidth="2" />
+            <circle cx="16" cy="9" r="3" fill="currentColor" />
+            <line x1="16" y1="14" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
         category: "signals",
         description: "Выходной светофор станции",
       },
@@ -725,95 +806,139 @@ const staticObjectCategories: ObjectCategory[] = [
             <circle cx="10" cy="5" r="1.5" fill="currentColor" />
           </svg>
         ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-yellow-500">
+            <circle cx="16" cy="10" r="6" fill="white" stroke="currentColor" strokeWidth="2" />
+            <circle cx="16" cy="10" r="3" fill="currentColor" />
+            <line x1="16" y1="16" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
         category: "signals",
         description: "Проходной светофор автоблокировки",
       },
-          {
-            id: "route-signal",
-            name: "Route Signal",
-            nameRu: "Маршрутный светофор",
-            icon: (
-              <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
-                {/* Основание (мачта) */}
-                <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
-                {/* Прямоугольник щита (как у входного/выходного) */}
-                <rect x="6" y="2" width="8" height="6" rx="1" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                {/* Синий круг с белой стрелкой внутри - маршрутное указание */}
-                <circle cx="10" cy="5" r="2" fill="currentColor" />
-                <path 
-                  d="M8 5 L10 7 L12 5 L10 4 Z" 
-                  fill="white" 
-                  stroke="white" 
-                  strokeWidth="0.5"
-                />
-              </svg>
-            ),
-            category: "signals",
-            description: "Маршрутный светофор для указания направления маршрута",
-          },
-          {
-            id: "barrier-signal",
-            name: "Barrier Signal",
-            nameRu: "Заградительный светофор",
-            icon: (
-              <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-700">
-                {/* Основание */}
-                <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
-                {/* Квадратный щит (отличие от прямоугольного) */}
-                <rect x="7" y="2" width="6" height="6" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                {/* Красный крест - знак заграждения */}
-                <line x1="8" y1="4" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5" />
-                <line x1="12" y1="4" x2="8" y2="8" stroke="currentColor" strokeWidth="1.5" />
-              </svg>
-            ),
-            category: "signals",
-            description: "Заградительный светофор для полной остановки движения",
-          },
-          {
-            id: "repeater-signal",
-            name: "Repeater Signal",
-            nameRu: "Повторительный светофор",
-            icon: (
-              <svg width="20" height="20" viewBox="0 0 20 20" className="text-yellow-600">
-                {/* Основание */}
-                <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
-                {/* Маленький прямоугольник (меньше основного) */}
-                <rect x="7" y="2.5" width="6" height="5" rx="0.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                {/* Треугольник - символ повторения */}
-                <path d="M8 5 L12 5 L10 7 Z" fill="currentColor" />
-              </svg>
-            ),
-            category: "signals",
-            description: "Повторительный светофор для дублирования показаний основного",
-          },
-          {
-            id: "conditional-signal",
-            name: "Conditional Signal",
-            nameRu: "Условно-разрешающий сигнал",
-            icon: (
-              <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-700">
-                {/* Основание */}
-                <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
-                {/* Ромбовидная форма - отличие для условных сигналов */}
-                <path 
-                  d="M10 2 L13 5 L10 8 L7 5 Z" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="1.5" 
-                />
-                {/* Белая буква "У" внутри (Условно) */}
-                <text 
-                  x="10" 
-                  y="6" 
-                  textAnchor="middle" 
-                  fontSize="4" 
-                  fontWeight="bold" 
-                fill="white"
-              >
-                У
-              </text>
-            </svg>
-          ),
+      {
+        id: "route-signal",
+        name: "Route Signal",
+        nameRu: "Маршрутный светофор",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-blue-600">
+            <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
+            <rect x="6" y="2" width="8" height="6" rx="1" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="10" cy="5" r="2" fill="currentColor" />
+            <path 
+              d="M8 5 L10 7 L12 5 L10 4 Z" 
+              fill="white" 
+              stroke="white" 
+              strokeWidth="0.5"
+            />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-blue-600">
+            <rect x="10" y="4" width="12" height="10" rx="2" fill="white" stroke="currentColor" strokeWidth="2" />
+            <circle cx="16" cy="9" r="3" fill="currentColor" />
+            <path 
+              d="M14 9 L16 12 L18 9 L16 7 Z" 
+              fill="white" 
+              stroke="white" 
+              strokeWidth="0.8"
+            />
+            <line x1="16" y1="14" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
+        category: "signals",
+        description: "Маршрутный светофор для указания направления маршрута",
+      },
+      {
+        id: "barrier-signal",
+        name: "Barrier Signal",
+        nameRu: "Заградительный светофор",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-red-700">
+            <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
+            <rect x="7" y="2" width="6" height="6" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="8" y1="4" x2="12" y2="8" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="12" y1="4" x2="8" y2="8" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-red-700">
+            <rect x="11" y="4" width="10" height="10" fill="white" stroke="currentColor" strokeWidth="2" />
+            <line x1="13" y1="6" x2="19" y2="12" stroke="currentColor" strokeWidth="2" />
+            <line x1="19" y1="6" x2="13" y2="12" stroke="currentColor" strokeWidth="2" />
+            <line x1="16" y1="14" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
+        category: "signals",
+        description: "Заградительный светофор для полной остановки движения",
+      },
+      {
+        id: "repeater-signal",
+        name: "Repeater Signal",
+        nameRu: "Повторительный светофор",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-yellow-600">
+            <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
+            <rect x="7" y="2.5" width="6" height="5" rx="0.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M8 5 L12 5 L10 7 Z" fill="currentColor" />
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-yellow-600">
+            <rect x="11" y="4" width="10" height="8" rx="1" fill="white" stroke="currentColor" strokeWidth="2" />
+            <path d="M13 8 L19 8 L16 11 Z" fill="currentColor" />
+            <line x1="16" y1="12" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
+        category: "signals",
+        description: "Повторительный светофор для дублирования показаний основного",
+      },
+      {
+        id: "conditional-signal",
+        name: "Conditional Signal",
+        nameRu: "Условно-разрешающий сигнал",
+        icon: (
+          <svg width="20" height="20" viewBox="0 0 20 20" className="text-green-700">
+            <line x1="10" y1="6" x2="10" y2="18" stroke="currentColor" strokeWidth="2" />
+            <path 
+              d="M10 2 L13 5 L10 8 L7 5 Z" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="1.5" 
+            />
+            <text 
+              x="10" 
+              y="6" 
+              textAnchor="middle" 
+              fontSize="4" 
+              fontWeight="bold" 
+              fill="white"
+            >
+              У
+            </text>
+          </svg>
+        ),
+        canvasIcon: (
+          <svg width="32" height="32" viewBox="0 0 32 32" className="text-green-700">
+            <path 
+              d="M16 4 L21 9 L16 14 L11 9 Z" 
+              fill="white" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+            />
+            <text 
+              x="16" 
+              y="11" 
+              textAnchor="middle" 
+              fontSize="6" 
+              fontWeight="bold" 
+              fill="currentColor"
+            >
+              У
+            </text>
+            <line x1="16" y1="14" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ),
         category: "signals",
         description: "Сигнал с условно-разрешающим значением",
       },
@@ -826,29 +951,9 @@ const staticObjectCategories: ObjectCategory[] = [
 // Function to generate dynamic traction modes from locomotive data
 // =============================================================================
 
-const generateTractionModeObjects = (locomotive: Locomotive | null): PaletteObject[] => {
-  /*if (!locomotive || !locomotive.tractionModes) {
-    return [
-      {
-        id: "no-locomotive",
-        name: "No Locomotive Selected",
-        nameRu: "Локомотив не выбран",
-        icon: (
-          <svg width="20" height="20" viewBox="0 0 20 20" className="text-gray-400">
-            <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4,3" />
-            <text x="10" y="14" fontSize="8" fill="currentColor" textAnchor="middle">
-              ?
-            </text>
-          </svg>
-        ),
-        category: "traction-modes",
-        description: "Выберите локомотив для отображения режимов тяги",
-      },
-    ];
-  }*/
-
-  return LOCOMOTIVES[0].tractionModes.map((mode) => ({
-    id: `traction-${mode.id}`,
+const generateTractionModeObjects = (locomotive: Locomotive): PaletteObject[] => {
+  return locomotive.tractionModes.map((mode) => ({
+    id: `traction-${locomotive.id}-${mode.id}`,
     name: `Traction Mode ${mode.label}`,
     nameRu: `${mode.label}`,
     icon: (
@@ -867,23 +972,59 @@ const generateTractionModeObjects = (locomotive: Locomotive | null): PaletteObje
         </text>
       </svg>
     ),
+    canvasIcon: (
+      <svg width="32" height="32" viewBox="0 0 32 32">
+        <rect x="4" y="10" width="24" height="12" fill="white" stroke={mode.color} strokeWidth="2" rx="2" />
+        <line
+          x1="8"
+          y1="16"
+          x2="24"
+          y2="16"
+          stroke={mode.color}
+          strokeWidth="3"
+          strokeDasharray={mode.lineStyle === "dashed" ? "4,3" : mode.lineStyle === "dotted" ? "2,2" : "none"}
+        />
+        <text x="16" y="19" fontSize="6" fill={mode.color} textAnchor="middle" fontWeight="bold">
+          {mode.label}
+        </text>
+        <line x1="16" y1="22" x2="16" y2="32" stroke={mode.color} strokeWidth="2" />
+      </svg>
+    ),
     category: "traction-modes",
-    description: `Режим тяги: ${mode.label} (${LOCOMOTIVES[0].name})`,
+    description: `Режим тяги: ${mode.label} (${locomotive.name})`,
   }));
 };
+
+// =============================================================================
+// ОБЪЕДИНЕНИЕ ВСЕХ КАТЕГОРИЙ С ДИНАМИЧЕСКИМИ РЕЖИМАМИ ТЯГИ
+// =============================================================================
+
+const getAllCategories = (): ObjectCategory[] => {
+  return staticObjectCategories;
+};
+
+const OBJECT_CATEGORIES = getAllCategories();
 
 // =============================================================================
 // КОМПОНЕНТ ПАЛИТРЫ ОБЪЕКТОВ
 // Object Palette Component
 // =============================================================================
 
-
-// Функция для получения полного объекта по ID (включая icon)
+// Функция для получения полного объекта по ID (включая icon и canvasIcon)
 export function getPaletteObjectById(objectId: string): PaletteObject | null {
+  // Проверяем статические категории
   for (const category of staticObjectCategories) {
     const object = category.objects.find(obj => obj.id === objectId);
     if (object) return object;
   }
+  
+  // Проверяем режимы тяги локомотивов
+  for (const locomotive of LOCOMOTIVES) {
+    const tractionObjects = generateTractionModeObjects(locomotive);
+    const object = tractionObjects.find(obj => obj.id === objectId);
+    if (object) return object;
+  }
+  
   return null;
 }
 
@@ -892,6 +1033,7 @@ interface VisioObjectPaletteProps {
   placedObjects?: PlacedObject[];
   onDeleteObject?: (id: string) => void;
   onSelectObject?: (id: string | null) => void;
+  onUpdateObject?: (id: string, updates: Partial<PlacedObject>) => void;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
 }
@@ -901,25 +1043,25 @@ export default function VisioObjectPalette({
   placedObjects = [],
   onDeleteObject,
   onSelectObject,
+  onUpdateObject,
   collapsed = false,
   onToggleCollapse,
 }: VisioObjectPaletteProps) {
   const [sidebarWidth, setSidebarWidth] = useState(360);
   const [isResizing, setIsResizing] = useState(false);
-  const resizeStartX = useRef(0);
-  const resizeStartWidth = useRef(0);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(["speed-curve", "track-objects"])
+    new Set(["speed-curve", "control-modes", "track-objects", "signals"])
   );
 
-  // Получаем выбранный объект или последний добавленный
+  const [editCoordinate, setEditCoordinate] = useState("");
+  const [editStationName, setEditStationName] = useState("");
+
   const displayedObject = selectedObjectId
     ? placedObjects.find(obj => obj.id === selectedObjectId)
     : placedObjects.length > 0
     ? placedObjects[placedObjects.length - 1]
     : null;
 
-  // Получаем полный объект с иконкой для отображения
   const displayedObjectWithIcon = displayedObject 
     ? {
         ...displayedObject,
@@ -927,25 +1069,27 @@ export default function VisioObjectPalette({
       }
     : null;
 
+  useEffect(() => {
+    if (displayedObjectWithIcon) {
+      setEditCoordinate(displayedObjectWithIcon.coordinate.toFixed(1));
+      setEditStationName(displayedObjectWithIcon.stationName || "");
+    }
+  }, [displayedObjectWithIcon?.id, displayedObjectWithIcon?.coordinate, displayedObjectWithIcon?.stationName]);
+
   const handleResizeStart = (e: React.MouseEvent) => {
     if (collapsed) return;
     setIsResizing(true);
-    resizeStartX.current = e.clientX;
-    resizeStartWidth.current = sidebarWidth;
     e.preventDefault();
   };
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isResizing) return;
-      const deltaX = e.clientX - resizeStartX.current;
-      const newWidth = Math.max(280, Math.min(500, resizeStartWidth.current - deltaX));
+      const newWidth = Math.max(280, Math.min(500, window.innerWidth - e.clientX));
       setSidebarWidth(newWidth);
     };
 
-    const handleMouseUp = () => {
-      setIsResizing(false);
-    };
+    const handleMouseUp = () => setIsResizing(false);
 
     if (isResizing) {
       document.addEventListener("mousemove", handleMouseMove);
@@ -958,207 +1102,270 @@ export default function VisioObjectPalette({
   }, [isResizing]);
 
   const toggleCategory = (categoryId: string) => {
-    const newExpanded = new Set(expandedCategories);
-    if (newExpanded.has(categoryId)) {
-      newExpanded.delete(categoryId);
-    } else {
-      newExpanded.add(categoryId);
-    }
-    setExpandedCategories(newExpanded);
+    setExpandedCategories(prev => {
+      const next = new Set(prev);
+      next.has(categoryId) ? next.delete(categoryId) : next.add(categoryId);
+      return next;
+    });
   };
 
   const handleDragStart = (e: React.DragEvent, object: PaletteObject) => {
-    // Передаем ID объекта
     e.dataTransfer.setData("application/x-palette-object-id", object.id);
-    
-    // Передаем данные объекта БЕЗ поля icon (оно не сериализуется)
-    const objectDataWithoutIcon = {
+    e.dataTransfer.setData("application/x-palette-object-data", JSON.stringify({
       id: object.id,
       name: object.name,
       nameRu: object.nameRu,
       category: object.category,
       description: object.description,
-    };
-    
-    e.dataTransfer.setData("application/x-palette-object-data", JSON.stringify(objectDataWithoutIcon));
+    }));
     e.dataTransfer.effectAllowed = "copy";
   };
 
-  const handleDeleteClick = () => {
-    if (displayedObjectWithIcon && onDeleteObject) {
-      onDeleteObject(displayedObjectWithIcon.id);
+  const handleCoordinateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditCoordinate(e.target.value);
+  };
+
+  const handleCoordinateBlur = () => {
+    if (!displayedObjectWithIcon || !onUpdateObject) return;
+    
+    const newCoord = parseFloat(editCoordinate);
+    // Проверяем валидность и отличие от текущего значения
+    if (!isNaN(newCoord) && newCoord >= 1610 && newCoord <= 1782) {
+      if (Math.abs(newCoord - displayedObjectWithIcon.coordinate) > 0.01) {
+        // Координата изменилась - обновляем объект
+        onUpdateObject(displayedObjectWithIcon.id, { coordinate: newCoord });
+      }
+    } else {
+      // Невалидное значение - возвращаем предыдущее
+      setEditCoordinate(displayedObjectWithIcon.coordinate.toFixed(1));
     }
   };
 
-  // Collapsed state
+  const handleStationNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditStationName(e.target.value);
+  };
+
+  const handleStationNameBlur = () => {
+    if (!displayedObjectWithIcon || !onUpdateObject) return;
+    onUpdateObject(displayedObjectWithIcon.id, { stationName: editStationName });
+  };
+
   if (collapsed) {
     return (
-      <div
-        style={{ width: "100px" }}
-        className="h-full bg-gray-800 text-white flex flex-col items-center py-4 transition-all duration-300 flex-shrink-0 z-20"
-      >
-        <button
-          onClick={onToggleCollapse}
-          style={{ marginBottom: 20, marginRight: 50 }}
-          className="p-2 hover:bg-gray-700 rounded transition-colors"
-          title="Развернуть палитру объектов"
-        >
+      <div className="w-24 h-full bg-gray-800 text-white flex flex-col items-center py-4">
+        <button onClick={onToggleCollapse} className="p-2 mb-4 hover:bg-gray-700 rounded">
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <div style={{ 
-          marginRight: 50, 
-          writingMode: 'vertical-rl', 
-          transform: 'rotate(180deg)', 
-          fontSize: 14, 
-          letterSpacing: 2, 
-          color: '#fff' 
-        }}>
+        <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: 14 }}>
           Палитра объектов
         </div>
       </div>
     );
   }
 
-  return (
-    <div
-      className="h-full flex items-stretch z-20 transition-all duration-300 z-150"
-      style={{ width: `${sidebarWidth}px`, minWidth: 280, marginRight: 50 }}
-    >
-      {/* Resize handle */}
-      <div
-        className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize flex-shrink-0 transition-colors"
-        onMouseDown={handleResizeStart}
-      />
+  // Найти категорию "Режимы управления поездом"
+  const controlModesCategory = OBJECT_CATEGORIES.find(cat => cat.id === "control-modes");
 
-      {/* Sidebar content */}
+  return (
+    <div className="h-full flex" style={{ width: `${sidebarWidth}px`, minWidth: 280 }}>
+      <div className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize" onMouseDown={handleResizeStart} />
+
       <div className="flex-1 bg-white border-l border-gray-300 flex flex-col shadow-lg">
-        {/* Header */}
-        <div className="flex-shrink-0 p-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-          <button
-            onClick={onToggleCollapse}
-            className="p-2 mr-2 hover:bg-gray-200 rounded transition-colors text-gray-700"
-            title="Свернуть палитру"
-          >
-            <ChevronRight className="w-5 h-5" />
+        <div className="p-4 border-b bg-gray-50 flex items-center gap-2">
+          <button onClick={onToggleCollapse} className="p-2 hover:bg-gray-200 rounded">
+            <ChevronRight className="w-5 h-5 text-gray-700" />
           </button>
-          <h3 className="text-gray-700 flex-1 font-medium">Палитра объектов</h3>
+          <h3 className="flex-1 font-medium text-gray-700">Палитра объектов</h3>
         </div>
 
-        {/* Subheader */}
-        <div className="p-3 border-b border-gray-200 bg-gray-50">
-          <p className="text-xs text-gray-500">
-            Перетащите объекты на холст для размещения
-          </p>
+        <div className="p-3 border-b bg-gray-50">
+          <p className="text-xs text-gray-500">Перетащите объекты на холст</p>
         </div>
 
         {/* Categories */}
-        <ScrollArea className="flex-1" style={{ overflow: "auto" }}>
-          <div className="p-2 space-y-1">
-            {staticObjectCategories.map((category) => {
-              const isExpanded = expandedCategories.has(category.id);
-
+        <div className="flex-1 overflow-auto p-2 space-y-1">
+          {OBJECT_CATEGORIES.map((category) => {
+            const isExpanded = expandedCategories.has(category.id);
+            
+            // Специальная обработка для категории "Режимы управления поездом"
+            if (category.id === "control-modes") {
               return (
-                <div
-                  key={category.id}
-                  className="rounded-lg border border-gray-200"
-                >
-                  {/* Category Header */}
+                <div key={category.id} className="rounded-lg border border-gray-200">
                   <button
                     onClick={() => toggleCategory(category.id)}
-                    className="w-full flex items-center gap-2 p-2.5 transition-colors bg-gray-50 hover:bg-gray-100"
+                    className="w-full flex items-center gap-2 p-2.5 bg-gray-50 hover:bg-gray-100"
                   >
-                    {isExpanded ? (
-                      <ChevronDown className="w-4 h-4 text-gray-600" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4 text-gray-600" />
-                    )}
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div className="text-gray-600">{category.icon}</div>
-                      <span className="text-sm font-medium truncate text-gray-900">
-                        {category.nameRu}
-                      </span>
-                    </div>
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-white text-gray-500">
-                      {category.objects.length}
+                    {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                    <div className="text-gray-600">{category.icon}</div>
+                    <span className="flex-1 text-sm font-medium text-left">{category.nameRu}</span>
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-white">
+                      {category.objects.length + LOCOMOTIVES.reduce((sum, loc) => sum + loc.tractionModes.length, 0)}
                     </span>
                   </button>
 
-                  {/* Category Objects */}
                   {isExpanded && (
-                    <div className="bg-white">
-                      <div className="grid grid-cols-2 gap-1 p-1.5">
+                    <div className="bg-white p-1.5 space-y-2">
+                      {/* Основные режимы управления */}
+                      <div className="grid grid-cols-2 gap-1">
                         {category.objects.map((object) => (
                           <div
                             key={object.id}
                             draggable
                             onDragStart={(e) => handleDragStart(e, object)}
-                            className="flex items-center gap-1 p-2 rounded border border-gray-200 hover:border-blue-400 hover:bg-blue-50 cursor-move transition-all"
-                            title={object.description || object.nameRu}
+                            className="flex flex-col items-center gap-1 p-2 rounded border hover:border-blue-400 hover:bg-blue-50 cursor-move"
+                            title={object.description}
                           >
-                            <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-50 group-hover:bg-white" style={{minWidth: 32}}>
-                              {object.icon}
-                            </div>
-                            <span className="text-xs text-gray-700 hover:text-blue-700 leading-tight line-clamp-2 pl-2">
-                              {object.nameRu}
-                            </span>
+                            <div className="w-8 h-8 flex items-center justify-center">{object.icon}</div>
+                            <span className="text-xs text-center leading-tight">{object.nameRu}</span>
                           </div>
                         ))}
                       </div>
+
+                      {/* Локомотивы */}
+                      {LOCOMOTIVES.map((locomotive) => {
+                        const tractionObjects = generateTractionModeObjects(locomotive);
+                        return (
+                          <div key={locomotive.id} className="border-t pt-2">
+                            <div className="flex items-center gap-2 mb-2 px-2">
+                              <Gauge className="w-4 h-4 text-blue-700" />
+                              <span className="text-sm font-semibold text-blue-900">
+                                {locomotive.name}
+                              </span>
+                              <span className="text-xs px-1.5 py-0.5 rounded bg-blue-100">
+                                {tractionObjects.length}
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-1">
+                              {tractionObjects.map((mode) => (
+                                <div
+                                  key={mode.id}
+                                  draggable
+                                  onDragStart={(e) => handleDragStart(e, mode)}
+                                  className="flex flex-col items-center gap-1 p-2 rounded border border-blue-200 hover:border-blue-400 hover:bg-blue-50 cursor-move"
+                                  title={mode.description}
+                                >
+                                  <div className="w-8 h-8 flex items-center justify-center">{mode.icon}</div>
+                                  <span className="text-xs text-center leading-tight">{mode.nameRu}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
               );
-            })}
-          </div>
-        </ScrollArea>
+            }
 
-        {/* Info panel for selected/last added object */}
+            // Обычные категории
+            return (
+              <div key={category.id} className="rounded-lg border border-gray-200">
+                <button
+                  onClick={() => toggleCategory(category.id)}
+                  className="w-full flex items-center gap-2 p-2.5 bg-gray-50 hover:bg-gray-100"
+                >
+                  {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                  <div className="text-gray-600">{category.icon}</div>
+                  <span className="flex-1 text-sm font-medium text-left">{category.nameRu}</span>
+                  <span className="text-xs px-1.5 py-0.5 rounded bg-white">{category.objects.length}</span>
+                </button>
+
+                {isExpanded && (
+                  <div className="bg-white p-1.5 grid grid-cols-2 gap-1">
+                    {category.objects.map((object) => (
+                      <div
+                        key={object.id}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, object)}
+                        className="flex flex-col items-center gap-1 p-2 rounded border hover:border-blue-400 hover:bg-blue-50 cursor-move"
+                        title={object.description}
+                      >
+                        <div className="w-8 h-8 flex items-center justify-center">{object.icon}</div>
+                        <span className="text-xs text-center leading-tight">{object.nameRu}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Separator */}
+        {displayedObjectWithIcon && <div className="h-0.5 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400" />}
+
+        {/* Info panel */}
         {displayedObjectWithIcon && (
-          <div className="flex-shrink-0 border-t-2 border-blue-500 bg-blue-50 p-4">
+          <div className="border-t-2 border-blue-500 bg-blue-50 p-4 space-y-4">
             <div className="flex items-start gap-3">
-              
+              <div className="w-12 h-12 bg-white rounded border-2 border-blue-500 flex items-center justify-center flex-shrink-0">
+                {displayedObjectWithIcon.objectType.icon}
+              </div>
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="text-sm font-semibold text-gray-900">
-                    {selectedObjectId ? 'Выбранный объект' : 'Последний добавленный'}
+                  <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <h4 className="text-sm font-semibold text-blue-900">
+                    {selectedObjectId ? 'Выбранный объект' : 'Последний объект'}
                   </h4>
                 </div>
-                <div className="w-10 h-10 bg-white rounded flex gap-10">
-                  <div style={{ transform: 'scale(1.4)' }} className="flex-shrink-0 w-10 h-6 bg-white rounded border-2 border-blue-500 flex justify-center mr-4">
-                    {displayedObjectWithIcon.objectType.icon}
-                  </div>
-                  <p className="text-sm text-gray-700 font-medium mb-2 pl-4">
-                    {displayedObjectWithIcon.objectType.nameRu}
-                  </p>
-              </div>
-                
-                
-                
-                <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
-                  <MapPin className="w-3 h-3" />
-                  <span className="font-mono">
-                    км {displayedObjectWithIcon.coordinate.toFixed(3)}
-                  </span>
-                </div>
-
-                {/*displayedObjectWithIcon.objectType.description && (
-                  <p className="text-xs text-gray-500 mb-3 line-clamp-2">
-                    {displayedObjectWithIcon.objectType.description}
-                  </p>
-                )*/}
-                
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={handleDeleteClick}
-                  className="w-full flex items-center justify-center gap-2"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Удалить объект
-                </Button>
+                <p className="text-sm font-medium text-gray-800 break-words">
+                  {displayedObjectWithIcon.objectType.nameRu}
+                </p>
               </div>
             </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs font-semibold text-gray-700">Координата (км)</Label>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                <div className="flex-1">
+                  <Input
+                    type="number"
+                    step="0.1"
+                    min="1610"
+                    max="1782"
+                    value={editCoordinate}
+                    onChange={handleCoordinateChange}
+                    onBlur={handleCoordinateBlur}
+                    className="h-9 text-sm"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Диапазон: 1610-1782 км</p>
+                </div>
+              </div>
+            </div>
+
+            {displayedObjectWithIcon.objectType.id === 'station' && (
+              <div className="space-y-2">
+                <Label className="text-xs font-semibold text-gray-700">Название станции</Label>
+                <Input
+                  type="text"
+                  value={editStationName}
+                  onChange={handleStationNameChange}
+                  onBlur={handleStationNameBlur}
+                  placeholder="Введите название станции..."
+                  className="h-9 text-sm"
+                />
+              </div>
+            )}
+
+            <Button
+              variant="destructive"
+              onClick={() => onDeleteObject?.(displayedObjectWithIcon.id)}
+              className="w-full h-9"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Удалить объект
+            </Button>
+          </div>
+        )}
+
+        {!displayedObjectWithIcon && (
+          <div className="p-4 border-t bg-gray-50">
+            <p className="text-xs text-gray-600 text-center italic">
+              Разместите объект на холсте, чтобы увидеть его свойства
+            </p>
           </div>
         )}
       </div>

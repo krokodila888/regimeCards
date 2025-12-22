@@ -23,6 +23,7 @@ type PlacedObject = {
   objectType: PaletteObject;
   coordinate: number;
   position: { x: number; y: number };
+  stationName?: string; // Добавлено для названий станций
 };
 
 interface WorkspaceProps {
@@ -113,6 +114,22 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     setSelectedObjectId(id);
   };
 
+  const handleUpdateObject = (id: string, updates: Partial<PlacedObject>) => {
+    setPlacedObjects(prev => 
+      prev.map(obj => {
+        if (obj.id === id) {
+          const updatedObj = { ...obj, ...updates };
+          
+          // Если изменилась координата, нужно пересчитать позицию X
+          // Это будет сделано в CanvasScreenshot через useEffect
+          
+          return updatedObj;
+        }
+        return obj;
+      })
+    );
+  };
+
   const handleDeleteObject = (id: string) => {
     setPlacedObjects(prev => prev.filter(obj => obj.id !== id));
     if (selectedObjectId === id) {
@@ -165,6 +182,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
             placedObjects={placedObjects}
             onDeleteObject={handleDeleteObject}
             onSelectObject={handleSelectObject}
+            onUpdateObject={handleUpdateObject}
             collapsed={paletteCollapsed}
             onToggleCollapse={() => setPaletteCollapsed(!paletteCollapsed)}
           />

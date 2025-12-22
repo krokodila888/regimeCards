@@ -12,6 +12,7 @@ export type PaletteObject = {
   icon: React.ReactNode;
   category: string;
   description?: string;
+  canvasIcon?: any
 };
 
 export type PlacedObject = {
@@ -25,6 +26,8 @@ export type PlacedObject = {
     x: number; // Горизонтальная позиция
     y: number; // Вертикальная позиция (центр секции скорости)
   };
+  /** Название станции, если применимо */
+  stationName?: string;
 };
 
 export type ObjectCategory = {
