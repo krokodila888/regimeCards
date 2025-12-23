@@ -5,6 +5,7 @@ export interface TrackSegment {
   startCoord: number;
   endCoord: number;
   stationName: string;
+  road?: string,
 }
 
 export interface SpeedLimit {
@@ -131,6 +132,8 @@ export interface WorkflowState {
   optimalSpeedCurve?: { km: number; speed: number }[];
   regimeArrows?: RegimeArrow[];
   actualSpeedCurve?: { km: number; speed: number }[];
+  time?: number,
+  mass?: number,
 }
 
 export interface ChartData {

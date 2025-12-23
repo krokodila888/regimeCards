@@ -1398,6 +1398,17 @@
     background-color: var(--color-white);
   }
 
+  .border-dark-blue {
+    border: solid 2px var(--color-blue-500);
+    &:hover {
+      border: solid 2px var(--color-blue-600);
+    }
+  }
+
+  .border-dark-blue:hover {
+    border: solid 2px var(--color-blue-600);
+  }
+
   .fill-current {
     fill: currentColor;
   }

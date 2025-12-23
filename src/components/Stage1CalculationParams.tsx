@@ -496,8 +496,7 @@ export default function Stage1CalculationParams({
       <div className="pt-2 border-t border-gray-300">
       <Button
           onClick={handleLoad}
-          className="w-full bg-white text-blue-600 border  hover:text-white mt-4 mb-4 hover:bg-blue-600"
-          style={{border: 'solid 2px var(--color-blue-500)'}}
+          className="w-full bg-white text-blue-600 border  hover:text-white mt-4 mb-4 hover:bg-blue-600 border-dark-blue"
           disabled={!departureStation || !arrivalStation}
         >
           Загрузить состав
@@ -697,8 +696,7 @@ export default function Stage1CalculationParams({
         </div>
         <Button
           onClick={handleLoad}
-          className="w-full bg-white text-blue-600 border  hover:text-white mt-4 hover:bg-blue-600"
-          style={{border: 'solid 2px var(--color-blue-500)'}}
+          className="w-full bg-white text-blue-600 border  hover:text-white mt-4 hover:bg-blue-600 border-dark-blue"
           disabled={!departureStation || !arrivalStation}
         >
           Загрузить профиль
@@ -706,8 +704,7 @@ export default function Stage1CalculationParams({
         </Button>
         <Button
           onClick={handleLoad}
-          className="w-full bg-white text-blue-600 border  hover:text-white mb-4 hover:bg-blue-600"
-          style={{border: 'solid 2px var(--color-blue-500)'}}
+          className="w-full bg-white text-blue-600 border  hover:text-white mb-4 hover:bg-blue-600 border-dark-blue"
           disabled={!departureStation || !arrivalStation}
         >
           Загрузить время хода НГДП
@@ -738,8 +735,7 @@ export default function Stage1CalculationParams({
         </div>
         <Button
           onClick={handleLoad}
-          className="w-full bg-white text-blue-600 border hover:text-white mb-4 hover:bg-blue-600"
-          style={{border: 'solid 2px var(--color-blue-500)'}}
+          className="w-full bg-white text-blue-600 border hover:text-white mb-4 hover:bg-blue-600 border-dark-blue"
           disabled={!departureStation || !arrivalStation}
         >
           Загрузить ограничения скорости

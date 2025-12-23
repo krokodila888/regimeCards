@@ -1199,7 +1199,7 @@ export default function VisioObjectPalette({
                     <div className="text-gray-600">{category.icon}</div>
                     <span className="flex-1 text-sm font-medium text-left">{category.nameRu}</span>
                     <span className="text-xs px-1.5 py-0.5 rounded bg-white">
-                      {category.objects.length + LOCOMOTIVES.reduce((sum, loc) => sum + loc.tractionModes.length, 0)}
+                      {category.objects.length + LOCOMOTIVES[0].length}
                     </span>
                   </button>
 
@@ -1222,7 +1222,7 @@ export default function VisioObjectPalette({
                       </div>
 
                       {/* Локомотивы */}
-                      {LOCOMOTIVES.map((locomotive) => {
+                      {Array(LOCOMOTIVES[0]).map((locomotive) => {
                         const tractionObjects = generateTractionModeObjects(locomotive);
                         return (
                           <div key={locomotive.id} className="border-t pt-2">
@@ -1297,7 +1297,7 @@ export default function VisioObjectPalette({
 
         {/* Info panel */}
         {displayedObjectWithIcon && (
-          <div className="border-t-2 border-blue-500 bg-blue-50 p-4 space-y-4">
+          <div className="border-t-2 border-blue-500 bg-blue-50 p-4 space-y-4" style={{borderTop: '1px solid var(--color-gray-300)'}}>
             <div className="flex items-start gap-3">
               <div className="w-12 h-12 bg-white rounded border-2 border-blue-500 flex items-center justify-center flex-shrink-0">
                 {displayedObjectWithIcon.objectType.icon}
@@ -1305,22 +1305,36 @@ export default function VisioObjectPalette({
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <Info className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                  <h4 className="text-sm font-semibold text-blue-900">
-                    {selectedObjectId ? 'Выбранный объект' : 'Последний объект'}
+                  <h4 className="text-sm text-gray-700">
+                    {selectedObjectId ? 'Выбранный объект:' : 'Последний объект'}
                   </h4>
                 </div>
-                <p className="text-sm font-medium text-gray-800 break-words">
+                <p className="text-sm font-medium text-gray-700 break-words">
                   {displayedObjectWithIcon.objectType.nameRu}
                 </p>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label className="text-xs font-semibold text-gray-700">Координата (км)</Label>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                <div className="flex-1">
+            <div className="space-y-2 flex-1" style={{position: 'relative', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start'}}>
+            {displayedObjectWithIcon.objectType.id === 'station' && (
+              <div className="space-y-2 flex" style={{position: 'relative', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start'}}>
+                
+                <Input
+                  type="text"
+                  value={editStationName}
+                  onChange={handleStationNameChange}
+                  onBlur={handleStationNameBlur}
+                  placeholder="Введите название станции"
+                  className="h-9 text-sm text-gray-700"
+                  style={{width: 160}}
+                />
+                <Label className="text-sm text-gray-500" style={{paddingTop: 8, fontStyle: 'normal', fontWeight: 'normal'}}>Название</Label>
+              </div>
+            )}
+              
+              <div className="flex items-center gap-2" style={{position: 'relative', display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start'}}>
+                <MapPin className="w-5 h-5 text-gray-500 flex flex-shrink-0" style={{position: 'absolute', top: 8, left: 8}}/>
+                <div className="flex-1" style={{width: 'fit-content'}}>
                   <Input
                     type="number"
                     step="0.1"
@@ -1329,26 +1343,18 @@ export default function VisioObjectPalette({
                     value={editCoordinate}
                     onChange={handleCoordinateChange}
                     onBlur={handleCoordinateBlur}
-                    className="h-9 text-sm"
+                    className="h-9 text-sm pl-8 text-gray-700"
+                    style={{width: 160}}
                   />
-                  <p className="text-xs text-gray-500 mt-1">Диапазон: 1610-1782 км</p>
+                  <p className="text-xs text-gray-500 mt-1" style={{width: 'fit-content'}}>Диапазон: 1610-1782 км</p>
+                  
                 </div>
+                <Label className="text-sm text-gray-500" style={{paddingTop: 8, fontStyle: 'normal', fontWeight: 'normal'}}>Координата (км)</Label>
               </div>
+              
             </div>
 
-            {displayedObjectWithIcon.objectType.id === 'station' && (
-              <div className="space-y-2">
-                <Label className="text-xs font-semibold text-gray-700">Название станции</Label>
-                <Input
-                  type="text"
-                  value={editStationName}
-                  onChange={handleStationNameChange}
-                  onBlur={handleStationNameBlur}
-                  placeholder="Введите название станции..."
-                  className="h-9 text-sm"
-                />
-              </div>
-            )}
+            
 
             <Button
               variant="destructive"
