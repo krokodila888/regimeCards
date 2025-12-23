@@ -14,6 +14,25 @@ import demaNoRegimesImg from "./images/dema_no_regimes.png";
 import demaSpeedOnlyImg from "./images/dema_no_top_no_profile_no_regimes.png";
 import demaNoTopNoProfileImg from "./images/dema_no_top_no_profile.png";
 import demaNoTopNoRegimesImg from "./images/dema_no_top_no_regimes.png";
+
+import demaOptImg from "./images/dema_opt.png";
+import demaOptNoBottomImg from "./images/dema_opt_no-bottom.png";
+import demaOptNoProfileImg from "./images/dema_opt_no-profile.png";
+import demaOptNoTopImg from "./images/dema_opt_no-top.png";
+import demaOptNoRegimesImg from "./images/dema_opt_no-regimes.png";
+import demaOptSpeedOnlyImg from "./images/dema_opt_no-top_no-profile_no-regimes.png";
+import demaOptNoTopNoProfileImg from "./images/dema_opt_no-top_no-profile.png";
+import demaOptNoTopNoRegimesImg from "./images/dema_opt_no-top_no-regimes.png";
+
+import demaRealImg from "./images/dema_regimes.png";
+import demaRealNoBottomImg from "./images/dema_regimes_no-bottom.png";
+import demaRealNoProfileImg from "./images/dema_regimes_no-profile.png";
+import demaRealNoTopImg from "./images/dema_regimes_no-top.png";
+import demaRealNoRegimesImg from "./images/dema_regimes_no-regimes.png";
+import demaRealSpeedOnlyImg from "./images/dema_regimes_speed-only.png";
+import demaRealNoTopNoProfileImg from "./images/dema_regimes_no-top_no-profile.png";
+import demaRealNoTopNoRegimesImg from "./images/dema_regimes_no-top_no-regimes.png";
+
 import type { ChartData } from "../types/chart-data";
 
 // Типы для размещенных объектов
@@ -143,6 +162,22 @@ export default function MainCanvas({
               imageNoProfileUrl={demaNoProfileImg}
               imageNoTopNoRegimesUrl={demaNoTopNoRegimesImg}
               imageNoTopNoProfileUrl={demaNoTopNoProfileImg}
+              imageOptUrl={demaOptImg}
+              imageOptNoTopUrl={demaOptNoTopImg}
+              imageOptNoBottomUrl={demaOptNoBottomImg}
+              imageOptSpeedOnlyUrl={demaOptSpeedOnlyImg}
+              imageOptNoRegimesUrl={demaOptNoRegimesImg}
+              imageOptNoProfileUrl={demaOptNoProfileImg}
+              imageOptNoTopNoRegimesUrl={demaOptNoTopNoRegimesImg}
+              imageOptNoTopNoProfileUrl={demaOptNoTopNoProfileImg}
+              imageRealUrl={demaRealImg}
+              imageRealNoTopUrl={demaRealNoTopImg}
+              imageRealNoBottomUrl={demaRealNoBottomImg}
+              imageRealSpeedOnlyUrl={demaRealSpeedOnlyImg}
+              imageRealNoRegimesUrl={demaRealNoRegimesImg}
+              imageRealNoProfileUrl={demaRealNoProfileImg}
+              imageRealNoTopNoRegimesUrl={demaRealNoTopNoRegimesImg}
+              imageRealNoTopNoProfileUrl={demaRealNoTopNoProfileImg}
               placedObjects={placedObjects}
               onPlacedObjectsChange={onPlacedObjectsChange}
               selectedObjectId={selectedObjectId}

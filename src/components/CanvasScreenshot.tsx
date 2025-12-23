@@ -88,6 +88,22 @@ interface CanvasScreenshotProps {
   imageNoProfileUrl: string;
   imageNoTopNoRegimesUrl: string;
   imageNoTopNoProfileUrl: string;
+  imageOptUrl: string;
+  imageOptNoTopUrl: string;
+  imageOptNoBottomUrl: string;
+  imageOptSpeedOnlyUrl: string;
+  imageOptNoRegimesUrl: string;
+  imageOptNoProfileUrl: string;
+  imageOptNoTopNoRegimesUrl: string;
+  imageOptNoTopNoProfileUrl: string;
+  imageRealUrl: string;
+  imageRealNoTopUrl: string;
+  imageRealNoBottomUrl: string;
+  imageRealSpeedOnlyUrl: string;
+  imageRealNoRegimesUrl: string;
+  imageRealNoProfileUrl: string;
+  imageRealNoTopNoRegimesUrl: string;
+  imageRealNoTopNoProfileUrl: string;
   placedObjects: PlacedObject[];
   onPlacedObjectsChange: (objects: PlacedObject[]) => void;
   selectedObjectId: string | null;
@@ -103,6 +119,22 @@ export default function CanvasScreenshot({
   imageNoProfileUrl,
   imageNoTopNoRegimesUrl,
   imageNoTopNoProfileUrl,
+  imageOptUrl,
+  imageOptNoTopUrl,
+  imageOptNoBottomUrl,
+  imageOptSpeedOnlyUrl,
+  imageOptNoRegimesUrl,
+  imageOptNoProfileUrl,
+  imageOptNoTopNoRegimesUrl,
+  imageOptNoTopNoProfileUrl,
+  imageRealUrl,
+  imageRealNoTopUrl,
+  imageRealNoBottomUrl,
+  imageRealSpeedOnlyUrl,
+  imageRealNoRegimesUrl,
+  imageRealNoProfileUrl,
+  imageRealNoTopNoRegimesUrl,
+  imageRealNoTopNoProfileUrl,
   placedObjects,
   onPlacedObjectsChange,
   selectedObjectId,
@@ -148,20 +180,34 @@ export default function CanvasScreenshot({
   // Рассчитано на основе реальных размеров изображений
   const PLACEMENT_HEIGHT_CONFIGS = {
     // gradientCurve, regimeMarkers, profileCurve
-    'true_true_true': 71.8,      // Все слои видны: 714/967 = 73.8%
-    'false_true_true': 64.1,     // Без верхнего слоя: 497/752 = 66.1%
-    'false_true_false': 80.7,    // Без верхнего и профиля: 497/601 = 76.8%
-    'false_false_true': 74.7,    // Без верхнего и режимов: 497/601 = 82.7%
-    'true_false_false': 95.4,    // Без профиля и режимов: 712/731 = 97.4%
-    'false_false_false': 95.3,   // Только скорость: 497/511 = 97.3%
-    'true_false_true': 79.7,     // Без режимов: 712/871 = 81.7%
-    'true_true_false': 84.0,     // Без профиля: 712/828 = 86.0%
+    'true_true_true': 72.2,      // Все слои видны: 714/967 = 73.8%
+    'false_true_true': 64.7,     // Без верхнего слоя: 497/752 = 66.1%
+    'false_true_false': 81.3,    // Без верхнего и профиля: 497/601 = 76.8%
+    'false_false_true': 75.1,    // Без верхнего и режимов: 497/651 = 82.7%
+    'true_false_false': 96.1,    // Без профиля и режимов: 712/731 = 97.4%
+    'false_false_false': 95.9,   // Только скорость: 497/511 = 97.3%
+    'true_false_true': 80.5,     // Без режимов: 712/871 = 81.7%
+    'true_true_false': 84.7,     // Без профиля: 712/828 = 86.0%
+  };
+
+  const PLACEMENT_ICON_RATIO_CONFIGS = {
+    // Формула: (22 / высота_холста) × 100%
+    'true_true_true': 2.28,      // (22 / 967) × 100 = 2.276% ≈ 2.28%
+    'false_true_true': 2.93,     // (22 / 752) × 100 = 2.926% ≈ 2.93%
+    'false_true_false': 3.66,    // (22 / 601) × 100 = 3.661% ≈ 3.66%
+    'false_false_true': 3.38,    // (22 / 651) × 100 = 3.380% ≈ 3.38%
+    'true_false_false': 3.01,    // (22 / 731) × 100 = 3.010% ≈ 3.01%
+    'false_false_false': 4.31,   // (22 / 511) × 100 = 4.305% ≈ 4.31%
+    'true_false_true': 2.53,     // (22 / 871) × 100 = 2.526% ≈ 2.53%
+    'true_true_false': 2.66,     // (22 / 828) × 100 = 2.657% ≈ 2.66%
   };
 
   const [visibleLayers, setVisibleLayers] = useState({
     gradientCurve: true,
     regimeMarkers: true,
     profileCurve: true,
+    optSpeedCurve: true,
+    regimes2: false,
   });
 
   // ========================================================================
@@ -176,8 +222,20 @@ export default function CanvasScreenshot({
     const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
     const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
     const heightPercent = PLACEMENT_HEIGHT_CONFIGS[configKey as keyof typeof PLACEMENT_HEIGHT_CONFIGS] || 73.8;
-    
     return imageHeight * (heightPercent / 100);
+
+  };
+
+  // Вычисление позиции Y для размещения объектов на основе видимых слоев
+  const getIconSize = () => {
+    if (!imageRef.current) return 0;
+    const imageHeight = imageRef.current.clientHeight;
+    
+    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
+    const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
+    const iconSizePercent = PLACEMENT_ICON_RATIO_CONFIGS[configKey as keyof typeof PLACEMENT_ICON_RATIO_CONFIGS] || 20;
+    
+    return (imageHeight * iconSizePercent) / 100
   };
 
   // Синхронизация позиций объектов при изменении видимых слоев или загрузке изображения
@@ -185,6 +243,15 @@ export default function CanvasScreenshot({
     if (!imageRef.current || !imageLoaded || placedObjects.length === 0) return;
     
     const newY = getObjectPlacementY();
+
+    const imageHeight = imageRef.current.clientHeight;
+    
+    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
+    const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
+    const iconSizePercent = PLACEMENT_ICON_RATIO_CONFIGS[configKey as keyof typeof PLACEMENT_ICON_RATIO_CONFIGS] || 20;
+
+    const newIconSize = (imageHeight * iconSizePercent) / 100;
+    console.log({newIconSize: newIconSize})
     const imageWidth = imageRef.current.naturalWidth;
     
     // Обновляем Y-позиции всех объектов и пересчитываем X из координат
@@ -198,7 +265,8 @@ export default function CanvasScreenshot({
       
       return {
         ...obj,
-        position: { x: newX, y: newY }
+        position: { x: newX, y: newY },
+        iconSize: newIconSize, 
       };
     });
     
@@ -211,6 +279,7 @@ export default function CanvasScreenshot({
     
     const imageWidth = imageRef.current.naturalWidth;
     const currentY = getObjectPlacementY();
+    const currentIconSize = getIconSize();
     let needsUpdate = false;
     
     // Проверяем, нужно ли обновить позиции X на основе координат
@@ -227,10 +296,10 @@ export default function CanvasScreenshot({
         needsUpdate = true;
         return {
           ...obj,
-          position: { x: expectedX, y: currentY }
+          position: { x: expectedX, y: currentY },
+          iconSize: currentIconSize,
         };
       }
-      
       return obj;
     });
     
@@ -281,7 +350,8 @@ export default function CanvasScreenshot({
         id: `placed_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         objectType: fullObjectData || objectData,
         coordinate,
-        position: { x, y }
+        position: { x, y },
+        iconSize: getIconSize(),
       };
       
       onPlacedObjectsChange([...placedObjects, newObject]);
@@ -379,16 +449,36 @@ export default function CanvasScreenshot({
 
   // Получение текущего изображения на основе видимых слоёв
   const getCurrentImage = () => {
-    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
+    const { gradientCurve, regimeMarkers, profileCurve, optSpeedCurve, regimes2 } = visibleLayers;
+
+    if (regimes2 && gradientCurve && regimeMarkers && profileCurve) return imageRealUrl;
+    if (regimes2 && !gradientCurve && regimeMarkers && profileCurve) return imageRealNoTopUrl;
+    if (regimes2 && !gradientCurve && regimeMarkers && !profileCurve) return imageRealNoTopNoProfileUrl;
+    if (regimes2 && !gradientCurve && !regimeMarkers && profileCurve) return imageRealNoTopNoRegimesUrl;
+    if (regimes2 && gradientCurve && !regimeMarkers && !profileCurve) return imageRealNoBottomUrl;
+    if (regimes2 && !gradientCurve && !regimeMarkers && !profileCurve) return imageRealSpeedOnlyUrl;
+    if (regimes2 && gradientCurve && !regimeMarkers && profileCurve) return imageRealNoRegimesUrl;
+    if (regimes2 && gradientCurve && regimeMarkers && !profileCurve) return imageRealNoProfileUrl;
+
+
+    if (optSpeedCurve && !regimes2 && gradientCurve && regimeMarkers && profileCurve) return imageOptUrl;
+    if (optSpeedCurve && !regimes2 && !gradientCurve && regimeMarkers && profileCurve) return imageOptNoTopUrl;
+    if (optSpeedCurve && !regimes2 && !gradientCurve && regimeMarkers && !profileCurve) return imageOptNoTopNoProfileUrl;
+    if (optSpeedCurve && !regimes2 && !gradientCurve && !regimeMarkers && profileCurve) return imageOptNoTopNoRegimesUrl;
+    if (optSpeedCurve && !regimes2 && gradientCurve && !regimeMarkers && !profileCurve) return imageOptNoBottomUrl;
+    if (optSpeedCurve && !regimes2 && !gradientCurve && !regimeMarkers && !profileCurve) return imageOptSpeedOnlyUrl;
+    if (optSpeedCurve && !regimes2 && gradientCurve && !regimeMarkers && profileCurve) return imageOptNoRegimesUrl;
+    if (optSpeedCurve && !regimes2 && gradientCurve && regimeMarkers && !profileCurve) return imageOptNoProfileUrl;
     
-    if (gradientCurve && regimeMarkers && profileCurve) return imageUrl;
-    if (!gradientCurve && regimeMarkers && profileCurve) return imageNoTopUrl;
-    if (!gradientCurve && regimeMarkers && !profileCurve) return imageNoTopNoProfileUrl;
-    if (!gradientCurve && !regimeMarkers && profileCurve) return imageNoTopNoRegimesUrl;
-    if (gradientCurve && !regimeMarkers && !profileCurve) return imageNoBottomUrl;
-    if (!gradientCurve && !regimeMarkers && !profileCurve) return imageSpeedOnlyUrl;
-    if (gradientCurve && !regimeMarkers && profileCurve) return imageNoRegimesUrl;
-    if (gradientCurve && regimeMarkers && !profileCurve) return imageNoProfileUrl;
+    if (!optSpeedCurve && !regimes2 && gradientCurve && regimeMarkers && profileCurve) return imageUrl;
+    if (!optSpeedCurve && !regimes2 && !gradientCurve && regimeMarkers && profileCurve) return imageNoTopUrl;
+    if (!optSpeedCurve && !regimes2 && !gradientCurve && regimeMarkers && !profileCurve) return imageNoTopNoProfileUrl;
+    if (!optSpeedCurve && !regimes2 && !gradientCurve && !regimeMarkers && profileCurve) return imageNoTopNoRegimesUrl;
+    if (!optSpeedCurve && !regimes2 && gradientCurve && !regimeMarkers && !profileCurve) return imageNoBottomUrl;
+    if (!optSpeedCurve && !regimes2 && !gradientCurve && !regimeMarkers && !profileCurve) return imageSpeedOnlyUrl;
+    if (!optSpeedCurve && !regimes2 && gradientCurve && !regimeMarkers && profileCurve) return imageNoRegimesUrl;
+    if (!optSpeedCurve && !regimes2 && gradientCurve && regimeMarkers && !profileCurve) return imageNoProfileUrl;
+
     return imageUrl;
   };
 
@@ -511,7 +601,8 @@ export default function CanvasScreenshot({
               // Получаем полный объект с иконками
               const fullObject = getPaletteObjectById(obj.objectType.id);
               const canvasIcon = fullObject?.canvasIcon || fullObject?.icon || obj.objectType.icon;
-              
+              const iconSize = obj.iconSize || getIconSize();
+
               return (
                 <div
                   key={obj.id}
@@ -533,18 +624,15 @@ export default function CanvasScreenshot({
                     <div
                       style={{
                         position: 'absolute',
-                        bottom: '45px',
+                        bottom: '25px',
                         left: '50%',
                         transform: 'translateX(-50%)',
-                        backgroundColor: 'white',
-                        border: '2px solid #000',
+                        border: 'none',
                         padding: '4px 8px',
                         borderRadius: '4px',
-                        fontSize: '13px',
-                        fontWeight: 'bold',
+                        fontSize: '8px',
                         whiteSpace: 'nowrap',
                         pointerEvents: 'none',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
                       }}
                     >
                       {obj.stationName}
@@ -554,8 +642,8 @@ export default function CanvasScreenshot({
                   {/* Иконка объекта из canvasIcon */}
                   <div
                     style={{
-                      width: '32px',
-                      height: '32px',
+                      width: `${iconSize}px`, // <-- Используем сохраненное значение
+                      height: `${iconSize}px`, // <-- Используем сохраненное значение
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -566,7 +654,7 @@ export default function CanvasScreenshot({
                     }}
                   >
                     <div style={{ 
-                      transform: 'scale(1.0)',
+                      transform: 'scale(0.7)',
                       filter: isSelected 
                         ? 'drop-shadow(0 0 4px #3b82f6)' 
                         : isHovered 
@@ -680,6 +768,30 @@ export default function CanvasScreenshot({
               <Checkbox id="speedCurve" checked={true} disabled={true} />
               <Label htmlFor="speedCurve" className="text-sm cursor-not-allowed">
                 Кривая скорости
+              </Label>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <Checkbox 
+                id="optSpeedCurve" 
+                checked={visibleLayers.optSpeedCurve} 
+                onCheckedChange={(checked: boolean) =>
+                  setVisibleLayers({ ...visibleLayers, optSpeedCurve: checked })
+                } />
+              <Label htmlFor="optSpeedCurve" className="text-sm">
+                Оптимальная кривая скорости
+              </Label>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <Checkbox 
+                id="regimes2" 
+                checked={visibleLayers.regimes2} 
+                onCheckedChange={(checked: boolean) =>
+                  setVisibleLayers({ ...visibleLayers, regimes2: checked })
+                } />
+              <Label htmlFor="regimes2" className="text-sm">
+                Динамика реализованная
               </Label>
             </div>
           </div>

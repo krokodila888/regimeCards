@@ -28,6 +28,7 @@ export type PlacedObject = {
   };
   /** Название станции, если применимо */
   stationName?: string;
+  iconSize?: number;
 };
 
 export type ObjectCategory = {

@@ -464,7 +464,7 @@ const staticObjectCategories: ObjectCategory[] = [
       {
         id: "train-join-split",
         name: "Train Join/Split Point",
-        nameRu: "Место соединения-разъединения поездов (МСРП)",
+        nameRu: "Место соединения-разъединения поездов",
         icon: (
           <svg width="20" height="20" viewBox="0 0 20 20" className="text-purple-600">
             <line x1="4" y1="10" x2="10" y2="5" stroke="currentColor" strokeWidth="2" />
@@ -1305,7 +1305,7 @@ export default function VisioObjectPalette({
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="text-sm text-gray-700">
+                  <h4 className="text-sm text-gray-700" style={{fontStyle: 'normal', fontWeight: '300'}}>
                     {selectedObjectId ? 'Выбранный объект:' : 'Последний объект'}
                   </h4>
                 </div>
