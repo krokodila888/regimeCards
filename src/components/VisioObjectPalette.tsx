@@ -1199,7 +1199,7 @@ export default function VisioObjectPalette({
                     <div className="text-gray-600">{category.icon}</div>
                     <span className="flex-1 text-sm font-medium text-left">{category.nameRu}</span>
                     <span className="text-xs px-1.5 py-0.5 rounded bg-white">
-                      {category.objects.length + LOCOMOTIVES[0].length}
+                      {category.objects.length + LOCOMOTIVES[0].tractionModes.length}
                     </span>
                   </button>
 
