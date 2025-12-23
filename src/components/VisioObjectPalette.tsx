@@ -1152,11 +1152,11 @@ export default function VisioObjectPalette({
 
   if (collapsed) {
     return (
-      <div className="w-24 h-full bg-gray-800 text-white flex flex-col items-center py-4">
-        <button onClick={onToggleCollapse} className="p-2 mb-4 hover:bg-gray-700 rounded">
+      <div className="w-24 h-full bg-gray-800 text-white flex flex-col items-center py-4" style={{marginRight: 10 }}>
+        <button onClick={onToggleCollapse} className="p-2 mb-4 hover:bg-gray-700 rounded" style={{marginRight: 42 }}>
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: 14 }}>
+        <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: 14, marginRight: 42 }}>
           Палитра объектов
         </div>
       </div>
@@ -1167,7 +1167,7 @@ export default function VisioObjectPalette({
   const controlModesCategory = OBJECT_CATEGORIES.find(cat => cat.id === "control-modes");
 
   return (
-    <div className="h-full flex" style={{ width: `${sidebarWidth}px`, minWidth: 280 }}>
+    <div className="h-full flex" style={{ width: `${sidebarWidth}px`, minWidth: 280, marginRight: 56 }}>
       <div className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize" onMouseDown={handleResizeStart} />
 
       <div className="flex-1 bg-white border-l border-gray-300 flex flex-col shadow-lg">
