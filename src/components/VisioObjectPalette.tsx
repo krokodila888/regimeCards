@@ -1050,7 +1050,7 @@ export default function VisioObjectPalette({
   const [sidebarWidth, setSidebarWidth] = useState(360);
   const [isResizing, setIsResizing] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(["speed-curve", "control-modes", "track-objects", "signals"])
+    new Set(["speed-curve", "control-modes", "track-objects", "electrical", "structures", "power-supply", "signals"])
   );
 
   const [editCoordinate, setEditCoordinate] = useState("");

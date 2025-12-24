@@ -108,6 +108,8 @@ interface CanvasScreenshotProps {
   onPlacedObjectsChange: (objects: PlacedObject[]) => void;
   selectedObjectId: string | null;
   onSelectObject: (id: string | null) => void;
+  visibleLayers: any;
+  setVisibleLayers: any;
 }
 
 export default function CanvasScreenshot({ 
@@ -139,6 +141,8 @@ export default function CanvasScreenshot({
   onPlacedObjectsChange,
   selectedObjectId,
   onSelectObject,
+  visibleLayers, 
+          setVisibleLayers,
 }: CanvasScreenshotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -220,7 +224,7 @@ export default function CanvasScreenshot({
     // Высота прямоугольных иконок (нейтральная вставка, место проверки тормозов)
     // Формула: (высота_иконки / высота_холста) × 100%
     // Подгоните эти значения вручную для каждой комбинации
-    'true_true_true': 2.2,      // Подгонка под вашу картинку
+    'true_true_true': 4.2,      // Подгонка под вашу картинку
     'false_true_true': 2.8,     // Подгонка под вашу картинку
     'false_true_false': 3.6,    // Подгонка под вашу картинку
     'false_false_true': 3.4,    // Подгонка под вашу картинку
@@ -244,13 +248,13 @@ export default function CanvasScreenshot({
     'true_true_false': 0.2,     // 0.2% от высоты изображения
   };
 
-  const [visibleLayers, setVisibleLayers] = useState({
+  /*const [visibleLayers, setVisibleLayers] = useState({
     gradientCurve: true,
     regimeMarkers: true,
     profileCurve: true,
     optSpeedCurve: true,
     regimes2: false,
-  });
+  });*/
 
   // ========================================================================
   // ОБРАБОТЧИКИ СОБЫТИЙ
@@ -890,7 +894,7 @@ export default function CanvasScreenshot({
             <div className="flex items-center space-x-3 opacity-50">
               <Checkbox id="speedCurve" checked={true} disabled={true} />
               <Label htmlFor="speedCurve" className="text-sm cursor-not-allowed">
-                Кривая скорости
+                Оптимальная кривая скорости
               </Label>
             </div>
 
@@ -899,10 +903,10 @@ export default function CanvasScreenshot({
                 id="optSpeedCurve" 
                 checked={visibleLayers.optSpeedCurve} 
                 onCheckedChange={(checked: boolean) =>
-                  setVisibleLayers({ ...visibleLayers, optSpeedCurve: checked })
+                  setVisibleLayers({ ...visibleLayers, optSpeedCurve: checked, regimes2: checked ? visibleLayers.regimes2 : false })
                 } />
               <Label htmlFor="optSpeedCurve" className="text-sm">
-                Оптимальная кривая скорости
+                Кривая скорости
               </Label>
             </div>
 
