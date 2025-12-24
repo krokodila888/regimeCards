@@ -182,17 +182,17 @@ export default function CanvasScreenshot({
     // gradientCurve, regimeMarkers, profileCurve
     'true_true_true': 72.5,      // Все слои видны: 714/967
     'false_true_true': 64.3,     // Без верхнего слоя: 497/752
-    'false_true_false': 79.2,    // Без верхнего и профиля: 497/601
+    'false_true_false': 79.2,    // Без верхнего и профиля: 497/611
     'false_false_true': 74.3,    // Без верхнего и режимов: 497/651
     'true_false_false': 95.9,    // Без профиля и режимов: 712/731
-    'false_false_false': 94.8,   // Только скорость: 497/511
+    'false_false_false': 94.8,   // Только скорость: 497/516
     'true_false_true': 80.1,     // Без режимов: 712/871
     'true_true_false': 84.8,     // Без профиля: 712/828
   };
 
   const PLACEMENT_ICON_RATIO_CONFIGS = {
     // Формула: (22 / высота_холста) × 100%
-    'true_true_true': 2.8,      // (22 / 967) × 100 = 2.276% ≈ 2.28%
+    'true_true_true': 6.8,      // (22 / 967) × 100 = 2.276% ≈ 2.28%
     'false_true_true': 3.6,     // (22 / 752) × 100 = 2.926% ≈ 2.93%
     'false_true_false': 4.7,    // (22 / 601) × 100 = 3.661% ≈ 3.66%
     'false_false_true': 4.4,    // (22 / 651) × 100 = 3.380% ≈ 3.38%
