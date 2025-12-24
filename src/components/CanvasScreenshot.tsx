@@ -220,7 +220,7 @@ export default function CanvasScreenshot({
     // Высота прямоугольных иконок (нейтральная вставка, место проверки тормозов)
     // Формула: (высота_иконки / высота_холста) × 100%
     // Подгоните эти значения вручную для каждой комбинации
-    'true_true_true': 3.2,      // Подгонка под вашу картинку
+    'true_true_true': 2.2,      // Подгонка под вашу картинку
     'false_true_true': 2.8,     // Подгонка под вашу картинку
     'false_true_false': 3.6,    // Подгонка под вашу картинку
     'false_false_true': 3.4,    // Подгонка под вашу картинку
@@ -332,10 +332,13 @@ export default function CanvasScreenshot({
         MARGIN_RIGHT_KM
       );
       
+      // Для прямоугольных иконок не сохраняем iconSize, они вычисляются динамически
+      const isRectangularIcon = obj.objectType.id === 'neutral-insert' || obj.objectType.id === 'auto-brake-test';
+      
       return {
         ...obj,
         position: { x: newX, y: newY },
-        iconSize: newIconSize, 
+        iconSize: isRectangularIcon ? undefined : newIconSize, 
       };
     });
     
@@ -363,10 +366,14 @@ export default function CanvasScreenshot({
       // Проверяем, отличается ли текущая позиция от ожидаемой
       if (Math.abs(obj.position.x - expectedX) > 1) {
         needsUpdate = true;
+        
+        // Для прямоугольных иконок не сохраняем iconSize
+        const isRectangularIcon = obj.objectType.id === 'neutral-insert' || obj.objectType.id === 'auto-brake-test';
+        
         return {
           ...obj,
           position: { x: expectedX, y: currentY },
-          iconSize: currentIconSize,
+          iconSize: isRectangularIcon ? undefined : currentIconSize,
         };
       }
       return obj;
@@ -415,12 +422,14 @@ export default function CanvasScreenshot({
       );
       
       // Создаем новый размещенный объект
+      const isRectangularIcon = objectId === 'neutral-insert' || objectId === 'auto-brake-test';
+      
       const newObject: PlacedObject = {
         id: `placed_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         objectType: fullObjectData || objectData,
         coordinate,
         position: { x, y },
-        iconSize: getIconSize(),
+        iconSize: isRectangularIcon ? undefined : getIconSize(),
       };
       
       onPlacedObjectsChange([...placedObjects, newObject]);
@@ -674,7 +683,7 @@ export default function CanvasScreenshot({
               // Проверяем, является ли объект прямоугольным (нейтральная вставка или место проверки тормозов)
               const isRectangularIcon = obj.objectType.id === 'neutral-insert' || obj.objectType.id === 'auto-brake-test';
               
-              // Для прямоугольных иконок используем отдельные константы
+              // Для прямоугольных иконок используем отдельные размеры, для остальных (включая станции) - обычный iconSize
               const iconWidth = isRectangularIcon ? getRectangularIconWidth() : iconSize;
               const iconHeight = isRectangularIcon ? getRectangularIconHeight() : iconSize;
 
@@ -723,10 +732,16 @@ export default function CanvasScreenshot({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      filter: isSelected || isHovered 
-                        ? 'drop-shadow(0 2px 7px rgba(69, 148, 204, 0.7))' 
+                      filter: isSelected 
+                        ? 'drop-shadow(0 0 7px rgba(59, 130, 246, 0.8)) drop-shadow(0 0 8px rgba(59, 130, 246, 0.6))' 
+                        : isHovered 
+                        ? 'drop-shadow(0 0 7px rgba(96, 165, 250, 0.7)) drop-shadow(0 2px 4px rgba(0,0,0,0.3))' 
                         : 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))',
                       transition: 'filter 0.2s',
+                      outline: isSelected ? '2px solid #3b82f6' : 'none',
+                      outlineOffset: '2px',
+                      borderRadius: '4px',
+                      backgroundColor: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
                     }}
                   >
                     <div style={{ 
@@ -735,15 +750,8 @@ export default function CanvasScreenshot({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      filter: isSelected 
-                        ? 'drop-shadow(0 0 7px #3b82f6)' 
-                        : isHovered 
-                        ? 'drop-shadow(0 0 7px #60a5fa)' 
-                        : 'none',
-                      transition: 'filter 0.2s',
                     }}>
                       {React.cloneElement(canvasIcon as React.ReactElement, {
-                        viewBox: isRectangularIcon ? "0 0 29 21" : undefined,
                         style: {
                           width: '100%',
                           height: '100%',
@@ -766,8 +774,14 @@ export default function CanvasScreenshot({
                             transform: 'translateX(-50%)',
                             width: `${Math.max(1.5, iconSize * 0.0625)}px`,
                             height: `${extraLegHeight}px`,
-                            backgroundColor: '#000',
+                            backgroundColor: isSelected ? '#3b82f6' : isHovered ? '#60a5fa' : '#000',
                             pointerEvents: 'none',
+                            transition: 'background-color 0.2s',
+                            boxShadow: isSelected 
+                              ? '0 0 7px rgba(59, 130, 246, 0.8)' 
+                              : isHovered 
+                              ? '0 0 7px rgba(96, 165, 250, 0.7)' 
+                              : 'none',
                           }}
                         />
                       );
