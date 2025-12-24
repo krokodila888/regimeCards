@@ -57,6 +57,14 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     },
   ]);
 
+  const [visibleLayers, setVisibleLayers] = useState({
+    gradientCurve: false,
+    regimeMarkers: false,
+    profileCurve: false,
+    optSpeedCurve: false,
+    regimes2: false,
+  });
+
   const handleCreateNewChart = () => {
     const newChart: ChartData = {
       id: Date.now().toString(),
@@ -102,7 +110,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-    }, 2500);
+    }, 1800);
   };
 
    // Обработчики для размещенных объектов
@@ -158,6 +166,8 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
           onValidationChange={setIsDataValid}
           onLogout={onLogout}
           onShowLoading={handleShowLoading}
+          visibleLayers={visibleLayers} 
+          setVisibleLayers={setVisibleLayers}
         />
 
         {/* Main Canvas with placed objects props */}
@@ -173,6 +183,8 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
           onPlacedObjectsChange={handlePlacedObjectsChange}
           selectedObjectId={selectedObjectId}
           onSelectObject={handleSelectObject}
+          visibleLayers={visibleLayers} 
+          setVisibleLayers={setVisibleLayers}
         />
 
         {/* Visio Object Palette (справа) */}

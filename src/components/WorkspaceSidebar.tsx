@@ -39,6 +39,8 @@ interface WorkspaceSidebarProps {
   onValidationChange: (isValid: boolean) => void;
   onLogout: () => void;
   onShowLoading: (message: string) => void;
+  visibleLayers: any;
+  setVisibleLayers: any;
 }
 
 export default function WorkspaceSidebar({
@@ -55,6 +57,8 @@ export default function WorkspaceSidebar({
   onValidationChange,
   onLogout,
   onShowLoading,
+  visibleLayers,
+  setVisibleLayers,
 }: WorkspaceSidebarProps) {
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -437,6 +441,8 @@ export default function WorkspaceSidebar({
                         }}
                         isOld={activeChart?.age === "old"}
                         onShowLoading={onShowLoading}
+                        visibleLayers={visibleLayers} 
+                        setVisibleLayers={setVisibleLayers}
                       />
                     </AccordionContent>
                   </AccordionItem>

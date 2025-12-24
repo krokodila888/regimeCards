@@ -64,6 +64,8 @@ interface MainCanvasProps {
   onPlacedObjectsChange: (objects: PlacedObject[]) => void;
   selectedObjectId: string | null;
   onSelectObject: (id: string | null) => void;
+  visibleLayers: any;
+  setVisibleLayers: any
 }
 
 export default function MainCanvas({
@@ -77,6 +79,8 @@ export default function MainCanvas({
   onPlacedObjectsChange,
   selectedObjectId,
   onSelectObject,
+  visibleLayers,
+  setVisibleLayers
 }: MainCanvasProps) {
   const [chartTitle, setChartTitle] = useState(activeChart?.title || "");
   const { user } = useAuth();
@@ -182,6 +186,8 @@ export default function MainCanvas({
               onPlacedObjectsChange={onPlacedObjectsChange}
               selectedObjectId={selectedObjectId}
               onSelectObject={onSelectObject}
+              visibleLayers={visibleLayers} 
+              setVisibleLayers={setVisibleLayers}
             />
           )}
         </>

@@ -45,13 +45,17 @@ interface Stage1CalculationParamsProps {
   onUpdateWorkflow: (updates: Partial<WorkflowState>) => void;
   onShowLoading: (message: string) => void;
   isOld?: boolean;
+  visibleLayers: any;
+  setVisibleLayers: any;
 }
 
 export default function Stage1CalculationParams({
   workflow,
   onUpdateWorkflow,
   isOld = false,
-  onShowLoading
+  onShowLoading,
+  visibleLayers,
+  setVisibleLayers
 }: Stage1CalculationParamsProps) {
   const [wagonGroupsModalOpen, setWagonGroupsModalOpen] =
     useState(false);
@@ -78,6 +82,10 @@ export default function Stage1CalculationParams({
 
   const handleLoad = () => {
     onShowLoading("Идет загрузка...");
+  };
+
+  const handleCount = () => {
+    onShowLoading("Идет расчет...");
   };
 
   // Auto-populate fields when predefined section data is available
@@ -695,7 +703,16 @@ export default function Stage1CalculationParams({
           </Select>
         </div>
         <Button
-          onClick={handleLoad}
+           onClick={() => {
+            handleLoad(); // Показывает лоадер
+            // Ждем 1800ms (время таймера) + небольшой запас
+            setTimeout(() => {
+              setVisibleLayers({ 
+                ...visibleLayers,
+                profileCurve: true,
+              });
+            }, 1850); // 1800 + небольшой запас
+          }}
           className="w-full bg-white text-blue-600 border  hover:text-white mt-4 hover:bg-blue-600 border-dark-blue"
           disabled={!departureStation || !arrivalStation}
         >
@@ -760,7 +777,20 @@ export default function Stage1CalculationParams({
 
         {/* Form button */}
         <Button
-          onClick={handleFormSubmit}
+          onClick={() => {
+            handleCount()// Показывает лоадер
+            // Ждем 1800ms (время таймера) + небольшой запас
+            setTimeout(() => {
+              setVisibleLayers({ 
+                ...visibleLayers, 
+                gradientCurve: true, 
+                regimes2: true, 
+                regimeMarkers: true,
+                profileCurve: true,
+                optSpeedCurve: true,
+              })
+            }, 1850); // 1800 + небольшой запас
+          }}
           className="w-full bg-blue-600 hover:bg-blue-700 mt-4"
           disabled={!departureStation || !arrivalStation}
         >

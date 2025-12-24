@@ -108,6 +108,8 @@ interface CanvasScreenshotProps {
   onPlacedObjectsChange: (objects: PlacedObject[]) => void;
   selectedObjectId: string | null;
   onSelectObject: (id: string | null) => void;
+  visibleLayers: any;
+  setVisibleLayers: any;
 }
 
 export default function CanvasScreenshot({ 
@@ -139,6 +141,8 @@ export default function CanvasScreenshot({
   onPlacedObjectsChange,
   selectedObjectId,
   onSelectObject,
+  visibleLayers,
+  setVisibleLayers
 }: CanvasScreenshotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -216,13 +220,13 @@ export default function CanvasScreenshot({
     'true_true_false': 0.2,     // 0.2% от высоты изображения
   };
 
-  const [visibleLayers, setVisibleLayers] = useState({
-    gradientCurve: true,
-    regimeMarkers: true,
-    profileCurve: true,
-    optSpeedCurve: true,
+  /*const [visibleLayers, setVisibleLayers] = useState({
+    gradientCurve: false,
+    regimeMarkers: false,
+    profileCurve: false,
+    optSpeedCurve: false,
     regimes2: false,
-  });
+  });*/
 
   // ========================================================================
   // ОБРАБОТЧИКИ СОБЫТИЙ
@@ -789,7 +793,7 @@ export default function CanvasScreenshot({
                 }
               />
               <Label htmlFor="regimeMarkers" className="text-sm cursor-pointer">
-                Ленты режимов тяги
+                Ленты режимов управления
               </Label>
             </div>
 
