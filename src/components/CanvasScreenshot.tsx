@@ -180,26 +180,40 @@ export default function CanvasScreenshot({
   // Рассчитано на основе реальных размеров изображений
   const PLACEMENT_HEIGHT_CONFIGS = {
     // gradientCurve, regimeMarkers, profileCurve
-    'true_true_true': 72.2,      // Все слои видны: 714/967 = 73.8%
-    'false_true_true': 64.7,     // Без верхнего слоя: 497/752 = 66.1%
-    'false_true_false': 81.3,    // Без верхнего и профиля: 497/601 = 76.8%
-    'false_false_true': 75.1,    // Без верхнего и режимов: 497/651 = 82.7%
-    'true_false_false': 96.1,    // Без профиля и режимов: 712/731 = 97.4%
-    'false_false_false': 95.9,   // Только скорость: 497/511 = 97.3%
-    'true_false_true': 80.5,     // Без режимов: 712/871 = 81.7%
-    'true_true_false': 84.7,     // Без профиля: 712/828 = 86.0%
+    'true_true_true': 72.6,      // Все слои видны: 714/967
+    'false_true_true': 64.3,     // Без верхнего слоя: 497/752
+    'false_true_false': 79.2,    // Без верхнего и профиля: 497/601
+    'false_false_true': 74.3,    // Без верхнего и режимов: 497/651
+    'true_false_false': 95.4,    // Без профиля и режимов: 712/731
+    'false_false_false': 94.8,   // Только скорость: 497/511
+    'true_false_true': 80.1,     // Без режимов: 712/871
+    'true_true_false': 84.9,     // Без профиля: 712/828
   };
 
   const PLACEMENT_ICON_RATIO_CONFIGS = {
     // Формула: (22 / высота_холста) × 100%
-    'true_true_true': 2.28,      // (22 / 967) × 100 = 2.276% ≈ 2.28%
-    'false_true_true': 2.93,     // (22 / 752) × 100 = 2.926% ≈ 2.93%
-    'false_true_false': 3.66,    // (22 / 601) × 100 = 3.661% ≈ 3.66%
-    'false_false_true': 3.38,    // (22 / 651) × 100 = 3.380% ≈ 3.38%
-    'true_false_false': 3.01,    // (22 / 731) × 100 = 3.010% ≈ 3.01%
-    'false_false_false': 4.31,   // (22 / 511) × 100 = 4.305% ≈ 4.31%
-    'true_false_true': 2.53,     // (22 / 871) × 100 = 2.526% ≈ 2.53%
-    'true_true_false': 2.66,     // (22 / 828) × 100 = 2.657% ≈ 2.66%
+    'true_true_true': 2.8,      // (22 / 967) × 100 = 2.276% ≈ 2.28%
+    'false_true_true': 3.6,     // (22 / 752) × 100 = 2.926% ≈ 2.93%
+    'false_true_false': 4.7,    // (22 / 601) × 100 = 3.661% ≈ 3.66%
+    'false_false_true': 4.4,    // (22 / 651) × 100 = 3.380% ≈ 3.38%
+    'true_false_false': 3.8,    // (22 / 731) × 100 = 3.010% ≈ 3.01%
+    'false_false_false': 5.7,   // (22 / 511) × 100 = 4.305% ≈ 4.31%
+    'true_false_true': 3.4,     // (22 / 871) × 100 = 2.526% ≈ 2.53%
+    'true_true_false': 3.5,     // (22 / 828) × 100 = 2.657% ≈ 2.66%
+  };
+
+  const EXTRA_LEG_HEIGHT_CONFIGS = {
+    // Дополнительная высота ножки в процентах от высоты изображения
+    // Формула: (желаемая_высота_ножки / высота_холста) × 100%
+    // Подгоните эти значения вручную для каждой комбинации
+    'true_true_true': 0.2,        // Нет дополнительной ножки
+    'false_true_true': 0.3,       // Нет дополнительной ножки
+    'false_true_false': 0.4,    // 0.5% от высоты изображения
+    'false_false_true': 0.4,    // 0.5% от высоты изображения
+    'true_false_false': 0.3,    // 0.3% от высоты изображения
+    'false_false_false': 0.4,   // 1.0% от высоты изображения
+    'true_false_true': 0.2,     // 0.2% от высоты изображения
+    'true_true_false': 0.2,     // 0.2% от высоты изображения
   };
 
   const [visibleLayers, setVisibleLayers] = useState({
@@ -223,19 +237,30 @@ export default function CanvasScreenshot({
     const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
     const heightPercent = PLACEMENT_HEIGHT_CONFIGS[configKey as keyof typeof PLACEMENT_HEIGHT_CONFIGS] || 73.8;
     return imageHeight * (heightPercent / 100);
-
   };
 
-  // Вычисление позиции Y для размещения объектов на основе видимых слоев
+  // Вычисление размера иконки на основе видимых слоев
   const getIconSize = () => {
+    if (!imageRef.current) return 22;
+    const imageHeight = imageRef.current.clientHeight;
+    
+    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
+    const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
+    const iconSizePercent = PLACEMENT_ICON_RATIO_CONFIGS[configKey as keyof typeof PLACEMENT_ICON_RATIO_CONFIGS] || 2.28;
+    
+    return (imageHeight * iconSizePercent) / 100;
+  };
+
+  // Вычисление высоты дополнительной ножки на основе видимых слоев
+  const getExtraLegHeight = () => {
     if (!imageRef.current) return 0;
     const imageHeight = imageRef.current.clientHeight;
     
     const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
     const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
-    const iconSizePercent = PLACEMENT_ICON_RATIO_CONFIGS[configKey as keyof typeof PLACEMENT_ICON_RATIO_CONFIGS] || 20;
+    const extraLegPercent = EXTRA_LEG_HEIGHT_CONFIGS[configKey as keyof typeof EXTRA_LEG_HEIGHT_CONFIGS] || 0;
     
-    return (imageHeight * iconSizePercent) / 100
+    return (imageHeight * extraLegPercent) / 100;
   };
 
   // Синхронизация позиций объектов при изменении видимых слоев или загрузке изображения
@@ -243,15 +268,7 @@ export default function CanvasScreenshot({
     if (!imageRef.current || !imageLoaded || placedObjects.length === 0) return;
     
     const newY = getObjectPlacementY();
-
-    const imageHeight = imageRef.current.clientHeight;
-    
-    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
-    const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
-    const iconSizePercent = PLACEMENT_ICON_RATIO_CONFIGS[configKey as keyof typeof PLACEMENT_ICON_RATIO_CONFIGS] || 20;
-
-    const newIconSize = (imageHeight * iconSizePercent) / 100;
-    console.log({newIconSize: newIconSize})
+    const newIconSize = getIconSize();
     const imageWidth = imageRef.current.naturalWidth;
     
     // Обновляем Y-позиции всех объектов и пересчитываем X из координат
@@ -460,7 +477,6 @@ export default function CanvasScreenshot({
     if (regimes2 && gradientCurve && !regimeMarkers && profileCurve) return imageRealNoRegimesUrl;
     if (regimes2 && gradientCurve && regimeMarkers && !profileCurve) return imageRealNoProfileUrl;
 
-
     if (optSpeedCurve && !regimes2 && gradientCurve && regimeMarkers && profileCurve) return imageOptUrl;
     if (optSpeedCurve && !regimes2 && !gradientCurve && regimeMarkers && profileCurve) return imageOptNoTopUrl;
     if (optSpeedCurve && !regimes2 && !gradientCurve && regimeMarkers && !profileCurve) return imageOptNoTopNoProfileUrl;
@@ -624,13 +640,14 @@ export default function CanvasScreenshot({
                     <div
                       style={{
                         position: 'absolute',
-                        bottom: '25px',
+                        bottom: `${iconSize + 3}px`,
                         left: '50%',
                         transform: 'translateX(-50%)',
                         border: 'none',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        fontSize: '8px',
+                        padding: '2px 6px',
+                        borderRadius: '3px',
+                        fontSize: `${iconSize * 0.36}px`,
+                        fontWeight: 'bold',
                         whiteSpace: 'nowrap',
                         pointerEvents: 'none',
                       }}
@@ -642,36 +659,68 @@ export default function CanvasScreenshot({
                   {/* Иконка объекта из canvasIcon */}
                   <div
                     style={{
-                      width: `${iconSize}px`, // <-- Используем сохраненное значение
-                      height: `${iconSize}px`, // <-- Используем сохраненное значение
+                      width: `${iconSize}px`,
+                      height: `${iconSize}px`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       filter: isSelected || isHovered 
-                        ? 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))' 
-                        : 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+                        ? 'drop-shadow(0 2px 3px rgba(0,0,0,0.3))' 
+                        : 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))',
                       transition: 'filter 0.2s',
                     }}
                   >
                     <div style={{ 
-                      transform: 'scale(0.7)',
+                      width: '100%',
+                      height: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       filter: isSelected 
-                        ? 'drop-shadow(0 0 4px #3b82f6)' 
+                        ? 'drop-shadow(0 0 2px #3b82f6)' 
                         : isHovered 
-                        ? 'drop-shadow(0 0 4px #60a5fa)' 
+                        ? 'drop-shadow(0 0 2px #60a5fa)' 
                         : 'none',
                       transition: 'filter 0.2s',
                     }}>
-                      {canvasIcon}
+                      {React.cloneElement(canvasIcon as React.ReactElement, {
+                        style: {
+                          width: '100%',
+                          height: '100%',
+                        }
+                      })}
                     </div>
                   </div>
+                  
+                  {/* Дополнительная ножка (на основе конфигурации) */}
+                  {(() => {
+                    const extraLegHeight = getExtraLegHeight();
+                    
+                    if (extraLegHeight > 0) {
+                      return (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            bottom: `-${extraLegHeight}px`,
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: `${Math.max(1.5, iconSize * 0.0625)}px`,
+                            height: `${extraLegHeight}px`,
+                            backgroundColor: '#000',
+                            pointerEvents: 'none',
+                          }}
+                        />
+                      );
+                    }
+                    return null;
+                  })()}
                   
                   {/* Tooltip при наведении */}
                   {isHovered && !isDragging && (
                     <div
                       style={{
                         position: 'absolute',
-                        bottom: isStation && obj.stationName ? '80px' : '45px',
+                        bottom: isStation && obj.stationName ? `${iconSize * 2.8}px` : `${iconSize * 1.8}px`,
                         left: '50%',
                         transform: 'translateX(-50%)',
                         backgroundColor: 'rgba(0, 0, 0, 0.9)',
