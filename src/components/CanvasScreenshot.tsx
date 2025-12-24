@@ -108,8 +108,6 @@ interface CanvasScreenshotProps {
   onPlacedObjectsChange: (objects: PlacedObject[]) => void;
   selectedObjectId: string | null;
   onSelectObject: (id: string | null) => void;
-  visibleLayers: any;
-  setVisibleLayers: any;
 }
 
 export default function CanvasScreenshot({ 
@@ -141,8 +139,6 @@ export default function CanvasScreenshot({
   onPlacedObjectsChange,
   selectedObjectId,
   onSelectObject,
-  visibleLayers,
-  setVisibleLayers
 }: CanvasScreenshotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -201,9 +197,37 @@ export default function CanvasScreenshot({
     'false_true_false': 4.7,    // (22 / 601) × 100 = 3.661% ≈ 3.66%
     'false_false_true': 4.4,    // (22 / 651) × 100 = 3.380% ≈ 3.38%
     'true_false_false': 3.8,    // (22 / 731) × 100 = 3.010% ≈ 3.01%
-    'false_false_false': 5.7,   // (22 / 511) × 100 = 4.305% ≈ 4.31%
+    'false_false_false': 4.4,   // (22 / 511) × 100 = 4.305% ≈ 4.31%
     'true_false_true': 3.4,     // (22 / 871) × 100 = 2.526% ≈ 2.53%
     'true_true_false': 3.5,     // (22 / 828) × 100 = 2.657% ≈ 2.66%
+  };
+
+  const RECTANGULAR_ICON_WIDTH_RATIO_CONFIGS = {
+    // Ширина прямоугольных иконок (нейтральная вставка, место проверки тормозов)
+    // Формула: (ширина_иконки / высота_холста) × 100%
+    // Подгоните эти значения вручную для каждой комбинации
+    'true_true_true': 3.5,      // Подгонка под вашу картинку
+    'false_true_true': 4.5,     // Подгонка под вашу картинку
+    'false_true_false': 6.0,    // Подгонка под вашу картинку
+    'false_false_true': 5.5,    // Подгонка под вашу картинку
+    'true_false_false': 4.8,    // Подгонка под вашу картинку
+    'false_false_false': 5.3,   // Подгонка под вашу картинку
+    'true_false_true': 4.2,     // Подгонка под вашу картинку
+    'true_true_false': 4.3,     // Подгонка под вашу картинку
+  };
+
+  const RECTANGULAR_ICON_HEIGHT_RATIO_CONFIGS = {
+    // Высота прямоугольных иконок (нейтральная вставка, место проверки тормозов)
+    // Формула: (высота_иконки / высота_холста) × 100%
+    // Подгоните эти значения вручную для каждой комбинации
+    'true_true_true': 3.2,      // Подгонка под вашу картинку
+    'false_true_true': 2.8,     // Подгонка под вашу картинку
+    'false_true_false': 3.6,    // Подгонка под вашу картинку
+    'false_false_true': 3.4,    // Подгонка под вашу картинку
+    'true_false_false': 2.9,    // Подгонка под вашу картинку
+    'false_false_false': 4.1,   // Подгонка под вашу картинку
+    'true_false_true': 2.6,     // Подгонка под вашу картинку
+    'true_true_false': 2.7,     // Подгонка под вашу картинку
   };
 
   const EXTRA_LEG_HEIGHT_CONFIGS = {
@@ -220,13 +244,13 @@ export default function CanvasScreenshot({
     'true_true_false': 0.2,     // 0.2% от высоты изображения
   };
 
-  /*const [visibleLayers, setVisibleLayers] = useState({
-    gradientCurve: false,
-    regimeMarkers: false,
-    profileCurve: false,
-    optSpeedCurve: false,
+  const [visibleLayers, setVisibleLayers] = useState({
+    gradientCurve: true,
+    regimeMarkers: true,
+    profileCurve: true,
+    optSpeedCurve: true,
     regimes2: false,
-  });*/
+  });
 
   // ========================================================================
   // ОБРАБОТЧИКИ СОБЫТИЙ
@@ -253,6 +277,30 @@ export default function CanvasScreenshot({
     const iconSizePercent = PLACEMENT_ICON_RATIO_CONFIGS[configKey as keyof typeof PLACEMENT_ICON_RATIO_CONFIGS] || 2.28;
     
     return (imageHeight * iconSizePercent) / 100;
+  };
+
+  // Вычисление ширины прямоугольной иконки на основе видимых слоев
+  const getRectangularIconWidth = () => {
+    if (!imageRef.current) return 29;
+    const imageHeight = imageRef.current.clientHeight;
+    
+    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
+    const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
+    const widthPercent = RECTANGULAR_ICON_WIDTH_RATIO_CONFIGS[configKey as keyof typeof RECTANGULAR_ICON_WIDTH_RATIO_CONFIGS] || 3.5;
+    
+    return (imageHeight * widthPercent) / 100;
+  };
+
+  // Вычисление высоты прямоугольной иконки на основе видимых слоев
+  const getRectangularIconHeight = () => {
+    if (!imageRef.current) return 21;
+    const imageHeight = imageRef.current.clientHeight;
+    
+    const { gradientCurve, regimeMarkers, profileCurve } = visibleLayers;
+    const configKey = `${gradientCurve}_${regimeMarkers}_${profileCurve}`;
+    const heightPercent = RECTANGULAR_ICON_HEIGHT_RATIO_CONFIGS[configKey as keyof typeof RECTANGULAR_ICON_HEIGHT_RATIO_CONFIGS] || 2.2;
+    
+    return (imageHeight * heightPercent) / 100;
   };
 
   // Вычисление высоты дополнительной ножки на основе видимых слоев
@@ -622,6 +670,13 @@ export default function CanvasScreenshot({
               const fullObject = getPaletteObjectById(obj.objectType.id);
               const canvasIcon = fullObject?.canvasIcon || fullObject?.icon || obj.objectType.icon;
               const iconSize = obj.iconSize || getIconSize();
+              
+              // Проверяем, является ли объект прямоугольным (нейтральная вставка или место проверки тормозов)
+              const isRectangularIcon = obj.objectType.id === 'neutral-insert' || obj.objectType.id === 'auto-brake-test';
+              
+              // Для прямоугольных иконок используем отдельные константы
+              const iconWidth = isRectangularIcon ? getRectangularIconWidth() : iconSize;
+              const iconHeight = isRectangularIcon ? getRectangularIconHeight() : iconSize;
 
               return (
                 <div
@@ -663,13 +718,13 @@ export default function CanvasScreenshot({
                   {/* Иконка объекта из canvasIcon */}
                   <div
                     style={{
-                      width: `${iconSize}px`,
-                      height: `${iconSize}px`,
+                      width: `${iconWidth}px`,
+                      height: `${iconHeight}px`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       filter: isSelected || isHovered 
-                        ? 'drop-shadow(0 2px 3px rgba(0,0,0,0.3))' 
+                        ? 'drop-shadow(0 2px 7px rgba(69, 148, 204, 0.7))' 
                         : 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))',
                       transition: 'filter 0.2s',
                     }}
@@ -681,13 +736,14 @@ export default function CanvasScreenshot({
                       alignItems: 'center',
                       justifyContent: 'center',
                       filter: isSelected 
-                        ? 'drop-shadow(0 0 2px #3b82f6)' 
+                        ? 'drop-shadow(0 0 7px #3b82f6)' 
                         : isHovered 
-                        ? 'drop-shadow(0 0 2px #60a5fa)' 
+                        ? 'drop-shadow(0 0 7px #60a5fa)' 
                         : 'none',
                       transition: 'filter 0.2s',
                     }}>
                       {React.cloneElement(canvasIcon as React.ReactElement, {
+                        viewBox: isRectangularIcon ? "0 0 29 21" : undefined,
                         style: {
                           width: '100%',
                           height: '100%',
@@ -793,7 +849,7 @@ export default function CanvasScreenshot({
                 }
               />
               <Label htmlFor="regimeMarkers" className="text-sm cursor-pointer">
-                Ленты режимов управления
+                Ленты режимов тяги
               </Label>
             </div>
 

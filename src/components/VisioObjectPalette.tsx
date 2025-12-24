@@ -683,14 +683,14 @@ const staticObjectCategories: ObjectCategory[] = [
           </svg>
         ),
         canvasIcon: (
-          <svg width="32" height="32" viewBox="0 0 32 32" className="text-gray-700">
-            <rect x="8" y="6" width="16" height="14" fill="white" stroke="currentColor" strokeWidth="2" />
-            <text x="16" y="16" fontSize="8" fill="currentColor" textAnchor="middle" fontWeight="bold">
-              НВ
-            </text>
-            <line x1="6" y1="24" x2="26" y2="24" stroke="currentColor" strokeWidth="2" strokeDasharray="3,3" />
-            <line x1="16" y1="20" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
-          </svg>
+          <svg width="29" height="21" viewBox="0 0 29 21" className="text-gray-700">
+  <rect x="6" y="3" width="17" height="11" fill="white" stroke="currentColor" strokeWidth="2" />
+  <text x="14.5" y="11" fontSize="7" fill="currentColor" textAnchor="middle" fontWeight="bold">
+    НВ
+  </text>
+  <line x1="4" y1="16" x2="25" y2="16" stroke="currentColor" strokeWidth="2" strokeDasharray="3,3" />
+  <line x1="14.5" y1="14" x2="14.5" y2="21" stroke="currentColor" strokeWidth="2" />
+</svg>
         ),
         category: "electrical",
         description: "Нейтральная вставка (участок без напряжения)",
@@ -742,13 +742,13 @@ const staticObjectCategories: ObjectCategory[] = [
           </svg>
         ),
         canvasIcon: (
-          <svg width="32" height="32" viewBox="0 0 32 32" className="text-black">
-            <rect x="8" y="6" width="16" height="16" fill="white" stroke="currentColor" strokeWidth="2" />
-            <text x="16" y="17" fontSize="8" fill="currentColor" textAnchor="middle" fontWeight="bold">
-              НТ
-            </text>
-            <line x1="16" y1="22" x2="16" y2="32" stroke="currentColor" strokeWidth="2" />
-          </svg>
+          <svg width="29" height="21" viewBox="0 0 29 21" className="text-black">
+  <rect x="6" y="3" width="17" height="13" fill="white" stroke="currentColor" strokeWidth="2" />
+  <text x="14.5" y="12" fontSize="7" fill="currentColor" textAnchor="middle" fontWeight="bold">
+    НТ
+  </text>
+  <line x1="14.5" y1="16" x2="14.5" y2="21" stroke="currentColor" strokeWidth="2" />
+</svg>
         ),
         category: "signals",
         description: "Место обязательной проверки автотормозов перед движением",
