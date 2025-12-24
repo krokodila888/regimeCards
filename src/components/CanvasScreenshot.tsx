@@ -185,19 +185,19 @@ export default function CanvasScreenshot({
     'false_true_false': 79.2,    // Без верхнего и профиля: 497/611
     'false_false_true': 74.3,    // Без верхнего и режимов: 497/651
     'true_false_false': 95.9,    // Без профиля и режимов: 712/731
-    'false_false_false': 94.8,   // Только скорость: 497/516
-    'true_false_true': 80.1,     // Без режимов: 712/871
+    'false_false_false': 93.8,   // Только скорость: 497/516
+    'true_false_true': 80.6,     // Без режимов: 712/871
     'true_true_false': 84.8,     // Без профиля: 712/828
   };
 
   const PLACEMENT_ICON_RATIO_CONFIGS = {
     // Формула: (22 / высота_холста) × 100%
-    'true_true_true': 6.8,      // (22 / 967) × 100 = 2.276% ≈ 2.28%
+    'true_true_true': 2.8,      // (22 / 967) × 100 = 2.276% ≈ 2.28%
     'false_true_true': 3.6,     // (22 / 752) × 100 = 2.926% ≈ 2.93%
     'false_true_false': 4.7,    // (22 / 601) × 100 = 3.661% ≈ 3.66%
     'false_false_true': 4.4,    // (22 / 651) × 100 = 3.380% ≈ 3.38%
     'true_false_false': 3.8,    // (22 / 731) × 100 = 3.010% ≈ 3.01%
-    'false_false_false': 4.4,   // (22 / 511) × 100 = 4.305% ≈ 4.31%
+    'false_false_false': 5.2,   // (22 / 511) × 100 = 4.305% ≈ 4.31%
     'true_false_true': 3.4,     // (22 / 871) × 100 = 2.526% ≈ 2.53%
     'true_true_false': 3.5,     // (22 / 828) × 100 = 2.657% ≈ 2.66%
   };
@@ -240,7 +240,7 @@ export default function CanvasScreenshot({
     'false_false_true': 0.4,    // 0.5% от высоты изображения
     'true_false_false': 0.3,    // 0.3% от высоты изображения
     'false_false_false': 0.4,   // 1.0% от высоты изображения
-    'true_false_true': 0.2,     // 0.2% от высоты изображения
+    'true_false_true': 0.1,     // 0.2% от высоты изображения
     'true_true_false': 0.2,     // 0.2% от высоты изображения
   };
 
@@ -708,7 +708,7 @@ export default function CanvasScreenshot({
                     <div
                       style={{
                         position: 'absolute',
-                        bottom: `${iconSize + 3}px`,
+                        bottom: `${iconSize}px`,
                         left: '50%',
                         transform: 'translateX(-50%)',
                         border: 'none',
