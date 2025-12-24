@@ -867,7 +867,7 @@ export default function CanvasScreenshot({
                 }
               />
               <Label htmlFor="regimeMarkers" className="text-sm cursor-pointer">
-                Ленты режимов тяги
+                Ленты режимов управления
               </Label>
             </div>
 
