@@ -41,6 +41,8 @@ interface WorkspaceSidebarProps {
   onShowLoading: (message: string) => void;
   visibleLayers: any;
   setVisibleLayers: any;
+  chosenAction: string;
+  setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function WorkspaceSidebar({
@@ -59,6 +61,8 @@ export default function WorkspaceSidebar({
   onShowLoading,
   visibleLayers,
   setVisibleLayers,
+  setСhosenAction,
+  chosenAction
 }: WorkspaceSidebarProps) {
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -66,10 +70,6 @@ export default function WorkspaceSidebar({
     Set<string>
   >(new Set());
   const [chartsExpanded, setChartsExpanded] = useState(true);
-
-  // Выбраная опция
-  const [chosenAction, setСhosenAction] =
-    useState<string>("start");
 
   // Замените состояние accordionValue
   const [accordionValue, setAccordionValue] = useState<
@@ -430,19 +430,28 @@ export default function WorkspaceSidebar({
                           }
                         }
                         onUpdateWorkflow={(updates) => {
+                          //console.log(activeChart);
+                          //console.log(activeChart.workflow);
+                          console.log(updates);
                           onUpdateChartData({
                             workflow: {
                               ...(activeChart.workflow || {
                                 currentStage: 1,
+                                ...updates,
                               }),
+                              currentStage: 1,
                               ...updates,
                             },
                           });
+                          console.log(activeChart);
+                          console.log(activeChart.workflow);
                         }}
                         isOld={activeChart?.age === "old"}
                         onShowLoading={onShowLoading}
                         visibleLayers={visibleLayers} 
                         setVisibleLayers={setVisibleLayers}
+                        chosenAction={chosenAction}
+                        setСhosenAction={setСhosenAction}
                       />
                     </AccordionContent>
                   </AccordionItem>

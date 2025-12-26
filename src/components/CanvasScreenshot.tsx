@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
@@ -12,6 +12,7 @@ import {
 } from './ui/dialog';
 import type { TrackBounds, PlacedObject, PaletteObject } from '../types/types';
 import { getPaletteObjectById } from './VisioObjectPalette';
+import { ChartData, WorkflowState } from '../types/chart-data';
 
 // ============================================================================
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ПРЕОБРАЗОВАНИЯ КООРДИНАТ
@@ -58,7 +59,8 @@ function kilometersToPixels(
   km: number,
   bounds: TrackBounds,
   marginLeft: number,
-  marginRight: number
+  marginRight: number,
+  
 ): number {
   const { startKm, endKm, imageWidth } = bounds;
   
@@ -104,12 +106,16 @@ interface CanvasScreenshotProps {
   imageRealNoProfileUrl: string;
   imageRealNoTopNoRegimesUrl: string;
   imageRealNoTopNoProfileUrl: string;
+  imageDemaEmptyProfile: string;
   placedObjects: PlacedObject[];
   onPlacedObjectsChange: (objects: PlacedObject[]) => void;
   selectedObjectId: string | null;
   onSelectObject: (id: string | null) => void;
   visibleLayers: any;
   setVisibleLayers: any;
+  chosenAction: string;
+  emptyField: string;
+  activeChart: ChartData,
 }
 
 export default function CanvasScreenshot({ 
@@ -142,7 +148,11 @@ export default function CanvasScreenshot({
   selectedObjectId,
   onSelectObject,
   visibleLayers, 
-          setVisibleLayers,
+  setVisibleLayers,
+  chosenAction,
+  emptyField,
+  activeChart,
+  imageDemaEmptyProfile
 }: CanvasScreenshotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -529,10 +539,38 @@ export default function CanvasScreenshot({
     containerRef.current.scrollLeft += e.deltaY;
   };
 
-  // Получение текущего изображения на основе видимых слоёв
-  const getCurrentImage = () => {
-    const { gradientCurve, regimeMarkers, profileCurve, optSpeedCurve, regimes2 } = visibleLayers;
+  useEffect(() => {
+    console.log(activeChart.workflow)
+    console.log({arrivalStation: activeChart.workflow?.arrivalStation})
+    console.log({departureStation: activeChart.workflow?.departureStation})
+  }, [activeChart])
 
+  useEffect(() => {
+    console.log(activeChart.workflow)
+  }, [])
+
+  useEffect(() => {
+    console.log(activeChart)
+  }, [activeChart])
+
+  // Получение текущего изображения на основе видимых слоёв
+  const getCurrentImage = useCallback(() => {
+    const { gradientCurve, regimeMarkers, profileCurve, optSpeedCurve, regimes2 } = visibleLayers;
+    if (
+      chosenAction === "createNew_profile" 
+      && activeChart.workflow?.arrivalStation 
+      && activeChart.workflow?.departureStation
+      && profileCurve
+    ) 
+      return imageDemaEmptyProfile;
+    if (chosenAction === "createNew_profile" 
+    && activeChart.workflow?.arrivalStation 
+    && activeChart.workflow?.departureStation
+    && !regimes2 
+    && !gradientCurve 
+    && !regimeMarkers 
+    && !profileCurve) return emptyField;
+    
     if (regimes2 && gradientCurve && regimeMarkers && profileCurve) return imageRealUrl;
     if (regimes2 && !gradientCurve && regimeMarkers && profileCurve) return imageRealNoTopUrl;
     if (regimes2 && !gradientCurve && regimeMarkers && !profileCurve) return imageRealNoTopNoProfileUrl;
@@ -561,7 +599,7 @@ export default function CanvasScreenshot({
     if (!optSpeedCurve && !regimes2 && gradientCurve && regimeMarkers && !profileCurve) return imageNoProfileUrl;
 
     return imageUrl;
-  };
+  }, [activeChart, visibleLayers]);
 
   // ========================================================================
   // RENDER
@@ -845,18 +883,7 @@ export default function CanvasScreenshot({
           </DialogHeader>
 
           <div className="space-y-4 py-4" >
-            <div className="flex items-center space-x-3">
-              <Checkbox
-                id="gradientCurve"
-                checked={visibleLayers.gradientCurve}
-                onCheckedChange={(checked: boolean) =>
-                  setVisibleLayers({ ...visibleLayers, gradientCurve: checked })
-                }
-              />
-              <Label htmlFor="gradientCurve" className="text-sm cursor-pointer">
-                Динамика реализованная
-              </Label>
-            </div>
+            
 
             <div className="flex items-center space-x-3">
               <Checkbox
@@ -903,7 +930,7 @@ export default function CanvasScreenshot({
                 id="optSpeedCurve" 
                 checked={visibleLayers.optSpeedCurve} 
                 onCheckedChange={(checked: boolean) =>
-                  setVisibleLayers({ ...visibleLayers, optSpeedCurve: checked, regimes2: checked ? visibleLayers.regimes2 : false })
+                  setVisibleLayers({ ...visibleLayers, optSpeedCurve: checked})
                 } />
               <Label htmlFor="optSpeedCurve" className="text-sm">
                 Кривая скорости
@@ -911,16 +938,29 @@ export default function CanvasScreenshot({
             </div>
 
             <div className="flex items-center space-x-3">
+              <Checkbox
+                id="gradientCurve"
+                checked={visibleLayers.gradientCurve}
+                onCheckedChange={(checked: boolean) =>
+                  setVisibleLayers({ ...visibleLayers, gradientCurve: checked, regimes2: checked === false ? false : visibleLayers.regimes2 })
+                }
+              />
+              <Label htmlFor="gradientCurve" className="text-sm cursor-pointer">
+                Динамика оптимальная
+              </Label>
+            </div>
+            <div className="flex items-center space-x-3">
               <Checkbox 
                 id="regimes2" 
                 checked={visibleLayers.regimes2} 
                 onCheckedChange={(checked: boolean) =>
-                  setVisibleLayers({ ...visibleLayers, regimes2: checked })
+                  setVisibleLayers({ ...visibleLayers, regimes2: checked,  gradientCurve: checked === true ? true : visibleLayers.gradientCurve })
                 } />
               <Label htmlFor="regimes2" className="text-sm">
-                Динамика реализованная
+                Динамика реализованная 
               </Label>
             </div>
+            
           </div>
         </DialogContent>
       </Dialog>
