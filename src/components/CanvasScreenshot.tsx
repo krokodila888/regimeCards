@@ -220,28 +220,28 @@ export default function CanvasScreenshot({
     // Ширина прямоугольных иконок (нейтральная вставка, место проверки тормозов)
     // Формула: (ширина_иконки / высота_холста) × 100%
     // Подгоните эти значения вручную для каждой комбинации
-    'true_true_true': 3.5,      // Подгонка под вашу картинку
-    'false_true_true': 4.5,     // Подгонка под вашу картинку
-    'false_true_false': 6.0,    // Подгонка под вашу картинку
-    'false_false_true': 5.5,    // Подгонка под вашу картинку
-    'true_false_false': 4.8,    // Подгонка под вашу картинку
-    'false_false_false': 5.3,   // Подгонка под вашу картинку
-    'true_false_true': 4.2,     // Подгонка под вашу картинку
-    'true_true_false': 4.3,     // Подгонка под вашу картинку
+    'true_true_true': 4.5,      // Подгонка под вашу картинку
+    'false_true_true': 6.2,     // Подгонка под вашу картинку
+    'false_true_false': 7.7,    // Подгонка под вашу картинку
+    'false_false_true': 5.9,    // Подгонка под вашу картинку
+    'true_false_false': 5.6,    // Подгонка под вашу картинку
+    'false_false_false': 6.4,   // Подгонка под вашу картинку
+    'true_false_true': 5.2,     // Подгонка под вашу картинку
+    'true_true_false': 5.3,     // Подгонка под вашу картинку
   };
 
   const RECTANGULAR_ICON_HEIGHT_RATIO_CONFIGS = {
     // Высота прямоугольных иконок (нейтральная вставка, место проверки тормозов)
     // Формула: (высота_иконки / высота_холста) × 100%
     // Подгоните эти значения вручную для каждой комбинации
-    'true_true_true': 4.2,      // Подгонка под вашу картинку
-    'false_true_true': 2.8,     // Подгонка под вашу картинку
-    'false_true_false': 3.6,    // Подгонка под вашу картинку
-    'false_false_true': 3.4,    // Подгонка под вашу картинку
-    'true_false_false': 2.9,    // Подгонка под вашу картинку
-    'false_false_false': 4.1,   // Подгонка под вашу картинку
-    'true_false_true': 2.6,     // Подгонка под вашу картинку
-    'true_true_false': 2.7,     // Подгонка под вашу картинку
+    'true_true_true': 4.8,      // Подгонка под вашу картинку
+    'false_true_true': 3.4,     // Подгонка под вашу картинку
+    'false_true_false': 3.9,    // Подгонка под вашу картинку
+    'false_false_true': 3.9,    // Подгонка под вашу картинку
+    'true_false_false': 3.6,    // Подгонка под вашу картинку
+    'false_false_false': 5.7,   // Подгонка под вашу картинку
+    'true_false_true': 3.6,     // Подгонка под вашу картинку
+    'true_true_false': 3.7,     // Подгонка под вашу картинку
   };
 
   const EXTRA_LEG_HEIGHT_CONFIGS = {
@@ -812,9 +812,9 @@ export default function CanvasScreenshot({
                           style={{
                             position: 'absolute',
                             bottom: `-${extraLegHeight}px`,
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            width: `${Math.max(1.5, iconSize * 0.0625)}px`,
+                            left: '47%',
+                            transform: 'translateX(-30%)',
+                            width: `${Math.max(1.5, iconSize * 0.06)}px`,
                             height: `${extraLegHeight}px`,
                             backgroundColor: isSelected ? '#3b82f6' : isHovered ? '#60a5fa' : '#000',
                             pointerEvents: 'none',
