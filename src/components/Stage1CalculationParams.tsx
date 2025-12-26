@@ -47,6 +47,8 @@ interface Stage1CalculationParamsProps {
   isOld?: boolean;
   visibleLayers: any;
   setVisibleLayers: any;
+  chosenAction: string;
+  setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function Stage1CalculationParams({
@@ -55,7 +57,9 @@ export default function Stage1CalculationParams({
   isOld = false,
   onShowLoading,
   visibleLayers,
-  setVisibleLayers
+  setVisibleLayers,
+  chosenAction,
+  setСhosenAction,
 }: Stage1CalculationParamsProps) {
   const [wagonGroupsModalOpen, setWagonGroupsModalOpen] =
     useState(false);
@@ -503,9 +507,18 @@ export default function Stage1CalculationParams({
       {/* Composition Section */}
       <div className="pt-2 border-t border-gray-300">
       <Button
-          onClick={handleLoad}
+          onClick={() => {
+            handleLoad();
+            handleLoad(); // Показывает лоадер
+            // Ждем 1800ms (время таймера) + небольшой запас
+            setTimeout(() => {
+              onUpdateWorkflow({
+                grossTrainMass:
+                  parseFloat('710')
+              })
+            }, 1850); // 1800 + небольшой запас
+          }}
           className="w-full bg-white text-blue-600 border  hover:text-white mt-4 mb-4 hover:bg-blue-600 border-dark-blue"
-          disabled={!departureStation || !arrivalStation}
         >
           Загрузить состав
           <RefreshCw className="w-4 h-4 ml-2" />
@@ -627,9 +640,10 @@ export default function Stage1CalculationParams({
           </div>
           <Select
             value={departureStation}
-            onValueChange={(value) =>
+            onValueChange={(value) => {
               onUpdateWorkflow({ departureStation: value })
-            }
+              console.log(workflow)
+            }}
           >
             <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
               <SelectValue placeholder="Станция отправления" />
@@ -686,9 +700,10 @@ export default function Stage1CalculationParams({
           </div>
           <Select
             value={arrivalStation}
-            onValueChange={(value) =>
+            onValueChange={(value) => {
               onUpdateWorkflow({ arrivalStation: value })
-            }
+              console.log(workflow)
+            }}
           >
             <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
               <SelectValue placeholder="Станция прибытия" />
@@ -707,6 +722,10 @@ export default function Stage1CalculationParams({
             handleLoad(); // Показывает лоадер
             // Ждем 1800ms (время таймера) + небольшой запас
             setTimeout(() => {
+              if (chosenAction === "createNew") {
+                setСhosenAction("createNew_profile");
+                setVisibleLayers({...visibleLayers, profileCurve: true})
+              }
               setVisibleLayers({ 
                 ...visibleLayers,
                 profileCurve: true,

@@ -5,8 +5,9 @@ import { Input } from "./ui/input";
 import ChartEditor from "./ChartEditor";
 import CanvasScreenshot from "./CanvasScreenshot";
 import { useAuth } from "../contexts/AuthContext";
-// @ts-ignore
-import demaImg from "./images/dema.png";
+import emptyField from "./images/dema_no_top_no_profile_no_regimes_no_boards_no_speed.png";
+import demaEmptyProfileImg from "./images/dema_profile_no-others.png";
+import demaImg from "./images/dema_no_top_no_profile_no_regimes.png";
 import demaNoBottomImg from "./images/dema_no_bottom.png";
 import demaNoProfileImg from "./images/dema_no_profile.png";
 import demaNoTopImg from "./images/dema_no_top.png";
@@ -65,7 +66,9 @@ interface MainCanvasProps {
   selectedObjectId: string | null;
   onSelectObject: (id: string | null) => void;
   visibleLayers: any;
-  setVisibleLayers: any
+  setVisibleLayers: any;
+  chosenAction: string;
+  setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function MainCanvas({
@@ -80,7 +83,9 @@ export default function MainCanvas({
   selectedObjectId,
   onSelectObject,
   visibleLayers,
-  setVisibleLayers
+  setVisibleLayers,
+  setСhosenAction,
+  chosenAction
 }: MainCanvasProps) {
   const [chartTitle, setChartTitle] = useState(activeChart?.title || "");
   const { user } = useAuth();
@@ -119,7 +124,7 @@ export default function MainCanvas({
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ marginRight: "4px" }}>
-      {activeChart ? (
+      {activeChart && chosenAction !== "createNew" ? (
         <>
           {/* Top Bar */}
           <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
@@ -156,7 +161,7 @@ export default function MainCanvas({
               chartData={activeChart}
               onUpdateChartData={handleUpdateChartData}
             />
-          ) : (
+          ) : (user?.role === "user" && activeChart.workflow?.arrivalStation && activeChart.workflow?.departureStation) && (
             <CanvasScreenshot
               imageUrl={demaImg}
               imageNoTopUrl={demaNoTopImg}
@@ -182,12 +187,16 @@ export default function MainCanvas({
               imageRealNoProfileUrl={demaRealNoProfileImg}
               imageRealNoTopNoRegimesUrl={demaRealNoTopNoRegimesImg}
               imageRealNoTopNoProfileUrl={demaRealNoTopNoProfileImg}
+              imageDemaEmptyProfile={demaEmptyProfileImg}
               placedObjects={placedObjects}
               onPlacedObjectsChange={onPlacedObjectsChange}
               selectedObjectId={selectedObjectId}
               onSelectObject={onSelectObject}
               visibleLayers={visibleLayers} 
               setVisibleLayers={setVisibleLayers}
+              chosenAction={chosenAction}
+              emptyField={emptyField}
+              activeChart={activeChart}
             />
           )}
         </>

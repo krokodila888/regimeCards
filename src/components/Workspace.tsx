@@ -7,6 +7,7 @@ import ScheduleSidebar from "./ScheduleSidebar";
 import VisioObjectPalette from "./VisioObjectPalette";
 import type { ChartData } from "../types/chart-data";
 import { chartDataByID1, LOCOMOTIVES } from "../types/consts";
+import { setCommentRange, setSyntheticLeadingComments } from "typescript";
 
 // Типы для размещенных объектов
 type PaletteObject = {
@@ -39,6 +40,10 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
+
+    // Выбраная опция
+    const [chosenAction, setСhosenAction] =
+    useState<string>("start");
   
   // Состояние для размещенных объектов
   const [placedObjects, setPlacedObjects] = useState<PlacedObject[]>([]);
@@ -63,6 +68,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     profileCurve: false,
     optSpeedCurve: false,
     regimes2: false,
+    borders: false,
   });
 
   const handleCreateNewChart = () => {
@@ -101,6 +107,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
 
   const handleUpdateChartData = (updates: Partial<ChartData>) => {
     if (activeChart) {
+      console.log(1)
       setActiveChart({ ...activeChart, ...updates });
     }
   };
@@ -168,6 +175,8 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
           onShowLoading={handleShowLoading}
           visibleLayers={visibleLayers} 
           setVisibleLayers={setVisibleLayers}
+          chosenAction={chosenAction} 
+          setСhosenAction={setСhosenAction}
         />
 
         {/* Main Canvas with placed objects props */}
@@ -185,6 +194,8 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
           onSelectObject={handleSelectObject}
           visibleLayers={visibleLayers} 
           setVisibleLayers={setVisibleLayers}
+          chosenAction={chosenAction} 
+          setСhosenAction={setСhosenAction}
         />
 
         {/* Visio Object Palette (справа) */}
