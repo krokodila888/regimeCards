@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ChevronDown,
   ChevronRight,
   ChevronLeft,
   Trash2,
-  Info,
   MapPin,
   Activity,
   AlertTriangle,
@@ -14,23 +13,14 @@ import {
   Gauge,
 } from "lucide-react";
 import { ObjectCategory, PaletteObject, PlacedObject } from "../types/types";
-import { ScrollArea } from "./ui/scroll-area";
 import { LOCOMOTIVES } from "../types/consts";
 import { Locomotive } from "../types/chart-data";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 
-// =============================================================================
-// СТАТИЧЕСКИЕ КАТЕГОРИИ ОБЪЕКТОВ
-// Static object categories for regime charts
-// =============================================================================
-
 const staticObjectCategories: ObjectCategory[] = [
-  // -------------------------------------------------------------------------
-  // КРИВАЯ ХОДА ПОЕЗДА И СКОРОСТЬ
-  // Train movement curve and speed elements
-  // -------------------------------------------------------------------------
+
   {
     id: "speed-curve",
     name: "Speed & Movement",
@@ -108,11 +98,6 @@ const staticObjectCategories: ObjectCategory[] = [
       },
     ],
   },
-
-  // -------------------------------------------------------------------------
-  // РЕЖИМЫ УПРАВЛЕНИЯ ПОЕЗДОМ
-  // Train control modes (braking, coasting)
-  // -------------------------------------------------------------------------
   {
     id: "control-modes",
     name: "Control Modes",
@@ -225,11 +210,6 @@ const staticObjectCategories: ObjectCategory[] = [
       },
     ],
   },
-
-  // -------------------------------------------------------------------------
-  // РАЗДЕЛЬНЫЕ ПУНКТЫ И ПУТЕВЫЕ ОБЪЕКТЫ
-  // Separation points and track objects
-  // -------------------------------------------------------------------------
   {
     id: "track-objects",
     name: "Track Objects",
@@ -525,11 +505,6 @@ const staticObjectCategories: ObjectCategory[] = [
       },
     ],
   },
-
-  // -------------------------------------------------------------------------
-  // ИСКУССТВЕННЫЕ СООРУЖЕНИЯ
-  // Engineering structures
-  // -------------------------------------------------------------------------
   {
     id: "structures",
     name: "Structures",
@@ -658,11 +633,6 @@ const staticObjectCategories: ObjectCategory[] = [
       },
     ],
   },
-
-  // -------------------------------------------------------------------------
-  // УСТРОЙСТВА ЭЛЕКТРОСНАБЖЕНИЯ
-  // Electric power supply devices
-  // -------------------------------------------------------------------------
   {
     id: "power-supply",
     name: "Power Supply",
@@ -717,11 +687,6 @@ const staticObjectCategories: ObjectCategory[] = [
       },
     ],
   },
-
-  // -------------------------------------------------------------------------
-  // СИГНАЛИЗАЦИЯ
-  // Signaling devices
-  // -------------------------------------------------------------------------
   {
     id: "signals",
     name: "Signals",
@@ -946,11 +911,6 @@ const staticObjectCategories: ObjectCategory[] = [
   },
 ];
 
-// =============================================================================
-// ФУНКЦИЯ ГЕНЕРАЦИИ ДИНАМИЧЕСКИХ РЕЖИМОВ ТЯГИ
-// Function to generate dynamic traction modes from locomotive data
-// =============================================================================
-
 const generateTractionModeObjects = (locomotive: Locomotive): PaletteObject[] => {
   return locomotive.tractionModes.map((mode) => ({
     id: `traction-${locomotive.id}-${mode.id}`,
@@ -995,9 +955,6 @@ const generateTractionModeObjects = (locomotive: Locomotive): PaletteObject[] =>
   }));
 };
 
-// =============================================================================
-// ОБЪЕДИНЕНИЕ ВСЕХ КАТЕГОРИЙ С ДИНАМИЧЕСКИМИ РЕЖИМАМИ ТЯГИ
-// =============================================================================
 
 const getAllCategories = (): ObjectCategory[] => {
   return staticObjectCategories;
@@ -1005,20 +962,12 @@ const getAllCategories = (): ObjectCategory[] => {
 
 const OBJECT_CATEGORIES = getAllCategories();
 
-// =============================================================================
-// КОМПОНЕНТ ПАЛИТРЫ ОБЪЕКТОВ
-// Object Palette Component
-// =============================================================================
-
-// Функция для получения полного объекта по ID (включая icon и canvasIcon)
 export function getPaletteObjectById(objectId: string): PaletteObject | null {
-  // Проверяем статические категории
   for (const category of staticObjectCategories) {
     const object = category.objects.find(obj => obj.id === objectId);
     if (object) return object;
   }
   
-  // Проверяем режимы тяги локомотивов
   for (const locomotive of LOCOMOTIVES) {
     const tractionObjects = generateTractionModeObjects(locomotive);
     const object = tractionObjects.find(obj => obj.id === objectId);
@@ -1129,14 +1078,11 @@ export default function VisioObjectPalette({
     if (!displayedObjectWithIcon || !onUpdateObject) return;
     
     const newCoord = parseFloat(editCoordinate);
-    // Проверяем валидность и отличие от текущего значения
     if (!isNaN(newCoord) && newCoord >= 1610 && newCoord <= 1782) {
       if (Math.abs(newCoord - displayedObjectWithIcon.coordinate) > 0.01) {
-        // Координата изменилась - обновляем объект
         onUpdateObject(displayedObjectWithIcon.id, { coordinate: newCoord });
       }
     } else {
-      // Невалидное значение - возвращаем предыдущее
       setEditCoordinate(displayedObjectWithIcon.coordinate.toFixed(1));
     }
   };
@@ -1163,8 +1109,6 @@ export default function VisioObjectPalette({
     );
   }
 
-  // Найти категорию "Режимы управления поездом"
-  const controlModesCategory = OBJECT_CATEGORIES.find(cat => cat.id === "control-modes");
 
   return (
     <div className="h-full flex" style={{ width: `${sidebarWidth}px`, minWidth: 280, marginRight: 56 }}>
@@ -1187,7 +1131,6 @@ export default function VisioObjectPalette({
           {OBJECT_CATEGORIES.map((category) => {
             const isExpanded = expandedCategories.has(category.id);
             
-            // Специальная обработка для категории "Режимы управления поездом"
             if (category.id === "control-modes") {
               return (
                 <div key={category.id} className="rounded-lg border border-gray-200">
@@ -1258,7 +1201,6 @@ export default function VisioObjectPalette({
               );
             }
 
-            // Обычные категории
             return (
               <div key={category.id} className="rounded-lg border border-gray-200">
                 <button
