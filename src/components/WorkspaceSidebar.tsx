@@ -43,6 +43,8 @@ interface WorkspaceSidebarProps {
   setVisibleLayers: any;
   chosenAction: string;
   setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
+  availableLayers: any;
+  setAvailableLayers: any;
 }
 
 export default function WorkspaceSidebar({
@@ -62,7 +64,9 @@ export default function WorkspaceSidebar({
   visibleLayers,
   setVisibleLayers,
   setСhosenAction,
-  chosenAction
+  chosenAction,
+  availableLayers,
+  setAvailableLayers,
 }: WorkspaceSidebarProps) {
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -202,30 +206,29 @@ export default function WorkspaceSidebar({
             Пользователь ТестТест
           </span>
         </div>
-          <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={onLogout}
-                  className="p-2 hover:bg-gray-700 rounded transition-colors h-auto w-auto hover:text-white"
-                  aria-label="Logout"
-                  title="Выйти из профиля"
-                >
-                  <LogOut className="w-4 h-4" />
-                </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onLogout}
+            className="p-2 hover:bg-gray-700 rounded transition-colors h-auto w-auto hover:text-white"
+            aria-label="Logout"
+            title="Выйти из профиля"
+          >
+            <LogOut className="w-4 h-4" />
+          </Button>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={onToggleCollapse}
-                  className="p-2 hover:bg-gray-700 rounded transition-colors h-auto w-auto hover:text-white"
-                  aria-label="Collapse sidebar"
-                  title="Свернуть боковую панель"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </Button>
-
-          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleCollapse}
+            className="p-2 hover:bg-gray-700 rounded transition-colors h-auto w-auto hover:text-white"
+            aria-label="Collapse sidebar"
+            title="Свернуть боковую панель"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
+        </div>
       </div>
 
       {/* Scrollable Content Area */}
@@ -452,6 +455,8 @@ export default function WorkspaceSidebar({
                         setVisibleLayers={setVisibleLayers}
                         chosenAction={chosenAction}
                         setСhosenAction={setСhosenAction}
+                        availableLayers={availableLayers}
+                        setAvailableLayers={setAvailableLayers}
                       />
                     </AccordionContent>
                   </AccordionItem>

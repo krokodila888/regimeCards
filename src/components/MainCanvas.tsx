@@ -34,6 +34,9 @@ import demaRealSpeedOnlyImg from "./images/dema_regimes_speed-only.png";
 import demaRealNoTopNoProfileImg from "./images/dema_regimes_no-top_no-profile.png";
 import demaRealNoTopNoRegimesImg from "./images/dema_regimes_no-top_no-regimes.png";
 
+import demaStartWithBoardsNoProfile from "./images/dema_boards_no_top_no_profile_no_regimes.png";
+import demaStartWithBoardsAndProfile from "./images/dema_boards_no_top_no_regimes.png";
+
 import type { ChartData } from "../types/chart-data";
 
 // Типы для размещенных объектов
@@ -69,6 +72,8 @@ interface MainCanvasProps {
   setVisibleLayers: any;
   chosenAction: string;
   setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
+  availableLayers: any;
+  setAvailableLayers: any;
 }
 
 export default function MainCanvas({
@@ -85,7 +90,9 @@ export default function MainCanvas({
   visibleLayers,
   setVisibleLayers,
   setСhosenAction,
-  chosenAction
+  chosenAction,
+  availableLayers,
+  setAvailableLayers,
 }: MainCanvasProps) {
   const [chartTitle, setChartTitle] = useState(activeChart?.title || "");
   const { user } = useAuth();
@@ -196,7 +203,11 @@ export default function MainCanvas({
               setVisibleLayers={setVisibleLayers}
               chosenAction={chosenAction}
               emptyField={emptyField}
+              demaStartWithBoardsNoProfile={demaStartWithBoardsNoProfile}
+              demaStartWithBoardsAndProfile={demaStartWithBoardsAndProfile}
               activeChart={activeChart}
+              availableLayers={availableLayers}
+              setAvailableLayers={setAvailableLayers}
             />
           )}
         </>

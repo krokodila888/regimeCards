@@ -71,6 +71,15 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     borders: false,
   });
 
+  const [availableLayers, setAvailableLayers] = useState({
+    gradientCurve: false,
+    regimeMarkers: false,
+    profileCurve: false,
+    optSpeedCurve: false,
+    regimes2: false,
+    borders: false,
+  });
+
   const handleCreateNewChart = () => {
     const newChart: ChartData = {
       id: Date.now().toString(),
@@ -177,6 +186,8 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
           setVisibleLayers={setVisibleLayers}
           chosenAction={chosenAction} 
           setСhosenAction={setСhosenAction}
+          availableLayers={availableLayers}
+          setAvailableLayers={setAvailableLayers}
         />
 
         {/* Main Canvas with placed objects props */}
@@ -196,6 +207,8 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
           setVisibleLayers={setVisibleLayers}
           chosenAction={chosenAction} 
           setСhosenAction={setСhosenAction}
+          availableLayers={availableLayers}
+          setAvailableLayers={setAvailableLayers}
         />
 
         {/* Visio Object Palette (справа) */}

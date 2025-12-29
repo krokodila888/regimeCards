@@ -115,7 +115,11 @@ interface CanvasScreenshotProps {
   setVisibleLayers: any;
   chosenAction: string;
   emptyField: string;
+  demaStartWithBoardsNoProfile: string;
+  demaStartWithBoardsAndProfile: string;
   activeChart: ChartData,
+  availableLayers: any;
+  setAvailableLayers: any;
 }
 
 export default function CanvasScreenshot({ 
@@ -149,10 +153,14 @@ export default function CanvasScreenshot({
   onSelectObject,
   visibleLayers, 
   setVisibleLayers,
+  availableLayers,
+  setAvailableLayers,
   chosenAction,
   emptyField,
   activeChart,
-  imageDemaEmptyProfile
+  imageDemaEmptyProfile,
+  demaStartWithBoardsNoProfile,
+  demaStartWithBoardsAndProfile,
 }: CanvasScreenshotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -555,21 +563,47 @@ export default function CanvasScreenshot({
 
   // Получение текущего изображения на основе видимых слоёв
   const getCurrentImage = useCallback(() => {
-    const { gradientCurve, regimeMarkers, profileCurve, optSpeedCurve, regimes2 } = visibleLayers;
+    const { gradientCurve, regimeMarkers, profileCurve, optSpeedCurve, regimes2, borders } = visibleLayers;
     if (
       chosenAction === "createNew_profile" 
       && activeChart.workflow?.arrivalStation 
       && activeChart.workflow?.departureStation
       && profileCurve
     ) 
-      return imageDemaEmptyProfile;
+    return imageDemaEmptyProfile;
+
     if (chosenAction === "createNew_profile" 
-    && activeChart.workflow?.arrivalStation 
-    && activeChart.workflow?.departureStation
-    && !regimes2 
-    && !gradientCurve 
-    && !regimeMarkers 
-    && !profileCurve) return emptyField;
+      && activeChart.workflow?.arrivalStation 
+      && activeChart.workflow?.departureStation
+      && !regimes2 
+      && !gradientCurve 
+      && !regimeMarkers 
+      && !profileCurve
+      && !borders
+      ) 
+    return emptyField;
+
+    if (chosenAction === "createNew_boards" 
+      && activeChart.workflow?.arrivalStation 
+      && activeChart.workflow?.departureStation
+      && !regimes2 
+      && !gradientCurve 
+      && !regimeMarkers 
+      && !profileCurve
+      && borders
+      ) 
+    return demaStartWithBoardsNoProfile;
+
+    if (chosenAction === "createNew_boards"
+      && activeChart.workflow?.arrivalStation 
+      && activeChart.workflow?.departureStation
+      && !regimes2 
+      && !gradientCurve 
+      && !regimeMarkers 
+      && profileCurve
+      && borders
+      ) 
+    return demaStartWithBoardsAndProfile;
     
     if (regimes2 && gradientCurve && regimeMarkers && profileCurve) return imageRealUrl;
     if (regimes2 && !gradientCurve && regimeMarkers && profileCurve) return imageRealNoTopUrl;
@@ -888,6 +922,7 @@ export default function CanvasScreenshot({
             <div className="flex items-center space-x-3">
               <Checkbox
                 id="regimeMarkers"
+                disabled={(chosenAction === "createNew_profile" || chosenAction === "createNew_profile") ? true : false}
                 checked={visibleLayers.regimeMarkers}
                 onCheckedChange={(checked: boolean) =>
                   setVisibleLayers({ ...visibleLayers, regimeMarkers: checked })
@@ -912,14 +947,22 @@ export default function CanvasScreenshot({
             </div>
 
             <div className="flex items-center space-x-3 opacity-50">
-              <Checkbox id="limitCurve" checked={true} disabled={true} />
+              <Checkbox 
+                id="limitCurve" 
+                checked={(chosenAction === "createNew") ? false : visibleLayers.borders} 
+                disabled={chosenAction === "createNew"} 
+              />
               <Label htmlFor="limitCurve" className="text-sm cursor-not-allowed">
                 Ограничения скорости
               </Label>
             </div>
 
             <div className="flex items-center space-x-3 opacity-50">
-              <Checkbox id="speedCurve" checked={true} disabled={true} />
+              <Checkbox 
+                id="speedCurve" 
+                checked={(chosenAction === "createNew_profile" || chosenAction === "createNew_profile") ? false : true} 
+                disabled={true} 
+              />
               <Label htmlFor="speedCurve" className="text-sm cursor-not-allowed">
                 Оптимальная кривая скорости
               </Label>
@@ -928,7 +971,8 @@ export default function CanvasScreenshot({
             <div className="flex items-center space-x-3">
               <Checkbox 
                 id="optSpeedCurve" 
-                checked={visibleLayers.optSpeedCurve} 
+                checked={visibleLayers.optSpeedCurve}
+                disabled={(chosenAction === "createNew_profile" || chosenAction === "createNew_profile") ? true : false}
                 onCheckedChange={(checked: boolean) =>
                   setVisibleLayers({ ...visibleLayers, optSpeedCurve: checked})
                 } />
@@ -941,6 +985,7 @@ export default function CanvasScreenshot({
               <Checkbox
                 id="gradientCurve"
                 checked={visibleLayers.gradientCurve}
+                disabled={(chosenAction === "createNew_profile" || chosenAction === "createNew_profile") ? true : false}
                 onCheckedChange={(checked: boolean) =>
                   setVisibleLayers({ ...visibleLayers, gradientCurve: checked, regimes2: checked === false ? false : visibleLayers.regimes2 })
                 }
@@ -953,6 +998,7 @@ export default function CanvasScreenshot({
               <Checkbox 
                 id="regimes2" 
                 checked={visibleLayers.regimes2} 
+                disabled={(chosenAction === "createNew_profile" || chosenAction === "createNew_profile") ? true : false}
                 onCheckedChange={(checked: boolean) =>
                   setVisibleLayers({ ...visibleLayers, regimes2: checked,  gradientCurve: checked === true ? true : visibleLayers.gradientCurve })
                 } />

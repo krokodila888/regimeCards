@@ -49,6 +49,8 @@ interface Stage1CalculationParamsProps {
   setVisibleLayers: any;
   chosenAction: string;
   setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
+  availableLayers: any;
+  setAvailableLayers: any;
 }
 
 export default function Stage1CalculationParams({
@@ -60,6 +62,8 @@ export default function Stage1CalculationParams({
   setVisibleLayers,
   chosenAction,
   setСhosenAction,
+  availableLayers,
+  setAvailableLayers,
 }: Stage1CalculationParamsProps) {
   const [wagonGroupsModalOpen, setWagonGroupsModalOpen] =
     useState(false);
@@ -514,7 +518,7 @@ export default function Stage1CalculationParams({
             setTimeout(() => {
               onUpdateWorkflow({
                 grossTrainMass:
-                  parseFloat('710')
+                  parseFloat('7100')
               })
             }, 1850); // 1800 + небольшой запас
           }}
@@ -739,7 +743,22 @@ export default function Stage1CalculationParams({
           <RefreshCw className="w-4 h-4 ml-2" />
         </Button>
         <Button
-          onClick={handleLoad}
+          onClick={() => {
+            handleLoad();
+            // Ждем 1800ms (время таймера) + небольшой запас
+            setTimeout(() => {
+              if (chosenAction === "createNew" || chosenAction === "createNew_profile" || chosenAction === "createNew_boards") {
+                onUpdateWorkflow({
+                  travelTime:
+                    parseFloat('183')
+                })
+              }
+              onUpdateWorkflow({
+                travelTime:
+                  parseFloat('183')
+              });
+            }, 1850); // 1800 + небольшой запас
+          }}
           className="w-full bg-white text-blue-600 border  hover:text-white mb-4 hover:bg-blue-600 border-dark-blue"
           disabled={!departureStation || !arrivalStation}
         >
@@ -770,7 +789,21 @@ export default function Stage1CalculationParams({
           </div>
         </div>
         <Button
-          onClick={handleLoad}
+          onClick={() => {
+            handleLoad();
+            // Ждем 1800ms (время таймера) + небольшой запас
+            setTimeout(() => {
+              if (chosenAction === "createNew_profile") {
+                setСhosenAction("createNew_boards");
+                setVisibleLayers({...visibleLayers, borders: true})
+              }
+              setVisibleLayers({ 
+                ...visibleLayers,
+                borders: true,
+              });
+            }, 1850); // 1800 + небольшой запас
+
+          }}
           className="w-full bg-white text-blue-600 border hover:text-white mb-4 hover:bg-blue-600 border-dark-blue"
           disabled={!departureStation || !arrivalStation}
         >
@@ -811,7 +844,7 @@ export default function Stage1CalculationParams({
             }, 1850); // 1800 + небольшой запас
           }}
           className="w-full bg-blue-600 hover:bg-blue-700 mt-4"
-          disabled={!departureStation || !arrivalStation}
+          disabled={!departureStation || !arrivalStation || chosenAction === 'createNew' || chosenAction === 'createNew_profile'}
         >
           Рассчитать скоростную кривую
         </Button>
