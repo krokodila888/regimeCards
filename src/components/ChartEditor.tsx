@@ -739,11 +739,18 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             (displayStartCoord - km) / Math.abs(displayEndCoord - displayStartCoord);
           return marginLeft + normalized * chartWidth;
         };
+
         const kmToX2 = (km: number) => {
-          // Простое преобразование БЕЗ реверса
-          const normalized =
-            (displayStartCoord + km) / Math.abs(displayEndCoord - displayStartCoord);
-          return marginLeft + normalized * chartWidth;
+          // ОБРАТНОЕ преобразование: меньшие км → правее, большие км → левее
+          // 1610 км → marginLeft (крайняя правая точка на canvas)
+          // 1782 км → marginLeft + chartWidth (крайняя левая точка на canvas)
+
+          const distanceFromRight = displayStartCoord - km;
+
+          // Преобразуем в пиксели (40px на км)
+          const x = marginLeft + distanceFromRight * PIXELS_PER_KM;
+
+          return x;
         };
 
         // ====================================
@@ -1190,6 +1197,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         const layer2Bottom = LAYER2_TOP + LAYER2_HEIGHT - 20;
         const layer2Height = layer2Bottom - layer2Top;
 
+        // Координаты для блока подписей справа
+        const legendX = marginLeft + chartWidth - 150 - 56; // 150px от правого края
+        const legendStartY = LAYER2_TOP + 25;
+
         // Draw layer border
         ctx.strokeStyle = '#d1d5db';
         ctx.lineWidth = lineWidth(1);
@@ -1317,80 +1328,361 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         ctx.setLineDash([]);
 
         // Кривая скоростных ограничений
-        if (speedLimits && speedLimits.length && speedLimits.length > 0) {
+        // Кривая скоростных ограничений (КРАСНАЯ ЛИНИЯ)
+
+        if (displaySettings.speedLimits && speedLimits && speedLimits.length > 0) {
           ctx.strokeStyle = '#ef4444';
           ctx.lineWidth = lineWidth(2.5);
           ctx.beginPath();
 
-          const relevantLimits = speedLimits?.filter(
-            (limit) => limit.end <= displayStartCoord && limit.start >= displayEndCoord
+          // Фильтруем ограничения, которые попадают в видимый диапазон
+          // ВАЖНО: координаты идут в ОБРАТНОМ порядке (1782 → 1610)
+          const relevantLimits = speedLimits.filter(
+            (limit) => limit.start >= displayEndCoord && limit.end <= displayStartCoord
           );
-          console.log({ relevantLimits: relevantLimits });
 
-          if (relevantLimits && relevantLimits?.length > 0) {
+          console.log('[LAYER 2] Ограничения скорости:', {
+            всегоОграничений: speedLimits.length,
+            вДиапазоне: relevantLimits.length,
+            диапазонОтображения: `${displayStartCoord} → ${displayEndCoord}`,
+            первоеОграничение: relevantLimits[0],
+            последнееОграничение: relevantLimits[relevantLimits.length - 1],
+          });
+
+          if (relevantLimits.length > 0) {
+            let started = false;
             let lastSpeed = relevantLimits[0].limit;
 
-            const firstLimit = relevantLimits[0];
-            const firstX = kmToX1(firstLimit.start);
-            ctx.moveTo(firstX, speedToY(lastSpeed));
+            relevantLimits.forEach((limit, index) => {
+              const segmentStart = Math.max(
+                displayEndCoord,
+                Math.min(displayStartCoord, limit.start)
+              );
+              const segmentEnd = Math.max(displayEndCoord, Math.min(displayStartCoord, limit.end));
 
-            relevantLimits.forEach((limit) => {
-              const segmentStart = Math.max(displayStartCoord, limit.start);
-              const segmentEnd = Math.min(displayEndCoord, limit.end);
-
-              const startX = kmToX(segmentStart);
-              console.log({startX: startX})
-              const endX = kmToX(segmentEnd);
-              console.log({endX: endX})
+              // Используем kmToX1 для правильного преобразования координат (справа налево)
+              const startX = kmToX1(segmentStart);
+              const endX = kmToX1(segmentEnd);
               const y = speedToY(limit.limit);
-              console.log({y: y})
 
-              if (limit.limit !== lastSpeed) {
-                ctx.lineTo(startX, speedToY(lastSpeed));
-                ctx.lineTo(startX, y);
+              if (!started) {
+                // Первая точка
+                ctx.moveTo(startX, y);
+                started = true;
               } else {
-                ctx.lineTo(startX, y);
+                // Проверяем, изменилась ли скорость
+                if (limit.limit !== lastSpeed) {
+                  // Вертикальный переход при смене ограничения
+                  ctx.lineTo(startX, speedToY(lastSpeed));
+                  ctx.lineTo(startX, y);
+                } else {
+                  // Продолжаем горизонтальную линию
+                  ctx.lineTo(startX, y);
+                }
               }
 
+              // Горизонтальная линия до конца сегмента
               ctx.lineTo(endX, y);
               lastSpeed = limit.limit;
+
+              // Отладка первых нескольких сегментов
+              if (index < 5) {
+                console.log(`[LAYER 2] Сегмент ${index}:`, {
+                  start: limit.start,
+                  end: limit.end,
+                  limit: limit.limit,
+                  startX,
+                  endX,
+                  y,
+                });
+              }
             });
+
+            ctx.stroke();
+          } else {
+            console.warn('[LAYER 2] Нет ограничений скорости в видимом диапазоне');
           }
 
-          ctx.stroke();
+          if (displaySettings.speedLimits) {
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(legendX, legendStartY, 12, 12);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = lineWidth(0.5);
+            ctx.strokeRect(legendX, legendStartY, 12, 12);
 
-          ctx.fillStyle = '#ef4444';
-          ctx.font = fontSize(11);
-          ctx.textAlign = 'left';
-          ctx.fillText('Скоростные ограничения', marginLeft + 10, layer2Top + 5);
+            ctx.fillStyle = '#374151';
+            ctx.font = fontSize(11);
+            ctx.textAlign = 'left';
+            ctx.fillText('Ограничения скорости', legendX + 18, legendStartY + 9);
+          }
         }
 
-        // Calculated Speed Curve (from trainForceData velocity)
-        if (trainForceData && trainForceData.length > 0) {
-          ctx.strokeStyle = '#10b981';
-          ctx.lineWidth = lineWidth(2);
+        // КООРДИНАТНАЯ ШКАЛА (18px ниже оси X)
+        // =============================================================================
+
+        const rulerY = layer2Bottom + 18; // Нижняя линия шкалы (18px ниже оси X)
+        const rulerTickHeight = 18; // Высота штриха (от layer2Bottom до rulerY)
+
+        // Рисуем нижнюю горизонтальную линию шкалы
+        ctx.strokeStyle = '#9ca3af';
+        ctx.lineWidth = lineWidth(2);
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, rulerY);
+        ctx.lineTo(marginLeft + chartWidth, rulerY);
+        ctx.stroke();
+
+        ctx.save();
+
+        // Определяем шаг сетки в зависимости от масштаба
+        let kmInterval = 1; // По умолчанию каждый километр
+
+        const totalKm = Math.abs(displayEndCoord - displayStartCoord);
+        if (totalKm > 100) {
+          kmInterval = 1;
+        } else if (totalKm > 50) {
+          kmInterval = 1;
+        } else if (totalKm > 20) {
+          kmInterval = 1;
+        } else {
+          kmInterval = 1;
+        }
+
+        console.log('[RULER] Параметры шкалы:', {
+          totalKm,
+          kmInterval,
+          displayStartCoord,
+          displayEndCoord,
+          rulerY,
+        });
+
+        // Генерируем отметки для шкалы
+        // ВАЖНО: координаты идут справа налево (1782 → 1610)
+        const rulerMarks: number[] = [];
+        for (
+          let km = Math.ceil(displayEndCoord);
+          km <= Math.floor(displayStartCoord);
+          km += kmInterval
+        ) {
+          rulerMarks.push(km);
+        }
+
+        console.log('[RULER] Отметки шкалы:', {
+          количество: rulerMarks.length,
+          первая: rulerMarks[0],
+          последняя: rulerMarks[rulerMarks.length - 1],
+          всеОтметки: rulerMarks.slice(0, 10), // Первые 10 для отладки
+        });
+
+        // Рисуем вертикальные штрихи и пунктирные линии вверх
+        ctx.save();
+
+        rulerMarks.forEach((km, index) => {
+          const x = kmToX1(km);
+
+          // 1. БЛЕДНАЯ ПУНКТИРНАЯ ЛИНИЯ ВВЕРХ (до верхнего края Layer 2)
+          ctx.strokeStyle = '#e5e7eb'; // Бледно-серый
+          ctx.lineWidth = lineWidth(1);
+          ctx.setLineDash([2, 4]); // Короткий пунктир
           ctx.beginPath();
-          let started = false;
-          trainForceData.forEach((point) => {
-            if (point.distance >= displayStartCoord && point.distance <= displayEndCoord) {
-              const x = kmToX(point.distance);
-              // Convert m/s to km/h: velocity is in m/s, multiply by 3.6
-              const speedKmh = point.velocity * 3.6;
-              const y = speedToY(speedKmh);
+          ctx.moveTo(x, layer2Top);
+          ctx.lineTo(x, layer2Bottom);
+          ctx.stroke();
+          ctx.setLineDash([]); // Сброс пунктира
+
+          // 2. ВЕРТИКАЛЬНЫЙ ШТРИХ ШКАЛЫ (от оси X вниз)
+          ctx.strokeStyle = '#9ca3af';
+          ctx.lineWidth = lineWidth(1.5);
+          ctx.beginPath();
+          ctx.moveTo(x, layer2Bottom);
+          ctx.lineTo(x, rulerY);
+          ctx.stroke();
+
+          // 3. ПОДПИСЬ КИЛОМЕТРА (справа от штриха)
+          ctx.fillStyle = '#374151';
+          ctx.font = fontSize(10);
+          ctx.textAlign = 'left'; // Подпись справа от штриха
+          ctx.textBaseline = 'middle';
+          ctx.fillText(`${km}`, x + 3, rulerY - 8); // +3px вправо, +9px вниз
+
+          // Отладка первых штрихов
+          if (index < 5) {
+            console.log(`[RULER] Отметка ${km} км:`, {
+              x,
+              layer2Top,
+              layer2Bottom,
+              rulerY,
+            });
+          }
+        });
+
+        ctx.restore();
+
+        // =============================================================================
+        // АЛЬТЕРНАТИВНЫЙ ВАРИАНТ: ЕСЛИ НУЖНЫ БОЛЕЕ ЧАСТЫЕ ДЕЛЕНИЯ
+        // =============================================================================
+
+        // Если нужны промежуточные деления (например, каждые 0.5 км),
+        // раскомментируйте этот блок:
+
+        /*
+// Промежуточные деления (короткие штрихи)
+const subInterval = kmInterval / 2; // Половина основного интервала
+
+for (let km = Math.ceil(displayEndCoord * 2) / 2; 
+     km <= Math.floor(displayStartCoord * 2) / 2; 
+     km += subInterval) {
+  
+  // Пропускаем, если это основная отметка
+  if (rulerMarks.includes(km)) continue;
+
+  const x = kmToX1(km);
+
+  // Короткий штрих (половина высоты)
+  ctx.strokeStyle = '#9ca3af'; // Более светлый
+  ctx.lineWidth = lineWidth(1);
+  ctx.beginPath();
+  ctx.moveTo(x, layer2Bottom);
+  ctx.lineTo(x, layer2Bottom + rulerTickHeight / 2);
+  ctx.stroke();
+  
+  // Тонкая пунктирная линия вверх (опционально)
+  ctx.strokeStyle = '#f3f4f6'; // Очень бледный
+  ctx.setLineDash([1, 5]);
+  ctx.beginPath();
+  ctx.moveTo(x, layer2Top);
+  ctx.lineTo(x, layer2Bottom);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}*/
+
+        if (displaySettings.optimalSpeedCurve && speedCurves && speedCurves.length > 0) {
+          ctx.strokeStyle = '#3b82f6';
+          ctx.lineWidth = lineWidth(2);
+          //ctx.setLineDash([5, 3]);
+          ctx.beginPath();
+
+          // Фильтруем точки в видимом диапазоне
+          const visiblePoints = speedCurves.filter(
+            (point) =>
+              point.distance >= displayEndCoord &&
+              point.distance <= displayStartCoord &&
+              point.optimalSpeed !== null
+          );
+
+          console.log('[LAYER 2] Оптимальная кривая:', {
+            всегоТочек: speedCurves.length,
+            вДиапазоне: visiblePoints.length,
+          });
+
+          if (visiblePoints.length > 0) {
+            let started = false;
+
+            visiblePoints.forEach((point, index) => {
+              const x = kmToX1(point.distance);
+              const y = speedToY(point.optimalSpeed!);
+
               if (!started) {
                 ctx.moveTo(x, y);
                 started = true;
               } else {
                 ctx.lineTo(x, y);
               }
-            }
-          });
-          ctx.stroke();
 
-          /*ctx.fillStyle = '#10b981';
-          ctx.font = fontSize(11);
-          ctx.textAlign = 'left';
-          ctx.fillText('Расчётная скорость', marginLeft + 10, layer2Top + 30);*/
+              // Отладка первых точек
+              if (index < 3) {
+                console.log(`[LAYER 2] Оптимальная точка ${index}:`, {
+                  distance: point.distance,
+                  speed: point.optimalSpeed,
+                  x,
+                  y,
+                });
+              }
+            });
+
+            ctx.stroke();
+          }
+
+          ctx.setLineDash([]);
+
+          // Подпись
+          ctx.fillStyle = '#3b82f6';
+          ctx.fillRect(legendX, legendStartY + 20, 12, 12);
+          ctx.strokeStyle = '#000';
+          ctx.lineWidth = lineWidth(0.5);
+          ctx.strokeRect(legendX, legendStartY + 20, 12, 12);
+
+          ctx.fillStyle = '#374151';
+          ctx.fillText('Оптимальная кривая скорости', legendX + 18, legendStartY + 29);
+        }
+
+        // =============================================================================
+        // 3. ОТРИСОВКА ФАКТИЧЕСКОЙ КРИВОЙ (ЗЕЛЁНАЯ ЛИНИЯ)
+        // =============================================================================
+
+        // НАЙТИ В КОДЕ (около строки ~1330):
+        // // Фактическая кривая скорости
+        // if (displaySettings.actualSpeedCurve && chartData?.workflow?.actualSpeedCurve) {
+
+        // ЗАМЕНИТЬ НА:
+
+        // Фактическая кривая скорости (ЗЕЛЁНАЯ ЛИНИЯ)
+        if (displaySettings.actualSpeedCurve && speedCurves && speedCurves.length > 0) {
+          ctx.strokeStyle = '#22c55e';
+          ctx.lineWidth = lineWidth(2.5);
+          ctx.beginPath();
+
+          // Фильтруем точки в видимом диапазоне
+          const visiblePoints = speedCurves.filter(
+            (point) =>
+              point.distance >= displayEndCoord &&
+              point.distance <= displayStartCoord &&
+              point.actualSpeed !== null
+          );
+
+          console.log('[LAYER 2] Фактическая кривая:', {
+            всегоТочек: speedCurves.length,
+            вДиапазоне: visiblePoints.length,
+          });
+
+          if (visiblePoints.length > 0) {
+            let started = false;
+
+            visiblePoints.forEach((point, index) => {
+              const x = kmToX1(point.distance);
+              const y = speedToY(point.actualSpeed!);
+
+              if (!started) {
+                ctx.moveTo(x, y);
+                started = true;
+              } else {
+                ctx.lineTo(x, y);
+              }
+
+              // Отладка первых точек
+              if (index < 3) {
+                console.log(`[LAYER 2] Фактическая точка ${index}:`, {
+                  distance: point.distance,
+                  speed: point.actualSpeed,
+                  x,
+                  y,
+                });
+              }
+            });
+
+            ctx.stroke();
+          }
+
+          // Подпись
+          ctx.fillStyle = '#22c55e';
+          ctx.fillRect(legendX, legendStartY + 40, 12, 12);
+          ctx.strokeStyle = '#000';
+          ctx.lineWidth = lineWidth(0.5);
+          ctx.strokeRect(legendX, legendStartY + 40, 12, 12);
+
+          ctx.fillStyle = '#374151';
+          ctx.fillText('Фактическая кривая скорости', legendX + 18, legendStartY + 49);
+
+          ctx.restore();
         }
 
         // Station markers (vertical lines in Layer 2)
@@ -1449,67 +1741,116 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.strokeStyle = '#374151';
           ctx.lineWidth = lineWidth(2);
           ctx.beginPath();
-          ctx.moveTo(kmToX(displayStartCoord), profileStripTop);
-          ctx.lineTo(kmToX(displayEndCoord), profileStripTop);
+          ctx.moveTo(marginLeft, profileStripTop);
+          ctx.lineTo(marginLeft + chartWidth, profileStripTop);
           ctx.stroke();
 
           ctx.beginPath();
-          ctx.moveTo(kmToX(displayStartCoord), profileStripBottom);
-          ctx.lineTo(kmToX(displayEndCoord), profileStripBottom);
+          ctx.moveTo(marginLeft, profileStripBottom);
+          ctx.lineTo(marginLeft + chartWidth, profileStripBottom);
           ctx.stroke();
 
-          const relevantProfiles = trackSection.pathProfiles.filter(
-            (profile) =>
-              profile.endCoord >= displayStartCoord && profile.startCoord <= displayEndCoord
-          );
+          // ИСПРАВЛЕННАЯ ФИЛЬТРАЦИЯ (учитываем обратный порядок координат)
+          const relevantProfiles = trackSection.pathProfiles.filter((profile) => {
+            // Профиль ПЕРЕСЕКАЕТСЯ с диапазоном, если:
+            // 1. Его конец находится правее левой границы (endCoord >= 1610)
+            // 2. Его начало находится левее правой границы (startCoord <= 1782)
 
-          relevantProfiles.forEach((profile) => {
-            const segmentStart = Math.max(displayStartCoord, profile.startCoord);
-            const segmentEnd = Math.min(displayEndCoord, profile.endCoord);
+            const intersects =
+              profile.endCoord >= displayEndCoord && // Конец профиля >= 1610
+              profile.startCoord <= displayStartCoord; // Начало профиля <= 1782
 
-            const startX = kmToX(segmentStart);
-            const endX = kmToX(segmentEnd);
+            return intersects;
+          });
 
-            if (segmentStart > displayStartCoord) {
+          console.log('[LAYER 3] Профиль пути:', {
+            всегоПрофилей: trackSection.pathProfiles.length,
+            вДиапазоне: relevantProfiles.length,
+            диапазонОтображения: `${displayStartCoord} → ${displayEndCoord}`,
+            первыйВсехПрофилей: trackSection.pathProfiles[0],
+            первыйВДиапазоне: relevantProfiles[0],
+            примерПроверки: {
+              профиль: trackSection.pathProfiles[0],
+              'endCoord >= displayEndCoord':
+                trackSection.pathProfiles[0]?.endCoord >= displayEndCoord,
+              'startCoord <= displayStartCoord':
+                trackSection.pathProfiles[0]?.startCoord <= displayStartCoord,
+              пересекается:
+                trackSection.pathProfiles[0]?.endCoord >= displayEndCoord &&
+                trackSection.pathProfiles[0]?.startCoord <= displayStartCoord,
+            },
+          });
+
+          relevantProfiles.forEach((profile, index) => {
+            // Обрезаем сегмент по границам видимого диапазона
+            /*const segmentStart = profile.startCoord;
+            const segmentEnd = profile.endCoord;*/
+
+            // ВАЖНО: Теперь используем правильное преобразование координат
+            // Данные профиля в прямом порядке (1781 → 1789)
+            // Но отображение справа налево (1782 → 1610)
+            // Поэтому используем формулу: x = marginLeft + (displayStartCoord - km) * scale
+
+            // 1. ОБРЕЗКА ПО ВИДИМОМУ ДИАПАЗОНУ
+            const segmentStart = Math.max(profile.startCoord, displayEndCoord);
+            const segmentEnd = Math.min(profile.endCoord, displayStartCoord);
+
+            // 2. ПРЕОБРАЗОВАНИЕ В ПИКСЕЛИ
+            const startX = kmToX2(segmentStart);
+            const endX = kmToX2(segmentEnd);
+
+            console.log(`[LAYER 3] Профиль ${index}:`, {
+              id: profile.id,
+              originalRange: `${profile.startCoord} → ${profile.endCoord}`,
+              clippedRange: `${segmentStart} → ${segmentEnd}`,
+              slope: profile.slopePromille,
+              startX,
+              endX,
+              width: Math.abs(endX - startX),
+            });
+
+            // Вертикальные линии-разделители
+            // Рисуем разделитель в начале каждого сегмента (кроме первого)
+            if (index > 0) {
               ctx.strokeStyle = '#374151';
-              ctx.lineWidth = lineWidth(2);
+              ctx.lineWidth = lineWidth(1.5);
               ctx.beginPath();
               ctx.moveTo(startX, profileStripTop);
               ctx.lineTo(startX, profileStripBottom);
               ctx.stroke();
             }
 
-            if (segmentEnd === displayEndCoord) {
-              ctx.beginPath();
-              ctx.moveTo(endX, profileStripTop);
-              ctx.lineTo(endX, profileStripBottom);
-              ctx.stroke();
-            }
-
-            if (profile.slopePromille !== 0 && endX - startX > 2) {
+            // Диагональная линия уклона
+            if (profile.slopePromille !== 0 && Math.abs(endX - startX) > 5) {
               ctx.strokeStyle = '#64748b';
               ctx.lineWidth = lineWidth(2);
-
               ctx.beginPath();
+
               if (profile.slopePromille < 0) {
+                // Спуск: движение ВПРАВО (к началу пути 1782) - линия идёт ВВЕРХ
+                // На canvas: справа (startX) ВЫШЕ, слева (endX) НИЖЕ
                 ctx.moveTo(startX, profileStripTop);
                 ctx.lineTo(endX, profileStripBottom);
               } else if (profile.slopePromille > 0) {
+                // Подъём: движение ВПРАВО (к началу пути 1782) - линия идёт ВНИЗ
+                // На canvas: справа (startX) НИЖЕ, слева (endX) ВЫШЕ
                 ctx.moveTo(startX, profileStripBottom);
                 ctx.lineTo(endX, profileStripTop);
               }
+
               ctx.stroke();
             }
 
-            // Label slope value in the center
-            if (profile.slopePromille !== 0 && endX - startX > 20) {
+            // Подпись уклона
+            if (profile.slopePromille !== 0 && Math.abs(endX - startX) > 40) {
               ctx.fillStyle = '#475569';
-              ctx.font = fontSize(11);
+              ctx.font = fontSize(10);
               ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
               ctx.fillText(
                 `${profile.slopePromille}‰`,
                 (startX + endX) / 2,
-                (layer3Top + layer3Bottom) / 2
+                (profileStripTop + profileStripBottom) / 2
               );
             }
           });
@@ -1521,63 +1862,21 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.fillText('Профиль пути', marginLeft + 10, layer3Top + 15);
         }
 
-        // Оптимальная кривая скорости
-        if (displaySettings.optimalSpeedCurve && chartData?.workflow?.optimalSpeedCurve) {
-          ctx.strokeStyle = '#3b82f6';
-          ctx.lineWidth = lineWidth(2);
-          ctx.setLineDash([5, 5]);
-          ctx.beginPath();
+        // =============================================================================
+        // ДИАГНОСТИКА ДЛЯ LAYER 3
+        // =============================================================================
 
-          const pointsInRange = chartData?.workflow.optimalSpeedCurve.filter(
-            (point) => point.km >= displayStartCoord && point.km <= displayEndCoord
-          );
+        // Если профиль всё ещё не отображается, добавьте этот код ПЕРЕД блоком Layer 3:
 
-          if (pointsInRange.length > 0) {
-            const firstPoint = pointsInRange[0];
-            ctx.moveTo(kmToX(firstPoint.km), speedToY(firstPoint.speed));
-
-            for (let i = 1; i < pointsInRange.length; i++) {
-              const point = pointsInRange[i];
-              ctx.lineTo(kmToX(point.km), speedToY(point.speed));
-            }
-          }
-
-          ctx.stroke();
-          ctx.setLineDash([]);
-
-          ctx.fillStyle = '#3b82f6';
-          ctx.font = fontSize(11);
-          ctx.textAlign = 'left';
-          ctx.fillText('Оптимальная кривая', marginLeft + 10, layer2Top + 20);
-        }
-
-        // Фактическая кривая скорости
-        if (displaySettings.actualSpeedCurve && chartData?.workflow?.actualSpeedCurve) {
-          ctx.strokeStyle = '#22c55e';
-          ctx.lineWidth = lineWidth(2.5);
-          ctx.beginPath();
-
-          const pointsInRange = chartData.workflow.actualSpeedCurve.filter(
-            (point) => point.km >= displayStartCoord && point.km <= displayEndCoord
-          );
-
-          if (pointsInRange.length > 0) {
-            const firstPoint = pointsInRange[0];
-            ctx.moveTo(kmToX(firstPoint.km), speedToY(firstPoint.speed));
-
-            for (let i = 1; i < pointsInRange.length; i++) {
-              const point = pointsInRange[i];
-              ctx.lineTo(kmToX(point.km), speedToY(point.speed));
-            }
-          }
-
-          ctx.stroke();
-
-          ctx.fillStyle = '#22c55e';
-          ctx.font = fontSize(11);
-          ctx.textAlign = 'left';
-          ctx.fillText('Фактическая кривая', marginLeft + 10, layer2Top + 35);
-        }
+        console.log('[LAYER 3 ДИАГНОСТИКА]', {
+          displaySettings_trackProfile: displaySettings.trackProfile,
+          trackSection_exists: !!trackSection,
+          pathProfiles_exists: !!trackSection?.pathProfiles,
+          pathProfiles_length: trackSection?.pathProfiles?.length || 0,
+          pathProfiles_sample: trackSection?.pathProfiles?.[0],
+          displayStartCoord,
+          displayEndCoord,
+        });
 
         // ====================================
         // LAYER 4: REGIME BANDS (640-800px)
