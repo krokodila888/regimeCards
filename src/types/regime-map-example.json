@@ -1,0 +1,214 @@
+{
+  "metadata": {
+    "configurationId": "cfg_12345",
+    "configurationName": "Москва - Санкт-Петербург, ВЛ80 + грузовой состав",
+    "calculatedAt": "2024-12-18T10:30:00Z",
+    "direction": "forward",
+    "locomotive": {
+      "name": "ВЛ80С-1234",
+      "series": "ВЛ80С",
+      "weight": 184,
+      "power": 6520
+    },
+    "train": {
+      "name": "Грузовой состав 71 вагон",
+      "weight": 5100,
+      "length": 1050,
+      "numberOfCars": 71
+    },
+    "totals": {
+      "distance": 650.5,
+      "travelTime": 485,
+      "energy": 12450,
+      "averageSpeed": 80.5,
+      "maxSpeed": 90
+    },
+    "safety": {
+      "passed": true,
+      "warnings": [
+        "Приближение к максимальной силе растяжения на км 125.3"
+      ]
+    }
+  },
+  "bounds": {
+    "startDistance": 0,
+    "endDistance": 650.5,
+    "minSpeed": 0,
+    "maxSpeed": 100,
+    "minGradient": -12,
+    "maxGradient": 15
+  },
+  "profile": [
+    {
+      "start": 0,
+      "end": 5.2,
+      "gradient": 0,
+      "curveRadius": 0,
+      "hasCurve": false
+    },
+    {
+      "start": 5.2,
+      "end": 8.7,
+      "gradient": 8.5,
+      "curveRadius": 600,
+      "hasCurve": true
+    },
+    {
+      "start": 8.7,
+      "end": 15.0,
+      "gradient": -3.2,
+      "curveRadius": 0,
+      "hasCurve": false
+    }
+  ],
+  "stations": [
+    {
+      "name": "Москва-Товарная",
+      "distance": 0,
+      "isLoop": false,
+      "type": "start"
+    },
+    {
+      "name": "Химки",
+      "distance": 18.5,
+      "isLoop": false,
+      "type": "intermediate"
+    },
+    {
+      "name": "Санкт-Петербург-Товарный",
+      "distance": 650.5,
+      "isLoop": true,
+      "type": "end"
+    }
+  ],
+  "speedLimits": [
+    {
+      "start": 0,
+      "end": 15.0,
+      "limit": 60,
+      "type": "track_category",
+      "reason": "Участок 4 категории"
+    },
+    {
+      "start": 15.0,
+      "end": 35.8,
+      "limit": 80,
+      "type": "track_category"
+    },
+    {
+      "start": 25.0,
+      "end": 27.5,
+      "limit": 40,
+      "type": "temporary",
+      "reason": "Ремонт пути"
+    }
+  ],
+  "speedCurve": [
+    {
+      "distance": 0,
+      "speed": 0,
+      "time": 0
+    },
+    {
+      "distance": 0.5,
+      "speed": 25.3,
+      "time": 0.71
+    },
+    {
+      "distance": 1.0,
+      "speed": 35.8,
+      "time": 1.25
+    },
+    {
+      "distance": 1.5,
+      "speed": 43.2,
+      "time": 1.71
+    },
+    {
+      "distance": 2.0,
+      "speed": 49.5,
+      "time": 2.12
+    }
+  ],
+  "regimeBands": [
+    {
+      "start": 0,
+      "end": 12.5,
+      "mode": "acceleration",
+      "controllerPosition": "П3"
+    },
+    {
+      "start": 12.5,
+      "end": 18.3,
+      "mode": "constant_speed",
+      "controllerPosition": "П2"
+    },
+    {
+      "start": 18.3,
+      "end": 22.1,
+      "mode": "coasting"
+    },
+    {
+      "start": 22.1,
+      "end": 25.0,
+      "mode": "braking"
+    }
+  ],
+  "longitudinalForces": [
+    {
+      "distance": 0,
+      "tension": 0,
+      "compression": 0,
+      "maxAllowable": 1200
+    },
+    {
+      "distance": 5.0,
+      "tension": 850,
+      "compression": 0,
+      "maxAllowable": 1200
+    },
+    {
+      "distance": 10.0,
+      "tension": 1050,
+      "compression": 0,
+      "maxAllowable": 1200
+    },
+    {
+      "distance": 15.0,
+      "tension": 0,
+      "compression": 420,
+      "maxAllowable": 1200
+    }
+  ],
+  "infrastructure": [
+    {
+      "type": "brake_test",
+      "distance": 2.5,
+      "label": "Точка опробования тормозов"
+    },
+    {
+      "type": "neutral_start",
+      "distance": 45.2,
+      "label": "Начало НВ"
+    },
+    {
+      "type": "neutral_end",
+      "distance": 45.8,
+      "label": "Конец НВ"
+    },
+    {
+      "type": "picket",
+      "distance": 100.0,
+      "label": "ПК 100"
+    },
+    {
+      "type": "tunnel_start",
+      "distance": 123.5,
+      "label": "Тоннель"
+    },
+    {
+      "type": "tunnel_end",
+      "distance": 125.8
+    }
+  ]
+}
