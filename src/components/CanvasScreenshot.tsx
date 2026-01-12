@@ -958,7 +958,7 @@ export default function CanvasScreenshot({
                 checked={visibleLayers.regimeMarkers}
                 onCheckedChange={(checked: boolean) =>
                   setVisibleLayers({ ...visibleLayers, regimeMarkers: checked })
-                }                
+                }
               />
               <Label htmlFor="regimeMarkers" className="text-sm cursor-pointer">
                 Ленты режимов управления
@@ -978,13 +978,18 @@ export default function CanvasScreenshot({
               </Label>
             </div>
 
-            <div className={`flex items-center space-x-3 ${chosenAction === 'createNew' ? 'opacity-50' : ''}`}>
+            <div
+              className={`flex items-center space-x-3 ${chosenAction === 'createNew' ? 'opacity-50' : ''}`}
+            >
               <Checkbox
                 id="limitCurve"
                 checked={chosenAction === 'createNew' ? false : visibleLayers.borders}
                 disabled={chosenAction === 'createNew'}
               />
-              <Label htmlFor="limitCurve" className={`text-sm ${chosenAction === 'createNew' ? 'cursor-not-allowed' : ''}`}>
+              <Label
+                htmlFor="limitCurve"
+                className={`text-sm ${chosenAction === 'createNew' ? 'cursor-not-allowed' : ''}`}
+              >
                 Ограничения скорости
               </Label>
             </div>

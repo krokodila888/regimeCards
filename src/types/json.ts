@@ -449,7 +449,10 @@ export function convertToRenderData(
         name: result.configuration.train.name,
         weight: result.configuration.train.totalWeight || 0,
         length: result.configuration.train.totalLength || 0,
-        numberOfCars: result.configuration.train.cars.reduce((sum: number, c: any) => sum + c.count, 0),
+        numberOfCars: result.configuration.train.cars.reduce(
+          (sum: number, c: any) => sum + c.count,
+          0
+        ),
       },
       totals: {
         distance: result.configuration.trackSection.totalLength,

@@ -1,6 +1,15 @@
 import { GitBranch, ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 
+// Ограничения скорости (119 сегментов, 1782→1610 км)
+import { speedLimits } from './../types/speed-limits';
+
+// Продольные силы (3434 точки, 1781.8→1610.1 км, 20 точек/км)
+import { longitudinalForces } from './../types/longitudinal_forces';
+
+// Кривые скорости (1718 точек, 1781.8→1610.1 км, 10 точек/км)
+import { speedCurves } from './../types/speedCurves';
+
 import type {
   ChartData,
   CanvasObject,
@@ -21,7 +30,6 @@ import {
 } from './ui/context-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Label } from './ui/label';
-import VisioObjectPalette from './VisioObjectPalette';
 
 const PIXELS_PER_KM = 40;
 
@@ -48,9 +56,9 @@ const createKmToXConverter = (chartData: ChartData, marginLeft: number = 80) => 
     actualEndCoord = trackSection.stations[trackSection.stations.length - 1].endCoord;
   }
 
-  const isReversed = actualStartCoord > actualEndCoord;
-  const displayStartCoord = isReversed ? actualEndCoord : actualStartCoord;
-  const displayEndCoord = isReversed ? actualStartCoord : actualEndCoord;
+  const isReversed = /*actualStartCoord > actualEndCoord*/ true;
+  const displayStartCoord = /*isReversed ? actualEndCoord : actualStartCoord*/ 1782;
+  const displayEndCoord = /*isReversed ? actualStartCoord : actualEndCoord*/ 1610;
 
   return (km: number) => {
     if (!isFinite(km)) {
@@ -679,9 +687,9 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           actualEndCoord = trackSection.stations[trackSection.stations.length - 1].endCoord;
         }
 
-        const isReversed = actualStartCoord > actualEndCoord;
-        const displayStartCoord = isReversed ? actualEndCoord : actualStartCoord;
-        const displayEndCoord = isReversed ? actualStartCoord : actualEndCoord;
+        const isReversed = /*actualStartCoord > actualEndCoord*/ true;
+        const displayStartCoord = /*isReversed ? actualEndCoord : actualStartCoord*/ 1782;
+        const displayEndCoord = /*isReversed ? actualStartCoord : actualEndCoord*/ 1610;
         const displayTrackLength = displayEndCoord - displayStartCoord;
 
         // Фон (без трансформаций)
@@ -699,9 +707,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         // LAYER DEFINITIONS (4 layers, total 800px)
         // ==============
         const LAYER1_TOP = 0; // Force Dynamics Layer
-        const LAYER1_HEIGHT = 160;
-        const LAYER2_TOP = 160; // Speed Curves Layer
-        const LAYER2_HEIGHT = 320;
+        const LAYER1_HEIGHT = 180;
+        const LAYER1_CENTER = 90;
+        const LAYER2_TOP = 180; // Speed Curves Layer
+        const LAYER2_HEIGHT = 300;
         const LAYER3_TOP = 480; // Track Profile Layer
         const LAYER3_HEIGHT = 160;
         const LAYER4_TOP = 640; // Regime Bands Layer
@@ -720,9 +729,21 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           const normalizedKm = isReversed ? displayEndCoord - km : km;
 
           // ФИКСИРОВАННЫЙ МАСШТАБ: 40px на 1 км
-          const x = marginLeft + (normalizedKm - displayStartCoord) * PIXELS_PER_KM;
+          const x = marginLeft + (normalizedKm + displayStartCoord) * PIXELS_PER_KM;
 
           return x;
+        };
+        const kmToX1 = (km: number) => {
+          // Простое преобразование БЕЗ реверса
+          const normalized =
+            (displayStartCoord - km) / Math.abs(displayEndCoord - displayStartCoord);
+          return marginLeft + normalized * chartWidth;
+        };
+        const kmToX2 = (km: number) => {
+          // Простое преобразование БЕЗ реверса
+          const normalized =
+            (displayStartCoord + km) / Math.abs(displayEndCoord - displayStartCoord);
+          return marginLeft + normalized * chartWidth;
         };
 
         // ====================================
@@ -730,7 +751,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         // ====================================
         // LAYER 1: TENSION/COMPRESSION FORCE DYNAMICS (0-160px)
         // ====================================
-        if (displaySettings.trackProfile) {
+        /*if (displaySettings.trackProfile) {
           // Using trackProfile setting to show/hide force layer
           const layer1Top = LAYER1_TOP + 10;
           const layer1Bottom = LAYER1_TOP + LAYER1_HEIGHT - 10;
@@ -773,29 +794,29 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.textAlign = 'right';
 
           // Горизонтальные пунктирные линии для каждой десятки
-          for (let force = -100; force <= 100; force += 10) {
+          for (let force = -125; force <= 115; force += 25) {
             // Преобразование силы в координату Y
             const y = layer1Center - force * (layer1Height / 2 / 100);
 
             // Пунктирная линия через весь слой
-            ctx.setLineDash([3, 3]); // Пунктирный стиль
+            ctx.setLineDash([2, 5]); // Пунктирный стиль
             ctx.beginPath();
             ctx.moveTo(marginLeft, y);
             ctx.lineTo(marginLeft + chartWidth, y);
             ctx.stroke();
 
             // Подписи слева (только для круглых значений -100, -50, 0, 50, 100)
-            if (force % 50 === 0 || force === 0) {
+            if (force % 25 === 0 || force === 0 || force === 110) {
               ctx.setLineDash([]); // Сброс пунктира
               ctx.fillText(`${force}`, marginLeft - 5, y + 4);
 
               // Толще линия для основных значений
-              ctx.lineWidth = lineWidth(1.5);
+              ctx.lineWidth = lineWidth(0.5);
               ctx.beginPath();
               ctx.moveTo(marginLeft, y);
               ctx.lineTo(marginLeft + chartWidth, y);
               ctx.stroke();
-              ctx.lineWidth = lineWidth(1);
+              ctx.lineWidth = lineWidth(0.5);
             }
           }
 
@@ -920,6 +941,244 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           } else {
             console.warn('[LAYER 1] trainForceData пуст или не определен');
           }
+        }*/
+        if (displaySettings.trackProfile) {
+          // Using trackProfile setting to show/hide force layer
+          const layer1Top = LAYER1_TOP + 25;
+          const layer1Bottom = LAYER1_TOP + LAYER1_HEIGHT - 25;
+          const layer1Center = (layer1Top + layer1Bottom) / 2;
+          const layer1Height = layer1Bottom - layer1Top;
+
+          // ЛОГИРОВАНИЕ данных
+          console.log('[LAYER 1] Рисование слоя усилий:', {
+            layer1Top,
+            layer1Bottom,
+            layer1Center,
+            layer1Height,
+            displayStartCoord,
+            displayEndCoord,
+            trackSectionStart: trackSection?.stations?.[0]?.startCoord,
+            trackSectionEnd: trackSection?.stations?.[trackSection?.stations?.length - 1]?.endCoord,
+            isReversed,
+            trainForceDataLength: trainForceData?.length || 0,
+          });
+
+          // Draw layer border
+          ctx.strokeStyle = '#d1d5db';
+          ctx.lineWidth = lineWidth(1);
+          ctx.strokeRect(marginLeft, LAYER1_TOP, chartWidth, LAYER1_HEIGHT);
+
+          // Draw baseline (blue)
+          ctx.strokeStyle = '#9ca3af';
+          ctx.lineWidth = lineWidth(1);
+          ctx.beginPath();
+          ctx.moveTo(marginLeft, layer1Center);
+          ctx.lineTo(marginLeft + chartWidth, layer1Center);
+          ctx.stroke();
+
+          // Y-СКАЛА от -100 до 100 кН
+          ctx.save();
+          ctx.strokeStyle = '#9ca3af';
+          ctx.lineWidth = lineWidth(1);
+          ctx.fillStyle = '#6b7280';
+          ctx.font = fontSize(11);
+          ctx.textAlign = 'right';
+
+          // Горизонтальные пунктирные линии для каждой десятки
+          for (let force = -125; force <= 125; force += 25) {
+            // Преобразование силы в координату Y
+            const y = layer1Center - force * (layer1Height / 2 / 100);
+
+            // Пунктирная линия через весь слой
+            ctx.setLineDash([1, 3]); // Пунктирный стиль
+            ctx.beginPath();
+            ctx.moveTo(marginLeft, y);
+            ctx.lineTo(marginLeft + chartWidth, y);
+            ctx.stroke();
+
+            // Подписи слева (только для круглых значений -100, -50, 0, 50, 100)
+            if (force % 25 === 0 || force === 0 || force === 125) {
+              ctx.setLineDash([]); // Сброс пунктира
+              ctx.fillText(`${force}`, marginLeft - 5, y + 4);
+
+              // Толще линия для основных значений
+              ctx.lineWidth = lineWidth(0.5);
+              ctx.beginPath();
+              ctx.moveTo(marginLeft, y);
+              //ctx.lineTo(marginLeft + chartWidth, y);
+              //ctx.stroke();
+              ctx.lineWidth = lineWidth(0.5);
+            }
+          }
+
+          ctx.setLineDash([]); // Сброс пунктира
+          ctx.restore();
+
+          // Draw force curves from longitudinalForces
+          if (longitudinalForces && longitudinalForces.length > 0) {
+            console.log('[LAYER 1] Данные:', {
+              точек: longitudinalForces.length,
+              displayStartCoord: displayStartCoord,
+              displayEndCoord: displayEndCoord,
+              диапазонДанных: `${longitudinalForces[0].distance} - ${longitudinalForces[longitudinalForces.length - 1].distance} км`,
+              диапазонОтображения: `${displayStartCoord} - ${displayEndCoord} км`,
+              разница: `${Math.abs(longitudinalForces[0].distance - displayStartCoord)} км`,
+            });
+
+            // Проверяем, попадают ли данные в диапазон отображения
+            const firstDataKm = longitudinalForces[0].distance;
+            const lastDataKm = longitudinalForces[longitudinalForces.length - 1].distance;
+
+            const dataInRange = longitudinalForces.filter(
+              (point) => point.distance <= displayStartCoord && point.distance >= displayEndCoord
+            );
+
+            console.log('[LAYER 1] Данные в диапазоне:', {
+              всего: longitudinalForces.length,
+              вДиапазоне: dataInRange.length,
+              процент: Math.round((dataInRange.length / longitudinalForces.length) * 100) + '%',
+            });
+
+            // Если данных в диапазоне нет — возможно проблема с координатами
+            if (dataInRange.length === 0) {
+              console.error('[LAYER 1] Нет данных в видимом диапазоне! Возможные причины:', {
+                данныеНачинаютсяС: firstDataKm,
+                данныеЗаканчиваются: lastDataKm,
+                отображаемыйДиапазон: `${displayStartCoord} - ${displayEndCoord}`,
+                разницаСНачалом: firstDataKm - displayStartCoord,
+                разницаСКонцом: lastDataKm - displayEndCoord,
+              });
+            }
+
+            // Find max absolute force for scaling (учитываем оба значения)
+            const maxTension = /**Math.max(...longitudinalForces.map(d => Math.abs(d.tension)), 1) */ 125;
+            const maxCompression = /*Math.max(...longitudinalForces.map(d => Math.abs(d.compression)), 1)*/ 125;
+            const maxForce = Math.max(maxTension, maxCompression);
+
+            const forceScale = LAYER1_HEIGHT / 2 / maxForce;
+
+            /*console.log('[LAYER 1] Параметры масштабирования:', {
+              maxTension,
+              maxCompression,
+              maxForce,
+              forceScale,
+              LAYER1_HEIGHT,
+            });*/
+
+            // 1. Рисуем КРАСНУЮ кривую (растяжение/tension)
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = lineWidth(2);
+            ctx.beginPath();
+            let tensionStarted = false;
+            let tensionPointsDrawn = 0;
+
+            longitudinalForces.forEach((point, index) => {
+              // Данные уже в километрах с правильной привязкой
+              const distanceKm = point.distance;
+
+              if (distanceKm <= displayStartCoord && distanceKm >= displayEndCoord) {
+                //console.log(distanceKm)
+                //console.log(displayStartCoord)
+                //console.log(111)
+                const x = kmToX1(distanceKm);
+                const y = LAYER1_CENTER - point.tension * forceScale; // Положительное значение - выше базовой линии
+                ctx.lineTo(x, y);
+                ctx.moveTo(x, y);
+                //console.log({x: x, y: y})
+
+                /*if (!tensionStarted) {
+                  ctx.moveTo(x, y);
+                  tensionStarted = true;
+                  console.log(222)
+                } else {
+                  ctx.lineTo(x, y);
+                  console.log(333)
+                }*/
+                tensionPointsDrawn++;
+
+                // Логирование для отладки
+                if (index < 3 || index === longitudinalForces.length - 1) {
+                  console.log('[LAYER 1] Точка растяжения:', {
+                    index,
+                    distanceKm,
+                    tension: point.tension,
+                    x,
+                    y,
+                  });
+                }
+              }
+            });
+
+            ctx.stroke();
+
+            // 2. Рисуем СИНЮЮ кривую (сжатие/compression)
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = lineWidth(2);
+            ctx.beginPath();
+            let compressionStarted = false;
+            let compressionPointsDrawn = 0;
+
+            longitudinalForces.forEach((point, index) => {
+              const distanceKm = point.distance;
+
+              if (distanceKm <= displayStartCoord && distanceKm >= displayEndCoord) {
+                const x = kmToX1(distanceKm);
+                // Сжатие отображаем как отрицательное значение (ниже базовой линии)
+                const y = LAYER1_CENTER + point.compression * forceScale;
+                ctx.lineTo(x, y);
+                ctx.moveTo(x, y);
+
+                /*if (!compressionStarted) {
+                  ctx.moveTo(x, y);
+                  compressionStarted = true;
+                } else {
+                  ctx.lineTo(x, y);
+                }*/
+                compressionPointsDrawn++;
+              }
+            });
+
+            ctx.stroke();
+
+            console.log('[LAYER 1] Статистика отрисовки:', {
+              totalPoints: longitudinalForces.length,
+              tensionPointsDrawn,
+              compressionPointsDrawn,
+            });
+
+            // Если данных нет в видимом диапазоне
+            if (tensionPointsDrawn === 0 && compressionPointsDrawn === 0) {
+              console.warn('[LAYER 1] Нет данных longitudinalForces в видимом диапазоне!', {
+                displayStartCoord,
+                displayEndCoord,
+                dataRangeStart: longitudinalForces[0]?.distance,
+                dataRangeEnd: longitudinalForces[longitudinalForces.length - 1]?.distance,
+              });
+            }
+
+            // ЛЕГЕНДА
+            ctx.save();
+            const legendX = marginLeft + chartWidth - 120;
+            const legendY = LAYER1_TOP + 25;
+
+            // Легенда для растяжения (красный)
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(legendX, legendY, 12, 12);
+            ctx.fillStyle = '#374151';
+            ctx.font = fontSize(11);
+            ctx.textAlign = 'left';
+            ctx.fillText('Растяжение', legendX + 18, legendY + 9);
+
+            // Легенда для сжатия (синий)
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillRect(legendX, legendY + 20, 12, 12);
+            ctx.fillStyle = '#374151';
+            ctx.fillText('Сжатие', legendX + 18, legendY + 29);
+
+            ctx.restore();
+          } else {
+            console.warn('[LAYER 1] longitudinalForces пуст или не определен');
+          }
         }
 
         // ====================================
@@ -941,7 +1200,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           if (!isFinite(speed)) {
             return layer2Bottom;
           }
-          const maxSpeed = 320;
+          const maxSpeed = 90;
           const y = layer2Top + layer2Height - (speed / maxSpeed) * layer2Height;
 
           if (!isFinite(y)) {
@@ -950,17 +1209,19 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           return y;
         };
 
-        // Сетка по Y (скорость 0–320)
+        // Сетка по Y (скорость 0–90)
         ctx.save();
         ctx.strokeStyle = '#e5e7eb';
         ctx.lineWidth = lineWidth(1);
         ctx.fillStyle = '#9ca3af';
-        ctx.font = fontSize(13);
+        ctx.font = fontSize(11);
         ctx.textAlign = 'right';
+        ctx.save();
 
-        for (let speed = 0; speed <= 320; speed += 40) {
+        for (let speed = 0; speed <= 90; speed += 5) {
           const y = speedToY(speed);
           ctx.beginPath();
+          ctx.setLineDash([1, 3]);
           ctx.moveTo(marginLeft, y);
           ctx.lineTo(marginLeft + chartWidth, y);
           ctx.stroke();
@@ -972,8 +1233,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         ctx.fillStyle = '#9ca3af';
 
         // ФИКСИРОВАННАЯ СЕТКА (зум отключен)
-        let gridInterval = 10; // сетка каждые 10 км
-        let labelInterval = 20; // подписи каждые 20 км
+        let gridInterval = 1; // сетка каждые 1 км
+        let labelInterval = 2; // подписи каждые 2 км
 
         // Если участок короткий, уменьшаем шаг
         if (displayTrackLength <= 50) {
@@ -1026,7 +1287,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         }
 
         // Axes
-        ctx.strokeStyle = '#374151';
+        ctx.setLineDash([]);
+        //ctx.strokeStyle = '#374151';
         ctx.lineWidth = lineWidth(2);
 
         // X axis
@@ -1052,37 +1314,38 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         ctx.rotate(-Math.PI / 2);
         ctx.fillText('Скорость (км/ч)', 0, 0);
         ctx.restore();
+        ctx.setLineDash([]);
 
         // Кривая скоростных ограничений
-        if (
-          displaySettings.speedLimits &&
-          trackSection?.speedLimits?.length &&
-          trackSection?.speedLimits?.length > 0
-        ) {
+        if (speedLimits && speedLimits.length && speedLimits.length > 0) {
           ctx.strokeStyle = '#ef4444';
           ctx.lineWidth = lineWidth(2.5);
           ctx.beginPath();
 
-          const relevantLimits = trackSection?.speedLimits?.filter(
-            (limit) => limit.endCoord >= displayStartCoord && limit.startCoord <= displayEndCoord
+          const relevantLimits = speedLimits?.filter(
+            (limit) => limit.end <= displayStartCoord && limit.start >= displayEndCoord
           );
+          console.log({ relevantLimits: relevantLimits });
 
           if (relevantLimits && relevantLimits?.length > 0) {
-            let lastSpeed = relevantLimits[0].limitValue;
+            let lastSpeed = relevantLimits[0].limit;
 
             const firstLimit = relevantLimits[0];
-            const firstX = kmToX(Math.max(displayStartCoord, firstLimit.startCoord));
+            const firstX = kmToX1(firstLimit.start);
             ctx.moveTo(firstX, speedToY(lastSpeed));
 
             relevantLimits.forEach((limit) => {
-              const segmentStart = Math.max(displayStartCoord, limit.startCoord);
-              const segmentEnd = Math.min(displayEndCoord, limit.endCoord);
+              const segmentStart = Math.max(displayStartCoord, limit.start);
+              const segmentEnd = Math.min(displayEndCoord, limit.end);
 
               const startX = kmToX(segmentStart);
+              console.log({startX: startX})
               const endX = kmToX(segmentEnd);
-              const y = speedToY(limit.limitValue);
+              console.log({endX: endX})
+              const y = speedToY(limit.limit);
+              console.log({y: y})
 
-              if (limit.limitValue !== lastSpeed) {
+              if (limit.limit !== lastSpeed) {
                 ctx.lineTo(startX, speedToY(lastSpeed));
                 ctx.lineTo(startX, y);
               } else {
@@ -1090,7 +1353,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               }
 
               ctx.lineTo(endX, y);
-              lastSpeed = limit.limitValue;
+              lastSpeed = limit.limit;
             });
           }
 
@@ -1099,7 +1362,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.fillStyle = '#ef4444';
           ctx.font = fontSize(11);
           ctx.textAlign = 'left';
-          ctx.fillText('Скоростные ограничения', marginLeft + 10, layer2Top + 15);
+          ctx.fillText('Скоростные ограничения', marginLeft + 10, layer2Top + 5);
         }
 
         // Calculated Speed Curve (from trainForceData velocity)
@@ -1124,10 +1387,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           });
           ctx.stroke();
 
-          ctx.fillStyle = '#10b981';
+          /*ctx.fillStyle = '#10b981';
           ctx.font = fontSize(11);
           ctx.textAlign = 'left';
-          ctx.fillText('Расчётная скорость', marginLeft + 10, layer2Top + 30);
+          ctx.fillText('Расчётная скорость', marginLeft + 10, layer2Top + 30);*/
         }
 
         // Station markers (vertical lines in Layer 2)
@@ -1255,7 +1518,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.fillStyle = '#374151';
           ctx.font = fontSize(12);
           ctx.textAlign = 'left';
-          ctx.fillText('Профиль пути', marginLeft + 10, layer3Top - 5);
+          ctx.fillText('Профиль пути', marginLeft + 10, layer3Top + 15);
         }
 
         // Оптимальная кривая скорости
@@ -1285,7 +1548,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.fillStyle = '#3b82f6';
           ctx.font = fontSize(11);
           ctx.textAlign = 'left';
-          ctx.fillText('Оптимальная кривая', marginLeft + 10, layer2Top + 45);
+          ctx.fillText('Оптимальная кривая', marginLeft + 10, layer2Top + 20);
         }
 
         // Фактическая кривая скорости
@@ -1313,7 +1576,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.fillStyle = '#22c55e';
           ctx.font = fontSize(11);
           ctx.textAlign = 'left';
-          ctx.fillText('Фактическая кривая', marginLeft + 10, layer2Top + 60);
+          ctx.fillText('Фактическая кривая', marginLeft + 10, layer2Top + 35);
         }
 
         // ====================================
@@ -2794,7 +3057,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           </div>
         </div>
       </div>
-
     </>
   );
 }

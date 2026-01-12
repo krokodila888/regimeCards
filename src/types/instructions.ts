@@ -1,11 +1,11 @@
 /**
  * IMPORTED REGIME MAP DATA
- * 
+ *
  * Этот модуль объединяет все извлечённые данные из режимной карты:
  * - Ограничения скорости (speed limits)
  * - Продольные силы (longitudinal forces)
  * - Кривые скорости (speed curves: optimal, actual, limit)
- * 
+ *
  * Все данные извлечены из BMP-файлов высокого качества.
  */
 
@@ -14,22 +14,22 @@
 // ============================================================================
 
 export interface SpeedLimit {
-  start: number;     // км (начало отрезка)
-  end: number;       // км (конец отрезка)
-  limit: number;     // км/ч (целое число)
+  start: number; // км (начало отрезка)
+  end: number; // км (конец отрезка)
+  limit: number; // км/ч (целое число)
 }
 
 export interface LongitudinalForce {
-  distance: number;      // км
-  tension: number;       // кН (растяжение, >= 0)
-  compression: number;   // кН (сжатие, >= 0)
+  distance: number; // км
+  tension: number; // кН (растяжение, >= 0)
+  compression: number; // кН (сжатие, >= 0)
 }
 
 export interface SpeedCurvePoint {
-  distance: number;          // км
+  distance: number; // км
   speedLimit: number | null; // км/ч (красная - ограничения)
   optimalSpeed: number | null; // км/ч (синяя - оптимальная)
-  actualSpeed: number | null;  // км/ч (зелёная - фактическая)
+  actualSpeed: number | null; // км/ч (зелёная - фактическая)
 }
 
 // ============================================================================
@@ -67,7 +67,7 @@ export const longitudinalForces: LongitudinalForce[] = rawLongitudinalForces;
  * - speedLimit: красная линия (ограничения)
  * - optimalSpeed: синяя линия (оптимальная)
  * - actualSpeed: зелёная линия (фактическая)
- * 
+ *
  * 1718 точек с шагом 0.1 км (10 точек на километр)
  * Диапазон: 1781.8 → 1610.1 км
  */
@@ -82,24 +82,24 @@ export const regimeMapMetadata = {
   startKm: 1782.0,
   endKm: 1610.0,
   totalLength: 172.0, // км
-  
+
   // Рабочий диапазон (с учётом отступов null-зон)
   workStartKm: 1781.8,
   workEndKm: 1610.1,
   workLength: 171.7, // км
-  
+
   // Плотность данных
   forcesPointsPerKm: 20,
   speedPointsPerKm: 10,
   speedLimitSegments: 119,
-  
+
   // Диапазоны значений
   ranges: {
     tension: { min: 0, max: 108 }, // кН
     compression: { min: 0, max: 120.5 }, // кН
     speed: { min: 0, max: 80 }, // км/ч
   },
-  
+
   // Источники данных
   sources: {
     forces: 'dema1.bmp (12890x204)',
@@ -119,12 +119,12 @@ export function getForceAtDistance(km: number): LongitudinalForce | null {
   if (km < regimeMapMetadata.workStartKm || km > regimeMapMetadata.workEndKm) {
     return null;
   }
-  
+
   // Найти ближайшую точку
-  const closest = longitudinalForces.reduce((prev, curr) => 
+  const closest = longitudinalForces.reduce((prev, curr) =>
     Math.abs(curr.distance - km) < Math.abs(prev.distance - km) ? curr : prev
   );
-  
+
   return closest;
 }
 
@@ -135,11 +135,11 @@ export function getSpeedAtDistance(km: number): SpeedCurvePoint | null {
   if (km < regimeMapMetadata.workStartKm || km > regimeMapMetadata.workEndKm) {
     return null;
   }
-  
-  const closest = speedCurvePoints.reduce((prev, curr) => 
+
+  const closest = speedCurvePoints.reduce((prev, curr) =>
     Math.abs(curr.distance - km) < Math.abs(prev.distance - km) ? curr : prev
   );
-  
+
   return closest;
 }
 
@@ -147,7 +147,7 @@ export function getSpeedAtDistance(km: number): SpeedCurvePoint | null {
  * Получить ограничение скорости в точке
  */
 export function getSpeedLimitAtDistance(km: number): number | null {
-  const segment = speedLimits.find(s => km >= s.start && km < s.end);
+  const segment = speedLimits.find((s) => km >= s.start && km < s.end);
   return segment ? segment.limit : null;
 }
 
@@ -156,18 +156,17 @@ export function getSpeedLimitAtDistance(km: number): number | null {
  */
 export function filterDataByRange(startKm: number, endKm: number) {
   return {
-    forces: longitudinalForces.filter(f => f.distance >= startKm && f.distance <= endKm),
-    speeds: speedCurvePoints.filter(s => s.distance >= startKm && s.distance <= endKm),
-    limits: speedLimits.filter(l => l.end >= startKm && l.start <= endKm),
+    forces: longitudinalForces.filter((f) => f.distance >= startKm && f.distance <= endKm),
+    speeds: speedCurvePoints.filter((s) => s.distance >= startKm && s.distance <= endKm),
+    limits: speedLimits.filter((l) => l.end >= startKm && l.start <= endKm),
   };
 }
 
-
 /**
  * PATCH FOR ChartEditor.tsx - Stage 1: Connect Extracted Data
- * 
+ *
  * Этот файл содержит изменения для подключения извлечённых данных режимной карты.
- * 
+ *
  * ИЗМЕНЕНИЯ:
  * 1. Импорт данных из regime-map-data.ts
  * 2. Отрисовка продольных сил (LAYER 1)
@@ -202,7 +201,8 @@ import {
 Заменить весь блок отрисовки на:
 */
 
-if (displaySettings.trackProfile) { // Используем этот флаг для показа сил
+if (displaySettings.trackProfile) {
+  // Используем этот флаг для показа сил
   const layer1Top = LAYER1_TOP + 10;
   const layer1Bottom = LAYER1_TOP + LAYER1_HEIGHT - 10;
   const layer1Center = (layer1Top + layer1Bottom) / 2;
@@ -224,7 +224,7 @@ if (displaySettings.trackProfile) { // Используем этот флаг д
   // Y-шкала от -130 до +110 (как на оригинале)
   const maxTension = 110; // кН
   const maxCompression = 130; // кН (отображается как отрицательное)
-  
+
   ctx.save();
   ctx.strokeStyle = '#9ca3af';
   ctx.lineWidth = lineWidth(0.5);
@@ -237,12 +237,12 @@ if (displaySettings.trackProfile) { // Используем этот флаг д
   for (let force = 0; force <= maxTension; force += 20) {
     const ratio = force / maxTension;
     const y = layer1Center - ratio * (layer1Height / 2);
-    
+
     ctx.beginPath();
     ctx.moveTo(marginLeft, y);
     ctx.lineTo(marginLeft + chartWidth, y);
     ctx.stroke();
-    
+
     if (force % 40 === 0) {
       ctx.fillText(`${force}`, marginLeft - 5, y + 3);
     }
@@ -252,12 +252,12 @@ if (displaySettings.trackProfile) { // Используем этот флаг д
   for (let force = 0; force <= maxCompression; force += 20) {
     const ratio = force / maxCompression;
     const y = layer1Center + ratio * (layer1Height / 2);
-    
+
     ctx.beginPath();
     ctx.moveTo(marginLeft, y);
     ctx.lineTo(marginLeft + chartWidth, y);
     ctx.stroke();
-    
+
     if (force % 40 === 0) {
       ctx.fillText(`-${force}`, marginLeft - 5, y + 3);
     }
@@ -270,7 +270,7 @@ if (displaySettings.trackProfile) { // Используем этот флаг д
   if (longitudinalForces && longitudinalForces.length > 0) {
     // Фильтруем точки в видимом диапазоне
     const visibleForces = longitudinalForces.filter(
-      f => f.distance >= displayStartCoord && f.distance <= displayEndCoord
+      (f) => f.distance >= displayStartCoord && f.distance <= displayEndCoord
     );
 
     if (visibleForces.length > 0) {
@@ -280,7 +280,7 @@ if (displaySettings.trackProfile) { // Используем этот флаг д
       ctx.beginPath();
       let tensionStarted = false;
 
-      visibleForces.forEach(point => {
+      visibleForces.forEach((point) => {
         if (point.tension > 0) {
           const x = kmToX(point.distance);
           const ratio = point.tension / maxTension;
@@ -305,7 +305,7 @@ if (displaySettings.trackProfile) { // Используем этот флаг д
       ctx.beginPath();
       let compressionStarted = false;
 
-      visibleForces.forEach(point => {
+      visibleForces.forEach((point) => {
         if (point.compression > 0) {
           const x = kmToX(point.distance);
           const ratio = point.compression / maxCompression;
@@ -349,7 +349,7 @@ if (displaySettings.trackProfile) { // Используем этот флаг д
 // ОГРАНИЧЕНИЯ СКОРОСТИ (красная линия) - из извлечённых данных
 if (displaySettings.speedLimits && speedLimits && speedLimits.length > 0) {
   const visibleLimits = speedLimits.filter(
-    limit => limit.end >= displayStartCoord && limit.start <= displayEndCoord
+    (limit) => limit.end >= displayStartCoord && limit.start <= displayEndCoord
   );
 
   if (visibleLimits.length > 0) {
@@ -362,7 +362,7 @@ if (displaySettings.speedLimits && speedLimits && speedLimits.length > 0) {
     const firstX = kmToX(Math.max(displayStartCoord, firstLimit.start));
     ctx.moveTo(firstX, speedToY(lastSpeed));
 
-    visibleLimits.forEach(limit => {
+    visibleLimits.forEach((limit) => {
       const segmentStart = Math.max(displayStartCoord, limit.start);
       const segmentEnd = Math.min(displayEndCoord, limit.end);
 
@@ -395,7 +395,8 @@ if (displaySettings.speedLimits && speedLimits && speedLimits.length > 0) {
 // ОПТИМАЛЬНАЯ КРИВАЯ (синяя линия)
 if (displaySettings.optimalSpeedCurve && speedCurvePoints && speedCurvePoints.length > 0) {
   const visiblePoints = speedCurvePoints.filter(
-    p => p.distance >= displayStartCoord && p.distance <= displayEndCoord && p.optimalSpeed !== null
+    (p) =>
+      p.distance >= displayStartCoord && p.distance <= displayEndCoord && p.optimalSpeed !== null
   );
 
   if (visiblePoints.length > 0) {
@@ -426,7 +427,8 @@ if (displaySettings.optimalSpeedCurve && speedCurvePoints && speedCurvePoints.le
 // ФАКТИЧЕСКАЯ КРИВАЯ (зелёная линия)
 if (displaySettings.actualSpeedCurve && speedCurvePoints && speedCurvePoints.length > 0) {
   const visiblePoints = speedCurvePoints.filter(
-    p => p.distance >= displayStartCoord && p.distance <= displayEndCoord && p.actualSpeed !== null
+    (p) =>
+      p.distance >= displayStartCoord && p.distance <= displayEndCoord && p.actualSpeed !== null
   );
 
   if (visiblePoints.length > 0) {
@@ -464,7 +466,7 @@ if (displaySettings.actualSpeedCurve && speedCurvePoints && speedCurvePoints.len
   longitudinalForces,
   speedCurvePoints,
   speedLimits,
-]
+];
 
 // ============================================================================
 // ИНСТРУКЦИЯ ПО ПРИМЕНЕНИЮ ПАТЧА

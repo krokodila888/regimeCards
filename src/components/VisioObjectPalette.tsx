@@ -1648,6 +1648,7 @@ export default function VisioObjectPalette({
       <div
         className="w-1 bg-gray-300 hover:bg-blue-500 cursor-col-resize"
         onMouseDown={handleResizeStart}
+        style={{ boxShadow: '-3px 0 5px rgb(0 0 0 / 84%)' }}
       />
 
       <div className="flex-1 bg-white border-l border-gray-300 flex flex-col shadow-lg">

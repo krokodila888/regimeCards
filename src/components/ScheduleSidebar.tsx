@@ -245,6 +245,7 @@ export default function ScheduleSidebar({ chartData }: ScheduleSidebarProps) {
         onMouseDown={handleResizeStart}
         style={{
           cursor: isResizing ? 'col-resize' : 'col-resize',
+          boxShadow: '-3px 0 5px rgb(0 0 0 / 84%)',
         }}
       />
 

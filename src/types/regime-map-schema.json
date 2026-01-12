@@ -94,13 +94,7 @@
         },
         "totals": {
           "type": "object",
-          "required": [
-            "distance",
-            "travelTime",
-            "energy",
-            "averageSpeed",
-            "maxSpeed"
-          ],
+          "required": ["distance", "travelTime", "energy", "averageSpeed", "maxSpeed"],
           "properties": {
             "distance": {
               "type": "number",

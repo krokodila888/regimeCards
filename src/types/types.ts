@@ -46,4 +46,4 @@ export type layers = {
   optSpeedCurve: boolean;
   regimes2: boolean;
   borders: boolean;
-}
+};

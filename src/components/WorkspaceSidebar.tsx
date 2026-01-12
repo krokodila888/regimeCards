@@ -169,6 +169,7 @@ export default function WorkspaceSidebar({
       <div
         className="absolute right-0 top-0 bottom-0 w-1 hover:w-2 hover:bg-blue-500 cursor-col-resize transition-all z-10 bg-gray-300"
         onMouseDown={() => setIsResizing(true)}
+        style={{ boxShadow: '3px 0 5px rgb(0 0 0 / 84%)' }}
       />
 
       {/* Header - Fixed at top */}
