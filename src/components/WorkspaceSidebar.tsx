@@ -9,6 +9,7 @@ import { Button } from './ui/button';
 import { Collapsible, CollapsibleTrigger } from './ui/collapsible';
 import { ScrollArea } from './ui/scroll-area';
 import { Separator } from './ui/separator';
+import { layers } from '@/types/types';
 
 interface WorkspaceSidebarProps {
   collapsed: boolean;
@@ -24,12 +25,12 @@ interface WorkspaceSidebarProps {
   onValidationChange: (isValid: boolean) => void;
   onLogout: () => void;
   onShowLoading: (message: string) => void;
-  visibleLayers: any;
-  setVisibleLayers: any;
+  visibleLayers: layers;
+  setVisibleLayers: React.Dispatch<React.SetStateAction<layers>>;
   chosenAction: string;
   setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
-  availableLayers: any;
-  setAvailableLayers: any;
+  availableLayers: layers;
+  setAvailableLayers: React.Dispatch<React.SetStateAction<layers>>;
 }
 
 export default function WorkspaceSidebar({

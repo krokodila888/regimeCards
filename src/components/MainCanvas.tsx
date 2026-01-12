@@ -36,6 +36,7 @@ import demaRealNoTopNoRegimesImg from './images/dema_regimes_no-top_no-regimes.p
 import demaRealSpeedOnlyImg from './images/dema_regimes_speed-only.png';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { layers } from '@/types/types';
 
 // Типы для размещенных объектов
 type PaletteObject = {
@@ -66,12 +67,12 @@ interface MainCanvasProps {
   onPlacedObjectsChange: (objects: PlacedObject[]) => void;
   selectedObjectId: string | null;
   onSelectObject: (id: string | null) => void;
-  visibleLayers: any;
-  setVisibleLayers: any;
+  visibleLayers: layers;
+  setVisibleLayers: React.Dispatch<React.SetStateAction<layers>>;
   chosenAction: string;
   setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
-  availableLayers: any;
-  setAvailableLayers: any;
+  availableLayers: layers;
+  setAvailableLayers: React.Dispatch<React.SetStateAction<layers>>;
 }
 
 export default function MainCanvas({

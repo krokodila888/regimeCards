@@ -9,6 +9,7 @@ import MainCanvas from './MainCanvas';
 import ScheduleSidebar from './ScheduleSidebar';
 import VisioObjectPalette from './VisioObjectPalette';
 import WorkspaceSidebar from './WorkspaceSidebar';
+import { layers } from '@/types/types';
 
 // Типы для размещенных объектов
 type PaletteObject = {
@@ -62,7 +63,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     },
   ]);
 
-  const [visibleLayers, setVisibleLayers] = useState({
+  const [visibleLayers, setVisibleLayers] = useState<layers>({
     gradientCurve: false,
     regimeMarkers: false,
     profileCurve: false,
@@ -71,7 +72,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     borders: false,
   });
 
-  const [availableLayers, setAvailableLayers] = useState({
+  const [availableLayers, setAvailableLayers] = useState<layers>({
     gradientCurve: false,
     regimeMarkers: false,
     profileCurve: false,

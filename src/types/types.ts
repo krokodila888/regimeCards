@@ -38,3 +38,12 @@ export type ObjectCategory = {
   icon: React.ReactNode;
   objects: PaletteObject[];
 };
+
+export type layers = {
+  gradientCurve: boolean;
+  regimeMarkers: boolean;
+  profileCurve: boolean;
+  optSpeedCurve: boolean;
+  regimes2: boolean;
+  borders: boolean;
+}

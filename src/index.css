@@ -3201,3 +3201,11 @@ html {
     height: 0;
   }
 }
+
+.checkbox[disabled] {
+  cursor: auto;
+}
+
+.checkbox {
+  cursor: pointer;
+}

@@ -25,18 +25,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { layers } from '@/types/types';
 
 interface Stage1CalculationParamsProps {
   workflow: WorkflowState;
   onUpdateWorkflow: (updates: Partial<WorkflowState>) => void;
   onShowLoading: (message: string) => void;
   isOld?: boolean;
-  visibleLayers: any;
-  setVisibleLayers: any;
+  visibleLayers: layers;
+  setVisibleLayers: React.Dispatch<React.SetStateAction<layers>>;
   chosenAction: string;
   setСhosenAction: React.Dispatch<React.SetStateAction<string>>;
-  availableLayers: any;
-  setAvailableLayers: any;
+  availableLayers: layers;
+  setAvailableLayers: React.Dispatch<React.SetStateAction<layers>>;
 }
 
 export default function Stage1CalculationParams({

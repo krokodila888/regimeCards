@@ -2,7 +2,7 @@ import { ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import { ChartData } from '../types/chart-data';
-import type { TrackBounds, PlacedObject } from '../types/types';
+import type { TrackBounds, PlacedObject, layers } from '../types/types';
 
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
@@ -106,15 +106,15 @@ interface CanvasScreenshotProps {
   onPlacedObjectsChange: (objects: PlacedObject[]) => void;
   selectedObjectId: string | null;
   onSelectObject: (id: string | null) => void;
-  visibleLayers: any;
-  setVisibleLayers: any;
+  visibleLayers: layers;
+  setVisibleLayers: React.Dispatch<React.SetStateAction<layers>>;
   chosenAction: string;
   emptyField: string;
   demaStartWithBoardsNoProfile: string;
   demaStartWithBoardsAndProfile: string;
   activeChart: ChartData;
-  availableLayers: any;
-  setAvailableLayers: any;
+  availableLayers: layers;
+  setAvailableLayers: React.Dispatch<React.SetStateAction<layers>>;
 }
 
 export default function CanvasScreenshot({
@@ -958,7 +958,7 @@ export default function CanvasScreenshot({
                 checked={visibleLayers.regimeMarkers}
                 onCheckedChange={(checked: boolean) =>
                   setVisibleLayers({ ...visibleLayers, regimeMarkers: checked })
-                }
+                }                
               />
               <Label htmlFor="regimeMarkers" className="text-sm cursor-pointer">
                 Ленты режимов управления
@@ -978,13 +978,13 @@ export default function CanvasScreenshot({
               </Label>
             </div>
 
-            <div className="flex items-center space-x-3 opacity-50">
+            <div className={`flex items-center space-x-3 ${chosenAction === 'createNew' ? 'opacity-50' : ''}`}>
               <Checkbox
                 id="limitCurve"
                 checked={chosenAction === 'createNew' ? false : visibleLayers.borders}
                 disabled={chosenAction === 'createNew'}
               />
-              <Label htmlFor="limitCurve" className="text-sm cursor-not-allowed">
+              <Label htmlFor="limitCurve" className={`text-sm ${chosenAction === 'createNew' ? 'cursor-not-allowed' : ''}`}>
                 Ограничения скорости
               </Label>
             </div>

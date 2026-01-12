@@ -2795,11 +2795,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         </div>
       </div>
 
-      {/* Visio-like Object Palette - Right Sidebar (shares workspace) */}
-      <VisioObjectPalette
-        collapsed={paletteCollapsed}
-        onToggleCollapse={() => setPaletteCollapsed(!paletteCollapsed)}
-      />
     </>
   );
 }
