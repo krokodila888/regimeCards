@@ -1,7 +1,8 @@
-import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
-import { Button } from './ui/button';
 import { Upload } from 'lucide-react';
+import React from 'react';
+
+import { Button } from './ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 
 interface ImportVisioModalProps {
   isOpen: boolean;
@@ -14,9 +15,7 @@ export default function ImportVisioModal({ isOpen, onClose }: ImportVisioModalPr
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Импорт из Visio</DialogTitle>
-          <DialogDescription>
-            Эта функциональность еще в работе
-          </DialogDescription>
+          <DialogDescription>Эта функциональность еще в работе</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
           <Upload className="w-12 h-12 text-gray-400 mb-4" />

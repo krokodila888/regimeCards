@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import WorkspaceSidebar from "./WorkspaceSidebar";
-import MainCanvas from "./MainCanvas";
-import ImportVisioModal from "./ImportVisioModal";
-import LoadingOverlay from "./LoadingOverlay";
-import ScheduleSidebar from "./ScheduleSidebar";
-import VisioObjectPalette from "./VisioObjectPalette";
-import type { ChartData } from "../types/chart-data";
-import { chartDataByID1, LOCOMOTIVES } from "../types/consts";
-import { setCommentRange, setSyntheticLeadingComments } from "typescript";
+import React, { useState } from 'react';
+
+import type { ChartData } from '../types/chart-data';
+import { chartDataByID1 } from '../types/consts';
+
+import ImportVisioModal from './ImportVisioModal';
+import LoadingOverlay from './LoadingOverlay';
+import MainCanvas from './MainCanvas';
+import ScheduleSidebar from './ScheduleSidebar';
+import VisioObjectPalette from './VisioObjectPalette';
+import WorkspaceSidebar from './WorkspaceSidebar';
 
 // Типы для размещенных объектов
 type PaletteObject = {
@@ -38,27 +39,26 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
   const [activeChart, setActiveChart] = useState<ChartData | null>(null);
   const [isDataValid, setIsDataValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState('');
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
 
-    // Выбраная опция
-    const [chosenAction, setСhosenAction] =
-    useState<string>("start");
-  
+  // Выбраная опция
+  const [chosenAction, setСhosenAction] = useState<string>('start');
+
   // Состояние для размещенных объектов
   const [placedObjects, setPlacedObjects] = useState<PlacedObject[]>([]);
-  
+
   // Состояние для выбранного объекта
   const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
-  
+
   const [charts] = useState<{ id: string; title: string }[]>([
     {
-      id: "1",
-      title: "Режимная карта №1, участок Кропачево-Дема",
+      id: '1',
+      title: 'Режимная карта №1, участок Кропачево-Дема',
     },
     {
-      id: "2",
-      title: "Режимная карта №2, участок Санкт-Петербург - Москва",
+      id: '2',
+      title: 'Режимная карта №2, участок Санкт-Петербург - Москва',
     },
   ]);
 
@@ -105,9 +105,9 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
       ...chartDataByID1,
     };
 
-    const fullChart = chartDataByID[chart.id] || chartDataByID["1"];
+    const fullChart = chartDataByID[chart.id] || chartDataByID['1'];
     setActiveChart(fullChart);
-    
+
     // Очищаем размещенные объекты при переключении карты
     // В будущем здесь будет загрузка сохраненных объектов из fullChart
     setPlacedObjects([]);
@@ -116,7 +116,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
 
   const handleUpdateChartData = (updates: Partial<ChartData>) => {
     if (activeChart) {
-      console.log(1)
+      console.log(1);
       setActiveChart({ ...activeChart, ...updates });
     }
   };
@@ -129,7 +129,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     }, 1800);
   };
 
-   // Обработчики для размещенных объектов
+  // Обработчики для размещенных объектов
   const handlePlacedObjectsChange = (objects: PlacedObject[]) => {
     setPlacedObjects(objects);
   };
@@ -139,14 +139,14 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
   };
 
   const handleUpdateObject = (id: string, updates: Partial<PlacedObject>) => {
-    setPlacedObjects(prev => 
-      prev.map(obj => {
+    setPlacedObjects((prev) =>
+      prev.map((obj) => {
         if (obj.id === id) {
           const updatedObj = { ...obj, ...updates };
-          
+
           // Если изменилась координата, нужно пересчитать позицию X
           // Это будет сделано в CanvasScreenshot через useEffect
-          
+
           return updatedObj;
         }
         return obj;
@@ -155,10 +155,10 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
   };
 
   const handleDeleteObject = (id: string) => {
-    setPlacedObjects(prev => prev.filter(obj => obj.id !== id));
+    setPlacedObjects((prev) => prev.filter((obj) => obj.id !== id));
     if (selectedObjectId === id) {
       // Выбираем последний добавленный объект или null
-      const remaining = placedObjects.filter(obj => obj.id !== id);
+      const remaining = placedObjects.filter((obj) => obj.id !== id);
       setSelectedObjectId(remaining.length > 0 ? remaining[remaining.length - 1].id : null);
     }
   };
@@ -182,9 +182,9 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
           onValidationChange={setIsDataValid}
           onLogout={onLogout}
           onShowLoading={handleShowLoading}
-          visibleLayers={visibleLayers} 
+          visibleLayers={visibleLayers}
           setVisibleLayers={setVisibleLayers}
-          chosenAction={chosenAction} 
+          chosenAction={chosenAction}
           setСhosenAction={setСhosenAction}
           availableLayers={availableLayers}
           setAvailableLayers={setAvailableLayers}
@@ -203,9 +203,9 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
           onPlacedObjectsChange={handlePlacedObjectsChange}
           selectedObjectId={selectedObjectId}
           onSelectObject={handleSelectObject}
-          visibleLayers={visibleLayers} 
+          visibleLayers={visibleLayers}
           setVisibleLayers={setVisibleLayers}
-          chosenAction={chosenAction} 
+          chosenAction={chosenAction}
           setСhosenAction={setСhosenAction}
           availableLayers={availableLayers}
           setAvailableLayers={setAvailableLayers}
@@ -225,10 +225,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
         )}
 
         {/* Import Visio Modal */}
-        <ImportVisioModal
-          isOpen={showImportModal}
-          onClose={() => setShowImportModal(false)}
-        />
+        <ImportVisioModal isOpen={showImportModal} onClose={() => setShowImportModal(false)} />
 
         {/* Schedule Sidebar */}
         <ScheduleSidebar chartData={activeChart} />

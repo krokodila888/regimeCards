@@ -1,15 +1,9 @@
+import { Plus, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from './ui/table';
+
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Plus, Trash2 } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 
 interface Column {
   key: string;
@@ -25,10 +19,16 @@ interface DataTableProps {
   lockedCells?: (rowIndex: number, columnKey: string) => boolean;
 }
 
-export default function DataTable({ columns, data, onDataChange, errorIds, lockedCells }: DataTableProps) {
+export default function DataTable({
+  columns,
+  data,
+  onDataChange,
+  errorIds,
+  lockedCells,
+}: DataTableProps) {
   const handleCellChange = (rowIndex: number, columnKey: string, value: string) => {
     const newData = [...data];
-    const column = columns.find(c => c.key === columnKey);
+    const column = columns.find((c) => c.key === columnKey);
     newData[rowIndex] = {
       ...newData[rowIndex],
       [columnKey]: column?.type === 'number' ? parseFloat(value) || 0 : value,
@@ -38,7 +38,7 @@ export default function DataTable({ columns, data, onDataChange, errorIds, locke
 
   const handleAddRow = () => {
     const newRow: any = { id: Date.now().toString() };
-    columns.forEach(col => {
+    columns.forEach((col) => {
       newRow[col.key] = col.type === 'number' ? 0 : '';
     });
     onDataChange([...data, newRow]);
@@ -55,7 +55,7 @@ export default function DataTable({ columns, data, onDataChange, errorIds, locke
         <Table>
           <TableHeader>
             <TableRow className="border-gray-600 hover:bg-gray-600">
-              {columns.map(col => (
+              {columns.map((col) => (
                 <TableHead key={col.key} className="text-gray-300">
                   {col.label}
                 </TableHead>
@@ -75,7 +75,7 @@ export default function DataTable({ columns, data, onDataChange, errorIds, locke
                 const hasError = errorIds?.has(row.id);
                 return (
                   <TableRow key={row.id} className="border-gray-600 hover:bg-gray-600">
-                    {columns.map(col => {
+                    {columns.map((col) => {
                       const isLocked = lockedCells ? lockedCells(rowIndex, col.key) : false;
                       return (
                         <TableCell key={col.key} className="p-1">
@@ -85,8 +85,8 @@ export default function DataTable({ columns, data, onDataChange, errorIds, locke
                             onChange={(e) => handleCellChange(rowIndex, col.key, e.target.value)}
                             disabled={isLocked}
                             className={`h-8 px-2 ${
-                              isLocked 
-                                ? 'bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600' 
+                              isLocked
+                                ? 'bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600'
                                 : 'bg-gray-800 text-white border-gray-600'
                             } ${hasError ? 'border border-red-500' : ''}`}
                           />

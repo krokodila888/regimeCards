@@ -1,5686 +1,2845 @@
 export const trainForceData = [
-    { distance: 0, force: 103.9700, energy: 0.0000, velocity: 0.8300, time: 0.0000
- },
-  { distance: 25, force: 103.9700, energy: 7.0830, velocity: 2.5754, time: 13.1923
- },
-  { distance: 50, force: 103.6246, energy: 14.1541, velocity: 3.6162, time: 21.3077
- },
-  { distance: 75, force: 102.7654, energy: 21.1843, velocity: 4.3315, time: 27.0769
- },
-  { distance: 100, force: 101.9124, energy: 28.1561, velocity: 5.0469, time: 32.8462
- },
-  { distance: 125, force: 101.2574, energy: 35.0766, velocity: 5.5998, time: 37.6066
- },
-  { distance: 150, force: 100.6538, energy: 41.9542, velocity: 6.1121, time: 42.1148
- },
-  { distance: 175, force: 100.0960, energy: 48.7923, velocity: 6.5880, time: 46.2203
- },
-  { distance: 200, force: 99.6164, energy: 55.5950, velocity: 6.9990, time: 49.6102
- },
-  { distance: 225, force: 99.1388, energy: 62.3651, velocity: 7.4100, time: 53.0000
- },
-  { distance: 250, force: 98.7277, energy: 69.1049, velocity: 7.7653, time: 56.0702
- },
-  { distance: 275, force: 98.3181, energy: 75.8168, velocity: 8.1205, time: 59.1404
- },
-  { distance: 300, force: 97.9406, energy: 82.5018, velocity: 8.4491, time: 62.2909
- },
-  { distance: 325, force: 97.5763, energy: 89.1616, velocity: 8.7673, time: 65.4727
- },
-  { distance: 350, force: 97.2372, energy: 95.7975, velocity: 9.0644, time: 68.4444
- },
-  { distance: 375, force: 96.9211, energy: 102.4110, velocity: 9.3422, time: 71.2222
- },
-  { distance: 400, force: 96.6134, energy: 109.0032, velocity: 9.6135, time: 73.8654
- },
-  { distance: 425, force: 96.3198, energy: 115.5750, velocity: 9.8731, time: 76.2692
- },
-  { distance: 450, force: 96.0330, energy: 122.1270, velocity: 10.1273, time: 78.6863
- },
-  { distance: 475, force: 95.7628, energy: 128.6601, velocity: 10.3675, time: 81.1373
- },
-  { distance: 500, force: 95.4974, energy: 135.1749, velocity: 10.6039, time: 83.6122
- },
-  { distance: 525, force: 95.2461, energy: 141.6721, velocity: 10.8284, time: 86.1633
- },
-  { distance: 550, force: 95.0005, energy: 148.1524, velocity: 11.0483, time: 88.5833
- },
-  { distance: 575, force: 94.7684, energy: 154.6164, velocity: 11.2567, time: 90.6667
- },
-  { distance: 600, force: 94.5423, energy: 161.0648, velocity: 11.4600, time: 93.0000
- },
-  { distance: 625, force: 94.3221, energy: 167.4980, velocity: 11.6585, time: 94.4706
- },
-  { distance: 650, force: 94.1046, energy: 173.9163, velocity: 11.8551, time: 96.4545
- },
-  { distance: 675, force: 93.8887, energy: 180.3198, velocity: 12.0505, time: 98.7273
- },
-  { distance: 700, force: 93.6766, energy: 186.7087, velocity: 12.2430, time: 100.9649
- },
-  { distance: 725, force: 93.4692, energy: 193.0834, velocity: 12.4316, time: 103.1579
- },
-  { distance: 750, force: 93.2636, energy: 199.4439, velocity: 12.6189, time: 105.2963
- },
-  { distance: 775, force: 93.0658, energy: 205.7908, velocity: 12.7994, time: 107.1481
- },
-  { distance: 800, force: 92.8684, energy: 212.1242, velocity: 12.9800, time: 109.0000
- },
-  { distance: 825, force: 92.6664, energy: 218.4440, velocity: 13.1652, time: 110.8519
- },
-  { distance: 850, force: 92.4685, energy: 224.7501, velocity: 13.3469, time: 112.6154
- },
-  { distance: 875, force: 92.2700, energy: 231.0428, velocity: 13.5296, time: 114.1538
- },
-  { distance: 900, force: 92.0672, energy: 237.3218, velocity: 13.7167, time: 116.3333
- },
-  { distance: 925, force: 14.5003, energy: 240.9517, velocity: 13.7700, time: 118.2743
- },
-  { distance: 950, force: 13.2499, energy: 241.8970, velocity: 13.7700, time: 120.0442
- },
-  { distance: 975, force: 11.9995, energy: 242.7570, velocity: 13.7700, time: 121.8142
- },
-  { distance: 1000, force: 10.7491, energy: 243.5319, velocity: 13.7700, time: 123.5841
- },
-  { distance: 1025, force: 9.4222, energy: 244.2190, velocity: 13.7700, time: 125.4412
- },
-  { distance: 1050, force: 7.7895, energy: 244.8053, velocity: 13.7700, time: 127.6471
- },
-  { distance: 1075, force: 6.1278, energy: 245.2793, velocity: 13.7700, time: 129.5000
- },
-  { distance: 1100, force: 4.4606, energy: 245.6400, velocity: 13.7700, time: 131.2857
- },
-  { distance: 1125, force: 2.7934, energy: 245.8871, velocity: 13.7700, time: 133.0714
- },
-  { distance: 1150, force: 1.1262, energy: 246.0206, velocity: 13.7700, time: 134.8571
- },
-  { distance: 1175, force: 0.0000, energy: 246.0589, velocity: 13.7700, time: 136.2000
- },
-  { distance: 1200, force: 0.0000, energy: 246.0589, velocity: 13.7700, time: 138.1000
- },
-  { distance: 1225, force: 0.0000, energy: 246.0589, velocity: 13.7780, time: 139.8000
- },
-  { distance: 1250, force: 0.0000, energy: 246.0589, velocity: 13.8005, time: 142.0500
- },
-  { distance: 1275, force: 0.0000, energy: 246.0589, velocity: 13.8160, time: 143.6000
- },
-  { distance: 1300, force: 0.0000, energy: 246.0589, velocity: 13.8400, time: 145.0000
- },
-  { distance: 1325, force: 0.0000, energy: 246.0589, velocity: 13.8771, time: 147.3571
- },
-  { distance: 1350, force: 0.0000, energy: 246.0589, velocity: 13.9140, time: 148.8000
- },
-  { distance: 1375, force: 0.0000, energy: 246.0589, velocity: 13.9520, time: 151.0500
- },
-  { distance: 1400, force: 0.0000, energy: 246.0589, velocity: 14.0020, time: 152.6000
- },
-  { distance: 1425, force: 0.0000, energy: 246.0589, velocity: 14.0520, time: 154.5500
- },
-  { distance: 1450, force: 0.0000, energy: 246.0589, velocity: 14.1100, time: 155.8000
- },
-  { distance: 1475, force: 0.0000, energy: 246.0589, velocity: 14.1725, time: 158.0500
- },
-  { distance: 1500, force: 0.0000, energy: 246.0589, velocity: 14.2350, time: 159.6000
- },
-  { distance: 1525, force: 0.0000, energy: 246.0589, velocity: 14.3030, time: 161.5500
- },
-  { distance: 1550, force: 0.0000, energy: 246.0589, velocity: 14.3780, time: 162.8000
- },
-  { distance: 1575, force: 0.0000, energy: 246.0589, velocity: 14.4630, time: 165.0500
- },
-  { distance: 1600, force: 0.0000, energy: 246.0589, velocity: 14.5410, time: 166.6000
- },
-  { distance: 1625, force: 0.0000, energy: 246.0589, velocity: 14.6340, time: 168.5500
- },
-  { distance: 1650, force: 0.0000, energy: 246.0589, velocity: 14.7260, time: 169.8000
- },
-  { distance: 1675, force: 0.0000, energy: 246.0589, velocity: 14.8240, time: 172.0500
- },
-  { distance: 1700, force: 0.0000, energy: 246.0589, velocity: 14.9240, time: 173.3000
- },
-  { distance: 1725, force: 0.0000, energy: 246.0589, velocity: 15.0295, time: 175.1000
- },
-  { distance: 1750, force: 0.0000, energy: 246.0589, velocity: 15.1420, time: 176.8000
- },
-  { distance: 1775, force: 0.0000, energy: 246.0589, velocity: 15.2546, time: 178.0833
- },
-  { distance: 1800, force: 0.0000, energy: 246.0589, velocity: 15.3696, time: 180.1600
- },
-  { distance: 1825, force: 0.0000, energy: 246.0589, velocity: 15.4896, time: 182.0800
- },
-  { distance: 1850, force: 0.0000, energy: 246.0589, velocity: 15.6092, time: 183.1538
- },
-  { distance: 1875, force: 0.0000, energy: 246.0589, velocity: 15.7246, time: 185.0769
- },
-  { distance: 1900, force: 0.0000, energy: 246.0589, velocity: 15.8400, time: 187.0000
- },
-  { distance: 1925, force: 0.0000, energy: 246.0589, velocity: 15.9604, time: 187.9259
- },
-  { distance: 1950, force: 0.0000, energy: 246.0589, velocity: 16.0807, time: 189.7037
- },
-  { distance: 1975, force: 0.0000, energy: 246.0589, velocity: 16.2050, time: 191.0500
- },
-  { distance: 2000, force: 0.0000, energy: 246.0589, velocity: 16.3300, time: 192.4615
- },
-  { distance: 2025, force: 0.0000, energy: 246.0589, velocity: 16.4550, time: 194.3571
- },
-  { distance: 2050, force: 0.0000, energy: 246.0589, velocity: 16.5806, time: 196.1176
- },
-  { distance: 2075, force: -65.3282, energy: 246.0589, velocity: 16.6600, time: 197.5426
- },
-  { distance: 2100, force: -66.3542, energy: 246.0589, velocity: 16.6600, time: 198.8992
- },
-  { distance: 2125, force: -67.3801, energy: 246.0589, velocity: 16.6600, time: 200.2558
- },
-  { distance: 2150, force: -68.4061, energy: 246.0589, velocity: 16.6600, time: 201.6124
- },
-  { distance: 2175, force: -69.4321, energy: 246.0589, velocity: 16.6600, time: 202.9690
- },
-  { distance: 2200, force: -70.3580, energy: 246.0589, velocity: 16.6600, time: 204.3643
- },
-  { distance: 2225, force: -70.9672, energy: 246.0589, velocity: 16.6600, time: 205.8821
- },
-  { distance: 2250, force: -71.5763, energy: 246.0589, velocity: 16.6600, time: 207.4000
- },
-  { distance: 2275, force: -72.1855, energy: 246.0589, velocity: 16.6600, time: 208.9179
- },
-  { distance: 2300, force: -72.7947, energy: 246.0589, velocity: 16.6600, time: 210.4357
- },
-  { distance: 2325, force: -73.4038, energy: 246.0589, velocity: 16.6600, time: 211.9536
- },
-  { distance: 2350, force: -74.0130, energy: 246.0589, velocity: 16.6600, time: 213.4714
- },
-  { distance: 2375, force: -74.6222, energy: 246.0589, velocity: 16.6600, time: 214.9893
- },
-  { distance: 2400, force: -75.2313, energy: 246.0589, velocity: 16.6600, time: 216.5071
- },
-  { distance: 2425, force: -75.8405, energy: 246.0589, velocity: 16.6600, time: 218.0250
- },
-  { distance: 2450, force: -76.4497, energy: 246.0589, velocity: 16.6600, time: 219.5429
- },
-  { distance: 2475, force: -77.0640, energy: 246.0589, velocity: 16.6600, time: 221.0606
- },
-  { distance: 2500, force: -77.8014, energy: 246.0589, velocity: 16.6600, time: 222.5758
- },
-  { distance: 2525, force: -78.5388, energy: 246.0589, velocity: 16.6600, time: 224.0909
- },
-  { distance: 2550, force: -78.7644, energy: 246.0589, velocity: 16.6600, time: 225.5882
- },
-  { distance: 2575, force: -78.2178, energy: 246.0589, velocity: 16.6600, time: 227.0600
- },
-  { distance: 2600, force: -77.5606, energy: 246.0589, velocity: 16.6600, time: 228.5600
- },
-  { distance: 2625, force: -76.9033, energy: 246.0589, velocity: 16.6600, time: 230.0600
- },
-  { distance: 2650, force: -76.2460, energy: 246.0589, velocity: 16.6600, time: 231.5600
- },
-  { distance: 2675, force: -75.5888, energy: 246.0589, velocity: 16.6600, time: 233.0600
- },
-  { distance: 2700, force: -74.9315, energy: 246.0589, velocity: 16.6600, time: 234.5600
- },
-  { distance: 2725, force: -74.2743, energy: 246.0589, velocity: 16.6600, time: 236.0600
- },
-  { distance: 2750, force: -73.6170, energy: 246.0589, velocity: 16.6600, time: 237.5600
- },
-  { distance: 2775, force: -72.9597, energy: 246.0589, velocity: 16.6600, time: 239.0600
- },
-  { distance: 2800, force: -72.3025, energy: 246.0589, velocity: 16.6600, time: 240.5600
- },
-  { distance: 2825, force: -71.6452, energy: 246.0589, velocity: 16.6600, time: 242.0600
- },
-  { distance: 2850, force: -70.9880, energy: 246.0589, velocity: 16.6600, time: 243.5600
- },
-  { distance: 2875, force: -70.3307, energy: 246.0589, velocity: 16.6600, time: 245.0600
- },
-  { distance: 2900, force: -69.6735, energy: 246.0589, velocity: 16.6600, time: 246.5600
- },
-  { distance: 2925, force: -69.0162, energy: 246.0589, velocity: 16.6600, time: 248.0600
- },
-  { distance: 2950, force: -68.3589, energy: 246.0589, velocity: 16.6600, time: 249.5600
- },
-  { distance: 2975, force: 0.0000, energy: 246.0589, velocity: 16.6652, time: 251.0652
- },
-  { distance: 3000, force: 0.0000, energy: 246.0589, velocity: 16.7957, time: 252.6957
- },
-  { distance: 3025, force: 0.0000, energy: 246.0589, velocity: 16.9256, time: 254.3333
- },
-  { distance: 3050, force: 0.0000, energy: 246.0589, velocity: 17.0533, time: 256.0000
- },
-  { distance: 3075, force: 0.0000, energy: 246.0589, velocity: 17.1800, time: 257.4545
- },
-  { distance: 3100, force: 0.0000, energy: 246.0589, velocity: 17.3050, time: 258.5909
- },
-  { distance: 3125, force: 0.0000, energy: 246.0589, velocity: 17.4204, time: 260.2800
- },
-  { distance: 3150, force: 0.0000, energy: 246.0589, velocity: 17.5400, time: 261.8000
- },
-  { distance: 3175, force: 0.0000, energy: 246.0589, velocity: 17.6545, time: 263.0500
- },
-  { distance: 3200, force: 0.0000, energy: 246.0589, velocity: 17.7670, time: 264.3000
- },
-  { distance: 3225, force: 0.0000, energy: 246.0589, velocity: 17.8740, time: 265.5500
- },
-  { distance: 3250, force: 0.0000, energy: 246.0589, velocity: 17.9740, time: 266.8000
- },
-  { distance: 3275, force: 0.0000, energy: 246.0589, velocity: 18.0740, time: 268.1000
- },
-  { distance: 3300, force: 0.0000, energy: 246.0589, velocity: 18.1700, time: 270.0000
- },
-  { distance: 3325, force: 0.0000, energy: 246.0589, velocity: 18.2656, time: 271.4706
- },
-  { distance: 3350, force: 0.0000, energy: 246.0589, velocity: 18.3610, time: 272.7619
- },
-  { distance: 3375, force: 0.0000, energy: 246.0589, velocity: 18.4562, time: 273.9524
- },
-  { distance: 3400, force: 0.0000, energy: 246.0589, velocity: 18.5478, time: 275.1707
- },
-  { distance: 3425, force: 0.0000, energy: 246.0589, velocity: 18.6373, time: 276.3902
- },
-  { distance: 3450, force: 0.0000, energy: 246.0589, velocity: 18.7227, time: 277.6098
- },
-  { distance: 3475, force: 0.0000, energy: 246.0589, velocity: 18.8095, time: 279.2750
- },
-  { distance: 3500, force: 0.0000, energy: 246.0589, velocity: 18.8967, time: 281.1026
- },
-  { distance: 3525, force: 0.0000, energy: 246.0589, velocity: 18.9800, time: 282.3846
- },
-  { distance: 3550, force: 0.0000, energy: 246.0589, velocity: 19.0633, time: 283.0000
- },
-  { distance: 3575, force: -103.5276, energy: 246.0589, velocity: 18.9787, time: 284.4348
- },
-  { distance: 3600, force: -103.6413, energy: 246.0589, velocity: 18.8855, time: 286.0500
- },
-  { distance: 3625, force: -103.7754, energy: 246.0589, velocity: 18.7757, time: 287.2553
- },
-  { distance: 3650, force: -103.8989, energy: 246.0589, velocity: 18.6747, time: 288.3191
- },
-  { distance: 3675, force: -104.0239, energy: 246.0589, velocity: 18.5725, time: 289.5625
- },
-  { distance: 3700, force: -104.1514, energy: 246.0589, velocity: 18.4683, time: 291.1250
- },
-  { distance: 3725, force: -104.2791, energy: 246.0589, velocity: 18.3642, time: 292.4583
- },
-  { distance: 3750, force: -104.4072, energy: 246.0589, velocity: 18.2597, time: 293.7742
- },
-  { distance: 3775, force: -104.5358, energy: 246.0589, velocity: 18.1548, time: 295.3871
- },
-  { distance: 3800, force: -47.1048, energy: 246.0589, velocity: 18.0500, time: 297.0000
- },
-  { distance: 3825, force: -47.9384, energy: 246.0589, velocity: 18.0500, time: 298.3724
- },
-  { distance: 3850, force: -48.7720, energy: 246.0589, velocity: 18.0500, time: 299.7448
- },
-  { distance: 3875, force: -49.6056, energy: 246.0589, velocity: 18.0500, time: 301.1172
- },
-  { distance: 3900, force: -50.4391, energy: 246.0589, velocity: 18.0500, time: 302.4896
- },
-  { distance: 3925, force: -51.2727, energy: 246.0589, velocity: 18.0500, time: 303.8620
- },
-  { distance: 3950, force: -52.1063, energy: 246.0589, velocity: 18.0500, time: 305.2344
- },
-  { distance: 3975, force: -52.9399, energy: 246.0589, velocity: 18.0500, time: 306.6068
- },
-  { distance: 4000, force: -53.7735, energy: 246.0589, velocity: 18.0500, time: 307.9792
- },
-  { distance: 4025, force: -54.6071, energy: 246.0589, velocity: 18.0500, time: 309.3516
- },
-  { distance: 4050, force: -55.4407, energy: 246.0589, velocity: 18.0500, time: 310.7240
- },
-  { distance: 4075, force: -56.2743, energy: 246.0589, velocity: 18.0500, time: 312.0964
- },
-  { distance: 4100, force: -57.1079, energy: 246.0589, velocity: 18.0500, time: 313.4688
- },
-  { distance: 4125, force: -57.9415, energy: 246.0589, velocity: 18.0500, time: 314.8412
- },
-  { distance: 4150, force: -58.7751, energy: 246.0589, velocity: 18.0500, time: 316.2136
- },
-  { distance: 4175, force: -59.6087, energy: 246.0589, velocity: 18.0500, time: 317.5861
- },
-  { distance: 4200, force: -60.4423, energy: 246.0589, velocity: 18.0500, time: 318.9585
- },
-  { distance: 4225, force: -61.2759, energy: 246.0589, velocity: 18.0500, time: 320.3309
- },
-  { distance: 4250, force: -62.1095, energy: 246.0589, velocity: 18.0500, time: 321.7033
- },
-  { distance: 4275, force: -62.9431, energy: 246.0589, velocity: 18.0500, time: 323.0757
- },
-  { distance: 4300, force: -63.7767, energy: 246.0589, velocity: 18.0500, time: 324.4481
- },
-  { distance: 4325, force: -64.6103, energy: 246.0589, velocity: 18.0500, time: 325.8205
- },
-  { distance: 4350, force: -65.4439, energy: 246.0589, velocity: 18.0500, time: 327.1929
- },
-  { distance: 4375, force: -66.2775, energy: 246.0589, velocity: 18.0500, time: 328.5653
- },
-  { distance: 4400, force: -67.1111, energy: 246.0589, velocity: 18.0500, time: 329.9377
- },
-  { distance: 4425, force: -67.9447, energy: 246.0589, velocity: 18.0500, time: 331.3101
- },
-  { distance: 4450, force: -68.7783, energy: 246.0589, velocity: 18.0500, time: 332.6825
- },
-  { distance: 4475, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 334.0551
- },
-  { distance: 4500, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 335.4325
- },
-  { distance: 4525, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 336.8099
- },
-  { distance: 4550, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 338.1873
- },
-  { distance: 4575, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 339.5647
- },
-  { distance: 4600, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 340.9421
- },
-  { distance: 4625, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 342.3196
- },
-  { distance: 4650, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 343.6970
- },
-  { distance: 4675, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 345.0744
- },
-  { distance: 4700, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 346.4518
- },
-  { distance: 4725, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 347.8292
- },
-  { distance: 4750, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 349.2066
- },
-  { distance: 4775, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 350.5840
- },
-  { distance: 4800, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 351.9614
- },
-  { distance: 4825, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 353.3388
- },
-  { distance: 4850, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 354.7163
- },
-  { distance: 4875, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 356.0937
- },
-  { distance: 4900, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 357.4711
- },
-  { distance: 4925, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 358.8485
- },
-  { distance: 4950, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 360.2259
- },
-  { distance: 4975, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 361.6033
- },
-  { distance: 5000, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 362.9807
- },
-  { distance: 5025, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 364.3581
- },
-  { distance: 5050, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 365.7355
- },
-  { distance: 5075, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 367.1129
- },
-  { distance: 5100, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 368.4904
- },
-  { distance: 5125, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 369.8678
- },
-  { distance: 5150, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 371.2452
- },
-  { distance: 5175, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 372.6226
- },
-  { distance: 5200, force: -69.5785, energy: 246.0589, velocity: 18.0500, time: 374.0000
- },
-  { distance: 5225, force: -69.4462, energy: 246.0589, velocity: 18.0500, time: 375.4706
- },
-  { distance: 5250, force: -69.3062, energy: 246.0589, velocity: 18.0500, time: 376.8948
- },
-  { distance: 5275, force: -69.1619, energy: 246.0589, velocity: 18.0500, time: 378.2929
- },
-  { distance: 5300, force: -69.0176, energy: 246.0589, velocity: 18.0500, time: 379.6911
- },
-  { distance: 5325, force: -68.8734, energy: 246.0589, velocity: 18.0500, time: 381.0892
- },
-  { distance: 5350, force: -68.7291, energy: 246.0589, velocity: 18.0500, time: 382.4874
- },
-  { distance: 5375, force: -68.5848, energy: 246.0589, velocity: 18.0500, time: 383.8855
- },
-  { distance: 5400, force: -68.4405, energy: 246.0589, velocity: 18.0500, time: 385.2836
- },
-  { distance: 5425, force: -68.2963, energy: 246.0589, velocity: 18.0500, time: 386.6818
- },
-  { distance: 5450, force: -68.1520, energy: 246.0589, velocity: 18.0500, time: 388.0799
- },
-  { distance: 5475, force: -68.0077, energy: 246.0589, velocity: 18.0500, time: 389.4780
- },
-  { distance: 5500, force: -67.8634, energy: 246.0589, velocity: 18.0500, time: 390.8762
- },
-  { distance: 5525, force: -67.7191, energy: 246.0589, velocity: 18.0500, time: 392.2743
- },
-  { distance: 5550, force: -67.5749, energy: 246.0589, velocity: 18.0500, time: 393.6724
- },
-  { distance: 5575, force: -67.4306, energy: 246.0589, velocity: 18.0500, time: 395.0706
- },
-  { distance: 5600, force: -67.2863, energy: 246.0589, velocity: 18.0500, time: 396.4687
- },
-  { distance: 5625, force: -67.1420, energy: 246.0589, velocity: 18.0500, time: 397.8668
- },
-  { distance: 5650, force: -66.9978, energy: 246.0589, velocity: 18.0500, time: 399.2650
- },
-  { distance: 5675, force: -66.8535, energy: 246.0589, velocity: 18.0500, time: 400.6631
- },
-  { distance: 5700, force: -66.7092, energy: 246.0589, velocity: 18.0500, time: 402.0613
- },
-  { distance: 5725, force: -66.5649, energy: 246.0589, velocity: 18.0500, time: 403.4594
- },
-  { distance: 5750, force: -66.4207, energy: 246.0589, velocity: 18.0500, time: 404.8575
- },
-  { distance: 5775, force: -66.2764, energy: 246.0589, velocity: 18.0500, time: 406.2557
- },
-  { distance: 5800, force: -66.1321, energy: 246.0589, velocity: 18.0500, time: 407.6538
- },
-  { distance: 5825, force: -65.9878, energy: 246.0589, velocity: 18.0500, time: 409.0519
- },
-  { distance: 5850, force: -65.8436, energy: 246.0589, velocity: 18.0500, time: 410.4501
- },
-  { distance: 5875, force: -65.6993, energy: 246.0589, velocity: 18.0500, time: 411.8482
- },
-  { distance: 5900, force: -65.5550, energy: 246.0589, velocity: 18.0500, time: 413.2463
- },
-  { distance: 5925, force: -65.4107, energy: 246.0589, velocity: 18.0500, time: 414.6445
- },
-  { distance: 5950, force: -65.2664, energy: 246.0589, velocity: 18.0500, time: 416.0426
- },
-  { distance: 5975, force: -65.1222, energy: 246.0589, velocity: 18.0500, time: 417.4407
- },
-  { distance: 6000, force: 0.0000, energy: 246.0589, velocity: 18.1179, time: 418.8209
- },
-  { distance: 6025, force: 0.0000, energy: 246.0589, velocity: 18.2311, time: 420.1891
- },
-  { distance: 6050, force: 0.0000, energy: 246.0589, velocity: 18.3443, time: 421.5572
- },
-  { distance: 6075, force: 0.0000, energy: 246.0589, velocity: 18.4575, time: 422.9254
- },
-  { distance: 6100, force: 0.0000, energy: 246.0589, velocity: 18.5706, time: 424.2935
- },
-  { distance: 6125, force: 0.0000, energy: 246.0589, velocity: 18.6838, time: 425.6617
- },
-  { distance: 6150, force: 0.0000, energy: 246.0589, velocity: 18.7970, time: 427.0299
- },
-  { distance: 6175, force: 0.0000, energy: 246.0589, velocity: 18.9102, time: 428.3980
- },
-  { distance: 6200, force: 0.0000, energy: 246.0589, velocity: 19.0196, time: 429.6702
- },
-  { distance: 6225, force: 0.0000, energy: 246.0589, velocity: 19.1260, time: 430.8670
- },
-  { distance: 6250, force: 0.0000, energy: 246.0589, velocity: 19.2323, time: 432.0638
- },
-  { distance: 6275, force: 0.0000, energy: 246.0589, velocity: 19.3387, time: 433.2606
- },
-  { distance: 6300, force: 0.0000, energy: 246.0589, velocity: 19.4451, time: 434.4574
- },
-  { distance: 6325, force: 0.0000, energy: 246.0589, velocity: 19.5515, time: 435.6543
- },
-  { distance: 6350, force: 0.0000, energy: 246.0589, velocity: 19.6579, time: 436.8511
- },
-  { distance: 6375, force: 0.0000, energy: 246.0589, velocity: 19.7639, time: 438.0491
- },
-  { distance: 6400, force: 0.0000, energy: 246.0589, velocity: 19.8621, time: 439.2761
- },
-  { distance: 6425, force: 0.0000, energy: 246.0589, velocity: 19.9602, time: 440.5031
- },
-  { distance: 6450, force: 0.0000, energy: 246.0589, velocity: 20.0584, time: 441.7301
- },
-  { distance: 6475, force: 0.0000, energy: 246.0589, velocity: 20.1566, time: 442.9571
- },
-  { distance: 6500, force: 0.0000, energy: 246.0589, velocity: 20.2547, time: 444.1840
- },
-  { distance: 6525, force: 0.0000, energy: 246.0589, velocity: 20.3529, time: 445.4110
- },
-  { distance: 6550, force: 0.0000, energy: 246.0589, velocity: 20.4510, time: 446.6380
- },
-  { distance: 6575, force: 0.0000, energy: 246.0589, velocity: 20.5492, time: 447.8650
- },
-  { distance: 6600, force: 0.0000, energy: 246.0589, velocity: 20.6474, time: 449.0920
- },
-  { distance: 6625, force: 0.0000, energy: 246.0589, velocity: 20.7455, time: 450.3190
- },
-  { distance: 6650, force: 0.0000, energy: 246.0589, velocity: 20.8437, time: 451.5460
- },
-  { distance: 6675, force: 0.0000, energy: 246.0589, velocity: 20.9418, time: 452.7730
- },
-  { distance: 6700, force: 0.0000, energy: 246.0589, velocity: 21.0400, time: 454.0000
- },
-  { distance: 6725, force: 0.0000, energy: 246.0589, velocity: 21.1356, time: 455.4706
- },
-  { distance: 6750, force: 0.0000, energy: 246.0589, velocity: 21.2298, time: 456.7402
- },
-  { distance: 6775, force: 0.0000, energy: 246.0589, velocity: 21.3232, time: 457.8968
- },
-  { distance: 6800, force: 0.0000, energy: 246.0589, velocity: 21.4166, time: 459.0534
- },
-  { distance: 6825, force: 0.0000, energy: 246.0589, velocity: 21.5100, time: 460.2100
- },
-  { distance: 6850, force: 0.0000, energy: 246.0589, velocity: 21.6035, time: 461.3665
- },
-  { distance: 6875, force: 0.0000, energy: 246.0589, velocity: 21.6969, time: 462.5231
- },
-  { distance: 6900, force: 0.0000, energy: 246.0589, velocity: 21.7903, time: 463.6797
- },
-  { distance: 6925, force: 0.0000, energy: 246.0589, velocity: 21.8837, time: 464.8363
- },
-  { distance: 6950, force: 0.0000, energy: 246.0589, velocity: 21.9771, time: 465.9929
- },
-  { distance: 6975, force: 0.0000, energy: 246.0589, velocity: 22.0705, time: 467.1495
- },
-  { distance: 7000, force: 0.0000, energy: 246.0589, velocity: 22.1640, time: 468.3060
- },
-  { distance: 7025, force: -61.9009, energy: 246.0589, velocity: 22.2200, time: 469.4424
- },
-  { distance: 7050, force: -61.9971, energy: 246.0589, velocity: 22.2200, time: 470.5483
- },
-  { distance: 7075, force: -62.0933, energy: 246.0589, velocity: 22.2200, time: 471.6542
- },
-  { distance: 7100, force: -62.1895, energy: 246.0589, velocity: 22.2200, time: 472.7602
- },
-  { distance: 7125, force: -62.2857, energy: 246.0589, velocity: 22.2200, time: 473.8661
- },
-  { distance: 7150, force: -62.3818, energy: 246.0589, velocity: 22.2200, time: 474.9721
- },
-  { distance: 7175, force: -62.4780, energy: 246.0589, velocity: 22.2200, time: 476.0780
- },
-  { distance: 7200, force: -62.5742, energy: 246.0589, velocity: 22.2200, time: 477.1839
- },
-  { distance: 7225, force: -62.6704, energy: 246.0589, velocity: 22.2200, time: 478.2899
- },
-  { distance: 7250, force: -62.7666, energy: 246.0589, velocity: 22.2200, time: 479.3958
- },
-  { distance: 7275, force: -62.8628, energy: 246.0589, velocity: 22.2200, time: 480.5017
- },
-  { distance: 7300, force: -62.9589, energy: 246.0589, velocity: 22.2200, time: 481.6077
- },
-  { distance: 7325, force: -63.0551, energy: 246.0589, velocity: 22.2200, time: 482.7136
- },
-  { distance: 7350, force: -63.1513, energy: 246.0589, velocity: 22.2200, time: 483.8196
- },
-  { distance: 7375, force: -63.2475, energy: 246.0589, velocity: 22.2200, time: 484.9255
- },
-  { distance: 7400, force: -63.3437, energy: 246.0589, velocity: 22.2200, time: 486.0314
- },
-  { distance: 7425, force: -63.4399, energy: 246.0589, velocity: 22.2200, time: 487.1374
- },
-  { distance: 7450, force: -63.5360, energy: 246.0589, velocity: 22.2200, time: 488.2433
- },
-  { distance: 7475, force: -63.6322, energy: 246.0589, velocity: 22.2200, time: 489.3492
- },
-  { distance: 7500, force: -63.7284, energy: 246.0589, velocity: 22.2200, time: 490.4552
- },
-  { distance: 7525, force: -63.8246, energy: 246.0589, velocity: 22.2200, time: 491.5611
- },
-  { distance: 7550, force: -63.9208, energy: 246.0589, velocity: 22.2200, time: 492.6671
- },
-  { distance: 7575, force: -64.0170, energy: 246.0589, velocity: 22.2200, time: 493.7730
- },
-  { distance: 7600, force: -64.1132, energy: 246.0589, velocity: 22.2200, time: 494.8789
- },
-  { distance: 7625, force: -64.2093, energy: 246.0589, velocity: 22.2200, time: 495.9849
- },
-  { distance: 7650, force: -64.3055, energy: 246.0589, velocity: 22.2200, time: 497.0908
- },
-  { distance: 7675, force: -64.4017, energy: 246.0589, velocity: 22.2200, time: 498.1967
- },
-  { distance: 7700, force: -64.4979, energy: 246.0589, velocity: 22.2200, time: 499.3027
- },
-  { distance: 7725, force: -64.5941, energy: 246.0589, velocity: 22.2200, time: 500.4086
- },
-  { distance: 7750, force: -64.6903, energy: 246.0589, velocity: 22.2200, time: 501.5146
- },
-  { distance: 7775, force: -64.7864, energy: 246.0589, velocity: 22.2200, time: 502.6205
- },
-  { distance: 7800, force: -64.8826, energy: 246.0589, velocity: 22.2200, time: 503.7264
- },
-  { distance: 7825, force: -64.9788, energy: 246.0589, velocity: 22.2200, time: 504.8324
- },
-  { distance: 7850, force: -65.0750, energy: 246.0589, velocity: 22.2200, time: 505.9383
- },
-  { distance: 7875, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 507.0454
- },
-  { distance: 7900, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 508.1793
- },
-  { distance: 7925, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 509.3132
- },
-  { distance: 7950, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 510.4471
- },
-  { distance: 7975, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 511.5810
- },
-  { distance: 8000, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 512.7149
- },
-  { distance: 8025, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 513.8488
- },
-  { distance: 8050, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 514.9827
- },
-  { distance: 8075, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 516.1166
- },
-  { distance: 8100, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 517.2505
- },
-  { distance: 8125, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 518.3844
- },
-  { distance: 8150, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 519.5184
- },
-  { distance: 8175, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 520.6523
- },
-  { distance: 8200, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 521.7862
- },
-  { distance: 8225, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 522.9201
- },
-  { distance: 8250, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 524.0540
- },
-  { distance: 8275, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 525.1879
- },
-  { distance: 8300, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 526.3218
- },
-  { distance: 8325, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 527.4557
- },
-  { distance: 8350, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 528.5896
- },
-  { distance: 8375, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 529.7235
- },
-  { distance: 8400, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 530.8575
- },
-  { distance: 8425, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 531.9914
- },
-  { distance: 8450, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 533.1253
- },
-  { distance: 8475, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 534.2592
- },
-  { distance: 8500, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 535.3931
- },
-  { distance: 8525, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 536.5270
- },
-  { distance: 8550, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 537.6609
- },
-  { distance: 8575, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 538.7948
- },
-  { distance: 8600, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 539.9287
- },
-  { distance: 8625, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 541.0626
- },
-  { distance: 8650, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 542.1965
- },
-  { distance: 8675, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 543.3305
- },
-  { distance: 8700, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 544.4644
- },
-  { distance: 8725, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 545.5983
- },
-  { distance: 8750, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 546.7322
- },
-  { distance: 8775, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 547.8661
- },
-  { distance: 8800, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 549.0000
- },
-  { distance: 8825, force: -64.9320, energy: 246.0589, velocity: 22.2200, time: 550.4706
- },
-  { distance: 8850, force: -64.6832, energy: 246.0589, velocity: 22.2200, time: 551.6747
- },
-  { distance: 8875, force: -64.4267, energy: 246.0589, velocity: 22.2200, time: 552.7289
- },
-  { distance: 8900, force: -64.1702, energy: 246.0589, velocity: 22.2200, time: 553.7831
- },
-  { distance: 8925, force: -63.9137, energy: 246.0589, velocity: 22.2200, time: 554.8373
- },
-  { distance: 8950, force: -63.6572, energy: 246.0589, velocity: 22.2200, time: 555.8916
- },
-  { distance: 8975, force: -63.4007, energy: 246.0589, velocity: 22.2200, time: 556.9458
- },
-  { distance: 9000, force: -63.1442, energy: 246.0589, velocity: 22.2200, time: 558.0000
- },
-  { distance: 9025, force: -63.1230, energy: 246.0589, velocity: 22.2200, time: 559.4706
- },
-  { distance: 9050, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 560.7149
- },
-  { distance: 9075, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 561.8319
- },
-  { distance: 9100, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 562.9489
- },
-  { distance: 9125, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 564.0660
- },
-  { distance: 9150, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 565.1830
- },
-  { distance: 9175, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 566.3000
- },
-  { distance: 9200, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 567.4170
- },
-  { distance: 9225, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 568.5340
- },
-  { distance: 9250, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 569.6511
- },
-  { distance: 9275, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 570.7681
- },
-  { distance: 9300, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 571.8851
- },
-  { distance: 9325, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 573.0021
- },
-  { distance: 9350, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 574.1191
- },
-  { distance: 9375, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 575.2362
- },
-  { distance: 9400, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 576.3532
- },
-  { distance: 9425, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 577.4702
- },
-  { distance: 9450, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 578.5872
- },
-  { distance: 9475, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 579.7043
- },
-  { distance: 9500, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 580.8213
- },
-  { distance: 9525, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 581.9383
- },
-  { distance: 9550, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 583.0553
- },
-  { distance: 9575, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 584.1723
- },
-  { distance: 9600, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 585.2894
- },
-  { distance: 9625, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 586.4064
- },
-  { distance: 9650, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 587.5234
- },
-  { distance: 9675, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 588.6404
- },
-  { distance: 9700, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 589.7574
- },
-  { distance: 9725, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 590.8745
- },
-  { distance: 9750, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 591.9915
- },
-  { distance: 9775, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 593.1085
- },
-  { distance: 9800, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 594.2255
- },
-  { distance: 9825, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 595.3426
- },
-  { distance: 9850, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 596.4596
- },
-  { distance: 9875, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 597.5766
- },
-  { distance: 9900, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 598.6936
- },
-  { distance: 9925, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 599.8106
- },
-  { distance: 9950, force: -63.1154, energy: 246.0589, velocity: 22.2200, time: 600.9277
- },
-  { distance: 9975, force: -63.1257, energy: 246.0589, velocity: 22.2200, time: 602.0450
- },
-  { distance: 10000, force: -63.3822, energy: 246.0589, velocity: 22.2200, time: 603.1700
- },
-  { distance: 10025, force: -63.6386, energy: 246.0589, velocity: 22.2200, time: 604.2950
- },
-  { distance: 10050, force: -63.8951, energy: 246.0589, velocity: 22.2200, time: 605.4200
- },
-  { distance: 10075, force: -64.1516, energy: 246.0589, velocity: 22.2200, time: 606.5450
- },
-  { distance: 10100, force: -64.4081, energy: 246.0589, velocity: 22.2200, time: 607.6700
- },
-  { distance: 10125, force: -64.6646, energy: 246.0589, velocity: 22.2200, time: 608.7950
- },
-  { distance: 10150, force: -64.9211, energy: 246.0589, velocity: 22.2200, time: 609.9200
- },
-  { distance: 10175, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 611.0385
- },
-  { distance: 10200, force: -65.1673, energy: 246.0589, velocity: 22.2200, time: 612.0000
- },
-  { distance: 10225, force: -63.7409, energy: 246.0589, velocity: 22.2200, time: 613.4706
- },
-  { distance: 10250, force: -62.2321, energy: 246.0589, velocity: 22.2200, time: 614.6747
- },
-  { distance: 10275, force: -60.6772, energy: 246.0589, velocity: 22.2200, time: 615.7289
- },
-  { distance: 10300, force: -59.1222, energy: 246.0589, velocity: 22.2200, time: 616.7831
- },
-  { distance: 10325, force: -57.5672, energy: 246.0589, velocity: 22.2200, time: 617.8373
- },
-  { distance: 10350, force: -56.0122, energy: 246.0589, velocity: 22.2200, time: 618.8916
- },
-  { distance: 10375, force: -54.4573, energy: 246.0589, velocity: 22.2200, time: 619.9458
- },
-  { distance: 10400, force: -52.9023, energy: 246.0589, velocity: 22.2200, time: 621.0000
- },
-  { distance: 10425, force: -52.7149, energy: 246.0589, velocity: 22.2200, time: 622.4706
- },
-  { distance: 10450, force: -52.6065, energy: 246.0589, velocity: 22.2200, time: 623.7149
- },
-  { distance: 10475, force: -52.5423, energy: 246.0589, velocity: 22.2200, time: 624.8319
- },
-  { distance: 10500, force: -52.4782, energy: 246.0589, velocity: 22.2200, time: 625.9489
- },
-  { distance: 10525, force: -52.4141, energy: 246.0589, velocity: 22.2200, time: 627.0660
- },
-  { distance: 10550, force: -52.3500, energy: 246.0589, velocity: 22.2200, time: 628.1830
- },
-  { distance: 10575, force: -52.2859, energy: 246.0589, velocity: 22.2200, time: 629.3000
- },
-  { distance: 10600, force: -52.2217, energy: 246.0589, velocity: 22.2200, time: 630.4170
- },
-  { distance: 10625, force: -52.1576, energy: 246.0589, velocity: 22.2200, time: 631.5340
- },
-  { distance: 10650, force: -52.0935, energy: 246.0589, velocity: 22.2200, time: 632.6511
- },
-  { distance: 10675, force: -52.0294, energy: 246.0589, velocity: 22.2200, time: 633.7681
- },
-  { distance: 10700, force: -51.9652, energy: 246.0589, velocity: 22.2200, time: 634.8851
- },
-  { distance: 10725, force: -51.9011, energy: 246.0589, velocity: 22.2200, time: 636.0021
- },
-  { distance: 10750, force: -51.8370, energy: 246.0589, velocity: 22.2200, time: 637.1191
- },
-  { distance: 10775, force: -51.7729, energy: 246.0589, velocity: 22.2200, time: 638.2362
- },
-  { distance: 10800, force: -51.7087, energy: 246.0589, velocity: 22.2200, time: 639.3532
- },
-  { distance: 10825, force: -51.6446, energy: 246.0589, velocity: 22.2200, time: 640.4702
- },
-  { distance: 10850, force: -51.5805, energy: 246.0589, velocity: 22.2200, time: 641.5872
- },
-  { distance: 10875, force: -51.5164, energy: 246.0589, velocity: 22.2200, time: 642.7043
- },
-  { distance: 10900, force: -51.4523, energy: 246.0589, velocity: 22.2200, time: 643.8213
- },
-  { distance: 10925, force: -51.3881, energy: 246.0589, velocity: 22.2200, time: 644.9383
- },
-  { distance: 10950, force: -51.3240, energy: 246.0589, velocity: 22.2200, time: 646.0553
- },
-  { distance: 10975, force: -51.2599, energy: 246.0589, velocity: 22.2200, time: 647.1723
- },
-  { distance: 11000, force: -51.1958, energy: 246.0589, velocity: 22.2200, time: 648.2894
- },
-  { distance: 11025, force: -51.1316, energy: 246.0589, velocity: 22.2200, time: 649.4064
- },
-  { distance: 11050, force: -51.0675, energy: 246.0589, velocity: 22.2200, time: 650.5234
- },
-  { distance: 11075, force: -51.0034, energy: 246.0589, velocity: 22.2200, time: 651.6404
- },
-  { distance: 11100, force: -50.9393, energy: 246.0589, velocity: 22.2200, time: 652.7574
- },
-  { distance: 11125, force: -50.8752, energy: 246.0589, velocity: 22.2200, time: 653.8745
- },
-  { distance: 11150, force: -50.8110, energy: 246.0589, velocity: 22.2200, time: 654.9915
- },
-  { distance: 11175, force: -50.7469, energy: 246.0589, velocity: 22.2200, time: 656.1085
- },
-  { distance: 11200, force: -50.6828, energy: 246.0589, velocity: 22.2200, time: 657.2255
- },
-  { distance: 11225, force: -50.6187, energy: 246.0589, velocity: 22.2200, time: 658.3426
- },
-  { distance: 11250, force: -50.5545, energy: 246.0589, velocity: 22.2200, time: 659.4596
- },
-  { distance: 11275, force: -50.4904, energy: 246.0589, velocity: 22.2200, time: 660.5766
- },
-  { distance: 11300, force: -50.4263, energy: 246.0589, velocity: 22.2200, time: 661.6936
- },
-  { distance: 11325, force: -50.3622, energy: 246.0589, velocity: 22.2200, time: 662.8106
- },
-  { distance: 11350, force: -50.2980, energy: 246.0589, velocity: 22.2200, time: 663.9277
- },
-  { distance: 11375, force: -50.2961, energy: 246.0589, velocity: 22.2200, time: 665.0450
- },
-  { distance: 11400, force: -51.7870, energy: 246.0589, velocity: 22.2200, time: 666.1700
- },
-  { distance: 11425, force: -53.2778, energy: 246.0589, velocity: 22.2200, time: 667.2950
- },
-  { distance: 11450, force: -54.7687, energy: 246.0589, velocity: 22.2200, time: 668.4200
- },
-  { distance: 11475, force: -56.2595, energy: 246.0589, velocity: 22.2200, time: 669.5450
- },
-  { distance: 11500, force: -57.7504, energy: 246.0589, velocity: 22.2200, time: 670.6700
- },
-  { distance: 11525, force: -59.2413, energy: 246.0589, velocity: 22.2200, time: 671.7950
- },
-  { distance: 11550, force: -60.7321, energy: 246.0589, velocity: 22.2200, time: 672.9200
- },
-  { distance: 11575, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 674.0454
- },
-  { distance: 11600, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 675.1795
- },
-  { distance: 11625, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 676.3136
- },
-  { distance: 11650, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 677.4477
- },
-  { distance: 11675, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 678.5819
- },
-  { distance: 11700, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 679.7160
- },
-  { distance: 11725, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 680.8501
- },
-  { distance: 11750, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 681.9842
- },
-  { distance: 11775, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 683.1183
- },
-  { distance: 11800, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 684.2525
- },
-  { distance: 11825, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 685.3866
- },
-  { distance: 11850, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 686.5207
- },
-  { distance: 11875, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 687.6548
- },
-  { distance: 11900, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 688.7890
- },
-  { distance: 11925, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 689.9231
- },
-  { distance: 11950, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 691.0572
- },
-  { distance: 11975, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 692.1913
- },
-  { distance: 12000, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 693.3254
- },
-  { distance: 12025, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 694.4596
- },
-  { distance: 12050, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 695.5937
- },
-  { distance: 12075, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 696.7278
- },
-  { distance: 12100, force: -99.6706, energy: 246.0589, velocity: 22.1781, time: 697.6441
- },
-  { distance: 12125, force: -99.7362, energy: 246.0589, velocity: 22.1231, time: 698.4915
- },
-  { distance: 12150, force: -99.8036, energy: 246.0589, velocity: 22.0665, time: 699.5882
- },
-  { distance: 12175, force: -99.8737, energy: 246.0589, velocity: 22.0077, time: 701.0400
- },
-  { distance: 12200, force: -99.9413, energy: 246.0589, velocity: 21.9511, time: 702.0400
- },
-  { distance: 12225, force: -100.0089, energy: 246.0589, velocity: 21.8944, time: 703.0400
- },
-  { distance: 12250, force: -100.0766, energy: 246.0589, velocity: 21.8377, time: 704.0463
- },
-  { distance: 12275, force: -100.1457, energy: 246.0589, velocity: 21.7798, time: 705.2037
- },
-  { distance: 12300, force: -100.2149, energy: 246.0589, velocity: 21.7219, time: 706.3611
- },
-  { distance: 12325, force: -100.2840, energy: 246.0589, velocity: 21.6641, time: 707.5185
- },
-  { distance: 12350, force: -100.3532, energy: 246.0589, velocity: 21.6062, time: 708.6759
- },
-  { distance: 12375, force: -100.4246, energy: 246.0589, velocity: 21.5466, time: 709.9643
- },
-  { distance: 12400, force: -100.4967, energy: 246.0589, velocity: 21.4863, time: 711.3036
- },
-  { distance: 12425, force: -100.5689, energy: 246.0589, velocity: 21.4261, time: 712.6429
- },
-  { distance: 12450, force: -100.6411, energy: 246.0589, velocity: 21.3658, time: 713.9821
- },
-  { distance: 12475, force: -100.7143, energy: 246.0589, velocity: 21.3047, time: 715.2632
- },
-  { distance: 12500, force: -100.7905, energy: 246.0589, velocity: 21.2411, time: 716.3596
- },
-  { distance: 12525, force: -100.8668, energy: 246.0589, velocity: 21.1775, time: 717.4561
- },
-  { distance: 12550, force: -100.9432, energy: 246.0589, velocity: 21.1139, time: 718.5526
- },
-  { distance: 12575, force: -101.0195, energy: 246.0589, velocity: 21.0504, time: 719.6491
- },
-  { distance: 12600, force: -101.0964, energy: 246.0589, velocity: 20.9864, time: 720.8718
- },
-  { distance: 12625, force: -101.1734, energy: 246.0589, velocity: 20.9223, time: 722.1538
- },
-  { distance: 12650, force: -101.2505, energy: 246.0589, velocity: 20.8582, time: 723.4359
- },
-  { distance: 12675, force: -101.3277, energy: 246.0589, velocity: 20.7941, time: 724.7179
- },
-  { distance: 12700, force: -101.4048, energy: 246.0589, velocity: 20.7300, time: 726.0000
- },
-  { distance: 12725, force: -101.4845, energy: 246.0589, velocity: 20.6638, time: 726.7353
- },
-  { distance: 12750, force: -101.5660, energy: 246.0589, velocity: 20.5962, time: 727.8108
- },
-  { distance: 12775, force: -101.6485, energy: 246.0589, velocity: 20.5278, time: 729.0777
- },
-  { distance: 12800, force: -101.7310, energy: 246.0589, velocity: 20.4594, time: 730.3446
- },
-  { distance: 12825, force: -101.8136, energy: 246.0589, velocity: 20.3910, time: 731.6115
- },
-  { distance: 12850, force: -101.8962, energy: 246.0589, velocity: 20.3226, time: 732.8784
- },
-  { distance: 12875, force: -101.9788, energy: 246.0589, velocity: 20.2542, time: 734.1453
- },
-  { distance: 12900, force: -102.0615, energy: 246.0589, velocity: 20.1857, time: 735.4122
- },
-  { distance: 12925, force: -102.1443, energy: 246.0589, velocity: 20.1173, time: 736.6791
- },
-  { distance: 12950, force: -102.2271, energy: 246.0589, velocity: 20.0489, time: 737.9459
- },
-  { distance: 12975, force: -102.3099, energy: 246.0589, velocity: 19.9805, time: 739.2128
- },
-  { distance: 13000, force: -102.3927, energy: 246.0589, velocity: 19.9121, time: 740.4797
- },
-  { distance: 13025, force: -102.4756, energy: 246.0589, velocity: 19.8437, time: 741.7466
- },
-  { distance: 13050, force: -102.5636, energy: 246.0589, velocity: 19.7712, time: 743.1765
- },
-  { distance: 13075, force: -102.6510, energy: 246.0589, velocity: 19.6991, time: 744.5789
- },
-  { distance: 13100, force: -102.7362, energy: 246.0589, velocity: 19.6289, time: 745.8947
- },
-  { distance: 13125, force: -102.8224, energy: 246.0589, velocity: 19.5579, time: 747.1905
- },
-  { distance: 13150, force: -102.9140, energy: 246.0589, velocity: 19.4825, time: 748.3810
- },
-  { distance: 13175, force: -103.0057, energy: 246.0589, velocity: 19.4071, time: 749.5714
- },
-  { distance: 13200, force: -103.0995, energy: 246.0589, velocity: 19.3300, time: 750.7500
- },
-  { distance: 13225, force: -103.1946, energy: 246.0589, velocity: 19.2519, time: 751.9219
- },
-  { distance: 13250, force: -103.2896, energy: 246.0589, velocity: 19.1739, time: 753.0909
- },
-  { distance: 13275, force: -103.3819, energy: 246.0589, velocity: 19.0982, time: 754.2273
- },
-  { distance: 13300, force: -103.4742, energy: 246.0589, velocity: 19.0224, time: 755.3636
- },
-  { distance: 13325, force: -103.5725, energy: 246.0589, velocity: 18.9419, time: 756.8462
- },
-  { distance: 13350, force: -103.6694, energy: 246.0589, velocity: 18.8625, time: 758.5000
- },
-  { distance: 13375, force: -103.7740, energy: 246.0589, velocity: 18.7768, time: 760.0526
- },
-  { distance: 13400, force: -103.8705, energy: 246.0589, velocity: 18.6979, time: 761.3684
- },
-  { distance: 13425, force: -103.9699, energy: 246.0589, velocity: 18.6167, time: 762.6190
- },
-  { distance: 13450, force: -104.0719, energy: 246.0589, velocity: 18.5333, time: 763.8095
- },
-  { distance: 13475, force: -104.1739, energy: 246.0589, velocity: 18.4500, time: 765.0000
- },
-  { distance: 13500, force: -104.2711, energy: 246.0589, velocity: 18.3706, time: 766.5873
- },
-  { distance: 13525, force: -104.3684, energy: 246.0589, velocity: 18.2913, time: 768.1746
- },
-  { distance: 13550, force: -104.4665, energy: 246.0589, velocity: 18.2113, time: 769.5806
- },
-  { distance: 13575, force: -104.5655, energy: 246.0589, velocity: 18.1306, time: 770.7903
- },
-  { distance: 13600, force: -60.2381, energy: 246.0589, velocity: 18.0500, time: 772.0000
- },
-  { distance: 13625, force: -60.5587, energy: 246.0589, velocity: 18.0500, time: 773.3636
- },
-  { distance: 13650, force: -60.8793, energy: 246.0589, velocity: 18.0500, time: 774.7273
- },
-  { distance: 13675, force: -61.2000, energy: 246.0589, velocity: 18.0500, time: 776.0909
- },
-  { distance: 13700, force: -61.5206, energy: 246.0589, velocity: 18.0500, time: 777.4545
- },
-  { distance: 13725, force: -61.8412, energy: 246.0589, velocity: 18.0500, time: 778.8182
- },
-  { distance: 13750, force: -62.1618, energy: 246.0589, velocity: 18.0500, time: 780.1818
- },
-  { distance: 13775, force: -62.4824, energy: 246.0589, velocity: 18.0500, time: 781.5455
- },
-  { distance: 13800, force: -62.8030, energy: 246.0589, velocity: 18.0500, time: 782.9091
- },
-  { distance: 13825, force: -63.0060, energy: 246.0589, velocity: 18.0500, time: 784.2941
- },
-  { distance: 13850, force: -62.7384, energy: 246.0589, velocity: 18.0500, time: 785.7647
- },
-  { distance: 13875, force: -62.4198, energy: 246.0589, velocity: 18.0500, time: 787.0556
- },
-  { distance: 13900, force: -61.9389, energy: 246.0589, velocity: 18.0500, time: 788.4444
- },
-  { distance: 13925, force: -61.4580, energy: 246.0589, velocity: 18.0500, time: 789.8333
- },
-  { distance: 13950, force: -60.9771, energy: 246.0589, velocity: 18.0500, time: 791.2222
- },
-  { distance: 13975, force: -60.4961, energy: 246.0589, velocity: 18.0500, time: 792.6111
- },
-  { distance: 14000, force: -60.0152, energy: 246.0589, velocity: 18.0500, time: 794.0000
- },
-  { distance: 14025, force: -58.6372, energy: 246.0589, velocity: 18.0500, time: 795.4706
- },
-  { distance: 14050, force: -57.2075, energy: 246.0589, velocity: 18.0500, time: 796.8471
- },
-  { distance: 14075, force: -55.7488, energy: 246.0589, velocity: 18.0500, time: 798.1706
- },
-  { distance: 14100, force: -54.2900, energy: 246.0589, velocity: 18.0500, time: 799.4941
- },
-  { distance: 14125, force: -52.8312, energy: 246.0589, velocity: 18.0500, time: 800.8176
- },
-  { distance: 14150, force: -51.3724, energy: 246.0589, velocity: 18.0500, time: 802.1412
- },
-  { distance: 14175, force: -49.9136, energy: 246.0589, velocity: 18.0500, time: 803.4647
- },
-  { distance: 14200, force: -48.4548, energy: 246.0589, velocity: 18.0500, time: 804.7882
- },
-  { distance: 14225, force: -47.2653, energy: 246.0589, velocity: 18.0500, time: 806.2194
- },
-  { distance: 14250, force: -46.1271, energy: 246.0589, velocity: 18.0500, time: 807.6710
- },
-  { distance: 14275, force: -44.9889, energy: 246.0589, velocity: 18.0500, time: 809.1226
- },
-  { distance: 14300, force: -43.8508, energy: 246.0589, velocity: 18.0500, time: 810.5742
- },
-  { distance: 14325, force: -42.7126, energy: 246.0589, velocity: 18.0500, time: 812.0258
- },
-  { distance: 14350, force: -41.5744, energy: 246.0589, velocity: 18.0500, time: 813.4774
- },
-  { distance: 14375, force: -40.4362, energy: 246.0589, velocity: 18.0500, time: 814.9290
- },
-  { distance: 14400, force: -39.2980, energy: 246.0589, velocity: 18.0500, time: 816.3806
- },
-  { distance: 14425, force: -38.1599, energy: 246.0589, velocity: 18.0500, time: 817.8323
- },
-  { distance: 14450, force: -37.0217, energy: 246.0589, velocity: 18.0500, time: 819.2839
- },
-  { distance: 14475, force: -35.8835, energy: 246.0589, velocity: 18.0500, time: 820.7355
- },
-  { distance: 14500, force: -34.7453, energy: 246.0589, velocity: 18.0500, time: 822.1871
- },
-  { distance: 14525, force: -33.3955, energy: 246.0589, velocity: 18.0500, time: 823.6111
- },
-  { distance: 14550, force: -31.7764, energy: 246.0589, velocity: 18.0500, time: 825.0000
- },
-  { distance: 14575, force: -31.6426, energy: 246.0589, velocity: 18.0500, time: 825.7353
- },
-  { distance: 14600, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 826.8976
- },
-  { distance: 14625, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 828.3000
- },
-  { distance: 14650, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 829.7024
- },
-  { distance: 14675, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 831.1049
- },
-  { distance: 14700, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 832.5073
- },
-  { distance: 14725, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 833.9098
- },
-  { distance: 14750, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 835.3122
- },
-  { distance: 14775, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 836.7146
- },
-  { distance: 14800, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 838.1171
- },
-  { distance: 14825, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 839.5195
- },
-  { distance: 14850, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 840.9220
- },
-  { distance: 14875, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 842.3244
- },
-  { distance: 14900, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 843.7268
- },
-  { distance: 14925, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 845.1293
- },
-  { distance: 14950, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 846.5317
- },
-  { distance: 14975, force: -31.5945, energy: 246.0589, velocity: 18.0500, time: 847.9341
- },
-  { distance: 15000, force: -31.7484, energy: 246.0589, velocity: 18.0500, time: 849.3333
- },
-  { distance: 15025, force: -32.3896, energy: 246.0589, velocity: 18.0500, time: 850.7222
- },
-  { distance: 15050, force: -33.0308, energy: 246.0589, velocity: 18.0500, time: 852.1111
- },
-  { distance: 15075, force: -33.6720, energy: 246.0589, velocity: 18.0500, time: 853.5000
- },
-  { distance: 15100, force: -34.3133, energy: 246.0589, velocity: 18.0500, time: 854.8889
- },
-  { distance: 15125, force: -34.9545, energy: 246.0589, velocity: 18.0500, time: 856.2778
- },
-  { distance: 15150, force: -35.5957, energy: 246.0589, velocity: 18.0500, time: 857.6667
- },
-  { distance: 15175, force: -36.2761, energy: 246.0589, velocity: 18.0500, time: 859.0564
- },
-  { distance: 15200, force: -37.8952, energy: 246.0589, velocity: 18.0500, time: 860.4655
- },
-  { distance: 15225, force: -39.5143, energy: 246.0589, velocity: 18.0500, time: 861.8745
- },
-  { distance: 15250, force: -41.1334, energy: 246.0589, velocity: 18.0500, time: 863.2836
- },
-  { distance: 15275, force: -42.7525, energy: 246.0589, velocity: 18.0500, time: 864.6927
- },
-  { distance: 15300, force: -44.3716, energy: 246.0589, velocity: 18.0500, time: 866.1018
- },
-  { distance: 15325, force: -45.9907, energy: 246.0589, velocity: 18.0500, time: 867.5109
- },
-  { distance: 15350, force: -47.6098, energy: 246.0589, velocity: 18.0500, time: 868.9200
- },
-  { distance: 15375, force: -49.2289, energy: 246.0589, velocity: 18.0500, time: 870.3291
- },
-  { distance: 15400, force: -50.8480, energy: 246.0589, velocity: 18.0500, time: 871.7382
- },
-  { distance: 15425, force: -52.4671, energy: 246.0589, velocity: 18.0500, time: 873.1473
- },
-  { distance: 15450, force: -54.0862, energy: 246.0589, velocity: 18.0500, time: 874.5564
- },
-  { distance: 15475, force: -55.7053, energy: 246.0589, velocity: 18.0500, time: 875.9655
- },
-  { distance: 15500, force: -57.3244, energy: 246.0589, velocity: 18.0500, time: 877.3745
- },
-  { distance: 15525, force: -58.9435, energy: 246.0589, velocity: 18.0500, time: 878.7836
- },
-  { distance: 15550, force: -60.5626, energy: 246.0589, velocity: 18.0500, time: 880.1927
- },
-  { distance: 15575, force: -62.1817, energy: 246.0589, velocity: 18.0500, time: 881.6018
- },
-  { distance: 15600, force: -63.8008, energy: 246.0589, velocity: 18.0500, time: 883.0109
- },
-  { distance: 15625, force: -65.4199, energy: 246.0589, velocity: 18.0500, time: 884.4200
- },
-  { distance: 15650, force: -67.0390, energy: 246.0589, velocity: 18.0500, time: 885.8291
- },
-  { distance: 15675, force: -68.6581, energy: 246.0589, velocity: 18.0500, time: 887.2382
- },
-  { distance: 15700, force: -70.2772, energy: 246.0589, velocity: 18.0500, time: 888.6473
- },
-  { distance: 15725, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 890.0552
- },
-  { distance: 15750, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 891.4360
- },
-  { distance: 15775, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 892.8169
- },
-  { distance: 15800, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 894.1977
- },
-  { distance: 15825, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 895.5785
- },
-  { distance: 15850, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 896.9593
- },
-  { distance: 15875, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 898.3401
- },
-  { distance: 15900, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 899.7209
- },
-  { distance: 15925, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 901.1017
- },
-  { distance: 15950, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 902.4826
- },
-  { distance: 15975, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 903.8634
- },
-  { distance: 16000, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 905.2442
- },
-  { distance: 16025, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 906.6250
- },
-  { distance: 16050, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 908.0058
- },
-  { distance: 16075, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 909.3866
- },
-  { distance: 16100, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 910.7674
- },
-  { distance: 16125, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 912.1483
- },
-  { distance: 16150, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 913.5291
- },
-  { distance: 16175, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 914.9099
- },
-  { distance: 16200, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 916.2907
- },
-  { distance: 16225, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 917.6715
- },
-  { distance: 16250, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 919.0523
- },
-  { distance: 16275, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 920.4331
- },
-  { distance: 16300, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 921.8140
- },
-  { distance: 16325, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 923.1948
- },
-  { distance: 16350, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 924.5756
- },
-  { distance: 16375, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 925.9564
- },
-  { distance: 16400, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 927.3372
- },
-  { distance: 16425, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 928.7180
- },
-  { distance: 16450, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 930.0988
- },
-  { distance: 16475, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 931.4797
- },
-  { distance: 16500, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 932.8605
- },
-  { distance: 16525, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 934.2413
- },
-  { distance: 16550, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 935.6221
- },
-  { distance: 16575, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 937.0029
- },
-  { distance: 16600, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 938.3837
- },
-  { distance: 16625, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 939.7645
- },
-  { distance: 16650, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 941.1453
- },
-  { distance: 16675, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 942.5262
- },
-  { distance: 16700, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 943.9070
- },
-  { distance: 16725, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 945.2878
- },
-  { distance: 16750, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 946.6686
- },
-  { distance: 16775, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 948.0494
- },
-  { distance: 16800, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 949.4302
- },
-  { distance: 16825, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 950.8110
- },
-  { distance: 16850, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 952.1919
- },
-  { distance: 16875, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 953.5727
- },
-  { distance: 16900, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 954.9535
- },
-  { distance: 16925, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 956.3343
- },
-  { distance: 16950, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 957.7151
- },
-  { distance: 16975, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 959.0959
- },
-  { distance: 17000, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 960.4767
- },
-  { distance: 17025, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 961.8576
- },
-  { distance: 17050, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 963.2384
- },
-  { distance: 17075, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 964.6192
- },
-  { distance: 17100, force: -71.8315, energy: 246.0589, velocity: 18.0500, time: 966.0000
- },
-  { distance: 17125, force: -71.6845, energy: 246.0589, velocity: 18.0500, time: 967.4706
- },
-  { distance: 17150, force: -71.5289, energy: 246.0589, velocity: 18.0500, time: 968.8842
- },
-  { distance: 17175, force: -71.3686, energy: 246.0589, velocity: 18.0500, time: 970.2658
- },
-  { distance: 17200, force: -71.2083, energy: 246.0589, velocity: 18.0500, time: 971.6474
- },
-  { distance: 17225, force: -71.0480, energy: 246.0589, velocity: 18.0500, time: 973.0289
- },
-  { distance: 17250, force: -70.8877, energy: 246.0589, velocity: 18.0500, time: 974.4105
- },
-  { distance: 17275, force: -70.7274, energy: 246.0589, velocity: 18.0500, time: 975.7921
- },
-  { distance: 17300, force: -70.5671, energy: 246.0589, velocity: 18.0500, time: 977.1737
- },
-  { distance: 17325, force: -70.4068, energy: 246.0589, velocity: 18.0500, time: 978.5553
- },
-  { distance: 17350, force: -70.2465, energy: 246.0589, velocity: 18.0500, time: 979.9368
- },
-  { distance: 17375, force: -70.0862, energy: 246.0589, velocity: 18.0500, time: 981.3184
- },
-  { distance: 17400, force: -69.9259, energy: 246.0589, velocity: 18.0500, time: 982.7000
- },
-  { distance: 17425, force: -69.7655, energy: 246.0589, velocity: 18.0500, time: 984.0816
- },
-  { distance: 17450, force: -69.6052, energy: 246.0589, velocity: 18.0500, time: 985.4632
- },
-  { distance: 17475, force: -69.4449, energy: 246.0589, velocity: 18.0500, time: 986.8447
- },
-  { distance: 17500, force: -69.2846, energy: 246.0589, velocity: 18.0500, time: 988.2263
- },
-  { distance: 17525, force: -69.1243, energy: 246.0589, velocity: 18.0500, time: 989.6079
- },
-  { distance: 17550, force: -68.9640, energy: 246.0589, velocity: 18.0500, time: 990.9895
- },
-  { distance: 17575, force: -68.8037, energy: 246.0589, velocity: 18.0500, time: 992.3711
- },
-  { distance: 17600, force: -68.6434, energy: 246.0589, velocity: 18.0500, time: 993.7526
- },
-  { distance: 17625, force: -68.4831, energy: 246.0589, velocity: 18.0500, time: 995.1342
- },
-  { distance: 17650, force: -68.3228, energy: 246.0589, velocity: 18.0500, time: 996.5158
- },
-  { distance: 17675, force: -68.1625, energy: 246.0589, velocity: 18.0500, time: 997.8974
- },
-  { distance: 17700, force: -68.0022, energy: 246.0589, velocity: 18.0500, time: 999.2789
- },
-  { distance: 17725, force: -67.8419, energy: 246.0589, velocity: 18.0500, time: 1000.6605
- },
-  { distance: 17750, force: -67.6816, energy: 246.0589, velocity: 18.0500, time: 1002.0421
- },
-  { distance: 17775, force: -67.5213, energy: 246.0589, velocity: 18.0500, time: 1003.4237
- },
-  { distance: 17800, force: -67.3609, energy: 246.0589, velocity: 18.0500, time: 1004.8053
- },
-  { distance: 17825, force: -67.2006, energy: 246.0589, velocity: 18.0500, time: 1006.1868
- },
-  { distance: 17850, force: -67.0403, energy: 246.0589, velocity: 18.0500, time: 1007.5684
- },
-  { distance: 17875, force: -66.8800, energy: 246.0589, velocity: 18.0500, time: 1008.9500
- },
-  { distance: 17900, force: -66.7197, energy: 246.0589, velocity: 18.0500, time: 1010.3316
- },
-  { distance: 17925, force: -66.5594, energy: 246.0589, velocity: 18.0500, time: 1011.7132
- },
-  { distance: 17950, force: -66.3991, energy: 246.0589, velocity: 18.0500, time: 1013.0947
- },
-  { distance: 17975, force: -66.2388, energy: 246.0589, velocity: 18.0500, time: 1014.4763
- },
-  { distance: 18000, force: -66.0785, energy: 246.0589, velocity: 18.0500, time: 1015.8579
- },
-  { distance: 18025, force: -65.9182, energy: 246.0589, velocity: 18.0500, time: 1017.2395
- },
-  { distance: 18050, force: -65.7579, energy: 246.0589, velocity: 18.0500, time: 1018.6211
- },
-  { distance: 18075, force: -65.5976, energy: 246.0589, velocity: 18.0500, time: 1020.0026
- },
-  { distance: 18100, force: -65.4373, energy: 246.0589, velocity: 18.0500, time: 1021.3842
- },
-  { distance: 18125, force: -65.2770, energy: 246.0589, velocity: 18.0500, time: 1022.7658
- },
-  { distance: 18150, force: -65.1166, energy: 246.0589, velocity: 18.0500, time: 1024.1474
- },
-  { distance: 18175, force: -64.9563, energy: 246.0589, velocity: 18.0500, time: 1025.5289
- },
-  { distance: 18200, force: -64.7960, energy: 246.0589, velocity: 18.0500, time: 1026.9105
- },
-  { distance: 18225, force: -64.6357, energy: 246.0589, velocity: 18.0500, time: 1028.2921
- },
-  { distance: 18250, force: -64.4754, energy: 246.0589, velocity: 18.0500, time: 1029.6737
- },
-  { distance: 18275, force: -64.3215, energy: 246.0589, velocity: 18.0500, time: 1031.0500
- },
-  { distance: 18300, force: 0.0000, energy: 246.0589, velocity: 18.0747, time: 1032.2956
- },
-  { distance: 18325, force: 0.0000, energy: 246.0589, velocity: 18.1774, time: 1033.5271
- },
-  { distance: 18350, force: 0.0000, energy: 246.0589, velocity: 18.2801, time: 1034.7586
- },
-  { distance: 18375, force: 0.0000, energy: 246.0589, velocity: 18.3828, time: 1035.9901
- },
-  { distance: 18400, force: 0.0000, energy: 246.0589, velocity: 18.4855, time: 1037.2217
- },
-  { distance: 18425, force: 0.0000, energy: 246.0589, velocity: 18.5882, time: 1038.4532
- },
-  { distance: 18450, force: 0.0000, energy: 246.0589, velocity: 18.6909, time: 1039.6847
- },
-  { distance: 18475, force: 0.0000, energy: 246.0589, velocity: 18.7936, time: 1040.9163
- },
-  { distance: 18500, force: 0.0000, energy: 246.0589, velocity: 18.8963, time: 1042.1478
- },
-  { distance: 18525, force: 0.0000, energy: 246.0589, velocity: 18.9990, time: 1043.3793
- },
-  { distance: 18550, force: 0.0000, energy: 246.0589, velocity: 19.1017, time: 1044.6108
- },
-  { distance: 18575, force: 0.0000, energy: 246.0589, velocity: 19.2045, time: 1045.8424
- },
-  { distance: 18600, force: 0.0000, energy: 246.0589, velocity: 19.3072, time: 1047.0739
- },
-  { distance: 18625, force: 0.0000, energy: 246.0589, velocity: 19.4099, time: 1048.3054
- },
-  { distance: 18650, force: 0.0000, energy: 246.0589, velocity: 19.5126, time: 1049.5369
- },
-  { distance: 18675, force: 0.0000, energy: 246.0589, velocity: 19.6153, time: 1050.7685
- },
-  { distance: 18700, force: 0.0000, energy: 246.0589, velocity: 19.7180, time: 1052.0000
- },
-  { distance: 18725, force: 0.0000, energy: 246.0589, velocity: 19.8207, time: 1053.2315
- },
-  { distance: 18750, force: 0.0000, energy: 246.0589, velocity: 19.9234, time: 1054.4631
- },
-  { distance: 18775, force: 0.0000, energy: 246.0589, velocity: 20.0261, time: 1055.6946
- },
-  { distance: 18800, force: 0.0000, energy: 246.0589, velocity: 20.1288, time: 1056.9261
- },
-  { distance: 18825, force: 0.0000, energy: 246.0589, velocity: 20.2315, time: 1058.1576
- },
-  { distance: 18850, force: 0.0000, energy: 246.0589, velocity: 20.3343, time: 1059.3892
- },
-  { distance: 18875, force: 0.0000, energy: 246.0589, velocity: 20.4370, time: 1060.6207
- },
-  { distance: 18900, force: 0.0000, energy: 246.0589, velocity: 20.5397, time: 1061.8522
- },
-  { distance: 18925, force: 0.0000, energy: 246.0589, velocity: 20.6424, time: 1063.0837
- },
-  { distance: 18950, force: 0.0000, energy: 246.0589, velocity: 20.7451, time: 1064.3153
- },
-  { distance: 18975, force: 0.0000, energy: 246.0589, velocity: 20.8478, time: 1065.5468
- },
-  { distance: 19000, force: 0.0000, energy: 246.0589, velocity: 20.9505, time: 1066.7783
- },
-  { distance: 19025, force: 0.0000, energy: 246.0589, velocity: 21.0532, time: 1068.0099
- },
-  { distance: 19050, force: 0.0000, energy: 246.0589, velocity: 21.1559, time: 1069.2414
- },
-  { distance: 19075, force: 0.0000, energy: 246.0589, velocity: 21.2586, time: 1070.4729
- },
-  { distance: 19100, force: 0.0000, energy: 246.0589, velocity: 21.3613, time: 1071.7044
- },
-  { distance: 19125, force: 0.0000, energy: 246.0589, velocity: 21.4641, time: 1072.9360
- },
-  { distance: 19150, force: 0.0000, energy: 246.0589, velocity: 21.5668, time: 1074.1675
- },
-  { distance: 19175, force: 0.0000, energy: 246.0589, velocity: 21.6695, time: 1075.3990
- },
-  { distance: 19200, force: 0.0000, energy: 246.0589, velocity: 21.7722, time: 1076.6305
- },
-  { distance: 19225, force: 0.0000, energy: 246.0589, velocity: 21.8749, time: 1077.8621
- },
-  { distance: 19250, force: 0.0000, energy: 246.0589, velocity: 21.9776, time: 1079.0936
- },
-  { distance: 19275, force: 0.0000, energy: 246.0589, velocity: 22.0803, time: 1080.3251
- },
-  { distance: 19300, force: 0.0000, energy: 246.0589, velocity: 22.1830, time: 1081.5567
- },
-  { distance: 19325, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1082.7169
- },
-  { distance: 19350, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1083.8371
- },
-  { distance: 19375, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1084.9572
- },
-  { distance: 19400, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1086.0774
- },
-  { distance: 19425, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1087.1976
- },
-  { distance: 19450, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1088.3177
- },
-  { distance: 19475, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1089.4379
- },
-  { distance: 19500, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1090.5580
- },
-  { distance: 19525, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1091.6782
- },
-  { distance: 19550, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1092.7984
- },
-  { distance: 19575, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1093.9185
- },
-  { distance: 19600, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1095.0387
- },
-  { distance: 19625, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1096.1589
- },
-  { distance: 19650, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1097.2790
- },
-  { distance: 19675, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1098.3992
- },
-  { distance: 19700, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1099.5193
- },
-  { distance: 19725, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1100.6395
- },
-  { distance: 19750, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1101.7597
- },
-  { distance: 19775, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1102.8798
- },
-  { distance: 19800, force: -62.1633, energy: 246.0589, velocity: 22.2200, time: 1104.0000
- },
-  { distance: 19825, force: -61.7222, energy: 246.0589, velocity: 22.2200, time: 1105.4706
- },
-  { distance: 19850, force: -61.2555, energy: 246.0589, velocity: 22.2200, time: 1106.7362
- },
-  { distance: 19875, force: -60.7746, energy: 246.0589, velocity: 22.2200, time: 1107.8865
- },
-  { distance: 19900, force: -60.2937, energy: 246.0589, velocity: 22.2200, time: 1109.0368
- },
-  { distance: 19925, force: -59.8128, energy: 246.0589, velocity: 22.2200, time: 1110.1871
- },
-  { distance: 19950, force: -59.3319, energy: 246.0589, velocity: 22.2200, time: 1111.3374
- },
-  { distance: 19975, force: -58.8509, energy: 246.0589, velocity: 22.2200, time: 1112.4877
- },
-  { distance: 20000, force: -58.3700, energy: 246.0589, velocity: 22.2200, time: 1113.6380
- },
-  { distance: 20025, force: -57.8891, energy: 246.0589, velocity: 22.2200, time: 1114.7883
- },
-  { distance: 20050, force: -57.4082, energy: 246.0589, velocity: 22.2200, time: 1115.9387
- },
-  { distance: 20075, force: -56.9272, energy: 246.0589, velocity: 22.2200, time: 1117.0890
- },
-  { distance: 20100, force: -56.4463, energy: 246.0589, velocity: 22.2200, time: 1118.2393
- },
-  { distance: 20125, force: -55.9654, energy: 246.0589, velocity: 22.2200, time: 1119.3896
- },
-  { distance: 20150, force: -55.4845, energy: 246.0589, velocity: 22.2200, time: 1120.5399
- },
-  { distance: 20175, force: -54.6506, energy: 246.0589, velocity: 22.2200, time: 1121.4412
- },
-  { distance: 20200, force: -53.5687, energy: 246.0589, velocity: 22.2200, time: 1122.2660
- },
-  { distance: 20225, force: -52.4466, energy: 246.0589, velocity: 22.2200, time: 1123.3744
- },
-  { distance: 20250, force: -51.3245, energy: 246.0589, velocity: 22.2200, time: 1124.4828
- },
-  { distance: 20275, force: -50.2023, energy: 246.0589, velocity: 22.2200, time: 1125.5911
- },
-  { distance: 20300, force: -49.0802, energy: 246.0589, velocity: 22.2200, time: 1126.6995
- },
-  { distance: 20325, force: -47.9580, energy: 246.0589, velocity: 22.2200, time: 1127.8079
- },
-  { distance: 20350, force: -46.8359, energy: 246.0589, velocity: 22.2200, time: 1128.9163
- },
-  { distance: 20375, force: -45.7137, energy: 246.0589, velocity: 22.2200, time: 1130.0246
- },
-  { distance: 20400, force: -44.5916, energy: 246.0589, velocity: 22.2200, time: 1131.1330
- },
-  { distance: 20425, force: -43.4694, energy: 246.0589, velocity: 22.2200, time: 1132.2414
- },
-  { distance: 20450, force: -42.3473, energy: 246.0589, velocity: 22.2200, time: 1133.3498
- },
-  { distance: 20475, force: -41.2251, energy: 246.0589, velocity: 22.2200, time: 1134.4581
- },
-  { distance: 20500, force: -40.1030, energy: 246.0589, velocity: 22.2200, time: 1135.5665
- },
-  { distance: 20525, force: -38.9808, energy: 246.0589, velocity: 22.2200, time: 1136.6749
- },
-  { distance: 20550, force: -37.8587, energy: 246.0589, velocity: 22.2200, time: 1137.7833
- },
-  { distance: 20575, force: -36.7365, energy: 246.0589, velocity: 22.2200, time: 1138.8916
- },
-  { distance: 20600, force: -35.6144, energy: 246.0589, velocity: 22.2200, time: 1140.0000
- },
-  { distance: 20625, force: -34.1981, energy: 246.0589, velocity: 22.2200, time: 1141.4706
- },
-  { distance: 20650, force: -32.7649, energy: 246.0589, velocity: 22.2200, time: 1142.7089
- },
-  { distance: 20675, force: -31.3221, energy: 246.0589, velocity: 22.2200, time: 1143.8165
- },
-  { distance: 20700, force: -29.8793, energy: 246.0589, velocity: 22.2200, time: 1144.9241
- },
-  { distance: 20725, force: -28.4366, energy: 246.0589, velocity: 22.2200, time: 1146.0316
- },
-  { distance: 20750, force: -26.9938, energy: 246.0589, velocity: 22.2200, time: 1147.1392
- },
-  { distance: 20775, force: -25.5511, energy: 246.0589, velocity: 22.2200, time: 1148.2468
- },
-  { distance: 20800, force: -24.1083, energy: 246.0589, velocity: 22.2200, time: 1149.3544
- },
-  { distance: 20825, force: -22.6655, energy: 246.0589, velocity: 22.2200, time: 1150.4620
- },
-  { distance: 20850, force: -21.2228, energy: 246.0589, velocity: 22.2200, time: 1151.5696
- },
-  { distance: 20875, force: -19.7800, energy: 246.0589, velocity: 22.2200, time: 1152.6772
- },
-  { distance: 20900, force: -18.3372, energy: 246.0589, velocity: 22.2200, time: 1153.7848
- },
-  { distance: 20925, force: -16.8945, energy: 246.0589, velocity: 22.2200, time: 1154.8924
- },
-  { distance: 20950, force: -15.4517, energy: 246.0589, velocity: 22.2200, time: 1156.0000
- },
-  { distance: 20975, force: -14.6164, energy: 246.0589, velocity: 22.2200, time: 1157.1000
- },
-  { distance: 21000, force: -14.2767, energy: 246.0589, velocity: 22.2200, time: 1158.6667
- },
-  { distance: 21025, force: -13.9561, energy: 246.0589, velocity: 22.2200, time: 1159.7083
- },
-  { distance: 21050, force: -13.6355, energy: 246.0589, velocity: 22.2200, time: 1160.7500
- },
-  { distance: 21075, force: -13.3149, energy: 246.0589, velocity: 22.2200, time: 1161.7917
- },
-  { distance: 21100, force: -12.9943, energy: 246.0589, velocity: 22.2200, time: 1162.8333
- },
-  { distance: 21125, force: -12.6737, energy: 246.0589, velocity: 22.2200, time: 1163.8750
- },
-  { distance: 21150, force: -12.3530, energy: 246.0589, velocity: 22.2200, time: 1164.9167
- },
-  { distance: 21175, force: -12.0324, energy: 246.0589, velocity: 22.2200, time: 1165.9583
- },
-  { distance: 21200, force: -11.7118, energy: 246.0589, velocity: 22.2200, time: 1167.0000
- },
-  { distance: 21225, force: -11.9794, energy: 246.0589, velocity: 22.2200, time: 1168.4706
- },
-  { distance: 21250, force: -12.2810, energy: 246.0589, velocity: 22.2200, time: 1169.6400
- },
-  { distance: 21275, force: -12.6016, energy: 246.0589, velocity: 22.2200, time: 1170.6400
- },
-  { distance: 21300, force: -12.9222, energy: 246.0589, velocity: 22.2200, time: 1171.6400
- },
-  { distance: 21325, force: -13.2428, energy: 246.0589, velocity: 22.2200, time: 1172.6400
- },
-  { distance: 21350, force: -13.9738, energy: 246.0589, velocity: 22.2200, time: 1173.7273
- },
-  { distance: 21375, force: -14.9357, energy: 246.0589, velocity: 22.2200, time: 1174.8636
- },
-  { distance: 21400, force: -15.8975, energy: 246.0589, velocity: 22.2200, time: 1176.0000
- },
-  { distance: 21425, force: -16.8593, energy: 246.0589, velocity: 22.2200, time: 1177.1364
- },
-  { distance: 21450, force: -17.8212, energy: 246.0589, velocity: 22.2200, time: 1178.2727
- },
-  { distance: 21475, force: -18.7830, energy: 246.0589, velocity: 22.2200, time: 1179.4091
- },
-  { distance: 21500, force: -19.7449, energy: 246.0589, velocity: 22.2200, time: 1180.5455
- },
-  { distance: 21525, force: -20.7067, energy: 246.0589, velocity: 22.2200, time: 1181.6818
- },
-  { distance: 21550, force: -21.6686, energy: 246.0589, velocity: 22.2200, time: 1182.8182
- },
-  { distance: 21575, force: -22.6304, energy: 246.0589, velocity: 22.2200, time: 1183.9545
- },
-  { distance: 21600, force: -23.5922, energy: 246.0589, velocity: 22.2200, time: 1185.0909
- },
-  { distance: 21625, force: -24.5541, energy: 246.0589, velocity: 22.2200, time: 1186.2273
- },
-  { distance: 21650, force: -25.5159, energy: 246.0589, velocity: 22.2200, time: 1187.3636
- },
-  { distance: 21675, force: -26.4778, energy: 246.0589, velocity: 22.2200, time: 1188.5000
- },
-  { distance: 21700, force: -27.4396, energy: 246.0589, velocity: 22.2200, time: 1189.6364
- },
-  { distance: 21725, force: -28.4015, energy: 246.0589, velocity: 22.2200, time: 1190.7727
- },
-  { distance: 21750, force: -29.3633, energy: 246.0589, velocity: 22.2200, time: 1191.9091
- },
-  { distance: 21775, force: -30.3380, energy: 246.0589, velocity: 22.2200, time: 1193.0457
- },
-  { distance: 21800, force: -31.6204, energy: 246.0589, velocity: 22.2200, time: 1194.1886
- },
-  { distance: 21825, force: -32.9029, energy: 246.0589, velocity: 22.2200, time: 1195.3314
- },
-  { distance: 21850, force: -34.1853, energy: 246.0589, velocity: 22.2200, time: 1196.4743
- },
-  { distance: 21875, force: -35.4678, energy: 246.0589, velocity: 22.2200, time: 1197.6171
- },
-  { distance: 21900, force: -36.7502, energy: 246.0589, velocity: 22.2200, time: 1198.7600
- },
-  { distance: 21925, force: -38.0327, energy: 246.0589, velocity: 22.2200, time: 1199.9029
- },
-  { distance: 21950, force: -39.3152, energy: 246.0589, velocity: 22.2200, time: 1201.0457
- },
-  { distance: 21975, force: -40.5976, energy: 246.0589, velocity: 22.2200, time: 1202.1886
- },
-  { distance: 22000, force: -41.8801, energy: 246.0589, velocity: 22.2200, time: 1203.3314
- },
-  { distance: 22025, force: -43.1625, energy: 246.0589, velocity: 22.2200, time: 1204.4743
- },
-  { distance: 22050, force: -44.4450, energy: 246.0589, velocity: 22.2200, time: 1205.6171
- },
-  { distance: 22075, force: -45.7274, energy: 246.0589, velocity: 22.2200, time: 1206.7600
- },
-  { distance: 22100, force: -47.0099, energy: 246.0589, velocity: 22.2200, time: 1207.9029
- },
-  { distance: 22125, force: -48.2667, energy: 246.0589, velocity: 22.2200, time: 1209.0440
- },
-  { distance: 22150, force: -48.9079, energy: 246.0589, velocity: 22.2200, time: 1210.1440
- },
-  { distance: 22175, force: -49.5492, energy: 246.0589, velocity: 22.2200, time: 1211.2440
- },
-  { distance: 22200, force: -50.1904, energy: 246.0589, velocity: 22.2200, time: 1212.3440
- },
-  { distance: 22225, force: -50.8316, energy: 246.0589, velocity: 22.2200, time: 1213.4440
- },
-  { distance: 22250, force: -51.4728, energy: 246.0589, velocity: 22.2200, time: 1214.5440
- },
-  { distance: 22275, force: -52.1141, energy: 246.0589, velocity: 22.2200, time: 1215.6440
- },
-  { distance: 22300, force: -52.7553, energy: 246.0589, velocity: 22.2200, time: 1216.7440
- },
-  { distance: 22325, force: -53.3965, energy: 246.0589, velocity: 22.2200, time: 1217.8440
- },
-  { distance: 22350, force: -54.0378, energy: 246.0589, velocity: 22.2200, time: 1218.9440
- },
-  { distance: 22375, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1220.0457
- },
-  { distance: 22400, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1221.1880
- },
-  { distance: 22425, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1222.3303
- },
-  { distance: 22450, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1223.4726
- },
-  { distance: 22475, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1224.6149
- },
-  { distance: 22500, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1225.7572
- },
-  { distance: 22525, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1226.8995
- },
-  { distance: 22550, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1228.0418
- },
-  { distance: 22575, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1229.1841
- },
-  { distance: 22600, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1230.3264
- },
-  { distance: 22625, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1231.4687
- },
-  { distance: 22650, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1232.6110
- },
-  { distance: 22675, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1233.7533
- },
-  { distance: 22700, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1234.8956
- },
-  { distance: 22725, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1236.0379
- },
-  { distance: 22750, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1237.1802
- },
-  { distance: 22775, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1238.3225
- },
-  { distance: 22800, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1239.4648
- },
-  { distance: 22825, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1240.6070
- },
-  { distance: 22850, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1241.7493
- },
-  { distance: 22875, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1242.8916
- },
-  { distance: 22900, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1244.0339
- },
-  { distance: 22925, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1245.1762
- },
-  { distance: 22950, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1246.3185
- },
-  { distance: 22975, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1247.4608
- },
-  { distance: 23000, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1248.6031
- },
-  { distance: 23025, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1249.7454
- },
-  { distance: 23050, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1250.8877
- },
-  { distance: 23075, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1252.0300
- },
-  { distance: 23100, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1253.1723
- },
-  { distance: 23125, force: -54.6533, energy: 246.0589, velocity: 22.2200, time: 1254.3146
- },
-  { distance: 23150, force: -54.4769, energy: 246.0589, velocity: 22.2200, time: 1255.2941
- },
-  { distance: 23175, force: -54.0341, energy: 246.0589, velocity: 22.2200, time: 1256.0476
- },
-  { distance: 23200, force: -53.5532, energy: 246.0589, velocity: 22.2200, time: 1257.2381
- },
-  { distance: 23225, force: -53.0723, energy: 246.0589, velocity: 22.2200, time: 1258.4286
- },
-  { distance: 23250, force: -52.5913, energy: 246.0589, velocity: 22.2200, time: 1259.6190
- },
-  { distance: 23275, force: -52.1104, energy: 246.0589, velocity: 22.2200, time: 1260.8095
- },
-  { distance: 23300, force: -51.6295, energy: 246.0589, velocity: 22.2200, time: 1262.0000
- },
-  { distance: 23325, force: -50.3250, energy: 246.0589, velocity: 22.2200, time: 1262.7353
- },
-  { distance: 23350, force: -48.9731, energy: 246.0589, velocity: 22.2200, time: 1263.7207
- },
-  { distance: 23375, force: -47.5945, energy: 246.0589, velocity: 22.2200, time: 1264.8468
- },
-  { distance: 23400, force: -46.2158, energy: 246.0589, velocity: 22.2200, time: 1265.9730
- },
-  { distance: 23425, force: -44.8372, energy: 246.0589, velocity: 22.2200, time: 1267.0991
- },
-  { distance: 23450, force: -43.4585, energy: 246.0589, velocity: 22.2200, time: 1268.2252
- },
-  { distance: 23475, force: -42.0799, energy: 246.0589, velocity: 22.2200, time: 1269.3514
- },
-  { distance: 23500, force: -40.7013, energy: 246.0589, velocity: 22.2200, time: 1270.4775
- },
-  { distance: 23525, force: -39.3226, energy: 246.0589, velocity: 22.2200, time: 1271.6036
- },
-  { distance: 23550, force: -37.9440, energy: 246.0589, velocity: 22.2200, time: 1272.7297
- },
-  { distance: 23575, force: -36.5653, energy: 246.0589, velocity: 22.2200, time: 1273.8559
- },
-  { distance: 23600, force: -35.1867, energy: 246.0589, velocity: 22.2200, time: 1274.9820
- },
-  { distance: 23625, force: -33.8081, energy: 246.0589, velocity: 22.2200, time: 1276.1081
- },
-  { distance: 23650, force: -32.4294, energy: 246.0589, velocity: 22.2200, time: 1277.2342
- },
-  { distance: 23675, force: -31.0508, energy: 246.0589, velocity: 22.2200, time: 1278.3604
- },
-  { distance: 23700, force: -29.6721, energy: 246.0589, velocity: 22.2200, time: 1279.4865
- },
-  { distance: 23725, force: -28.2935, energy: 246.0589, velocity: 22.2200, time: 1280.6126
- },
-  { distance: 23750, force: -26.9149, energy: 246.0589, velocity: 22.2200, time: 1281.7387
- },
-  { distance: 23775, force: -25.5362, energy: 246.0589, velocity: 22.2200, time: 1282.8649
- },
-  { distance: 23800, force: -24.1576, energy: 246.0589, velocity: 22.2200, time: 1283.9910
- },
-  { distance: 23825, force: -22.7789, energy: 246.0589, velocity: 22.2200, time: 1285.1171
- },
-  { distance: 23850, force: -21.4003, energy: 246.0589, velocity: 22.2200, time: 1286.2432
- },
-  { distance: 23875, force: -20.0217, energy: 246.0589, velocity: 22.2200, time: 1287.3694
- },
-  { distance: 23900, force: -18.6430, energy: 246.0589, velocity: 22.2200, time: 1288.4955
- },
-  { distance: 23925, force: -17.2644, energy: 246.0589, velocity: 22.2200, time: 1289.6216
- },
-  { distance: 23950, force: -15.8857, energy: 246.0589, velocity: 22.2200, time: 1290.7477
- },
-  { distance: 23975, force: -14.5071, energy: 246.0589, velocity: 22.2200, time: 1291.8739
- },
-  { distance: 24000, force: -13.1285, energy: 246.0589, velocity: 22.2200, time: 1293.0000
- },
-  { distance: 24025, force: -13.3086, energy: 246.0589, velocity: 22.2200, time: 1294.4706
- },
-  { distance: 24050, force: -13.5787, energy: 246.0589, velocity: 22.2200, time: 1295.7429
- },
-  { distance: 24075, force: -13.8993, energy: 246.0589, velocity: 22.2200, time: 1296.9036
- },
-  { distance: 24100, force: -14.2199, energy: 246.0589, velocity: 22.2200, time: 1298.0643
- },
-  { distance: 24125, force: -14.5405, energy: 246.0589, velocity: 22.2200, time: 1299.2250
- },
-  { distance: 24150, force: -14.8612, energy: 246.0589, velocity: 22.2200, time: 1300.3857
- },
-  { distance: 24175, force: -15.1818, energy: 246.0589, velocity: 22.2200, time: 1301.5464
- },
-  { distance: 24200, force: -15.5024, energy: 246.0589, velocity: 22.2200, time: 1302.7071
- },
-  { distance: 24225, force: -15.8230, energy: 246.0589, velocity: 22.2200, time: 1303.8679
- },
-  { distance: 24250, force: -16.1436, energy: 246.0589, velocity: 22.2200, time: 1305.0286
- },
-  { distance: 24275, force: -16.4642, energy: 246.0589, velocity: 22.2200, time: 1306.1893
- },
-  { distance: 24300, force: -16.7848, energy: 246.0589, velocity: 22.2200, time: 1307.3500
- },
-  { distance: 24325, force: -17.3171, energy: 246.0589, velocity: 22.2200, time: 1308.4813
- },
-  { distance: 24350, force: -18.1186, energy: 246.0589, velocity: 22.2200, time: 1309.5750
- },
-  { distance: 24375, force: -18.9201, energy: 246.0589, velocity: 22.2200, time: 1310.6688
- },
-  { distance: 24400, force: -19.7217, energy: 246.0589, velocity: 22.2200, time: 1311.7625
- },
-  { distance: 24425, force: -20.5232, energy: 246.0589, velocity: 22.2200, time: 1312.8563
- },
-  { distance: 24450, force: -21.3247, energy: 246.0589, velocity: 22.2200, time: 1313.9500
- },
-  { distance: 24475, force: -22.1622, energy: 246.0589, velocity: 22.2200, time: 1315.0443
- },
-  { distance: 24500, force: -23.8614, energy: 246.0589, velocity: 22.2200, time: 1316.1514
- },
-  { distance: 24525, force: -25.5607, energy: 246.0589, velocity: 22.2200, time: 1317.2586
- },
-  { distance: 24550, force: -27.2599, energy: 246.0589, velocity: 22.2200, time: 1318.3657
- },
-  { distance: 24575, force: -28.9592, energy: 246.0589, velocity: 22.2200, time: 1319.4729
- },
-  { distance: 24600, force: -30.6584, energy: 246.0589, velocity: 22.2200, time: 1320.5800
- },
-  { distance: 24625, force: -32.3577, energy: 246.0589, velocity: 22.2200, time: 1321.6871
- },
-  { distance: 24650, force: -34.0570, energy: 246.0589, velocity: 22.2200, time: 1322.7943
- },
-  { distance: 24675, force: -35.7562, energy: 246.0589, velocity: 22.2200, time: 1323.9014
- },
-  { distance: 24700, force: -37.4555, energy: 246.0589, velocity: 22.2200, time: 1325.0086
- },
-  { distance: 24725, force: -39.1547, energy: 246.0589, velocity: 22.2200, time: 1326.1157
- },
-  { distance: 24750, force: -40.8540, energy: 246.0589, velocity: 22.2200, time: 1327.2229
- },
-  { distance: 24775, force: -42.5532, energy: 246.0589, velocity: 22.2200, time: 1328.3300
- },
-  { distance: 24800, force: -44.2525, energy: 246.0589, velocity: 22.2200, time: 1329.4371
- },
-  { distance: 24825, force: -45.9517, energy: 246.0589, velocity: 22.2200, time: 1330.5443
- },
-  { distance: 24850, force: -47.6510, energy: 246.0589, velocity: 22.2200, time: 1331.6514
- },
-  { distance: 24875, force: -49.3502, energy: 246.0589, velocity: 22.2200, time: 1332.7586
- },
-  { distance: 24900, force: -51.0495, energy: 246.0589, velocity: 22.2200, time: 1333.8657
- },
-  { distance: 24925, force: -52.7488, energy: 246.0589, velocity: 22.2200, time: 1334.9729
- },
-  { distance: 24950, force: -54.4480, energy: 246.0589, velocity: 22.2200, time: 1336.0800
- },
-  { distance: 24975, force: -56.1473, energy: 246.0589, velocity: 22.2200, time: 1337.1871
- },
-  { distance: 25000, force: -57.8465, energy: 246.0589, velocity: 22.2200, time: 1338.2943
- },
-  { distance: 25025, force: -59.5458, energy: 246.0589, velocity: 22.2200, time: 1339.4014
- },
-  { distance: 25050, force: -61.2450, energy: 246.0589, velocity: 22.2200, time: 1340.5086
- },
-  { distance: 25075, force: -62.9443, energy: 246.0589, velocity: 22.2200, time: 1341.6157
- },
-  { distance: 25100, force: -64.6435, energy: 246.0589, velocity: 22.2200, time: 1342.7229
- },
-  { distance: 25125, force: -66.3428, energy: 246.0589, velocity: 22.2200, time: 1343.8300
- },
-  { distance: 25150, force: -68.0420, energy: 246.0589, velocity: 22.2200, time: 1344.9371
- },
-  { distance: 25175, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1346.0455
- },
-  { distance: 25200, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1347.1818
- },
-  { distance: 25225, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1348.3182
- },
-  { distance: 25250, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1349.4545
- },
-  { distance: 25275, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1350.5909
- },
-  { distance: 25300, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1351.7273
- },
-  { distance: 25325, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1352.8636
- },
-  { distance: 25350, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1354.0000
- },
-  { distance: 25375, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1355.1364
- },
-  { distance: 25400, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1356.2727
- },
-  { distance: 25425, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1357.4091
- },
-  { distance: 25450, force: -69.6733, energy: 246.0589, velocity: 22.2200, time: 1358.5455
- },
-  { distance: 25475, force: -67.8204, energy: 246.0589, velocity: 22.2200, time: 1359.8824
- },
-  { distance: 25500, force: -64.6654, energy: 246.0589, velocity: 22.2200, time: 1361.2577
- },
-  { distance: 25525, force: -61.2989, energy: 246.0589, velocity: 22.2200, time: 1362.3313
- },
-  { distance: 25550, force: -57.9325, energy: 246.0589, velocity: 22.2200, time: 1363.4049
- },
-  { distance: 25575, force: -54.5660, energy: 246.0589, velocity: 22.2200, time: 1364.4785
- },
-  { distance: 25600, force: -51.1996, energy: 246.0589, velocity: 22.2200, time: 1365.5521
- },
-  { distance: 25625, force: -47.8331, energy: 246.0589, velocity: 22.2200, time: 1366.6258
- },
-  { distance: 25650, force: -44.4667, energy: 246.0589, velocity: 22.2200, time: 1367.6994
- },
-  { distance: 25675, force: -41.1003, energy: 246.0589, velocity: 22.2200, time: 1368.7730
- },
-  { distance: 25700, force: -37.7338, energy: 246.0589, velocity: 22.2200, time: 1369.8466
- },
-  { distance: 25725, force: -34.3674, energy: 246.0589, velocity: 22.2200, time: 1370.9202
- },
-  { distance: 25750, force: -31.0009, energy: 246.0589, velocity: 22.2200, time: 1371.9939
- },
-  { distance: 25775, force: -27.6345, energy: 246.0589, velocity: 22.2200, time: 1373.0675
- },
-  { distance: 25800, force: -24.2680, energy: 246.0589, velocity: 22.2200, time: 1374.1411
- },
-  { distance: 25825, force: -21.0280, energy: 246.0589, velocity: 22.2200, time: 1375.2941
- },
-  { distance: 25850, force: -18.2939, energy: 246.0589, velocity: 22.2200, time: 1376.7647
- },
-  { distance: 25875, force: -15.6077, energy: 246.0589, velocity: 22.2200, time: 1377.8855
- },
-  { distance: 25900, force: -12.9306, energy: 246.0589, velocity: 22.2200, time: 1378.9398
- },
-  { distance: 25925, force: -10.2534, energy: 246.0589, velocity: 22.2200, time: 1379.9940
- },
-  { distance: 25950, force: -7.5763, energy: 246.0589, velocity: 22.2200, time: 1381.0482
- },
-  { distance: 25975, force: -4.8992, energy: 246.0589, velocity: 22.2200, time: 1382.1024
- },
-  { distance: 26000, force: -2.2221, energy: 246.0589, velocity: 22.2200, time: 1383.1566
- },
-  { distance: 26025, force: 0.4551, energy: 246.0744, velocity: 22.2200, time: 1384.2392
- },
-  { distance: 26050, force: 3.1322, energy: 246.1966, velocity: 22.2200, time: 1385.4354
- },
-  { distance: 26075, force: 5.8093, energy: 246.5012, velocity: 22.2200, time: 1386.6316
- },
-  { distance: 26100, force: 8.4864, energy: 246.9882, velocity: 22.2200, time: 1387.8278
- },
-  { distance: 26125, force: 11.1636, energy: 247.6575, velocity: 22.2200, time: 1389.0239
- },
-  { distance: 26150, force: 13.8407, energy: 248.5092, velocity: 22.2200, time: 1390.2201
- },
-  { distance: 26175, force: 16.5178, energy: 249.5433, velocity: 22.2200, time: 1391.4163
- },
-  { distance: 26200, force: 19.1950, energy: 250.7597, velocity: 22.2200, time: 1392.6124
- },
-  { distance: 26225, force: 21.8721, energy: 252.1586, velocity: 22.2200, time: 1393.8086
- },
-  { distance: 26250, force: 0.0000, energy: 252.9036, velocity: 22.1900, time: 1395.0000
- },
-  { distance: 26275, force: 0.0000, energy: 252.9036, velocity: 22.1535, time: 1395.5500
- },
-  { distance: 26300, force: 0.0000, energy: 252.9036, velocity: 22.1160, time: 1396.8000
- },
-  { distance: 26325, force: 0.0000, energy: 252.9036, velocity: 22.0785, time: 1398.0500
- },
-  { distance: 26350, force: 0.0000, energy: 252.9036, velocity: 22.0410, time: 1399.3000
- },
-  { distance: 26375, force: 0.0000, energy: 252.9036, velocity: 21.9980, time: 1400.5500
- },
-  { distance: 26400, force: 0.0000, energy: 252.9036, velocity: 21.9560, time: 1401.8000
- },
-  { distance: 26425, force: 0.0000, energy: 252.9036, velocity: 21.9080, time: 1403.0000
- },
-  { distance: 26450, force: 0.0000, energy: 252.9036, velocity: 21.8580, time: 1403.3000
- },
-  { distance: 26475, force: 0.0000, energy: 252.9036, velocity: 21.8080, time: 1404.5500
- },
-  { distance: 26500, force: 0.0000, energy: 252.9036, velocity: 21.7580, time: 1405.8000
- },
-  { distance: 26525, force: 0.0000, energy: 252.9036, velocity: 21.7080, time: 1407.0500
- },
-  { distance: 26550, force: 0.0000, energy: 252.9036, velocity: 21.6580, time: 1408.3000
- },
-  { distance: 26575, force: 0.0000, energy: 252.9036, velocity: 21.6025, time: 1409.5500
- },
-  { distance: 26600, force: 0.0000, energy: 252.9036, velocity: 21.5400, time: 1411.0000
- },
-  { distance: 26625, force: 0.0000, energy: 252.9036, velocity: 21.4857, time: 1412.0000
- },
-  { distance: 26650, force: 0.0000, energy: 252.9036, velocity: 21.4200, time: 1412.8000
- },
-  { distance: 26675, force: 0.0000, energy: 252.9036, velocity: 21.3580, time: 1414.0500
- },
-  { distance: 26700, force: 0.0000, energy: 252.9036, velocity: 21.3050, time: 1415.3000
- },
-  { distance: 26725, force: 0.0000, energy: 252.9036, velocity: 21.2480, time: 1416.5500
- },
-  { distance: 26750, force: 0.0000, energy: 252.9036, velocity: 21.1900, time: 1417.5000
- },
-  { distance: 26775, force: 0.0000, energy: 252.9036, velocity: 21.1380, time: 1419.0500
- },
-  { distance: 26800, force: 0.0000, energy: 252.9036, velocity: 21.0880, time: 1420.3000
- },
-  { distance: 26825, force: 0.0000, energy: 252.9036, velocity: 21.0435, time: 1421.5500
- },
-  { distance: 26850, force: 0.0000, energy: 252.9036, velocity: 20.9980, time: 1422.8000
- },
-  { distance: 26875, force: 0.0000, energy: 252.9036, velocity: 20.9585, time: 1424.0500
- },
-  { distance: 26900, force: 0.0000, energy: 252.9036, velocity: 20.9210, time: 1425.0000
- },
-  { distance: 26925, force: 0.0000, energy: 252.9036, velocity: 20.8890, time: 1425.5500
- },
-  { distance: 26950, force: 0.0000, energy: 252.9036, velocity: 20.8560, time: 1426.8000
- },
-  { distance: 26975, force: 0.0000, energy: 252.9036, velocity: 20.8290, time: 1428.0500
- },
-  { distance: 27000, force: 0.0000, energy: 252.9036, velocity: 20.8040, time: 1429.3000
- },
-  { distance: 27025, force: 0.0000, energy: 252.9036, velocity: 20.7790, time: 1430.5500
- },
-  { distance: 27050, force: 0.0000, energy: 252.9036, velocity: 20.7540, time: 1431.8000
- },
-  { distance: 27075, force: 0.0000, energy: 252.9036, velocity: 20.7295, time: 1433.0500
- },
-  { distance: 27100, force: 0.0000, energy: 252.9036, velocity: 20.7100, time: 1434.0000
- },
-  { distance: 27125, force: 0.0000, energy: 252.9036, velocity: 20.6964, time: 1435.3571
- },
-  { distance: 27150, force: 0.0000, energy: 252.9036, velocity: 20.6820, time: 1436.8000
- },
-  { distance: 27175, force: 0.0000, energy: 252.9036, velocity: 20.6695, time: 1438.0500
- },
-  { distance: 27200, force: 0.0000, energy: 252.9036, velocity: 20.6600, time: 1439.3000
- },
-  { distance: 27225, force: 0.0000, energy: 252.9036, velocity: 20.6545, time: 1440.5500
- },
-  { distance: 27250, force: 0.0000, energy: 252.9036, velocity: 20.6500, time: 1441.8000
- },
-  { distance: 27275, force: 0.0000, energy: 252.9036, velocity: 20.6500, time: 1443.0000
- },
-  { distance: 27300, force: 0.0000, energy: 252.9036, velocity: 20.6500, time: 1443.7500
- },
-  { distance: 27325, force: -101.5090, energy: 252.9036, velocity: 20.6435, time: 1445.0435
- },
-  { distance: 27350, force: -101.7032, energy: 252.9036, velocity: 20.4824, time: 1446.2069
- },
-  { distance: 27375, force: -101.8801, energy: 252.9036, velocity: 20.3359, time: 1447.9310
- },
-  { distance: 27400, force: -102.0633, energy: 252.9036, velocity: 20.1843, time: 1448.8571
- },
-  { distance: 27425, force: -102.2515, energy: 252.9036, velocity: 20.0287, time: 1450.0938
- },
-  { distance: 27450, force: -102.4407, energy: 252.9036, velocity: 19.8725, time: 1451.3958
- },
-  { distance: 27475, force: -102.6302, energy: 252.9036, velocity: 19.7162, time: 1452.6979
- },
-  { distance: 27500, force: -102.8199, energy: 252.9036, velocity: 19.5600, time: 1454.0000
- },
-  { distance: 27525, force: -103.0165, energy: 252.9036, velocity: 19.3982, time: 1455.4706
- },
-  { distance: 27550, force: -103.2227, energy: 252.9036, velocity: 19.2288, time: 1456.6364
- },
-  { distance: 27575, force: -103.4212, energy: 252.9036, velocity: 19.0659, time: 1457.7727
- },
-  { distance: 27600, force: -103.6199, energy: 252.9036, velocity: 18.9030, time: 1458.9091
- },
-  { distance: 27625, force: -103.8419, energy: 252.9036, velocity: 18.7213, time: 1460.5333
- },
-  { distance: 27650, force: -104.0568, energy: 252.9036, velocity: 18.5456, time: 1462.0588
- },
-  { distance: 27675, force: -104.2685, energy: 252.9036, velocity: 18.3728, time: 1463.5294
- },
-  { distance: 27700, force: -104.4804, energy: 252.9036, velocity: 18.2000, time: 1465.0000
- },
-  { distance: 27725, force: -104.7061, energy: 252.9036, velocity: 18.0162, time: 1465.7353
- },
-  { distance: 27750, force: -104.9351, energy: 252.9036, velocity: 17.8300, time: 1467.2000
- },
-  { distance: 27775, force: -105.1661, energy: 252.9036, velocity: 17.6423, time: 1469.0536
- },
-  { distance: 27800, force: -105.4029, energy: 252.9036, velocity: 17.4504, time: 1470.3929
- },
-  { distance: 27825, force: -105.6399, energy: 252.9036, velocity: 17.2584, time: 1471.7321
- },
-  { distance: 27850, force: -105.8838, energy: 252.9036, velocity: 17.0612, time: 1473.1765
- },
-  { distance: 27875, force: -106.1312, energy: 252.9036, velocity: 16.8614, time: 1474.6111
- },
-  { distance: 27900, force: -1.3708, energy: 252.9036, velocity: 16.6600, time: 1476.0000
- },
-  { distance: 27925, force: 0.0944, energy: 252.9068, velocity: 16.6600, time: 1477.1197
- },
-  { distance: 27950, force: 1.8738, energy: 252.9739, velocity: 16.6600, time: 1478.6154
- },
-  { distance: 27975, force: 3.6532, energy: 253.1621, velocity: 16.6600, time: 1480.1111
- },
-  { distance: 28000, force: 5.4326, energy: 253.4716, velocity: 16.6600, time: 1481.6068
- },
-  { distance: 28025, force: 7.2121, energy: 253.9023, velocity: 16.6600, time: 1483.1026
- },
-  { distance: 28050, force: 8.9915, energy: 254.4543, velocity: 16.6600, time: 1484.5983
- },
-  { distance: 28075, force: 10.7709, energy: 255.1274, velocity: 16.6600, time: 1486.0940
- },
-  { distance: 28100, force: 12.5503, energy: 255.9218, velocity: 16.6600, time: 1487.5897
- },
-  { distance: 28125, force: 14.3297, energy: 256.8374, velocity: 16.6600, time: 1489.0855
- },
-  { distance: 28150, force: 16.1091, energy: 257.8742, velocity: 16.6600, time: 1490.5812
- },
-  { distance: 28175, force: 17.8885, energy: 259.0323, velocity: 16.6600, time: 1492.0769
- },
-  { distance: 28200, force: 19.6679, energy: 260.3115, velocity: 16.6600, time: 1493.5726
- },
-  { distance: 28225, force: 21.4473, energy: 261.7120, velocity: 16.6600, time: 1495.0684
- },
-  { distance: 28250, force: 23.2267, energy: 263.2337, velocity: 16.6600, time: 1496.5641
- },
-  { distance: 28275, force: 0.0000, energy: 264.0249, velocity: 16.6580, time: 1498.1000
- },
-  { distance: 28300, force: 0.0000, energy: 264.0249, velocity: 16.6080, time: 1500.3000
- },
-  { distance: 28325, force: 0.0000, energy: 264.0249, velocity: 16.5525, time: 1501.5500
- },
-  { distance: 28350, force: 0.0000, energy: 264.0249, velocity: 16.4900, time: 1502.8000
- },
-  { distance: 28375, force: 0.0000, energy: 264.0249, velocity: 16.4275, time: 1505.0500
- },
-  { distance: 28400, force: 0.0000, energy: 264.0249, velocity: 16.3620, time: 1506.3000
- },
-  { distance: 28425, force: 0.0000, energy: 264.0249, velocity: 16.2870, time: 1507.5500
- },
-  { distance: 28450, force: 0.0000, energy: 264.0249, velocity: 16.2076, time: 1509.5882
- },
-  { distance: 28475, force: 0.0000, energy: 264.0249, velocity: 16.1271, time: 1511.0526
- },
-  { distance: 28500, force: 0.0000, energy: 264.0249, velocity: 16.0547, time: 1512.3684
- },
-  { distance: 28525, force: 0.0000, energy: 264.0249, velocity: 15.9778, time: 1513.7027
- },
-  { distance: 28550, force: 0.0000, energy: 264.0249, velocity: 15.8970, time: 1515.0811
- },
-  { distance: 28575, force: 0.0000, energy: 264.0249, velocity: 15.8227, time: 1517.1081
- },
-  { distance: 28600, force: 0.0000, energy: 264.0249, velocity: 15.7472, time: 1518.7778
- },
-  { distance: 28625, force: 0.0000, energy: 264.0249, velocity: 15.6714, time: 1520.1714
- },
-  { distance: 28650, force: 0.0000, energy: 264.0249, velocity: 15.6000, time: 1521.6000
- },
-  { distance: 28675, force: 0.0000, energy: 264.0249, velocity: 15.5270, time: 1523.1000
- },
-  { distance: 28700, force: 0.0000, energy: 264.0249, velocity: 15.4550, time: 1525.3000
- },
-  { distance: 28725, force: 0.0000, energy: 264.0249, velocity: 15.3856, time: 1526.6875
- },
-  { distance: 28750, force: 0.0000, energy: 264.0249, velocity: 15.3200, time: 1528.0000
- },
-  { distance: 28775, force: 0.0000, energy: 264.0249, velocity: 15.2470, time: 1529.5500
- },
-  { distance: 28800, force: 0.0000, energy: 264.0249, velocity: 15.1720, time: 1531.6000
- },
-  { distance: 28825, force: 0.0000, energy: 264.0249, velocity: 15.0970, time: 1533.0500
- },
-  { distance: 28850, force: 0.0000, energy: 264.0249, velocity: 15.0190, time: 1534.6000
- },
-  { distance: 28875, force: 0.0000, energy: 264.0249, velocity: 14.9365, time: 1536.1000
- },
-  { distance: 28900, force: 0.0000, energy: 264.0249, velocity: 14.8500, time: 1538.0000
- },
-  { distance: 28925, force: 0.0000, energy: 264.0249, velocity: 14.7691, time: 1539.4706
- },
-  { distance: 28950, force: 0.0000, energy: 264.0249, velocity: 14.6851, time: 1541.1429
- },
-  { distance: 28975, force: 0.0000, energy: 264.0249, velocity: 14.5994, time: 1542.9286
- },
-  { distance: 29000, force: 0.0000, energy: 264.0249, velocity: 14.5137, time: 1544.7143
- },
-  { distance: 29025, force: 0.0000, energy: 264.0249, velocity: 14.4270, time: 1547.0500
- },
-  { distance: 29050, force: 0.0000, energy: 264.0249, velocity: 14.3513, time: 1548.3750
- },
-  { distance: 29075, force: 0.0000, energy: 264.0249, velocity: 14.2750, time: 1550.5000
- },
-  { distance: 29100, force: 0.0000, energy: 264.0249, velocity: 14.2050, time: 1552.3000
- },
-  { distance: 29125, force: 0.0000, energy: 264.0249, velocity: 14.1480, time: 1553.5500
- },
-  { distance: 29150, force: 0.0000, energy: 264.0249, velocity: 14.0900, time: 1555.6000
- },
-  { distance: 29175, force: 0.0000, energy: 264.0249, velocity: 14.0480, time: 1557.1000
- },
-  { distance: 29200, force: 0.0000, energy: 264.0249, velocity: 14.0010, time: 1559.3000
- },
-  { distance: 29225, force: 0.0000, energy: 264.0249, velocity: 13.9690, time: 1560.5500
- },
-  { distance: 29250, force: 0.0000, energy: 264.0249, velocity: 13.9440, time: 1562.6000
- },
-  { distance: 29275, force: 0.0000, energy: 264.0249, velocity: 13.9295, time: 1564.1000
- },
-  { distance: 29300, force: 0.0000, energy: 264.0249, velocity: 13.9100, time: 1566.0000
- },
-  { distance: 29325, force: 0.0000, energy: 264.0249, velocity: 13.9100, time: 1568.3571
- },
-  { distance: 29350, force: 0.0000, energy: 264.0249, velocity: 13.9100, time: 1569.7000
- },
-  { distance: 29375, force: 0.0000, energy: 264.0249, velocity: 13.9100, time: 1571.6000
- },
-  { distance: 29400, force: 0.0000, energy: 264.0249, velocity: 13.9185, time: 1573.7000
- },
-  { distance: 29425, force: 0.0000, energy: 264.0249, velocity: 13.9310, time: 1575.1000
- },
-  { distance: 29450, force: 0.0000, energy: 264.0249, velocity: 13.9470, time: 1576.7000
- },
-  { distance: 29475, force: 0.0000, energy: 264.0249, velocity: 13.9720, time: 1578.6000
- },
-  { distance: 29500, force: 0.0000, energy: 264.0249, velocity: 14.0000, time: 1581.0000
- },
-  { distance: 29525, force: 0.0000, energy: 264.0249, velocity: 14.0271, time: 1582.3571
- },
-  { distance: 29550, force: 0.0000, energy: 264.0249, velocity: 14.0552, time: 1583.7619
- },
-  { distance: 29575, force: 0.0000, energy: 264.0249, velocity: 14.0861, time: 1585.7391
- },
-  { distance: 29600, force: 0.0000, energy: 264.0249, velocity: 14.1200, time: 1588.0000
- },
-  { distance: 29625, force: 0.0000, energy: 264.0249, velocity: 14.1465, time: 1589.5500
- },
-  { distance: 29650, force: 0.0000, energy: 264.0249, velocity: 14.1760, time: 1590.8000
- },
-  { distance: 29675, force: 0.0000, energy: 264.0249, velocity: 14.1905, time: 1593.0500
- },
-  { distance: 29700, force: 0.0000, energy: 264.0249, velocity: 14.2030, time: 1594.6000
- },
-  { distance: 29725, force: 0.0000, energy: 264.0249, velocity: 14.2155, time: 1596.5500
- },
-  { distance: 29750, force: 0.0000, energy: 264.0249, velocity: 14.2200, time: 1598.6000
- },
-  { distance: 29775, force: 0.0000, energy: 264.0249, velocity: 14.2200, time: 1599.8000
- },
-  { distance: 29800, force: 0.0000, energy: 264.0249, velocity: 14.2195, time: 1602.0500
- },
-  { distance: 29825, force: 0.0000, energy: 264.0249, velocity: 14.2070, time: 1603.6000
- },
-  { distance: 29850, force: 0.0000, energy: 264.0249, velocity: 14.1890, time: 1605.5500
- },
-  { distance: 29875, force: 0.0000, energy: 264.0249, velocity: 14.1640, time: 1606.8000
- },
-  { distance: 29900, force: 0.0000, energy: 264.0249, velocity: 14.1400, time: 1609.0000
- },
-  { distance: 29925, force: 0.0000, energy: 264.0249, velocity: 14.1086, time: 1611.0476
- },
-  { distance: 29950, force: 0.0000, energy: 264.0249, velocity: 14.0752, time: 1612.2381
- },
-  { distance: 29975, force: 0.0000, energy: 264.0249, velocity: 14.0471, time: 1613.8571
- },
-  { distance: 30000, force: 0.0000, energy: 264.0249, velocity: 14.0123, time: 1616.1818
- },
-  { distance: 30025, force: 0.0000, energy: 264.0249, velocity: 13.9791, time: 1617.6957
- },
-  { distance: 30050, force: 0.0000, energy: 264.0249, velocity: 13.9455, time: 1619.6364
- },
-  { distance: 30075, force: 0.0000, energy: 264.0249, velocity: 13.9085, time: 1621.1000
- },
-  { distance: 30100, force: 0.0000, energy: 264.0249, velocity: 13.8710, time: 1623.3000
- },
-  { distance: 30125, force: 0.0000, energy: 264.0249, velocity: 13.8280, time: 1625.1000
- },
-  { distance: 30150, force: 0.0000, energy: 264.0249, velocity: 13.7780, time: 1626.8000
- },
-  { distance: 30175, force: 22.8643, energy: 264.8037, velocity: 13.7700, time: 1628.4615
- },
-  { distance: 30200, force: 24.7879, energy: 266.4268, velocity: 13.7700, time: 1630.3846
- },
-  { distance: 30225, force: 26.7116, energy: 268.1811, velocity: 13.7700, time: 1632.3077
- },
-  { distance: 30250, force: 29.1893, energy: 270.0852, velocity: 13.7700, time: 1634.1333
- },
-  { distance: 30275, force: 31.9787, energy: 272.1687, velocity: 13.7700, time: 1635.9042
- },
-  { distance: 30300, force: 34.7680, energy: 274.4423, velocity: 13.7700, time: 1637.6750
- },
-  { distance: 30325, force: 37.5574, energy: 276.9059, velocity: 13.7700, time: 1639.4458
- },
-  { distance: 30350, force: 40.3467, energy: 279.5595, velocity: 13.7700, time: 1641.2167
- },
-  { distance: 30375, force: 43.1360, energy: 282.4031, velocity: 13.7700, time: 1642.9875
- },
-  { distance: 30400, force: 45.9254, energy: 285.4367, velocity: 13.7700, time: 1644.7583
- },
-  { distance: 30425, force: 48.7147, energy: 288.6604, velocity: 13.7700, time: 1646.5292
- },
-  { distance: 30450, force: 51.5041, energy: 292.0741, velocity: 13.7700, time: 1648.3000
- },
-  { distance: 30475, force: 54.2485, energy: 295.6763, velocity: 13.7700, time: 1650.0750
- },
-  { distance: 30500, force: 55.9157, energy: 299.4288, velocity: 13.7700, time: 1651.9500
- },
-  { distance: 30525, force: 57.5829, energy: 303.2948, velocity: 13.7700, time: 1653.8250
- },
-  { distance: 30550, force: 59.2501, energy: 307.2745, velocity: 13.7700, time: 1655.7000
- },
-  { distance: 30575, force: 60.9173, energy: 311.3677, velocity: 13.7700, time: 1657.5750
- },
-  { distance: 30600, force: 62.5845, energy: 315.5744, velocity: 13.7700, time: 1659.4500
- },
-  { distance: 30625, force: 64.2517, energy: 319.8948, velocity: 13.7700, time: 1661.3250
- },
-  { distance: 30650, force: 65.9189, energy: 324.3287, velocity: 13.7700, time: 1663.2000
- },
-  { distance: 30675, force: 67.5194, energy: 328.8740, velocity: 13.7700, time: 1665.0706
- },
-  { distance: 30700, force: 67.5194, energy: 333.4737, velocity: 13.7700, time: 1666.8344
- },
-  { distance: 30725, force: 67.5194, energy: 338.0735, velocity: 13.7700, time: 1668.5982
- },
-  { distance: 30750, force: 67.5194, energy: 342.6733, velocity: 13.7700, time: 1670.3620
- },
-  { distance: 30775, force: 67.5194, energy: 347.2730, velocity: 13.7700, time: 1672.1258
- },
-  { distance: 30800, force: 67.5194, energy: 351.8728, velocity: 13.7700, time: 1673.8896
- },
-  { distance: 30825, force: 67.5194, energy: 356.4725, velocity: 13.7700, time: 1675.6534
- },
-  { distance: 30850, force: 67.5194, energy: 361.0723, velocity: 13.7700, time: 1677.4172
- },
-  { distance: 30875, force: 67.5194, energy: 365.6720, velocity: 13.7700, time: 1679.1810
- },
-  { distance: 30900, force: 67.5194, energy: 370.2718, velocity: 13.7700, time: 1680.9448
- },
-  { distance: 30925, force: 67.5194, energy: 374.8716, velocity: 13.7700, time: 1682.7086
- },
-  { distance: 30950, force: 67.5194, energy: 379.4713, velocity: 13.7700, time: 1684.4724
- },
-  { distance: 30975, force: 67.5194, energy: 384.0711, velocity: 13.7700, time: 1686.2362
- },
-  { distance: 31000, force: 67.5194, energy: 388.6708, velocity: 13.7700, time: 1688.0000
- },
-  { distance: 31025, force: 67.2694, energy: 393.2621, velocity: 13.7700, time: 1690.2059
- },
-  { distance: 31050, force: 67.0050, energy: 397.8358, velocity: 13.7700, time: 1692.1034
- },
-  { distance: 31075, force: 66.7324, energy: 402.3912, velocity: 13.7700, time: 1693.8276
- },
-  { distance: 31100, force: 66.4599, energy: 406.9281, velocity: 13.7700, time: 1695.5517
- },
-  { distance: 31125, force: 66.1874, energy: 411.4464, velocity: 13.7700, time: 1697.2759
- },
-  { distance: 31150, force: 65.9149, energy: 415.9461, velocity: 13.7700, time: 1699.0000
- },
-  { distance: 31175, force: 63.0835, energy: 420.3401, velocity: 13.7700, time: 1701.2059
- },
-  { distance: 31200, force: 60.1047, energy: 424.5362, velocity: 13.7700, time: 1703.1429
- },
-  { distance: 31225, force: 57.0428, energy: 428.5266, velocity: 13.7700, time: 1704.9286
- },
-  { distance: 31250, force: 53.9809, energy: 432.3083, velocity: 13.7700, time: 1706.7143
- },
-  { distance: 31275, force: 50.9191, energy: 435.8815, velocity: 13.7700, time: 1708.5000
- },
-  { distance: 31300, force: 47.8572, energy: 439.2460, velocity: 13.7700, time: 1710.2857
- },
-  { distance: 31325, force: 44.7953, energy: 442.4020, velocity: 13.7700, time: 1712.0714
- },
-  { distance: 31350, force: 41.7335, energy: 445.3494, velocity: 13.7700, time: 1713.8571
- },
-  { distance: 31375, force: 38.6716, energy: 448.0882, velocity: 13.7700, time: 1715.6429
- },
-  { distance: 31400, force: 35.6097, energy: 450.6184, velocity: 13.7700, time: 1717.4286
- },
-  { distance: 31425, force: 32.5479, energy: 452.9400, velocity: 13.7700, time: 1719.2143
- },
-  { distance: 31450, force: 29.4860, energy: 455.0530, velocity: 13.7700, time: 1721.0000
- },
-  { distance: 31475, force: 26.4241, energy: 456.9575, velocity: 13.7700, time: 1722.7857
- },
-  { distance: 31500, force: 23.3623, energy: 458.6533, velocity: 13.7700, time: 1724.5714
- },
-  { distance: 31525, force: 20.3004, energy: 460.1406, velocity: 13.7700, time: 1726.3571
- },
-  { distance: 31550, force: 17.2386, energy: 461.4193, velocity: 13.7700, time: 1728.1429
- },
-  { distance: 31575, force: 14.1767, energy: 462.4894, velocity: 13.7700, time: 1729.9286
- },
-  { distance: 31600, force: 11.1148, energy: 463.3508, velocity: 13.7700, time: 1731.7143
- },
-  { distance: 31625, force: 8.0530, energy: 464.0037, velocity: 13.7700, time: 1733.5000
- },
-  { distance: 31650, force: 4.9911, energy: 464.4481, velocity: 13.7700, time: 1735.2857
- },
-  { distance: 31675, force: 3.0851, energy: 464.7232, velocity: 13.7700, time: 1737.3235
- },
-  { distance: 31700, force: 1.9914, energy: 464.8961, velocity: 13.7700, time: 1739.4211
- },
-  { distance: 31725, force: 1.0295, energy: 464.9990, velocity: 13.7700, time: 1741.1754
- },
-  { distance: 31750, force: 0.0677, energy: 465.0363, velocity: 13.7700, time: 1742.9298
- },
-  { distance: 31775, force: 0.0000, energy: 465.0387, velocity: 13.7700, time: 1744.4000
- },
-  { distance: 31800, force: 0.0000, energy: 465.0387, velocity: 13.7700, time: 1746.4500
- },
-  { distance: 31825, force: 0.0000, energy: 465.0387, velocity: 13.7770, time: 1748.4000
- },
-  { distance: 31850, force: 0.0000, energy: 465.0387, velocity: 13.7895, time: 1749.9500
- },
-  { distance: 31875, force: 0.0000, energy: 465.0387, velocity: 13.7920, time: 1752.2000
- },
-  { distance: 31900, force: 0.0000, energy: 465.0387, velocity: 13.8045, time: 1753.9000
- },
-  { distance: 31925, force: 0.0000, energy: 465.0387, velocity: 13.8240, time: 1755.7000
- },
-  { distance: 31950, force: 0.0000, energy: 465.0387, velocity: 13.8395, time: 1756.9500
- },
-  { distance: 31975, force: 0.0000, energy: 465.0387, velocity: 13.8540, time: 1759.2000
- },
-  { distance: 32000, force: 0.0000, energy: 465.0387, velocity: 13.8790, time: 1760.9000
- },
-  { distance: 32025, force: 0.0000, energy: 465.0387, velocity: 13.9040, time: 1762.7000
- },
-  { distance: 32050, force: 0.0000, energy: 465.0387, velocity: 13.9290, time: 1764.9000
- },
-  { distance: 32075, force: 0.0000, energy: 465.0387, velocity: 13.9560, time: 1766.4000
- },
-  { distance: 32100, force: 0.0000, energy: 465.0387, velocity: 13.9890, time: 1768.4500
- },
-  { distance: 32125, force: 0.0000, energy: 465.0387, velocity: 14.0210, time: 1769.7000
- },
-  { distance: 32150, force: 0.0000, energy: 465.0387, velocity: 14.0490, time: 1771.9000
- },
-  { distance: 32175, force: 0.0000, energy: 465.0387, velocity: 14.0915, time: 1773.1000
- },
-  { distance: 32200, force: 0.0000, energy: 465.0387, velocity: 14.1290, time: 1775.3000
- },
-  { distance: 32225, force: 0.0000, energy: 465.0387, velocity: 14.1665, time: 1777.1000
- },
-  { distance: 32250, force: 0.0000, energy: 465.0387, velocity: 14.2040, time: 1778.8000
- },
-  { distance: 32275, force: 0.0000, energy: 465.0387, velocity: 14.2515, time: 1780.1000
- },
-  { distance: 32300, force: 0.0000, energy: 465.0387, velocity: 14.2920, time: 1782.3000
- },
-  { distance: 32325, force: 0.0000, energy: 465.0387, velocity: 14.3415, time: 1784.0500
- },
-  { distance: 32350, force: 0.0000, energy: 465.0387, velocity: 14.3790, time: 1785.6000
- },
-  { distance: 32375, force: 0.0000, energy: 465.0387, velocity: 14.4165, time: 1787.5500
- },
-  { distance: 32400, force: 0.0000, energy: 465.0387, velocity: 14.4540, time: 1789.6000
- },
-  { distance: 32425, force: 0.0000, energy: 465.0387, velocity: 14.4810, time: 1791.0500
- },
-  { distance: 32450, force: 0.0000, energy: 465.0387, velocity: 14.5060, time: 1792.6000
- },
-  { distance: 32475, force: 0.0000, energy: 465.0387, velocity: 14.5255, time: 1794.5500
- },
-  { distance: 32500, force: 0.0000, energy: 465.0387, velocity: 14.5400, time: 1796.0000
- },
-  { distance: 32525, force: 0.0000, energy: 465.0387, velocity: 14.5500, time: 1798.0000
- },
-  { distance: 32550, force: 0.0000, energy: 465.0387, velocity: 14.5580, time: 1799.6000
- },
-  { distance: 32575, force: 0.0000, energy: 465.0387, velocity: 14.5600, time: 1801.1500
- },
-  { distance: 32600, force: 0.0000, energy: 465.0387, velocity: 14.5500, time: 1803.0000
- },
-  { distance: 32625, force: 0.0000, energy: 465.0387, velocity: 14.5500, time: 1804.3571
- },
-  { distance: 32650, force: 0.0000, energy: 465.0387, velocity: 14.5420, time: 1806.6000
- },
-  { distance: 32675, force: 0.0000, energy: 465.0387, velocity: 14.5395, time: 1808.0500
- },
-  { distance: 32700, force: 0.0000, energy: 465.0387, velocity: 14.5270, time: 1809.6000
- },
-  { distance: 32725, force: 0.0000, energy: 465.0387, velocity: 14.5200, time: 1811.5500
- },
-  { distance: 32750, force: 0.0000, energy: 465.0387, velocity: 14.5120, time: 1813.6000
- },
-  { distance: 32775, force: 0.0000, energy: 465.0387, velocity: 14.4995, time: 1815.0500
- },
-  { distance: 32800, force: 0.0000, energy: 465.0387, velocity: 14.4870, time: 1816.6000
- },
-  { distance: 32825, force: 0.0000, energy: 465.0387, velocity: 14.4800, time: 1818.5500
- },
-  { distance: 32850, force: 0.0000, energy: 465.0387, velocity: 14.4720, time: 1819.8000
- },
-  { distance: 32875, force: 0.0000, energy: 465.0387, velocity: 14.4600, time: 1822.0500
- },
-  { distance: 32900, force: 0.0000, energy: 465.0387, velocity: 14.4600, time: 1823.4286
- },
-  { distance: 32925, force: 0.0000, energy: 465.0387, velocity: 14.4600, time: 1825.7000
- },
-  { distance: 32950, force: 0.0000, energy: 465.0387, velocity: 14.4610, time: 1827.1000
- },
-  { distance: 32975, force: 0.0000, energy: 465.0387, velocity: 14.4735, time: 1828.7000
- },
-  { distance: 33000, force: 0.0000, energy: 465.0387, velocity: 14.4860, time: 1830.6000
- },
-  { distance: 33025, force: 0.0000, energy: 465.0387, velocity: 14.4985, time: 1832.7000
- },
-  { distance: 33050, force: 0.0000, energy: 465.0387, velocity: 14.5220, time: 1834.1000
- },
-  { distance: 33075, force: 0.0000, energy: 465.0387, velocity: 14.5470, time: 1835.7000
- },
-  { distance: 33100, force: 0.0000, energy: 465.0387, velocity: 14.5720, time: 1837.6000
- },
-  { distance: 33125, force: 0.0000, energy: 465.0387, velocity: 14.6055, time: 1838.8500
- },
-  { distance: 33150, force: 0.0000, energy: 465.0387, velocity: 14.6430, time: 1841.1000
- },
-  { distance: 33175, force: 0.0000, energy: 465.0387, velocity: 14.6805, time: 1842.7000
- },
-  { distance: 33200, force: 0.0000, energy: 465.0387, velocity: 14.7240, time: 1844.6000
- },
-  { distance: 33225, force: 0.0000, energy: 465.0387, velocity: 14.7740, time: 1845.8500
- },
-  { distance: 33250, force: 0.0000, energy: 465.0387, velocity: 14.8240, time: 1848.1000
- },
-  { distance: 33275, force: 0.0000, energy: 465.0387, velocity: 14.8775, time: 1849.3500
- },
-  { distance: 33300, force: 0.0000, energy: 465.0387, velocity: 14.9400, time: 1851.2000
- },
-  { distance: 33325, force: 0.0000, energy: 465.0387, velocity: 15.0025, time: 1852.8500
- },
-  { distance: 33350, force: 0.0000, energy: 465.0387, velocity: 15.0650, time: 1854.2000
- },
-  { distance: 33375, force: 0.0000, energy: 465.0387, velocity: 15.1310, time: 1856.3500
- },
-  { distance: 33400, force: 0.0000, energy: 465.0387, velocity: 15.2060, time: 1857.6000
- },
-  { distance: 33425, force: 0.0000, energy: 465.0387, velocity: 15.2810, time: 1859.7000
- },
-  { distance: 33450, force: 0.0000, energy: 465.0387, velocity: 15.3570, time: 1861.1000
- },
-  { distance: 33475, force: 0.0000, energy: 465.0387, velocity: 15.4410, time: 1862.3500
- },
-  { distance: 33500, force: 0.0000, energy: 465.0387, velocity: 15.5200, time: 1864.0000
- },
-  { distance: 33525, force: 0.0000, energy: 465.0387, velocity: 15.6082, time: 1865.4706
- },
-  { distance: 33550, force: 0.0000, energy: 465.0387, velocity: 15.6950, time: 1867.0000
- },
-  { distance: 33575, force: 0.0000, energy: 465.0387, velocity: 15.7809, time: 1868.5625
- },
-  { distance: 33600, force: 0.0000, energy: 465.0387, velocity: 15.8671, time: 1870.1538
- },
-  { distance: 33625, force: 0.0000, energy: 465.0387, velocity: 15.9555, time: 1872.0769
- },
-  { distance: 33650, force: 0.0000, energy: 465.0387, velocity: 16.0440, time: 1874.0000
- },
-  { distance: 33675, force: 0.0000, energy: 465.0387, velocity: 16.1335, time: 1875.0606
- },
-  { distance: 33700, force: 0.0000, energy: 465.0387, velocity: 16.2206, time: 1876.5758
- },
-  { distance: 33725, force: 0.0000, energy: 465.0387, velocity: 16.3077, time: 1878.0909
- },
-  { distance: 33750, force: 0.0000, energy: 465.0387, velocity: 16.3950, time: 1879.5000
- },
-  { distance: 33775, force: 0.0000, energy: 465.0387, velocity: 16.4834, time: 1881.0755
- },
-  { distance: 33800, force: 0.0000, energy: 465.0387, velocity: 16.5683, time: 1882.9623
- },
-  { distance: 33825, force: 0.0000, energy: 465.0387, velocity: 16.6532, time: 1884.8491
- },
-  { distance: 33850, force: -43.5725, energy: 465.0387, velocity: 16.6600, time: 1886.3577
- },
-  { distance: 33875, force: -43.3016, energy: 465.0387, velocity: 16.6600, time: 1887.8335
- },
-  { distance: 33900, force: -43.0307, energy: 465.0387, velocity: 16.6600, time: 1889.3093
- },
-  { distance: 33925, force: -42.7598, energy: 465.0387, velocity: 16.6600, time: 1890.7851
- },
-  { distance: 33950, force: -42.4888, energy: 465.0387, velocity: 16.6600, time: 1892.2609
- },
-  { distance: 33975, force: -42.2179, energy: 465.0387, velocity: 16.6600, time: 1893.7367
- },
-  { distance: 34000, force: -41.9470, energy: 465.0387, velocity: 16.6600, time: 1895.2125
- },
-  { distance: 34025, force: -41.6761, energy: 465.0387, velocity: 16.6600, time: 1896.6883
- },
-  { distance: 34050, force: -41.4052, energy: 465.0387, velocity: 16.6600, time: 1898.1641
- },
-  { distance: 34075, force: -41.1343, energy: 465.0387, velocity: 16.6600, time: 1899.6399
- },
-  { distance: 34100, force: -40.8633, energy: 465.0387, velocity: 16.6600, time: 1901.1157
- },
-  { distance: 34125, force: -40.5924, energy: 465.0387, velocity: 16.6600, time: 1902.5915
- },
-  { distance: 34150, force: -40.3215, energy: 465.0387, velocity: 16.6600, time: 1904.0673
- },
-  { distance: 34175, force: -40.0506, energy: 465.0387, velocity: 16.6600, time: 1905.5431
- },
-  { distance: 34200, force: -39.7797, energy: 465.0387, velocity: 16.6600, time: 1907.0189
- },
-  { distance: 34225, force: -39.5087, energy: 465.0387, velocity: 16.6600, time: 1908.4947
- },
-  { distance: 34250, force: -39.2378, energy: 465.0387, velocity: 16.6600, time: 1909.9705
- },
-  { distance: 34275, force: -38.9669, energy: 465.0387, velocity: 16.6600, time: 1911.4463
- },
-  { distance: 34300, force: -38.6960, energy: 465.0387, velocity: 16.6600, time: 1912.9221
- },
-  { distance: 34325, force: -38.4251, energy: 465.0387, velocity: 16.6600, time: 1914.3979
- },
-  { distance: 34350, force: -38.1541, energy: 465.0387, velocity: 16.6600, time: 1915.8737
- },
-  { distance: 34375, force: -37.8832, energy: 465.0387, velocity: 16.6600, time: 1917.3495
- },
-  { distance: 34400, force: -37.6123, energy: 465.0387, velocity: 16.6600, time: 1918.8253
- },
-  { distance: 34425, force: -37.3414, energy: 465.0387, velocity: 16.6600, time: 1920.3011
- },
-  { distance: 34450, force: -37.0705, energy: 465.0387, velocity: 16.6600, time: 1921.7769
- },
-  { distance: 34475, force: -36.7996, energy: 465.0387, velocity: 16.6600, time: 1923.2527
- },
-  { distance: 34500, force: -36.5286, energy: 465.0387, velocity: 16.6600, time: 1924.7285
- },
-  { distance: 34525, force: -36.2577, energy: 465.0387, velocity: 16.6600, time: 1926.2043
- },
-  { distance: 34550, force: -35.9868, energy: 465.0387, velocity: 16.6600, time: 1927.6800
- },
-  { distance: 34575, force: -35.7159, energy: 465.0387, velocity: 16.6600, time: 1929.1558
- },
-  { distance: 34600, force: -35.4450, energy: 465.0387, velocity: 16.6600, time: 1930.6316
- },
-  { distance: 34625, force: -35.1740, energy: 465.0387, velocity: 16.6600, time: 1932.1074
- },
-  { distance: 34650, force: -34.9031, energy: 465.0387, velocity: 16.6600, time: 1933.5832
- },
-  { distance: 34675, force: -34.6911, energy: 465.0387, velocity: 16.6600, time: 1935.0619
- },
-  { distance: 34700, force: -35.8934, energy: 465.0387, velocity: 16.6600, time: 1936.6106
- },
-  { distance: 34725, force: -37.0957, energy: 465.0387, velocity: 16.6600, time: 1938.1593
- },
-  { distance: 34750, force: -38.2980, energy: 465.0387, velocity: 16.6600, time: 1939.7080
- },
-  { distance: 34775, force: -39.5003, energy: 465.0387, velocity: 16.6600, time: 1941.2566
- },
-  { distance: 34800, force: -40.7026, energy: 465.0387, velocity: 16.6600, time: 1942.8053
- },
-  { distance: 34825, force: -41.9049, energy: 465.0387, velocity: 16.6600, time: 1944.3540
- },
-  { distance: 34850, force: -43.1072, energy: 465.0387, velocity: 16.6600, time: 1945.9027
- },
-  { distance: 34875, force: -44.3095, energy: 465.0387, velocity: 16.6600, time: 1947.4513
- },
-  { distance: 34900, force: -45.5119, energy: 465.0387, velocity: 16.6600, time: 1949.0000
- },
-  { distance: 34925, force: -44.3469, energy: 465.0387, velocity: 16.6600, time: 1950.5500
- },
-  { distance: 34950, force: -42.4027, energy: 465.0387, velocity: 16.6600, time: 1951.9796
- },
-  { distance: 34975, force: -40.3988, energy: 465.0387, velocity: 16.6600, time: 1953.5102
- },
-  { distance: 35000, force: -38.3950, energy: 465.0387, velocity: 16.6600, time: 1955.0408
- },
-  { distance: 35025, force: -36.3912, energy: 465.0387, velocity: 16.6600, time: 1956.5714
- },
-  { distance: 35050, force: -34.3873, energy: 465.0387, velocity: 16.6600, time: 1958.1020
- },
-  { distance: 35075, force: -32.3835, energy: 465.0387, velocity: 16.6600, time: 1959.6327
- },
-  { distance: 35100, force: -30.3797, energy: 465.0387, velocity: 16.6600, time: 1961.1633
- },
-  { distance: 35125, force: -28.3758, energy: 465.0387, velocity: 16.6600, time: 1962.6939
- },
-  { distance: 35150, force: -25.9720, energy: 465.0387, velocity: 16.6600, time: 1964.1765
- },
-  { distance: 35175, force: -23.4483, energy: 465.0387, velocity: 16.6600, time: 1965.6525
- },
-  { distance: 35200, force: -20.8994, energy: 465.0387, velocity: 16.6600, time: 1967.1356
- },
-  { distance: 35225, force: -18.3506, energy: 465.0387, velocity: 16.6600, time: 1968.6186
- },
-  { distance: 35250, force: -15.8017, energy: 465.0387, velocity: 16.6600, time: 1970.1017
- },
-  { distance: 35275, force: -13.2528, energy: 465.0387, velocity: 16.6600, time: 1971.5847
- },
-  { distance: 35300, force: -10.7039, energy: 465.0387, velocity: 16.6600, time: 1973.0678
- },
-  { distance: 35325, force: -8.1550, energy: 465.0387, velocity: 16.6600, time: 1974.5508
- },
-  { distance: 35350, force: -5.6062, energy: 465.0387, velocity: 16.6600, time: 1976.0339
- },
-  { distance: 35375, force: -3.0573, energy: 465.0387, velocity: 16.6600, time: 1977.5169
- },
-  { distance: 35400, force: -0.5084, energy: 465.0387, velocity: 16.6600, time: 1979.0000
- },
-  { distance: 35425, force: -0.5463, energy: 465.0387, velocity: 16.6600, time: 1980.4706
- },
-  { distance: 35450, force: -0.7333, energy: 465.0387, velocity: 16.6600, time: 1981.9611
- },
-  { distance: 35475, force: -1.0042, energy: 465.0387, velocity: 16.6600, time: 1983.4629
- },
-  { distance: 35500, force: -1.2751, energy: 465.0387, velocity: 16.6600, time: 1984.9647
- },
-  { distance: 35525, force: -1.5461, energy: 465.0387, velocity: 16.6600, time: 1986.4664
- },
-  { distance: 35550, force: -1.8170, energy: 465.0387, velocity: 16.6600, time: 1987.9682
- },
-  { distance: 35575, force: -2.0879, energy: 465.0387, velocity: 16.6600, time: 1989.4700
- },
-  { distance: 35600, force: -2.3588, energy: 465.0387, velocity: 16.6600, time: 1990.9717
- },
-  { distance: 35625, force: -2.6297, energy: 465.0387, velocity: 16.6600, time: 1992.4735
- },
-  { distance: 35650, force: -2.9007, energy: 465.0387, velocity: 16.6600, time: 1993.9753
- },
-  { distance: 35675, force: -3.1716, energy: 465.0387, velocity: 16.6600, time: 1995.4770
- },
-  { distance: 35700, force: -3.4425, energy: 465.0387, velocity: 16.6600, time: 1996.9788
- },
-  { distance: 35725, force: -3.7134, energy: 465.0387, velocity: 16.6600, time: 1998.4806
- },
-  { distance: 35750, force: -3.9843, energy: 465.0387, velocity: 16.6600, time: 1999.9823
- },
-  { distance: 35775, force: -4.2552, energy: 465.0387, velocity: 16.6600, time: 2001.4841
- },
-  { distance: 35800, force: -4.5262, energy: 465.0387, velocity: 16.6600, time: 2002.9859
- },
-  { distance: 35825, force: -4.7971, energy: 465.0387, velocity: 16.6600, time: 2004.4876
- },
-  { distance: 35850, force: -5.0680, energy: 465.0387, velocity: 16.6600, time: 2005.9894
- },
-  { distance: 35875, force: -5.3389, energy: 465.0387, velocity: 16.6600, time: 2007.4912
- },
-  { distance: 35900, force: -5.6098, energy: 465.0387, velocity: 16.6600, time: 2008.9929
- },
-  { distance: 35925, force: -5.8808, energy: 465.0387, velocity: 16.6600, time: 2010.4947
- },
-  { distance: 35950, force: -6.1517, energy: 465.0387, velocity: 16.6600, time: 2011.9965
- },
-  { distance: 35975, force: -6.4226, energy: 465.0387, velocity: 16.6600, time: 2013.4982
- },
-  { distance: 36000, force: -6.6935, energy: 465.0387, velocity: 16.6600, time: 2015.0000
- },
-  { distance: 36025, force: -5.6130, energy: 465.0387, velocity: 16.6600, time: 2016.4706
- },
-  { distance: 36050, force: -4.4545, energy: 465.0387, velocity: 16.6600, time: 2017.8000
- },
-  { distance: 36075, force: -3.3323, energy: 465.0387, velocity: 16.6600, time: 2019.0714
- },
-  { distance: 36100, force: -4.1339, energy: 465.0387, velocity: 16.6600, time: 2020.8571
- },
-  { distance: 36125, force: -4.9354, energy: 465.0387, velocity: 16.6600, time: 2022.6429
- },
-  { distance: 36150, force: -7.1252, energy: 465.0387, velocity: 16.6600, time: 2024.1765
- },
-  { distance: 36175, force: -9.7308, energy: 465.0387, velocity: 16.6600, time: 2025.6286
- },
-  { distance: 36200, force: -12.4240, energy: 465.0387, velocity: 16.6600, time: 2027.0571
- },
-  { distance: 36225, force: -15.1171, energy: 465.0387, velocity: 16.6600, time: 2028.4857
- },
-  { distance: 36250, force: -17.8103, energy: 465.0387, velocity: 16.6600, time: 2029.9143
- },
-  { distance: 36275, force: -20.5034, energy: 465.0387, velocity: 16.6600, time: 2031.3429
- },
-  { distance: 36300, force: -23.1966, energy: 465.0387, velocity: 16.6600, time: 2032.7714
- },
-  { distance: 36325, force: -26.3476, energy: 465.0387, velocity: 16.6600, time: 2034.2444
- },
-  { distance: 36350, force: -29.5858, energy: 465.0387, velocity: 16.6600, time: 2035.7259
- },
-  { distance: 36375, force: -32.8240, energy: 465.0387, velocity: 16.6600, time: 2037.2074
- },
-  { distance: 36400, force: -36.0622, energy: 465.0387, velocity: 16.6600, time: 2038.6889
- },
-  { distance: 36425, force: -39.3004, energy: 465.0387, velocity: 16.6600, time: 2040.1704
- },
-  { distance: 36450, force: -42.5386, energy: 465.0387, velocity: 16.6600, time: 2041.6519
- },
-  { distance: 36475, force: -45.7768, energy: 465.0387, velocity: 16.6600, time: 2043.1333
- },
-  { distance: 36500, force: -49.0150, energy: 465.0387, velocity: 16.6600, time: 2044.6148
- },
-  { distance: 36525, force: -52.2532, energy: 465.0387, velocity: 16.6600, time: 2046.0963
- },
-  { distance: 36550, force: -55.4914, energy: 465.0387, velocity: 16.6600, time: 2047.5778
- },
-  { distance: 36575, force: -58.6168, energy: 465.0387, velocity: 16.6600, time: 2049.0641
- },
-  { distance: 36600, force: -59.0352, energy: 465.0387, velocity: 16.6600, time: 2050.6667
- },
-  { distance: 36625, force: -59.4536, energy: 465.0387, velocity: 16.6600, time: 2052.2692
- },
-  { distance: 36650, force: -59.8720, energy: 465.0387, velocity: 16.6600, time: 2053.8718
- },
-  { distance: 36675, force: -60.2904, energy: 465.0387, velocity: 16.6600, time: 2055.4744
- },
-  { distance: 36700, force: -60.7088, energy: 465.0387, velocity: 16.6600, time: 2057.0769
- },
-  { distance: 36725, force: -61.1272, energy: 465.0387, velocity: 16.6600, time: 2058.6795
- },
-  { distance: 36750, force: -60.1574, energy: 465.0387, velocity: 16.6600, time: 2060.1765
- },
-  { distance: 36775, force: -58.7717, energy: 465.0387, velocity: 16.6600, time: 2061.6525
- },
-  { distance: 36800, force: -57.2985, energy: 465.0387, velocity: 16.6600, time: 2063.1356
- },
-  { distance: 36825, force: -55.8253, energy: 465.0387, velocity: 16.6600, time: 2064.6186
- },
-  { distance: 36850, force: -54.3520, energy: 465.0387, velocity: 16.6600, time: 2066.1017
- },
-  { distance: 36875, force: -52.8788, energy: 465.0387, velocity: 16.6600, time: 2067.5847
- },
-  { distance: 36900, force: -51.4056, energy: 465.0387, velocity: 16.6600, time: 2069.0678
- },
-  { distance: 36925, force: -49.9324, energy: 465.0387, velocity: 16.6600, time: 2070.5508
- },
-  { distance: 36950, force: -48.4592, energy: 465.0387, velocity: 16.6600, time: 2072.0339
- },
-  { distance: 36975, force: -46.9859, energy: 465.0387, velocity: 16.6600, time: 2073.5169
- },
-  { distance: 37000, force: -45.5127, energy: 465.0387, velocity: 16.6600, time: 2075.0000
- },
-  { distance: 37025, force: -44.1865, energy: 465.0387, velocity: 16.6600, time: 2076.4706
- },
-  { distance: 37050, force: -42.8689, energy: 465.0387, velocity: 16.6600, time: 2077.9143
- },
-  { distance: 37075, force: -41.5559, energy: 465.0387, velocity: 16.6600, time: 2079.3429
- },
-  { distance: 37100, force: -40.2430, energy: 465.0387, velocity: 16.6600, time: 2080.7714
- },
-  { distance: 37125, force: -38.9301, energy: 465.0387, velocity: 16.6600, time: 2082.2000
- },
-  { distance: 37150, force: -37.6172, energy: 465.0387, velocity: 16.6600, time: 2083.6286
- },
-  { distance: 37175, force: -36.3632, energy: 465.0387, velocity: 16.6600, time: 2085.0615
- },
-  { distance: 37200, force: -36.5235, energy: 465.0387, velocity: 16.6600, time: 2086.6000
- },
-  { distance: 37225, force: -36.6838, energy: 465.0387, velocity: 16.6600, time: 2088.1385
- },
-  { distance: 37250, force: -36.8441, energy: 465.0387, velocity: 16.6600, time: 2089.6769
- },
-  { distance: 37275, force: -37.0044, energy: 465.0387, velocity: 16.6600, time: 2091.2154
- },
-  { distance: 37300, force: -37.1648, energy: 465.0387, velocity: 16.6600, time: 2092.7538
- },
-  { distance: 37325, force: -35.7361, energy: 465.0387, velocity: 16.6600, time: 2094.3125
- },
-  { distance: 37350, force: -34.0048, energy: 465.0387, velocity: 16.6600, time: 2095.8750
- },
-  { distance: 37375, force: -32.2735, energy: 465.0387, velocity: 16.6600, time: 2097.4375
- },
-  { distance: 37400, force: -30.5422, energy: 465.0387, velocity: 16.6600, time: 2099.0000
- },
-  { distance: 37425, force: -28.6638, energy: 465.0387, velocity: 16.6600, time: 2100.4706
- },
-  { distance: 37450, force: -26.7769, energy: 465.0387, velocity: 16.6600, time: 2101.9624
- },
-  { distance: 37475, force: -24.8853, energy: 465.0387, velocity: 16.6600, time: 2103.4662
- },
-  { distance: 37500, force: -22.9937, energy: 465.0387, velocity: 16.6600, time: 2104.9699
- },
-  { distance: 37525, force: -21.1021, energy: 465.0387, velocity: 16.6600, time: 2106.4737
- },
-  { distance: 37550, force: -19.2104, energy: 465.0387, velocity: 16.6600, time: 2107.9774
- },
-  { distance: 37575, force: -17.3188, energy: 465.0387, velocity: 16.6600, time: 2109.4812
- },
-  { distance: 37600, force: -15.4272, energy: 465.0387, velocity: 16.6600, time: 2110.9850
- },
-  { distance: 37625, force: -13.5356, energy: 465.0387, velocity: 16.6600, time: 2112.4887
- },
-  { distance: 37650, force: -11.6439, energy: 465.0387, velocity: 16.6600, time: 2113.9925
- },
-  { distance: 37675, force: -9.7523, energy: 465.0387, velocity: 16.6600, time: 2115.4962
- },
-  { distance: 37700, force: -7.8607, energy: 465.0387, velocity: 16.6600, time: 2117.0000
- },
-  { distance: 37725, force: -6.1897, energy: 465.0387, velocity: 16.6600, time: 2118.4706
- },
-  { distance: 37750, force: -4.5313, energy: 465.0387, velocity: 16.6600, time: 2119.9524
- },
-  { distance: 37775, force: -2.8802, energy: 465.0387, velocity: 16.6600, time: 2121.4405
- },
-  { distance: 37800, force: -1.2290, energy: 465.0387, velocity: 16.6600, time: 2122.9286
- },
-  { distance: 37825, force: 0.4221, energy: 465.0530, velocity: 16.6600, time: 2124.4070
- },
-  { distance: 37850, force: 2.0733, energy: 465.1380, velocity: 16.6600, time: 2125.8605
- },
-  { distance: 37875, force: 3.7245, energy: 465.3355, velocity: 16.6600, time: 2127.3140
- },
-  { distance: 37900, force: 5.3756, energy: 465.6455, velocity: 16.6600, time: 2128.7674
- },
-  { distance: 37925, force: 0.0000, energy: 465.8286, velocity: 16.6495, time: 2130.1000
- },
-  { distance: 37950, force: 0.0000, energy: 465.8286, velocity: 16.6400, time: 2132.3000
- },
-  { distance: 37975, force: 0.0000, energy: 465.8286, velocity: 16.6345, time: 2133.5500
- },
-  { distance: 38000, force: 0.0000, energy: 465.8286, velocity: 16.6220, time: 2134.8000
- },
-  { distance: 38025, force: 0.0000, energy: 465.8286, velocity: 16.6100, time: 2136.1000
- },
-  { distance: 38050, force: 0.0000, energy: 465.8286, velocity: 16.6070, time: 2138.3000
- },
-  { distance: 38075, force: 0.0000, energy: 465.8286, velocity: 16.5945, time: 2139.5500
- },
-  { distance: 38100, force: 0.0000, energy: 465.8286, velocity: 16.5900, time: 2141.0000
- },
-  { distance: 38125, force: 0.0000, energy: 465.8286, velocity: 16.5800, time: 2142.3571
- },
-  { distance: 38150, force: 0.0000, energy: 465.8286, velocity: 16.5800, time: 2143.8000
- },
-  { distance: 38175, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2145.1000
- },
-  { distance: 38200, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2147.3000
- },
-  { distance: 38225, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2148.5500
- },
-  { distance: 38250, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2149.8000
- },
-  { distance: 38275, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2151.7500
- },
-  { distance: 38300, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2153.0000
- },
-  { distance: 38325, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2154.3571
- },
-  { distance: 38350, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2155.6667
- },
-  { distance: 38375, force: 0.0000, energy: 465.8286, velocity: 16.5700, time: 2157.4167
- },
-  { distance: 38400, force: 0.0000, energy: 465.8286, velocity: 16.5778, time: 2158.7826
- },
-  { distance: 38425, force: 0.0000, energy: 465.8286, velocity: 16.5800, time: 2160.7391
- },
-  { distance: 38450, force: 0.0000, energy: 465.8286, velocity: 16.5800, time: 2161.9565
- },
-  { distance: 38475, force: 0.0000, energy: 465.8286, velocity: 16.5800, time: 2163.1905
- },
-  { distance: 38500, force: 0.0000, energy: 465.8286, velocity: 16.5800, time: 2165.3000
- },
-  { distance: 38525, force: 0.0000, energy: 465.8286, velocity: 16.5800, time: 2166.5238
- },
-  { distance: 38550, force: 0.0000, energy: 465.8286, velocity: 16.5800, time: 2167.7500
- },
-  { distance: 38575, force: 0.0000, energy: 465.8286, velocity: 16.5900, time: 2169.1000
- },
-  { distance: 38600, force: 0.0000, energy: 465.8286, velocity: 16.5900, time: 2171.3000
- },
-  { distance: 38625, force: 0.0000, energy: 465.8286, velocity: 16.5900, time: 2172.5500
- },
-  { distance: 38650, force: 0.0000, energy: 465.8286, velocity: 16.5900, time: 2173.8000
- },
-  { distance: 38675, force: 0.0000, energy: 465.8286, velocity: 16.5905, time: 2176.0500
- },
-  { distance: 38700, force: 0.0000, energy: 465.8286, velocity: 16.6000, time: 2177.3000
- },
-  { distance: 38725, force: 0.0000, energy: 465.8286, velocity: 16.6000, time: 2178.5500
- },
-  { distance: 38750, force: 0.0000, energy: 465.8286, velocity: 16.6000, time: 2179.8000
- },
-  { distance: 38775, force: 0.0000, energy: 465.8286, velocity: 16.6100, time: 2182.0500
- },
-  { distance: 38800, force: 0.0000, energy: 465.8286, velocity: 16.6100, time: 2183.3000
- },
-  { distance: 38825, force: 0.0000, energy: 465.8286, velocity: 16.6100, time: 2184.5500
- },
-  { distance: 38850, force: 0.0000, energy: 465.8286, velocity: 16.6180, time: 2185.8000
- },
-  { distance: 38875, force: 0.0000, energy: 465.8286, velocity: 16.6205, time: 2188.0500
- },
-  { distance: 38900, force: 0.0000, energy: 465.8286, velocity: 16.6300, time: 2189.3000
- },
-  { distance: 38925, force: 0.0000, energy: 465.8286, velocity: 16.6300, time: 2190.5500
- },
-  { distance: 38950, force: 0.0000, energy: 465.8286, velocity: 16.6380, time: 2191.8000
- },
-  { distance: 38975, force: 0.0000, energy: 465.8286, velocity: 16.6400, time: 2194.0500
- },
-  { distance: 39000, force: 0.0000, energy: 465.8286, velocity: 16.6430, time: 2195.3000
- },
-  { distance: 39025, force: 0.0000, energy: 465.8286, velocity: 16.6500, time: 2196.5500
- },
-  { distance: 39050, force: 0.0000, energy: 465.8286, velocity: 16.6500, time: 2197.8000
- },
-  { distance: 39075, force: 0.0000, energy: 465.8286, velocity: 16.6505, time: 2200.0500
- },
-  { distance: 39100, force: 0.0000, energy: 465.8286, velocity: 16.6600, time: 2201.3000
- },
-  { distance: 39125, force: 0.0000, energy: 465.8286, velocity: 16.6600, time: 2202.5500
- },
-  { distance: 39150, force: -1.3283, energy: 465.8286, velocity: 16.6600, time: 2204.4275
- },
-  { distance: 39175, force: -1.2321, energy: 465.8286, velocity: 16.6600, time: 2205.9542
- },
-  { distance: 39200, force: -1.1360, energy: 465.8286, velocity: 16.6600, time: 2207.4809
- },
-  { distance: 39225, force: -1.0398, energy: 465.8286, velocity: 16.6600, time: 2209.0076
- },
-  { distance: 39250, force: -0.9436, energy: 465.8286, velocity: 16.6600, time: 2210.5344
- },
-  { distance: 39275, force: -0.8301, energy: 465.8286, velocity: 16.6600, time: 2212.0500
- },
-  { distance: 39300, force: 0.0000, energy: 465.8286, velocity: 16.6600, time: 2213.3000
- },
-  { distance: 39325, force: 0.0000, energy: 465.8286, velocity: 16.6600, time: 2214.5500
- },
-  { distance: 39350, force: 0.0000, energy: 465.8286, velocity: 16.6600, time: 2215.8421
- },
-  { distance: 39375, force: 0.0000, energy: 465.8286, velocity: 16.6600, time: 2218.1000
- },
-  { distance: 39400, force: 0.0000, energy: 465.8286, velocity: 16.6600, time: 2219.0000
- },
-  { distance: 39425, force: 0.0000, energy: 465.8286, velocity: 16.6500, time: 2220.3571
- },
-  { distance: 39450, force: 0.0000, energy: 465.8286, velocity: 16.6500, time: 2221.8000
- },
-  { distance: 39475, force: 0.0000, energy: 465.8286, velocity: 16.6395, time: 2224.0500
- },
-  { distance: 39500, force: 0.0000, energy: 465.8286, velocity: 16.6300, time: 2225.3000
- },
-  { distance: 39525, force: 0.0000, energy: 465.8286, velocity: 16.6245, time: 2226.5500
- },
-  { distance: 39550, force: 0.0000, energy: 465.8286, velocity: 16.6120, time: 2227.8000
- },
-  { distance: 39575, force: 0.0000, energy: 465.8286, velocity: 16.6095, time: 2230.0500
- },
-  { distance: 39600, force: 0.0000, energy: 465.8286, velocity: 16.6000, time: 2231.0000
- },
-  { distance: 39625, force: 0.0000, energy: 465.8286, velocity: 16.5922, time: 2232.5625
- },
-  { distance: 39650, force: 0.0000, energy: 465.8286, velocity: 16.5833, time: 2234.3333
- },
-  { distance: 39675, force: 0.0000, energy: 465.8286, velocity: 16.5729, time: 2235.7083
- },
-  { distance: 39700, force: 0.0000, energy: 465.8286, velocity: 16.5622, time: 2237.5652
- },
-  { distance: 39725, force: 0.0000, energy: 465.8286, velocity: 16.5517, time: 2238.8333
- },
-  { distance: 39750, force: 0.0000, energy: 465.8286, velocity: 16.5500, time: 2239.9545
- },
-  { distance: 39775, force: 0.0000, energy: 465.8286, velocity: 16.5391, time: 2242.0909
- },
-  { distance: 39800, force: 0.0000, energy: 465.8286, velocity: 16.5300, time: 2243.0000
- },
-  { distance: 39825, force: 0.0000, energy: 465.8286, velocity: 16.5275, time: 2244.5000
- },
-  { distance: 39850, force: 0.0000, energy: 465.8286, velocity: 16.5200, time: 2246.0000
- },
-  { distance: 39875, force: 0.0000, energy: 465.8286, velocity: 16.5100, time: 2248.0500
- },
-  { distance: 39900, force: 0.0000, energy: 465.8286, velocity: 16.5100, time: 2249.3000
- },
-  { distance: 39925, force: 0.0000, energy: 465.8286, velocity: 16.5100, time: 2250.5500
- },
-  { distance: 39950, force: 0.0000, energy: 465.8286, velocity: 16.5100, time: 2252.6842
- },
-  { distance: 39975, force: 0.0000, energy: 465.8286, velocity: 16.5100, time: 2254.1000
- },
-  { distance: 40000, force: 0.0000, energy: 465.8286, velocity: 16.5100, time: 2255.3500
- },
-  { distance: 40025, force: 0.0000, energy: 465.8286, velocity: 16.5100, time: 2256.6000
- },
-  { distance: 40050, force: 0.0000, energy: 465.8286, velocity: 16.5185, time: 2258.7000
- },
-  { distance: 40075, force: 0.0000, energy: 465.8286, velocity: 16.5210, time: 2260.1000
- },
-  { distance: 40100, force: 0.0000, energy: 465.8286, velocity: 16.5335, time: 2261.3500
- },
-  { distance: 40125, force: 0.0000, energy: 465.8286, velocity: 16.5400, time: 2262.6000
- },
-  { distance: 40150, force: 0.0000, energy: 465.8286, velocity: 16.5485, time: 2264.7000
- },
-  { distance: 40175, force: 0.0000, energy: 465.8286, velocity: 16.5610, time: 2266.1000
- },
-  { distance: 40200, force: 0.0000, energy: 465.8286, velocity: 16.5735, time: 2267.3500
- },
-  { distance: 40225, force: 0.0000, energy: 465.8286, velocity: 16.5920, time: 2268.6000
- },
-  { distance: 40250, force: 0.0000, energy: 465.8286, velocity: 16.6085, time: 2270.7000
- },
-  { distance: 40275, force: 0.0000, energy: 465.8286, velocity: 16.6220, time: 2272.1000
- },
-  { distance: 40300, force: 0.0000, energy: 465.8286, velocity: 16.6400, time: 2273.0000
- },
-  { distance: 40325, force: -10.1611, energy: 465.8286, velocity: 16.6600, time: 2275.0000
- },
-  { distance: 40350, force: -10.3537, energy: 465.8286, velocity: 16.6600, time: 2276.0000
- },
-  { distance: 40375, force: -10.5300, energy: 465.8286, velocity: 16.6600, time: 2277.5625
- },
-  { distance: 40400, force: -10.7063, energy: 465.8286, velocity: 16.6600, time: 2279.1250
- },
-  { distance: 40425, force: -10.8827, energy: 465.8286, velocity: 16.6600, time: 2280.6875
- },
-  { distance: 40450, force: -11.0590, energy: 465.8286, velocity: 16.6600, time: 2282.2500
- },
-  { distance: 40475, force: -11.2354, energy: 465.8286, velocity: 16.6600, time: 2283.8125
- },
-  { distance: 40500, force: -11.4117, energy: 465.8286, velocity: 16.6600, time: 2285.3750
- },
-  { distance: 40525, force: -11.5880, energy: 465.8286, velocity: 16.6600, time: 2286.9375
- },
-  { distance: 40550, force: -11.7644, energy: 465.8286, velocity: 16.6600, time: 2288.5000
- },
-  { distance: 40575, force: -11.9465, energy: 465.8286, velocity: 16.6600, time: 2290.0600
- },
-  { distance: 40600, force: -12.2671, energy: 465.8286, velocity: 16.6600, time: 2291.5600
- },
-  { distance: 40625, force: -12.5877, energy: 465.8286, velocity: 16.6600, time: 2293.0600
- },
-  { distance: 40650, force: -12.9083, energy: 465.8286, velocity: 16.6600, time: 2294.5600
- },
-  { distance: 40675, force: -13.2289, energy: 465.8286, velocity: 16.6600, time: 2296.0600
- },
-  { distance: 40700, force: -13.5495, energy: 465.8286, velocity: 16.6600, time: 2297.5600
- },
-  { distance: 40725, force: -13.8702, energy: 465.8286, velocity: 16.6600, time: 2299.0600
- },
-  { distance: 40750, force: -14.1908, energy: 465.8286, velocity: 16.6600, time: 2300.5600
- },
-  { distance: 40775, force: -14.5024, energy: 465.8286, velocity: 16.6600, time: 2302.0581
- },
-  { distance: 40800, force: -14.5986, energy: 465.8286, velocity: 16.6600, time: 2303.5116
- },
-  { distance: 40825, force: -14.6948, energy: 465.8286, velocity: 16.6600, time: 2304.9651
- },
-  { distance: 40850, force: -14.7910, energy: 465.8286, velocity: 16.6600, time: 2306.4186
- },
-  { distance: 40875, force: -14.9842, energy: 465.8286, velocity: 16.6600, time: 2307.8824
- },
-  { distance: 40900, force: -15.2457, energy: 465.8286, velocity: 16.6600, time: 2309.3600
- },
-  { distance: 40925, force: -15.5182, energy: 465.8286, velocity: 16.6600, time: 2310.8600
- },
-  { distance: 40950, force: -15.7907, energy: 465.8286, velocity: 16.6600, time: 2312.3600
- },
-  { distance: 40975, force: -16.0632, energy: 465.8286, velocity: 16.6600, time: 2313.8600
- },
-  { distance: 41000, force: -16.1818, energy: 465.8286, velocity: 16.6600, time: 2315.3625
- },
-  { distance: 41025, force: -15.8131, energy: 465.8286, velocity: 16.6600, time: 2316.8729
- },
-  { distance: 41050, force: -15.4444, energy: 465.8286, velocity: 16.6600, time: 2318.3833
- },
-  { distance: 41075, force: -15.0757, energy: 465.8286, velocity: 16.6600, time: 2319.8938
- },
-  { distance: 41100, force: -14.7070, energy: 465.8286, velocity: 16.6600, time: 2321.4042
- },
-  { distance: 41125, force: -14.3383, energy: 465.8286, velocity: 16.6600, time: 2322.9146
- },
-  { distance: 41150, force: -13.9696, energy: 465.8286, velocity: 16.6600, time: 2324.4250
- },
-  { distance: 41175, force: -13.6009, energy: 465.8286, velocity: 16.6600, time: 2325.9354
- },
-  { distance: 41200, force: -13.2322, energy: 465.8286, velocity: 16.6600, time: 2327.4458
- },
-  { distance: 41225, force: -12.8635, energy: 465.8286, velocity: 16.6600, time: 2328.9563
- },
-  { distance: 41250, force: -12.4948, energy: 465.8286, velocity: 16.6600, time: 2330.4667
- },
-  { distance: 41275, force: -12.1261, energy: 465.8286, velocity: 16.6600, time: 2331.9771
- },
-  { distance: 41300, force: -11.7574, energy: 465.8286, velocity: 16.6600, time: 2333.4875
- },
-  { distance: 41325, force: -11.3887, energy: 465.8286, velocity: 16.6600, time: 2334.9979
- },
-  { distance: 41350, force: -11.0200, energy: 465.8286, velocity: 16.6600, time: 2336.5083
- },
-  { distance: 41375, force: -10.6513, energy: 465.8286, velocity: 16.6600, time: 2338.0188
- },
-  { distance: 41400, force: -10.2825, energy: 465.8286, velocity: 16.6600, time: 2339.5292
- },
-  { distance: 41425, force: -9.9138, energy: 465.8286, velocity: 16.6600, time: 2341.0396
- },
-  { distance: 41450, force: -9.5451, energy: 465.8286, velocity: 16.6600, time: 2342.5500
- },
-  { distance: 41475, force: -9.1982, energy: 465.8286, velocity: 16.6600, time: 2344.0602
- },
-  { distance: 41500, force: -9.3746, energy: 465.8286, velocity: 16.6600, time: 2345.5639
- },
-  { distance: 41525, force: -9.5509, energy: 465.8286, velocity: 16.6600, time: 2347.0677
- },
-  { distance: 41550, force: -9.7272, energy: 465.8286, velocity: 16.6600, time: 2348.5714
- },
-  { distance: 41575, force: -9.9036, energy: 465.8286, velocity: 16.6600, time: 2350.0752
- },
-  { distance: 41600, force: -10.0799, energy: 465.8286, velocity: 16.6600, time: 2351.5789
- },
-  { distance: 41625, force: -10.2563, energy: 465.8286, velocity: 16.6600, time: 2353.0827
- },
-  { distance: 41650, force: -10.4326, energy: 465.8286, velocity: 16.6600, time: 2354.5865
- },
-  { distance: 41675, force: -10.6089, energy: 465.8286, velocity: 16.6600, time: 2356.0902
- },
-  { distance: 41700, force: -10.7853, energy: 465.8286, velocity: 16.6600, time: 2357.5940
- },
-  { distance: 41725, force: -10.9616, energy: 465.8286, velocity: 16.6600, time: 2359.0977
- },
-  { distance: 41750, force: -10.9262, energy: 465.8286, velocity: 16.6600, time: 2360.5882
- },
-  { distance: 41775, force: -10.5712, energy: 465.8286, velocity: 16.6600, time: 2362.0575
- },
-  { distance: 41800, force: -10.1704, energy: 465.8286, velocity: 16.6600, time: 2363.4956
- },
-  { distance: 41825, force: -9.7697, energy: 465.8286, velocity: 16.6600, time: 2364.9336
- },
-  { distance: 41850, force: -9.3689, energy: 465.8286, velocity: 16.6600, time: 2366.3717
- },
-  { distance: 41875, force: -8.9681, energy: 465.8286, velocity: 16.6600, time: 2367.8097
- },
-  { distance: 41900, force: -8.5674, energy: 465.8286, velocity: 16.6600, time: 2369.2478
- },
-  { distance: 41925, force: -8.1666, energy: 465.8286, velocity: 16.6600, time: 2370.6858
- },
-  { distance: 41950, force: -7.7658, energy: 465.8286, velocity: 16.6600, time: 2372.1239
- },
-  { distance: 41975, force: -7.3651, energy: 465.8286, velocity: 16.6600, time: 2373.5619
- },
-  { distance: 42000, force: -6.9643, energy: 465.8286, velocity: 16.6600, time: 2375.0000
- },
-  { distance: 42025, force: -6.9606, energy: 465.8286, velocity: 16.6600, time: 2376.4706
- },
-  { distance: 42050, force: -6.8669, energy: 465.8286, velocity: 16.6600, time: 2377.9639
- },
-  { distance: 42075, force: -6.7226, energy: 465.8286, velocity: 16.6600, time: 2379.4699
- },
-  { distance: 42100, force: -6.5784, energy: 465.8286, velocity: 16.6600, time: 2380.9759
- },
-  { distance: 42125, force: -6.4341, energy: 465.8286, velocity: 16.6600, time: 2382.4819
- },
-  { distance: 42150, force: -6.2898, energy: 465.8286, velocity: 16.6600, time: 2383.9880
- },
-  { distance: 42175, force: -6.1455, energy: 465.8286, velocity: 16.6600, time: 2385.4940
- },
-  { distance: 42200, force: -6.0013, energy: 465.8286, velocity: 16.6600, time: 2387.0000
- },
-  { distance: 42225, force: -5.5334, energy: 465.8286, velocity: 16.6600, time: 2388.4706
- },
-  { distance: 42250, force: -5.0470, energy: 465.8286, velocity: 16.6600, time: 2389.9624
- },
-  { distance: 42275, force: -4.5500, energy: 465.8286, velocity: 16.6600, time: 2391.4662
- },
-  { distance: 42300, force: -4.0531, energy: 465.8286, velocity: 16.6600, time: 2392.9699
- },
-  { distance: 42325, force: -3.5561, energy: 465.8286, velocity: 16.6600, time: 2394.4737
- },
-  { distance: 42350, force: -3.0592, energy: 465.8286, velocity: 16.6600, time: 2395.9774
- },
-  { distance: 42375, force: -2.5622, energy: 465.8286, velocity: 16.6600, time: 2397.4812
- },
-  { distance: 42400, force: -2.0653, energy: 465.8286, velocity: 16.6600, time: 2398.9850
- },
-  { distance: 42425, force: -1.5683, energy: 465.8286, velocity: 16.6600, time: 2400.4887
- },
-  { distance: 42450, force: -1.0714, energy: 465.8286, velocity: 16.6600, time: 2401.9925
- },
-  { distance: 42475, force: -0.5744, energy: 465.8286, velocity: 16.6600, time: 2403.4962
- },
-  { distance: 42500, force: -0.0775, energy: 465.8286, velocity: 16.6600, time: 2405.0000
- },
-  { distance: 42525, force: 0.9342, energy: 465.8604, velocity: 16.6600, time: 2406.5152
- },
-  { distance: 42550, force: 0.0000, energy: 465.8922, velocity: 16.6600, time: 2408.8000
- },
-  { distance: 42575, force: 0.0000, energy: 465.8922, velocity: 16.6500, time: 2410.0500
- },
-  { distance: 42600, force: 0.0000, energy: 465.8922, velocity: 16.6470, time: 2411.3000
- },
-  { distance: 42625, force: 0.0000, energy: 465.8922, velocity: 16.6345, time: 2413.1000
- },
-  { distance: 42650, force: 0.0000, energy: 465.8922, velocity: 16.6300, time: 2414.8000
- },
-  { distance: 42675, force: 0.0000, energy: 465.8922, velocity: 16.6095, time: 2416.0500
- },
-  { distance: 42700, force: 0.0000, energy: 465.8922, velocity: 16.5970, time: 2417.3000
- },
-  { distance: 42725, force: 0.0000, energy: 465.8922, velocity: 16.5790, time: 2419.1000
- },
-  { distance: 42750, force: 0.0000, energy: 465.8922, velocity: 16.5620, time: 2420.8000
- },
-  { distance: 42775, force: 0.0000, energy: 465.8922, velocity: 16.5390, time: 2422.0500
- },
-  { distance: 42800, force: 0.0000, energy: 465.8922, velocity: 16.5140, time: 2423.3000
- },
-  { distance: 42825, force: 0.0000, energy: 465.8922, velocity: 16.4890, time: 2425.1000
- },
-  { distance: 42850, force: 0.0000, energy: 465.8922, velocity: 16.4640, time: 2426.8000
- },
-  { distance: 42875, force: 0.0000, energy: 465.8922, velocity: 16.4290, time: 2428.0500
- },
-  { distance: 42900, force: 0.0000, energy: 465.8922, velocity: 16.4010, time: 2429.3000
- },
-  { distance: 42925, force: 0.0000, energy: 465.8922, velocity: 16.3635, time: 2431.1000
- },
-  { distance: 42950, force: 0.0000, energy: 465.8922, velocity: 16.3340, time: 2432.8000
- },
-  { distance: 42975, force: 0.0000, energy: 465.8922, velocity: 16.2985, time: 2434.0500
- },
-  { distance: 43000, force: 0.0000, energy: 465.8922, velocity: 16.2610, time: 2435.6000
- },
-  { distance: 43025, force: 0.0000, energy: 465.8922, velocity: 16.2235, time: 2437.5500
- },
-  { distance: 43050, force: 0.0000, energy: 465.8922, velocity: 16.1780, time: 2438.8000
- },
-  { distance: 43075, force: 0.0000, energy: 465.8922, velocity: 16.1385, time: 2440.1000
- },
-  { distance: 43100, force: 0.0000, energy: 465.8922, velocity: 16.1000, time: 2442.0000
- },
-  { distance: 43125, force: 0.0000, energy: 465.8922, velocity: 16.0593, time: 2443.3571
- },
-  { distance: 43150, force: 0.0000, energy: 465.8922, velocity: 16.0160, time: 2444.8000
- },
-  { distance: 43175, force: 0.0000, energy: 465.8922, velocity: 15.9785, time: 2447.0500
- },
-  { distance: 43200, force: 0.0000, energy: 465.8922, velocity: 15.9440, time: 2448.3000
- },
-  { distance: 43225, force: 0.0000, energy: 465.8922, velocity: 15.9135, time: 2449.5500
- },
-  { distance: 43250, force: 0.0000, energy: 465.8922, velocity: 15.8840, time: 2451.6000
- },
-  { distance: 43275, force: 0.0000, energy: 465.8922, velocity: 15.8490, time: 2453.0500
- },
-  { distance: 43300, force: 0.0000, energy: 465.8922, velocity: 15.8210, time: 2454.3000
- },
-  { distance: 43325, force: 0.0000, energy: 465.8922, velocity: 15.7890, time: 2456.1000
- },
-  { distance: 43350, force: 0.0000, energy: 465.8922, velocity: 15.7640, time: 2457.8000
- },
-  { distance: 43375, force: 0.0000, energy: 465.8922, velocity: 15.7390, time: 2459.0500
- },
-  { distance: 43400, force: 0.0000, energy: 465.8922, velocity: 15.7140, time: 2460.6000
- },
-  { distance: 43425, force: 0.0000, energy: 465.8922, velocity: 15.6931, time: 2462.6875
- },
-  { distance: 43450, force: 0.0000, energy: 465.8922, velocity: 15.6724, time: 2464.1765
- },
-  { distance: 43475, force: 0.0000, energy: 465.8922, velocity: 15.6516, time: 2465.6810
- },
-  { distance: 43500, force: 0.0000, energy: 465.8922, velocity: 15.6326, time: 2467.2286
- },
-  { distance: 43525, force: 0.0000, energy: 465.8922, velocity: 15.6135, time: 2468.7762
- },
-  { distance: 43550, force: 0.0000, energy: 465.8922, velocity: 15.5945, time: 2470.3238
- },
-  { distance: 43575, force: 0.0000, energy: 465.8922, velocity: 15.5754, time: 2471.8714
- },
-  { distance: 43600, force: 0.0000, energy: 465.8922, velocity: 15.5564, time: 2473.4190
- },
-  { distance: 43625, force: 0.0000, energy: 465.8922, velocity: 15.5373, time: 2474.9667
- },
-  { distance: 43650, force: 0.0000, energy: 465.8922, velocity: 15.5183, time: 2476.5143
- },
-  { distance: 43675, force: 0.0000, energy: 465.8922, velocity: 15.4990, time: 2478.1000
- },
-  { distance: 43700, force: 0.0000, energy: 465.8922, velocity: 15.4770, time: 2480.3000
- },
-  { distance: 43725, force: 0.0000, energy: 465.8922, velocity: 15.4590, time: 2481.5500
- },
-  { distance: 43750, force: 0.0000, energy: 465.8922, velocity: 15.4420, time: 2483.6000
- },
-  { distance: 43775, force: 0.0000, energy: 465.8922, velocity: 15.4295, time: 2485.0500
- },
-  { distance: 43800, force: 0.0000, energy: 465.8922, velocity: 15.4100, time: 2486.0000
- },
-  { distance: 43825, force: 0.0000, energy: 465.8922, velocity: 15.4026, time: 2488.2059
- },
-  { distance: 43850, force: 0.0000, energy: 465.8922, velocity: 15.3910, time: 2490.0787
- },
-  { distance: 43875, force: 0.0000, energy: 465.8922, velocity: 15.3770, time: 2491.7640
- },
-  { distance: 43900, force: 0.0000, energy: 465.8922, velocity: 15.3629, time: 2493.4494
- },
-  { distance: 43925, force: 0.0000, energy: 465.8922, velocity: 15.3489, time: 2495.1099
- },
-  { distance: 43950, force: 0.0000, energy: 465.8922, velocity: 15.3352, time: 2496.4835
- },
-  { distance: 43975, force: 0.0000, energy: 465.8922, velocity: 15.3214, time: 2497.8571
- },
-  { distance: 44000, force: 0.0000, energy: 465.8922, velocity: 15.3077, time: 2499.2308
- },
-  { distance: 44025, force: 0.0000, energy: 465.8922, velocity: 15.2928, time: 2500.7174
- },
-  { distance: 44050, force: 0.0000, energy: 465.8922, velocity: 15.2765, time: 2502.3478
- },
-  { distance: 44075, force: 0.0000, energy: 465.8922, velocity: 15.2602, time: 2503.9783
- },
-  { distance: 44100, force: 0.0000, energy: 465.8922, velocity: 15.2439, time: 2505.6087
- },
-  { distance: 44125, force: 0.0000, energy: 465.8922, velocity: 15.2299, time: 2507.4149
- },
-  { distance: 44150, force: 0.0000, energy: 465.8922, velocity: 15.2166, time: 2509.2766
- },
-  { distance: 44175, force: 0.0000, energy: 465.8922, velocity: 15.2033, time: 2511.1383
- },
-  { distance: 44200, force: 0.0000, energy: 465.8922, velocity: 15.1900, time: 2513.0000
- },
-  { distance: 44225, force: 0.0000, energy: 465.8922, velocity: 15.1731, time: 2514.3514
- },
-  { distance: 44250, force: 0.0000, energy: 465.8922, velocity: 15.1562, time: 2515.7027
- },
-  { distance: 44275, force: 0.0000, energy: 465.8922, velocity: 15.1395, time: 2517.1000
- },
-  { distance: 44300, force: 0.0000, energy: 465.8922, velocity: 15.1270, time: 2519.3000
- },
-  { distance: 44325, force: 0.0000, energy: 465.8922, velocity: 15.1090, time: 2520.5500
- },
-  { distance: 44350, force: 0.0000, energy: 465.8922, velocity: 15.0840, time: 2522.6000
- },
-  { distance: 44375, force: 0.0000, energy: 465.8922, velocity: 15.0585, time: 2524.0500
- },
-  { distance: 44400, force: 0.0000, energy: 465.8922, velocity: 15.0225, time: 2525.7500
- },
-  { distance: 44425, force: 0.0000, energy: 465.8922, velocity: 14.9875, time: 2527.7500
- },
-  { distance: 44450, force: 0.0000, energy: 465.8922, velocity: 14.9517, time: 2529.4138
- },
-  { distance: 44475, force: 0.0000, energy: 465.8922, velocity: 14.9174, time: 2531.1290
- },
-  { distance: 44500, force: 0.0000, energy: 465.8922, velocity: 14.8852, time: 2532.7419
- },
-  { distance: 44525, force: 0.0000, energy: 465.8922, velocity: 14.8461, time: 2534.3548
- },
-  { distance: 44550, force: 0.0000, energy: 465.8922, velocity: 14.8058, time: 2535.9677
- },
-  { distance: 44575, force: 0.0000, energy: 465.8922, velocity: 14.7664, time: 2537.5455
- },
-  { distance: 44600, force: 0.0000, energy: 465.8922, velocity: 14.7280, time: 2539.2000
- },
-  { distance: 44625, force: 0.0000, energy: 465.8922, velocity: 14.6885, time: 2541.0500
- },
-  { distance: 44650, force: 0.0000, energy: 465.8922, velocity: 14.6540, time: 2542.6000
- },
-  { distance: 44675, force: 0.0000, energy: 465.8922, velocity: 14.6235, time: 2544.5500
- },
-  { distance: 44700, force: 0.0000, energy: 465.8922, velocity: 14.5860, time: 2545.8000
- },
-  { distance: 44725, force: 0.0000, energy: 465.8922, velocity: 14.5585, time: 2548.0500
- },
-  { distance: 44750, force: 0.0000, energy: 465.8922, velocity: 14.5240, time: 2549.3000
- },
-  { distance: 44775, force: 0.0000, energy: 465.8922, velocity: 14.4990, time: 2551.1000
- },
-  { distance: 44800, force: 0.0000, energy: 465.8922, velocity: 14.4740, time: 2552.8000
- },
-  { distance: 44825, force: 0.0000, energy: 465.8922, velocity: 14.4490, time: 2555.0500
- },
-  { distance: 44850, force: 0.0000, energy: 465.8922, velocity: 14.4240, time: 2556.3000
- },
-  { distance: 44875, force: 0.0000, energy: 465.8922, velocity: 14.4045, time: 2558.1000
- },
-  { distance: 44900, force: 0.0000, energy: 465.8922, velocity: 14.3840, time: 2559.8000
- },
-  { distance: 44925, force: 0.0000, energy: 465.8922, velocity: 14.3671, time: 2561.4412
- },
-  { distance: 44950, force: 0.0000, energy: 465.8922, velocity: 14.3524, time: 2563.6471
- },
-  { distance: 44975, force: 0.0000, energy: 465.8922, velocity: 14.3295, time: 2565.0500
- },
-  { distance: 45000, force: 0.0000, energy: 465.8922, velocity: 14.3170, time: 2566.6000
- },
-  { distance: 45025, force: 0.0000, energy: 465.8922, velocity: 14.3045, time: 2568.5500
- },
-  { distance: 45050, force: 0.0000, energy: 465.8922, velocity: 14.2920, time: 2570.6000
- },
-  { distance: 45075, force: 0.0000, energy: 465.8922, velocity: 14.2795, time: 2572.0500
- },
-  { distance: 45100, force: 0.0000, energy: 465.8922, velocity: 14.2670, time: 2573.6000
- },
-  { distance: 45125, force: 0.0000, energy: 465.8922, velocity: 14.2545, time: 2575.5500
- },
-  { distance: 45150, force: 0.0000, energy: 465.8922, velocity: 14.2420, time: 2577.6000
- },
-  { distance: 45175, force: 0.0000, energy: 465.8922, velocity: 14.2395, time: 2579.0500
- },
-  { distance: 45200, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2580.6000
- },
-  { distance: 45225, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2582.5500
- },
-  { distance: 45250, force: 0.0000, energy: 465.8922, velocity: 14.2220, time: 2584.6000
- },
-  { distance: 45275, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2586.0500
- },
-  { distance: 45300, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2588.0000
- },
-  { distance: 45325, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2589.3571
- },
-  { distance: 45350, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2591.6000
- },
-  { distance: 45375, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2593.1000
- },
-  { distance: 45400, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2595.3000
- },
-  { distance: 45425, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2596.5500
- },
-  { distance: 45450, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2598.6000
- },
-  { distance: 45475, force: 0.0000, energy: 465.8922, velocity: 14.2205, time: 2600.1000
- },
-  { distance: 45500, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2602.3000
- },
-  { distance: 45525, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2603.5500
- },
-  { distance: 45550, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2605.6000
- },
-  { distance: 45575, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2607.1000
- },
-  { distance: 45600, force: 0.0000, energy: 465.8922, velocity: 14.2400, time: 2609.0000
- },
-  { distance: 45625, force: 0.0000, energy: 465.8922, velocity: 14.2400, time: 2610.3571
- },
-  { distance: 45650, force: 0.0000, energy: 465.8922, velocity: 14.2380, time: 2612.4000
- },
-  { distance: 45675, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2614.4500
- },
-  { distance: 45700, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2615.7000
- },
-  { distance: 45725, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 2617.9000
- },
-  { distance: 45750, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2619.4000
- },
-  { distance: 45775, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2621.4500
- },
-  { distance: 45800, force: 0.0000, energy: 465.8922, velocity: 14.2130, time: 2622.7000
- },
-  { distance: 45825, force: 0.0000, energy: 465.8922, velocity: 14.2005, time: 2624.9000
- },
-  { distance: 45850, force: 0.0000, energy: 465.8922, velocity: 14.1980, time: 2626.4000
- },
-  { distance: 45875, force: 0.0000, energy: 465.8922, velocity: 14.1855, time: 2628.4500
- },
-  { distance: 45900, force: 0.0000, energy: 465.8922, velocity: 14.1800, time: 2630.0000
- },
-  { distance: 45925, force: 0.0000, energy: 465.8922, velocity: 14.1664, time: 2632.0000
- },
-  { distance: 45950, force: 0.0000, energy: 465.8922, velocity: 14.1520, time: 2633.6000
- },
-  { distance: 45975, force: 0.0000, energy: 465.8922, velocity: 14.1390, time: 2635.1000
- },
-  { distance: 46000, force: 0.0000, energy: 465.8922, velocity: 14.1170, time: 2637.3000
- },
-  { distance: 46025, force: 0.0000, energy: 465.8922, velocity: 14.0990, time: 2639.1000
- },
-  { distance: 46050, force: 0.0000, energy: 465.8922, velocity: 14.0800, time: 2640.5000
- },
-  { distance: 46075, force: 0.0000, energy: 465.8922, velocity: 14.0590, time: 2642.1000
- },
-  { distance: 46100, force: 0.0000, energy: 465.8922, velocity: 14.0340, time: 2644.3000
- },
-  { distance: 46125, force: 0.0000, energy: 465.8922, velocity: 14.0050, time: 2646.0000
- },
-  { distance: 46150, force: 0.0000, energy: 465.8922, velocity: 13.9767, time: 2647.6667
- },
-  { distance: 46175, force: 0.0000, energy: 465.8922, velocity: 13.9455, time: 2649.6364
- },
-  { distance: 46200, force: 0.0000, energy: 465.8922, velocity: 13.9200, time: 2651.0000
- },
-  { distance: 46225, force: 0.0000, energy: 465.8922, velocity: 13.8929, time: 2653.3571
- },
-  { distance: 46250, force: 0.0000, energy: 465.8922, velocity: 13.8640, time: 2654.8000
- },
-  { distance: 46275, force: 0.0000, energy: 465.8922, velocity: 13.8395, time: 2657.0500
- },
-  { distance: 46300, force: 0.0000, energy: 465.8922, velocity: 13.8240, time: 2658.6000
- },
-  { distance: 46325, force: 0.0000, energy: 465.8922, velocity: 13.7990, time: 2660.5500
- },
-  { distance: 46350, force: 0.0000, energy: 465.8922, velocity: 13.7820, time: 2662.6000
- },
-  { distance: 46375, force: 0.0000, energy: 465.8922, velocity: 13.7695, time: 2664.0500
- },
-  { distance: 46400, force: 0.0000, energy: 465.8922, velocity: 13.7500, time: 2666.0000
- },
-  { distance: 46425, force: 0.0000, energy: 465.8922, velocity: 13.7400, time: 2667.3571
- },
-  { distance: 46450, force: 0.0000, energy: 465.8922, velocity: 13.7320, time: 2669.6000
- },
-  { distance: 46475, force: 0.0000, energy: 465.8922, velocity: 13.7200, time: 2671.1000
- },
-  { distance: 46500, force: 0.0000, energy: 465.8922, velocity: 13.7170, time: 2673.3000
- },
-  { distance: 46525, force: 0.0000, energy: 465.8922, velocity: 13.7100, time: 2675.1000
- },
-  { distance: 46550, force: 0.0000, energy: 465.8922, velocity: 13.7100, time: 2676.7000
- },
-  { distance: 46575, force: 0.0000, energy: 465.8922, velocity: 13.7195, time: 2678.9000
- },
-  { distance: 46600, force: 0.0000, energy: 465.8922, velocity: 13.7200, time: 2680.0000
- },
-  { distance: 46625, force: 0.0000, energy: 465.8922, velocity: 13.7300, time: 2682.3571
- },
-  { distance: 46650, force: 0.0000, energy: 465.8922, velocity: 13.7380, time: 2683.8000
- },
-  { distance: 46675, force: 0.0000, energy: 465.8922, velocity: 13.7505, time: 2686.0500
- },
-  { distance: 46700, force: 0.0000, energy: 465.8922, velocity: 13.7630, time: 2687.6000
- },
-  { distance: 46725, force: 0.0000, energy: 465.8922, velocity: 13.7755, time: 2689.5500
- },
-  { distance: 46750, force: 0.0000, energy: 465.8922, velocity: 13.7880, time: 2691.6000
- },
-  { distance: 46775, force: 0.0000, energy: 465.8922, velocity: 13.8105, time: 2693.1000
- },
-  { distance: 46800, force: 0.0000, energy: 465.8922, velocity: 13.8230, time: 2695.3000
- },
-  { distance: 46825, force: 0.0000, energy: 465.8922, velocity: 13.8355, time: 2696.5500
- },
-  { distance: 46850, force: 0.0000, energy: 465.8922, velocity: 13.8560, time: 2698.6000
- },
-  { distance: 46875, force: 0.0000, energy: 465.8922, velocity: 13.8705, time: 2700.1000
- },
-  { distance: 46900, force: 0.0000, energy: 465.8922, velocity: 13.8800, time: 2702.0000
- },
-  { distance: 46925, force: 0.0000, energy: 465.8922, velocity: 13.8936, time: 2704.3571
- },
-  { distance: 46950, force: 0.0000, energy: 465.8922, velocity: 13.9080, time: 2705.8000
- },
-  { distance: 46975, force: 0.0000, energy: 465.8922, velocity: 13.9105, time: 2707.1000
- },
-  { distance: 47000, force: 0.0000, energy: 465.8922, velocity: 13.9230, time: 2709.3000
- },
-  { distance: 47025, force: 0.0000, energy: 465.8922, velocity: 13.9300, time: 2711.1000
- },
-  { distance: 47050, force: 0.0000, energy: 465.8922, velocity: 13.9380, time: 2712.8000
- },
-  { distance: 47075, force: 0.0000, energy: 465.8922, velocity: 13.9400, time: 2715.0500
- },
-  { distance: 47100, force: 0.0000, energy: 465.8922, velocity: 13.9400, time: 2716.6000
- },
-  { distance: 47125, force: 0.0000, energy: 465.8922, velocity: 13.9455, time: 2718.5500
- },
-  { distance: 47150, force: 0.0000, energy: 465.8922, velocity: 13.9500, time: 2719.8000
- },
-  { distance: 47175, force: 0.0000, energy: 465.8922, velocity: 13.9500, time: 2722.0500
- },
-  { distance: 47200, force: 0.0000, energy: 465.8922, velocity: 13.9500, time: 2723.6000
- },
-  { distance: 47225, force: 0.0000, energy: 465.8922, velocity: 13.9500, time: 2725.5500
- },
-  { distance: 47250, force: 0.0000, energy: 465.8922, velocity: 13.9500, time: 2727.6000
- },
-  { distance: 47275, force: 0.0000, energy: 465.8922, velocity: 13.9575, time: 2728.7500
- },
-  { distance: 47300, force: 0.0000, energy: 465.8922, velocity: 13.9600, time: 2730.6000
- },
-  { distance: 47325, force: 0.0000, energy: 465.8922, velocity: 13.9655, time: 2732.5500
- },
-  { distance: 47350, force: 0.0000, energy: 465.8922, velocity: 13.9700, time: 2734.6000
- },
-  { distance: 47375, force: 0.0000, energy: 465.8922, velocity: 13.9805, time: 2736.1000
- },
-  { distance: 47400, force: 0.0000, energy: 465.8922, velocity: 13.9900, time: 2738.0000
- },
-  { distance: 47425, force: 0.0000, energy: 465.8922, velocity: 14.0000, time: 2739.3571
- },
-  { distance: 47450, force: 0.0000, energy: 465.8922, velocity: 14.0000, time: 2741.6000
- },
-  { distance: 47475, force: 0.0000, energy: 465.8922, velocity: 14.0100, time: 2743.1000
- },
-  { distance: 47500, force: 0.0000, energy: 465.8922, velocity: 14.0100, time: 2745.3000
- },
-  { distance: 47525, force: 0.0000, energy: 465.8922, velocity: 14.0155, time: 2747.1000
- },
-  { distance: 47550, force: 0.0000, energy: 465.8922, velocity: 14.0200, time: 2748.8000
- },
-  { distance: 47575, force: 0.0000, energy: 465.8922, velocity: 14.0200, time: 2750.1000
- },
-  { distance: 47600, force: 0.0000, energy: 465.8922, velocity: 14.0200, time: 2752.0000
- },
-  { distance: 47625, force: 0.0000, energy: 465.8922, velocity: 14.0200, time: 2754.4000
- },
-  { distance: 47650, force: 0.0000, energy: 465.8922, velocity: 14.0200, time: 2756.2000
- },
-  { distance: 47675, force: 0.0000, energy: 465.8922, velocity: 14.0200, time: 2757.4500
- },
-  { distance: 47700, force: 0.0000, energy: 465.8922, velocity: 14.0270, time: 2759.4000
- },
-  { distance: 47725, force: 0.0000, energy: 465.8922, velocity: 14.0300, time: 2760.9500
- },
-  { distance: 47750, force: 0.0000, energy: 465.8922, velocity: 14.0420, time: 2763.2000
- },
-  { distance: 47775, force: 0.0000, energy: 465.8922, velocity: 14.0505, time: 2765.0500
- },
-  { distance: 47800, force: 0.0000, energy: 465.8922, velocity: 14.0660, time: 2766.6000
- },
-  { distance: 47825, force: 0.0000, energy: 465.8922, velocity: 14.0855, time: 2768.5500
- },
-  { distance: 47850, force: 0.0000, energy: 465.8922, velocity: 14.1060, time: 2769.8000
- },
-  { distance: 47875, force: 0.0000, energy: 465.8922, velocity: 14.1332, time: 2771.8824
- },
-  { distance: 47900, force: 0.0000, energy: 465.8922, velocity: 14.1560, time: 2773.6000
- },
-  { distance: 47925, force: 0.0000, energy: 465.8922, velocity: 14.1755, time: 2775.5500
- },
-  { distance: 47950, force: 0.0000, energy: 465.8922, velocity: 14.1960, time: 2776.8000
- },
-  { distance: 47975, force: 0.0000, energy: 465.8922, velocity: 14.2210, time: 2779.0500
- },
-  { distance: 48000, force: 0.0000, energy: 465.8922, velocity: 14.2430, time: 2780.6000
- },
-  { distance: 48025, force: 0.0000, energy: 465.8922, velocity: 14.2610, time: 2782.5500
- },
-  { distance: 48050, force: 0.0000, energy: 465.8922, velocity: 14.2780, time: 2783.8000
- },
-  { distance: 48075, force: 0.0000, energy: 465.8922, velocity: 14.3007, time: 2786.0705
- },
-  { distance: 48100, force: 0.0000, energy: 465.8922, velocity: 14.3195, time: 2787.8326
- },
-  { distance: 48125, force: 0.0000, energy: 465.8922, velocity: 14.3382, time: 2789.5947
- },
-  { distance: 48150, force: 0.0000, energy: 465.8922, velocity: 14.3569, time: 2791.3568
- },
-  { distance: 48175, force: 0.0000, energy: 465.8922, velocity: 14.3756, time: 2793.1189
- },
-  { distance: 48200, force: 0.0000, energy: 465.8922, velocity: 14.3944, time: 2794.8811
- },
-  { distance: 48225, force: 0.0000, energy: 465.8922, velocity: 14.4131, time: 2796.6432
- },
-  { distance: 48250, force: 0.0000, energy: 465.8922, velocity: 14.4318, time: 2798.4053
- },
-  { distance: 48275, force: 0.0000, energy: 465.8922, velocity: 14.4505, time: 2800.1674
- },
-  { distance: 48300, force: 0.0000, energy: 465.8922, velocity: 14.4693, time: 2801.9295
- },
-  { distance: 48325, force: 0.0000, energy: 465.8922, velocity: 14.4880, time: 2803.6241
- },
-  { distance: 48350, force: 0.0000, energy: 465.8922, velocity: 14.5068, time: 2805.3158
- },
-  { distance: 48375, force: 0.0000, energy: 465.8922, velocity: 14.5256, time: 2807.0075
- },
-  { distance: 48400, force: 0.0000, energy: 465.8922, velocity: 14.5444, time: 2808.6992
- },
-  { distance: 48425, force: 0.0000, energy: 465.8922, velocity: 14.5632, time: 2810.3910
- },
-  { distance: 48450, force: 0.0000, energy: 465.8922, velocity: 14.5780, time: 2811.8000
- },
-  { distance: 48475, force: 0.0000, energy: 465.8922, velocity: 14.5910, time: 2814.0500
- },
-  { distance: 48500, force: 0.0000, energy: 465.8922, velocity: 14.6130, time: 2815.3000
- },
-  { distance: 48525, force: 0.0000, energy: 465.8922, velocity: 14.6255, time: 2817.1000
- },
-  { distance: 48550, force: 0.0000, energy: 465.8922, velocity: 14.6380, time: 2818.8000
- },
-  { distance: 48575, force: 0.0000, energy: 465.8922, velocity: 14.6500, time: 2820.1000
- },
-  { distance: 48600, force: 0.0000, energy: 465.8922, velocity: 14.6530, time: 2822.3000
- },
-  { distance: 48625, force: 0.0000, energy: 465.8922, velocity: 14.6655, time: 2823.5500
- },
-  { distance: 48650, force: 0.0000, energy: 465.8922, velocity: 14.6700, time: 2825.6000
- },
-  { distance: 48675, force: 0.0000, energy: 465.8922, velocity: 14.6800, time: 2827.1000
- },
-  { distance: 48700, force: 0.0000, energy: 465.8922, velocity: 14.6830, time: 2829.3000
- },
-  { distance: 48725, force: 0.0000, energy: 465.8922, velocity: 14.6900, time: 2830.5500
- },
-  { distance: 48750, force: 0.0000, energy: 465.8922, velocity: 14.6900, time: 2832.5000
- },
-  { distance: 48775, force: 0.0000, energy: 465.8922, velocity: 14.7000, time: 2834.0556
- },
-  { distance: 48800, force: 0.0000, energy: 465.8922, velocity: 14.7000, time: 2835.8000
- },
-  { distance: 48825, force: 0.0000, energy: 465.8922, velocity: 14.6935, time: 2837.6500
- },
-  { distance: 48850, force: 0.0000, energy: 465.8922, velocity: 14.6900, time: 2838.9000
- },
-  { distance: 48875, force: 0.0000, energy: 465.8922, velocity: 14.6785, time: 2841.1500
- },
-  { distance: 48900, force: 0.0000, energy: 465.8922, velocity: 14.6600, time: 2843.0000
- },
-  { distance: 48925, force: 0.0000, energy: 465.8922, velocity: 14.6464, time: 2844.3571
- },
-  { distance: 48950, force: 0.0000, energy: 465.8922, velocity: 14.6240, time: 2845.8000
- },
-  { distance: 48975, force: 0.0000, energy: 465.8922, velocity: 14.5990, time: 2848.0500
- },
-  { distance: 49000, force: 0.0000, energy: 465.8922, velocity: 14.5740, time: 2849.3000
- },
-  { distance: 49025, force: 0.0000, energy: 465.8922, velocity: 14.5435, time: 2851.1000
- },
-  { distance: 49050, force: 0.0000, energy: 465.8922, velocity: 14.5140, time: 2852.8000
- },
-  { distance: 49075, force: 0.0000, energy: 465.8922, velocity: 14.4824, time: 2854.4545
- },
-  { distance: 49100, force: 0.0000, energy: 465.8922, velocity: 14.4445, time: 2856.7273
- },
-  { distance: 49125, force: 0.0000, energy: 465.8922, velocity: 14.4160, time: 2858.2000
- },
-  { distance: 49150, force: 0.0000, energy: 465.8922, velocity: 14.3871, time: 2859.6471
- },
-  { distance: 49175, force: 0.0000, energy: 465.8922, velocity: 14.3576, time: 2861.1765
- },
-  { distance: 49200, force: 0.0000, energy: 465.8922, velocity: 14.3282, time: 2863.3824
- },
-  { distance: 49225, force: 0.0000, energy: 465.8922, velocity: 14.2982, time: 2865.0909
- },
-  { distance: 49250, force: 0.0000, energy: 465.8922, velocity: 14.2679, time: 2866.6061
- },
-  { distance: 49275, force: 0.0000, energy: 465.8922, velocity: 14.2378, time: 2868.1481
- },
-  { distance: 49300, force: 0.0000, energy: 465.8922, velocity: 14.2100, time: 2870.0000
- },
-  { distance: 49325, force: 0.0000, energy: 465.8922, velocity: 14.1764, time: 2872.3571
- },
-  { distance: 49350, force: 0.0000, energy: 465.8922, velocity: 14.1540, time: 2873.8000
- },
-  { distance: 49375, force: 0.0000, energy: 465.8922, velocity: 14.1290, time: 2875.1000
- },
-  { distance: 49400, force: 0.0000, energy: 465.8922, velocity: 14.1040, time: 2877.3000
- },
-  { distance: 49425, force: 0.0000, energy: 465.8922, velocity: 14.0790, time: 2879.1000
- },
-  { distance: 49450, force: 0.0000, energy: 465.8922, velocity: 14.0540, time: 2880.8000
- },
-  { distance: 49475, force: 0.0000, energy: 465.8922, velocity: 14.0290, time: 2883.0500
- },
-  { distance: 49500, force: 0.0000, energy: 465.8922, velocity: 14.0070, time: 2884.3000
- },
-  { distance: 49525, force: 0.0000, energy: 465.8922, velocity: 13.9890, time: 2886.1000
- },
-  { distance: 49550, force: 0.0000, energy: 465.8922, velocity: 13.9640, time: 2887.8000
- },
-  { distance: 49575, force: 0.0000, energy: 465.8922, velocity: 13.9495, time: 2890.0500
- },
-  { distance: 49600, force: 0.0000, energy: 465.8922, velocity: 13.9340, time: 2891.6000
- },
-  { distance: 49625, force: 0.0000, energy: 465.8922, velocity: 13.9145, time: 2893.5500
- },
-  { distance: 49650, force: 0.0000, energy: 465.8922, velocity: 13.8950, time: 2895.0000
- },
-  { distance: 49675, force: 0.0000, energy: 465.8922, velocity: 13.8795, time: 2897.0500
- },
-  { distance: 49700, force: 0.0000, energy: 465.8922, velocity: 13.8700, time: 2898.6000
- },
-  { distance: 49725, force: 0.0000, energy: 465.8922, velocity: 13.8645, time: 2900.5500
- },
-  { distance: 49750, force: 0.0000, energy: 465.8922, velocity: 13.8520, time: 2902.6000
- },
-  { distance: 49775, force: 0.0000, energy: 465.8922, velocity: 13.8400, time: 2904.1000
- },
-  { distance: 49800, force: 0.0000, energy: 465.8922, velocity: 13.8370, time: 2906.3000
- },
-  { distance: 49825, force: 0.0000, energy: 465.8922, velocity: 13.8300, time: 2907.5500
- },
-  { distance: 49850, force: 0.0000, energy: 465.8922, velocity: 13.8300, time: 2909.6000
- },
-  { distance: 49875, force: 0.0000, energy: 465.8922, velocity: 13.8300, time: 2911.1111
- },
-  { distance: 49900, force: 0.0000, energy: 465.8922, velocity: 13.8300, time: 2912.8500
- },
-  { distance: 49925, force: 0.0000, energy: 465.8922, velocity: 13.8300, time: 2915.1000
- },
-  { distance: 49950, force: 0.0000, energy: 465.8922, velocity: 13.8300, time: 2916.8000
- },
-  { distance: 49975, force: 0.0000, energy: 465.8922, velocity: 13.8400, time: 2919.0500
- },
-  { distance: 50000, force: 0.0000, energy: 465.8922, velocity: 13.8430, time: 2920.3000
- },
-  { distance: 50025, force: 0.0000, energy: 465.8922, velocity: 13.8500, time: 2922.1000
- },
-  { distance: 50050, force: 0.0000, energy: 465.8922, velocity: 13.8580, time: 2923.8000
- },
-  { distance: 50075, force: 0.0000, energy: 465.8922, velocity: 13.8700, time: 2926.0500
- },
-  { distance: 50100, force: 0.0000, energy: 465.8922, velocity: 13.8730, time: 2927.6000
- },
-  { distance: 50125, force: 0.0000, energy: 465.8922, velocity: 13.8855, time: 2929.5500
- },
-  { distance: 50150, force: 0.0000, energy: 465.8922, velocity: 13.8980, time: 2931.6000
- },
-  { distance: 50175, force: 0.0000, energy: 465.8922, velocity: 13.9105, time: 2933.0500
- },
-  { distance: 50200, force: 0.0000, energy: 465.8922, velocity: 13.9230, time: 2934.6000
- },
-  { distance: 50225, force: 0.0000, energy: 465.8922, velocity: 13.9410, time: 2936.5500
- },
-  { distance: 50250, force: 0.0000, energy: 465.8922, velocity: 13.9530, time: 2938.3000
- },
-  { distance: 50275, force: 0.0000, energy: 465.8922, velocity: 13.9710, time: 2940.1000
- },
-  { distance: 50300, force: 0.0000, energy: 465.8922, velocity: 13.9880, time: 2941.8000
- },
-  { distance: 50325, force: 0.0000, energy: 465.8922, velocity: 14.0105, time: 2944.0500
- },
-  { distance: 50350, force: 0.0000, energy: 465.8922, velocity: 14.0260, time: 2945.6000
- },
-  { distance: 50375, force: 0.0000, energy: 465.8922, velocity: 14.0510, time: 2947.5500
- },
-  { distance: 50400, force: 0.0000, energy: 465.8922, velocity: 14.0680, time: 2948.8000
- },
-  { distance: 50425, force: 0.0000, energy: 465.8922, velocity: 14.0910, time: 2951.0500
- },
-  { distance: 50450, force: 0.0000, energy: 465.8922, velocity: 14.1160, time: 2952.6000
- },
-  { distance: 50475, force: 0.0000, energy: 465.8922, velocity: 14.1410, time: 2954.1000
- },
-  { distance: 50500, force: 0.0000, energy: 465.8922, velocity: 14.1660, time: 2956.3000
- },
-  { distance: 50525, force: 0.0000, energy: 465.8922, velocity: 14.1938, time: 2957.6875
- },
-  { distance: 50550, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 2960.0000
- },
-  { distance: 50575, force: 0.0000, energy: 465.8922, velocity: 14.2510, time: 2961.5500
- },
-  { distance: 50600, force: 0.0000, energy: 465.8922, velocity: 14.2760, time: 2963.6000
- },
-  { distance: 50625, force: 0.0000, energy: 465.8922, velocity: 14.3010, time: 2965.0500
- },
-  { distance: 50650, force: 0.0000, energy: 465.8922, velocity: 14.3230, time: 2966.6000
- },
-  { distance: 50675, force: 0.0000, energy: 465.8922, velocity: 14.3410, time: 2968.5500
- },
-  { distance: 50700, force: 0.0000, energy: 465.8922, velocity: 14.3660, time: 2970.6000
- },
-  { distance: 50725, force: 0.0000, energy: 465.8922, velocity: 14.3810, time: 2972.0500
- },
-  { distance: 50750, force: 0.0000, energy: 465.8922, velocity: 14.4030, time: 2973.6000
- },
-  { distance: 50775, force: 0.0000, energy: 465.8922, velocity: 14.4210, time: 2975.5500
- },
-  { distance: 50800, force: 0.0000, energy: 465.8922, velocity: 14.4380, time: 2976.8000
- },
-  { distance: 50825, force: 0.0000, energy: 465.8922, velocity: 14.4555, time: 2979.1000
- },
-  { distance: 50850, force: 0.0000, energy: 465.8922, velocity: 14.4680, time: 2980.8000
- },
-  { distance: 50875, force: 0.0000, energy: 465.8922, velocity: 14.4805, time: 2982.1000
- },
-  { distance: 50900, force: 0.0000, energy: 465.8922, velocity: 14.4900, time: 2984.3000
- },
-  { distance: 50925, force: 0.0000, energy: 465.8922, velocity: 14.4955, time: 2985.5500
- },
-  { distance: 50950, force: 0.0000, energy: 465.8922, velocity: 14.5080, time: 2987.6000
- },
-  { distance: 50975, force: 0.0000, energy: 465.8922, velocity: 14.5105, time: 2989.1000
- },
-  { distance: 51000, force: 0.0000, energy: 465.8922, velocity: 14.5200, time: 2991.3000
- },
-  { distance: 51025, force: 0.0000, energy: 465.8922, velocity: 14.5200, time: 2992.5500
- },
-  { distance: 51050, force: 0.0000, energy: 465.8922, velocity: 14.5200, time: 2994.6000
- },
-  { distance: 51075, force: 0.0000, energy: 465.8922, velocity: 14.5200, time: 2996.0625
- },
-  { distance: 51100, force: 0.0000, energy: 465.8922, velocity: 14.5200, time: 2998.0000
- },
-  { distance: 51125, force: 0.0000, energy: 465.8922, velocity: 14.5125, time: 2999.7500
- },
-  { distance: 51150, force: 0.0000, energy: 465.8922, velocity: 14.5100, time: 3001.0000
- },
-  { distance: 51175, force: 0.0000, energy: 465.8922, velocity: 14.5000, time: 3003.2500
- },
-  { distance: 51200, force: 0.0000, energy: 465.8922, velocity: 14.4950, time: 3004.5000
- },
-  { distance: 51225, force: 0.0000, energy: 465.8922, velocity: 14.4825, time: 3006.5000
- },
-  { distance: 51250, force: 0.0000, energy: 465.8922, velocity: 14.4700, time: 3008.0000
- },
-  { distance: 51275, force: 0.0000, energy: 465.8922, velocity: 14.4575, time: 3010.2500
- },
-  { distance: 51300, force: 0.0000, energy: 465.8922, velocity: 14.4450, time: 3011.5000
- },
-  { distance: 51325, force: 0.0000, energy: 465.8922, velocity: 14.4325, time: 3013.5000
- },
-  { distance: 51350, force: 0.0000, energy: 465.8922, velocity: 14.4100, time: 3015.0000
- },
-  { distance: 51375, force: 0.0000, energy: 465.8922, velocity: 14.3945, time: 3016.5500
- },
-  { distance: 51400, force: 0.0000, energy: 465.8922, velocity: 14.3740, time: 3018.6000
- },
-  { distance: 51425, force: 0.0000, energy: 465.8922, velocity: 14.3490, time: 3020.1000
- },
-  { distance: 51450, force: 0.0000, energy: 465.8922, velocity: 14.3270, time: 3022.3000
- },
-  { distance: 51475, force: 0.0000, energy: 465.8922, velocity: 14.3090, time: 3023.5500
- },
-  { distance: 51500, force: 0.0000, energy: 465.8922, velocity: 14.2840, time: 3025.6000
- },
-  { distance: 51525, force: 0.0000, energy: 465.8922, velocity: 14.2585, time: 3027.1000
- },
-  { distance: 51550, force: 0.0000, energy: 465.8922, velocity: 14.2263, time: 3029.3750
- },
-  { distance: 51575, force: 0.0000, energy: 465.8922, velocity: 14.1975, time: 3030.7500
- },
-  { distance: 51600, force: 0.0000, energy: 465.8922, velocity: 14.1740, time: 3032.6000
- },
-  { distance: 51625, force: 0.0000, energy: 465.8922, velocity: 14.1490, time: 3034.5500
- },
-  { distance: 51650, force: 0.0000, energy: 465.8922, velocity: 14.1160, time: 3035.8000
- },
-  { distance: 51675, force: 0.0000, energy: 465.8922, velocity: 14.0895, time: 3038.0500
- },
-  { distance: 51700, force: 0.0000, energy: 465.8922, velocity: 14.0740, time: 3039.6000
- },
-  { distance: 51725, force: 0.0000, energy: 465.8922, velocity: 14.0490, time: 3041.1000
- },
-  { distance: 51750, force: 0.0000, energy: 465.8922, velocity: 14.0240, time: 3043.3000
- },
-  { distance: 51775, force: 0.0000, energy: 465.8922, velocity: 14.0045, time: 3045.1000
- },
-  { distance: 51800, force: 0.0000, energy: 465.8922, velocity: 13.9920, time: 3046.8000
- },
-  { distance: 51825, force: 0.0000, energy: 465.8922, velocity: 13.9795, time: 3049.0500
- },
-  { distance: 51850, force: 0.0000, energy: 465.8922, velocity: 13.9670, time: 3050.3000
- },
-  { distance: 51875, force: 0.0000, energy: 465.8922, velocity: 13.9600, time: 3052.1000
- },
-  { distance: 51900, force: 0.0000, energy: 465.8922, velocity: 13.9520, time: 3053.8000
- },
-  { distance: 51925, force: 0.0000, energy: 465.8922, velocity: 13.9500, time: 3056.0500
- },
-  { distance: 51950, force: 0.0000, energy: 465.8922, velocity: 13.9500, time: 3057.4000
- },
-  { distance: 51975, force: 0.0000, energy: 465.8922, velocity: 13.9500, time: 3059.4500
- },
-  { distance: 52000, force: 0.0000, energy: 465.8922, velocity: 13.9570, time: 3061.4000
- },
-  { distance: 52025, force: 0.0000, energy: 465.8922, velocity: 13.9600, time: 3062.9500
- },
-  { distance: 52050, force: 0.0000, energy: 465.8922, velocity: 13.9700, time: 3064.5000
- },
-  { distance: 52075, force: 0.0000, energy: 465.8922, velocity: 13.9805, time: 3066.1000
- },
-  { distance: 52100, force: 0.0000, energy: 465.8922, velocity: 13.9930, time: 3068.3000
- },
-  { distance: 52125, force: 0.0000, energy: 465.8922, velocity: 14.0000, time: 3070.1000
- },
-  { distance: 52150, force: 0.0000, energy: 465.8922, velocity: 14.0080, time: 3071.8000
- },
-  { distance: 52175, force: 0.0000, energy: 465.8922, velocity: 14.0205, time: 3074.0500
- },
-  { distance: 52200, force: 0.0000, energy: 465.8922, velocity: 14.0300, time: 3075.0000
- },
-  { distance: 52225, force: 0.0000, energy: 465.8922, velocity: 14.0485, time: 3076.8519
- },
-  { distance: 52250, force: 0.0000, energy: 465.8922, velocity: 14.0580, time: 3078.8000
- },
-  { distance: 52275, force: 0.0000, energy: 465.8922, velocity: 14.0705, time: 3081.0500
- },
-  { distance: 52300, force: 0.0000, energy: 465.8922, velocity: 14.0830, time: 3082.6000
- },
-  { distance: 52325, force: 0.0000, energy: 465.8922, velocity: 14.0955, time: 3084.5500
- },
-  { distance: 52350, force: 0.0000, energy: 465.8922, velocity: 14.1050, time: 3086.0000
- },
-  { distance: 52375, force: 0.0000, energy: 465.8922, velocity: 14.1105, time: 3088.0500
- },
-  { distance: 52400, force: 0.0000, energy: 465.8922, velocity: 14.1230, time: 3089.6000
- },
-  { distance: 52425, force: 0.0000, energy: 465.8922, velocity: 14.1410, time: 3091.5500
- },
-  { distance: 52450, force: 0.0000, energy: 465.8922, velocity: 14.1580, time: 3092.8000
- },
-  { distance: 52475, force: 0.0000, energy: 465.8922, velocity: 14.1705, time: 3095.0500
- },
-  { distance: 52500, force: 0.0000, energy: 465.8922, velocity: 14.1860, time: 3096.6000
- },
-  { distance: 52525, force: 0.0000, energy: 465.8922, velocity: 14.2010, time: 3098.1000
- },
-  { distance: 52550, force: 0.0000, energy: 465.8922, velocity: 14.2230, time: 3100.3000
- },
-  { distance: 52575, force: 0.0000, energy: 465.8922, velocity: 14.2410, time: 3102.1000
- },
-  { distance: 52600, force: 0.0000, energy: 465.8922, velocity: 14.2580, time: 3103.8000
- },
-  { distance: 52625, force: 0.0000, energy: 465.8922, velocity: 14.2805, time: 3105.1000
- },
-  { distance: 52650, force: 0.0000, energy: 465.8922, velocity: 14.2960, time: 3107.3000
- },
-  { distance: 52675, force: 0.0000, energy: 465.8922, velocity: 14.3155, time: 3109.1000
- },
-  { distance: 52700, force: 0.0000, energy: 465.8922, velocity: 14.3360, time: 3110.8000
- },
-  { distance: 52725, force: 0.0000, energy: 465.8922, velocity: 14.3610, time: 3112.1000
- },
-  { distance: 52750, force: 0.0000, energy: 465.8922, velocity: 14.3800, time: 3114.0000
- },
-  { distance: 52775, force: 0.0000, energy: 465.8922, velocity: 14.4005, time: 3116.0500
- },
-  { distance: 52800, force: 0.0000, energy: 465.8922, velocity: 14.4130, time: 3117.6000
- },
-  { distance: 52825, force: 0.0000, energy: 465.8922, velocity: 14.4255, time: 3119.5500
- },
-  { distance: 52850, force: 0.0000, energy: 465.8922, velocity: 14.4380, time: 3120.8000
- },
-  { distance: 52875, force: 0.0000, energy: 465.8922, velocity: 14.4500, time: 3123.0500
- },
-  { distance: 52900, force: 0.0000, energy: 465.8922, velocity: 14.4530, time: 3124.6000
- },
-  { distance: 52925, force: 0.0000, energy: 465.8922, velocity: 14.4600, time: 3126.5500
- },
-  { distance: 52950, force: 0.0000, energy: 465.8922, velocity: 14.4600, time: 3128.0000
- },
-  { distance: 52975, force: 0.0000, energy: 465.8922, velocity: 14.4542, time: 3129.5789
- },
-  { distance: 53000, force: 0.0000, energy: 465.8922, velocity: 14.4500, time: 3131.6000
- },
-  { distance: 53025, force: 0.0000, energy: 465.8922, velocity: 14.4395, time: 3133.1000
- },
-  { distance: 53050, force: 0.0000, energy: 465.8922, velocity: 14.4263, time: 3135.3750
- },
-  { distance: 53075, force: 0.0000, energy: 465.8922, velocity: 14.4050, time: 3136.7500
- },
-  { distance: 53100, force: 0.0000, energy: 465.8922, velocity: 14.3870, time: 3138.3000
- },
-  { distance: 53125, force: 0.0000, energy: 465.8922, velocity: 14.3695, time: 3140.0476
- },
-  { distance: 53150, force: 0.0000, energy: 465.8922, velocity: 14.3529, time: 3141.7143
- },
-  { distance: 53175, force: 0.0000, energy: 465.8922, velocity: 14.3327, time: 3143.7273
- },
-  { distance: 53200, force: 0.0000, energy: 465.8922, velocity: 14.3093, time: 3145.0667
- },
-  { distance: 53225, force: 0.0000, energy: 465.8922, velocity: 14.2890, time: 3147.1000
- },
-  { distance: 53250, force: 0.0000, energy: 465.8922, velocity: 14.2720, time: 3148.8000
- },
-  { distance: 53275, force: 0.0000, energy: 465.8922, velocity: 14.2590, time: 3151.0500
- },
-  { distance: 53300, force: 0.0000, energy: 465.8922, velocity: 14.2370, time: 3152.3000
- },
-  { distance: 53325, force: 0.0000, energy: 465.8922, velocity: 14.2245, time: 3154.1000
- },
-  { distance: 53350, force: 0.0000, energy: 465.8922, velocity: 14.2120, time: 3155.8000
- },
-  { distance: 53375, force: 0.0000, energy: 465.8922, velocity: 14.1995, time: 3158.0500
- },
-  { distance: 53400, force: 0.0000, energy: 465.8922, velocity: 14.1900, time: 3159.3000
- },
-  { distance: 53425, force: 0.0000, energy: 465.8922, velocity: 14.1845, time: 3161.1000
- },
-  { distance: 53450, force: 0.0000, energy: 465.8922, velocity: 14.1800, time: 3162.8000
- },
-  { distance: 53475, force: 0.0000, energy: 465.8922, velocity: 14.1800, time: 3165.0833
- },
-  { distance: 53500, force: 0.0000, energy: 465.8922, velocity: 14.1800, time: 3166.7000
- },
-  { distance: 53525, force: 0.0000, energy: 465.8922, velocity: 14.1800, time: 3168.1000
- },
-  { distance: 53550, force: 0.0000, energy: 465.8922, velocity: 14.1880, time: 3169.8000
- },
-  { distance: 53575, force: 0.0000, energy: 465.8922, velocity: 14.1900, time: 3172.0500
- },
-  { distance: 53600, force: 0.0000, energy: 465.8922, velocity: 14.1930, time: 3173.3000
- },
-  { distance: 53625, force: 0.0000, energy: 465.8922, velocity: 14.2000, time: 3175.3750
- },
-  { distance: 53650, force: 0.0000, energy: 465.8922, velocity: 14.2100, time: 3177.0000
- },
-  { distance: 53675, force: 0.0000, energy: 465.8922, velocity: 14.2155, time: 3178.5500
- },
-  { distance: 53700, force: 0.0000, energy: 465.8922, velocity: 14.2200, time: 3180.6000
- },
-  { distance: 53725, force: 0.0000, energy: 465.8922, velocity: 14.2300, time: 3182.1000
- },
-  { distance: 53750, force: 0.0000, energy: 465.8922, velocity: 14.2330, time: 3184.3000
- },
-  { distance: 53775, force: 0.0000, energy: 465.8922, velocity: 14.2400, time: 3185.5500
- },
-  { distance: 53800, force: 0.0000, energy: 465.8922, velocity: 14.2480, time: 3187.6000
- },
-  { distance: 53825, force: 0.0000, energy: 465.8922, velocity: 14.2500, time: 3189.2500
- },
-  { distance: 53850, force: 0.0000, energy: 465.8922, velocity: 14.2500, time: 3190.7143
- },
-  { distance: 53875, force: 0.0000, energy: 465.8922, velocity: 14.2600, time: 3193.0500
- },
-  { distance: 53900, force: 0.0000, energy: 465.8922, velocity: 14.2600, time: 3194.6000
- },
-  { distance: 53925, force: 0.0000, energy: 465.8922, velocity: 14.2600, time: 3196.5500
- },
-  { distance: 53950, force: 0.0000, energy: 465.8922, velocity: 14.2600, time: 3197.8000
- },
-  { distance: 53975, force: 0.0000, energy: 465.8922, velocity: 14.2600, time: 3200.0500
- },
-  { distance: 54000, force: 0.0000, energy: 465.8922, velocity: 14.2600, time: 3201.6000
- },
-  { distance: 54025, force: 0.0000, energy: 465.8922, velocity: 14.2655, time: 3203.5500
- },
-  { distance: 54050, force: 0.0000, energy: 465.8922, velocity: 14.2700, time: 3204.8000
- },
-  { distance: 54075, force: 0.0000, energy: 465.8922, velocity: 14.2700, time: 3207.0500
- },
-  { distance: 54100, force: 0.0000, energy: 465.8922, velocity: 14.2700, time: 3208.6000
- },
-  { distance: 54125, force: 0.0000, energy: 465.8922, velocity: 14.2705, time: 3210.1000
- },
-  { distance: 54150, force: 0.0000, energy: 465.8922, velocity: 14.2800, time: 3212.3000
- },
-  { distance: 54175, force: 0.0000, energy: 465.8922, velocity: 14.2855, time: 3213.5500
- },
-  { distance: 54200, force: 0.0000, energy: 465.8922, velocity: 14.2900, time: 3215.6000
- },
-  { distance: 54225, force: 0.0000, energy: 465.8922, velocity: 14.3000, time: 3217.3571
- },
-  { distance: 54250, force: 0.0000, energy: 465.8922, velocity: 14.3080, time: 3218.8000
- },
-  { distance: 54275, force: 0.0000, energy: 465.8922, velocity: 14.3105, time: 3221.0500
- },
-  { distance: 54300, force: 0.0000, energy: 465.8922, velocity: 14.3200, time: 3222.6000
- },
-  { distance: 54325, force: 0.0000, energy: 465.8922, velocity: 14.3255, time: 3224.5500
- },
-  { distance: 54350, force: 0.0000, energy: 465.8922, velocity: 14.3300, time: 3225.8000
- },
-  { distance: 54375, force: 0.0000, energy: 465.8922, velocity: 14.3300, time: 3228.0000
- },
-  { distance: 54400, force: 0.0000, energy: 465.8922, velocity: 14.3300, time: 3229.8000
- },
-  { distance: 54425, force: 0.0000, energy: 465.8922, velocity: 14.3285, time: 3231.3000
- },
-  { distance: 54450, force: 0.0000, energy: 465.8922, velocity: 14.3200, time: 3233.4000
- },
-  { distance: 54475, force: 0.0000, energy: 465.8922, velocity: 14.3175, time: 3234.5000
- },
-  { distance: 54500, force: 0.0000, energy: 465.8922, velocity: 14.3100, time: 3236.7143
- },
-  { distance: 54525, force: 0.0000, energy: 465.8922, velocity: 14.2995, time: 3238.1000
- },
-  { distance: 54550, force: 0.0000, energy: 465.8922, velocity: 14.2870, time: 3240.3000
- },
-  { distance: 54575, force: 0.0000, energy: 465.8922, velocity: 14.2745, time: 3241.5500
- },
-  { distance: 54600, force: 0.0000, energy: 465.8922, velocity: 14.2620, time: 3243.6000
- },
-  { distance: 54625, force: 0.0000, energy: 465.8922, velocity: 14.2490, time: 3245.1000
- },
-  { distance: 54650, force: 0.0000, energy: 465.8922, velocity: 14.2240, time: 3247.3000
- },
-  { distance: 54675, force: 0.0000, energy: 465.8922, velocity: 14.2045, time: 3248.5500
- },
-  { distance: 54700, force: 0.0000, energy: 465.8922, velocity: 14.1840, time: 3250.6000
- },
-  { distance: 54725, force: 0.0000, energy: 465.8922, velocity: 14.1585, time: 3252.1000
- },
-  { distance: 54750, force: 0.0000, energy: 465.8922, velocity: 14.1240, time: 3254.3000
- },
-  { distance: 54775, force: 0.0000, energy: 465.8922, velocity: 14.0990, time: 3256.1000
- },
-  { distance: 54800, force: 0.0000, energy: 465.8922, velocity: 14.0660, time: 3257.8000
- },
-  { distance: 54825, force: 0.0000, energy: 465.8922, velocity: 14.0300, time: 3259.0000
- },
-  { distance: 54850, force: 0.0000, energy: 465.8922, velocity: 13.9945, time: 3261.3636
- },
-  { distance: 54875, force: 0.0000, energy: 465.8922, velocity: 13.9605, time: 3263.3182
- },
-  { distance: 54900, force: 0.0000, energy: 465.8922, velocity: 13.9226, time: 3264.8696
- },
-  { distance: 54925, force: 0.0000, energy: 465.8922, velocity: 13.8843, time: 3266.5217
- },
-  { distance: 54950, force: 0.0000, energy: 465.8922, velocity: 13.8457, time: 3268.2174
- },
-  { distance: 54975, force: 0.0000, energy: 465.8922, velocity: 13.8100, time: 3270.3333
- },
-  { distance: 55000, force: 0.0000, energy: 465.8922, velocity: 13.7725, time: 3272.0000
- },
-  { distance: 55025, force: 16.7379, energy: 466.4624, velocity: 13.7700, time: 3273.8400
- },
-  { distance: 55050, force: 16.7699, energy: 467.6037, velocity: 13.7700, time: 3275.6921
- },
-  { distance: 55075, force: 16.8020, energy: 468.7473, velocity: 13.7700, time: 3277.5313
- },
-  { distance: 55100, force: 16.8340, energy: 469.8930, velocity: 13.7700, time: 3279.3706
- },
-  { distance: 55125, force: 16.8661, energy: 471.0409, velocity: 13.7700, time: 3281.2098
- },
-  { distance: 55150, force: 16.8982, energy: 472.1910, velocity: 13.7700, time: 3283.0490
- },
-  { distance: 55175, force: 16.9302, energy: 473.3433, velocity: 13.7700, time: 3284.8883
- },
-  { distance: 55200, force: 16.9623, energy: 474.4978, velocity: 13.7700, time: 3286.7275
- },
-  { distance: 55225, force: 16.9943, energy: 475.6544, velocity: 13.7700, time: 3288.5668
- },
-  { distance: 55250, force: 17.0264, energy: 476.8132, velocity: 13.7700, time: 3290.4060
- },
-  { distance: 55275, force: 17.0585, energy: 477.9742, velocity: 13.7700, time: 3292.2452
- },
-  { distance: 55300, force: 17.0905, energy: 479.1374, velocity: 13.7700, time: 3294.0845
- },
-  { distance: 55325, force: 17.1226, energy: 480.3028, velocity: 13.7700, time: 3295.9237
- },
-  { distance: 55350, force: 17.1547, energy: 481.4704, velocity: 13.7700, time: 3297.7629
- },
-  { distance: 55375, force: 17.1867, energy: 482.6402, velocity: 13.7700, time: 3299.6022
- },
-  { distance: 55400, force: 17.2649, energy: 483.8137, velocity: 13.7700, time: 3301.4320
- },
-  { distance: 55425, force: 17.4894, energy: 484.9975, velocity: 13.7700, time: 3303.2320
- },
-  { distance: 55450, force: 17.7138, energy: 486.1966, velocity: 13.7700, time: 3305.0320
- },
-  { distance: 55475, force: 17.9382, energy: 487.4110, velocity: 13.7700, time: 3306.8320
- },
-  { distance: 55500, force: 18.1627, energy: 488.6407, velocity: 13.7700, time: 3308.6320
- },
-  { distance: 55525, force: 18.3871, energy: 489.8856, velocity: 13.7700, time: 3310.4320
- },
-  { distance: 55550, force: 18.6115, energy: 491.1459, velocity: 13.7700, time: 3312.2320
- },
-  { distance: 55575, force: 18.8360, energy: 492.4215, velocity: 13.7700, time: 3314.0320
- },
-  { distance: 55600, force: 19.0604, energy: 493.7123, velocity: 13.7700, time: 3315.8320
- },
-  { distance: 55625, force: 19.2848, energy: 495.0184, velocity: 13.7700, time: 3317.6320
- },
-  { distance: 55650, force: 19.4554, energy: 496.3380, velocity: 13.7700, time: 3319.4300
- },
-  { distance: 55675, force: 19.4554, energy: 497.6634, velocity: 13.7700, time: 3321.2218
- },
-  { distance: 55700, force: 19.4554, energy: 498.9888, velocity: 13.7700, time: 3323.0137
- },
-  { distance: 55725, force: 19.4554, energy: 500.3142, velocity: 13.7700, time: 3324.8055
- },
-  { distance: 55750, force: 19.4554, energy: 501.6396, velocity: 13.7700, time: 3326.5973
- },
-  { distance: 55775, force: 19.4554, energy: 502.9650, velocity: 13.7700, time: 3328.3891
- },
-  { distance: 55800, force: 19.4554, energy: 504.2904, velocity: 13.7700, time: 3330.1809
- },
-  { distance: 55825, force: 19.4554, energy: 505.6158, velocity: 13.7700, time: 3331.9727
- },
-  { distance: 55850, force: 19.4554, energy: 506.9412, velocity: 13.7700, time: 3333.7645
- },
-  { distance: 55875, force: 19.4554, energy: 508.2666, velocity: 13.7700, time: 3335.5563
- },
-  { distance: 55900, force: 19.4554, energy: 509.5920, velocity: 13.7700, time: 3337.3481
- },
-  { distance: 55925, force: 19.4554, energy: 510.9174, velocity: 13.7700, time: 3339.1399
- },
-  { distance: 55950, force: 19.4554, energy: 512.2428, velocity: 13.7700, time: 3340.9317
- },
-  { distance: 55975, force: 19.4554, energy: 513.5682, velocity: 13.7700, time: 3342.7235
- },
-  { distance: 56000, force: 19.4554, energy: 514.8936, velocity: 13.7700, time: 3344.5154
- },
-  { distance: 56025, force: 19.4554, energy: 516.2190, velocity: 13.7700, time: 3346.3072
- },
-  { distance: 56050, force: 19.4554, energy: 517.5444, velocity: 13.7700, time: 3348.0990
- },
-  { distance: 56075, force: 19.4554, energy: 518.8698, velocity: 13.7700, time: 3349.8908
- },
-  { distance: 56100, force: 19.4554, energy: 520.1952, velocity: 13.7700, time: 3351.6826
- },
-  { distance: 56125, force: 19.4554, energy: 521.5206, velocity: 13.7700, time: 3353.4744
- },
-  { distance: 56150, force: 19.4554, energy: 522.8460, velocity: 13.7700, time: 3355.2662
- },
-  { distance: 56175, force: 19.4554, energy: 524.1714, velocity: 13.7700, time: 3357.0580
- },
-  { distance: 56200, force: 19.4554, energy: 525.4968, velocity: 13.7700, time: 3358.8498
- },
-  { distance: 56225, force: 19.4554, energy: 526.8222, velocity: 13.7700, time: 3360.6416
- },
-  { distance: 56250, force: 19.2907, energy: 528.1420, velocity: 13.7700, time: 3362.7647
- },
-  { distance: 56275, force: 19.0766, energy: 529.4489, velocity: 13.7700, time: 3364.7857
- },
-  { distance: 56300, force: 18.8522, energy: 530.7408, velocity: 13.7700, time: 3366.5714
- },
-  { distance: 56325, force: 18.6278, energy: 532.0175, velocity: 13.7700, time: 3368.3571
- },
-  { distance: 56350, force: 18.4033, energy: 533.2788, velocity: 13.7700, time: 3370.1429
- },
-  { distance: 56375, force: 18.1789, energy: 534.5249, velocity: 13.7700, time: 3371.9286
- },
-  { distance: 56400, force: 17.9545, energy: 535.7557, velocity: 13.7700, time: 3373.7143
- },
-  { distance: 56425, force: 17.7301, energy: 536.9712, velocity: 13.7700, time: 3375.5000
- },
-  { distance: 56450, force: 17.5056, energy: 538.1714, velocity: 13.7700, time: 3377.2857
- },
-  { distance: 56475, force: 17.2812, energy: 539.3564, velocity: 13.7700, time: 3379.0714
- },
-  { distance: 56500, force: 17.0568, energy: 540.5260, velocity: 13.7700, time: 3380.8571
- },
-  { distance: 56525, force: 16.8323, energy: 541.6803, velocity: 13.7700, time: 3382.6429
- },
-  { distance: 56550, force: 16.6079, energy: 542.8194, velocity: 13.7700, time: 3384.4286
- },
-  { distance: 56575, force: 16.3835, energy: 543.9432, velocity: 13.7700, time: 3386.2143
- },
-  { distance: 56600, force: 16.1590, energy: 545.0516, velocity: 13.7700, time: 3388.0000
- },
-  { distance: 56625, force: 15.6699, energy: 546.1358, velocity: 13.7700, time: 3390.2059
- },
-  { distance: 56650, force: 15.1655, energy: 547.1862, velocity: 13.7700, time: 3392.1429
- },
-  { distance: 56675, force: 14.6525, energy: 548.2018, velocity: 13.7700, time: 3393.9286
- },
-  { distance: 56700, force: 14.1395, energy: 549.1826, velocity: 13.7700, time: 3395.7143
- },
-  { distance: 56725, force: 13.6266, energy: 550.1283, velocity: 13.7700, time: 3397.5000
- },
-  { distance: 56750, force: 13.1136, energy: 551.0392, velocity: 13.7700, time: 3399.2857
- },
-  { distance: 56775, force: 12.6006, energy: 551.9151, velocity: 13.7700, time: 3401.0714
- },
-  { distance: 56800, force: 12.0876, energy: 552.7560, velocity: 13.7700, time: 3402.8571
- },
-  { distance: 56825, force: 11.5746, energy: 553.5620, velocity: 13.7700, time: 3404.6429
- },
-  { distance: 56850, force: 11.0616, energy: 554.3331, velocity: 13.7700, time: 3406.4286
- },
-  { distance: 56875, force: 10.5487, energy: 555.0692, velocity: 13.7700, time: 3408.2143
- },
-  { distance: 56900, force: 10.0357, energy: 555.7703, velocity: 13.7700, time: 3410.0000
- },
-  { distance: 56925, force: 8.3462, energy: 556.3964, velocity: 13.7700, time: 3411.4706
- },
-  { distance: 56950, force: 6.5889, energy: 556.9052, velocity: 13.7700, time: 3413.1963
- },
-  { distance: 56975, force: 4.7935, energy: 557.2929, velocity: 13.7700, time: 3415.0654
- },
-  { distance: 57000, force: 2.9981, energy: 557.5583, velocity: 13.7700, time: 3416.9346
- },
-  { distance: 57025, force: 1.2026, energy: 557.7014, velocity: 13.7700, time: 3418.8037
- },
-  { distance: 57050, force: 0.0000, energy: 557.7423, velocity: 13.7700, time: 3420.9000
- },
-  { distance: 57075, force: 0.0000, energy: 557.7423, velocity: 13.7700, time: 3422.7000
- },
-  { distance: 57100, force: 0.0000, energy: 557.7423, velocity: 13.7795, time: 3424.9000
- },
-  { distance: 57125, force: 0.0000, energy: 557.7423, velocity: 13.7920, time: 3426.4000
- },
-  { distance: 57150, force: 0.0000, energy: 557.7423, velocity: 13.8090, time: 3428.4500
- },
-  { distance: 57175, force: 0.0000, energy: 557.7423, velocity: 13.8270, time: 3429.7000
- },
-  { distance: 57200, force: 0.0000, energy: 557.7423, velocity: 13.8490, time: 3431.9000
- },
-  { distance: 57225, force: 0.0000, energy: 557.7423, velocity: 13.8840, time: 3433.4000
- },
-  { distance: 57250, force: 0.0000, energy: 557.7423, velocity: 13.9135, time: 3435.4500
- },
-  { distance: 57275, force: 0.0000, energy: 557.7423, velocity: 13.9510, time: 3437.4000
- },
-  { distance: 57300, force: 0.0000, energy: 557.7423, velocity: 13.9885, time: 3438.9500
- },
-  { distance: 57325, force: 0.0000, energy: 557.7423, velocity: 14.0380, time: 3440.4000
- },
-  { distance: 57350, force: 0.0000, energy: 557.7423, velocity: 14.0880, time: 3442.4500
- },
-  { distance: 57375, force: 0.0000, energy: 557.7423, velocity: 14.1380, time: 3444.4000
- },
-  { distance: 57400, force: 0.0000, energy: 557.7423, velocity: 14.1975, time: 3445.9500
- },
-  { distance: 57425, force: 0.0000, energy: 557.7423, velocity: 14.2525, time: 3448.0500
- },
-  { distance: 57450, force: 0.0000, energy: 557.7423, velocity: 14.3180, time: 3449.3000
- },
-  { distance: 57475, force: 0.0000, energy: 557.7423, velocity: 14.3875, time: 3451.1000
- },
-  { distance: 57500, force: 0.0000, energy: 557.7423, velocity: 14.4580, time: 3452.8000
- },
-  { distance: 57525, force: 0.0000, energy: 557.7423, velocity: 14.5330, time: 3455.0500
- },
-  { distance: 57550, force: 0.0000, energy: 557.7423, velocity: 14.6100, time: 3456.0000
- },
-  { distance: 57575, force: 0.0000, energy: 557.7423, velocity: 14.6835, time: 3458.2059
- },
-  { distance: 57600, force: 0.0000, energy: 557.7423, velocity: 14.7588, time: 3460.0105
- },
-  { distance: 57625, force: 0.0000, energy: 557.7423, velocity: 14.8352, time: 3461.5895
- },
-  { distance: 57650, force: 0.0000, energy: 557.7423, velocity: 14.9115, time: 3463.1684
- },
-  { distance: 57675, force: 0.0000, energy: 557.7423, velocity: 14.9878, time: 3464.7474
- },
-  { distance: 57700, force: 0.0000, energy: 557.7423, velocity: 15.0641, time: 3466.3263
- },
-  { distance: 57725, force: 0.0000, energy: 557.7423, velocity: 15.1404, time: 3467.9053
- },
-  { distance: 57750, force: 0.0000, energy: 557.7423, velocity: 15.2167, time: 3469.4842
- },
-  { distance: 57775, force: 0.0000, energy: 557.7423, velocity: 15.2930, time: 3471.0755
- },
-  { distance: 57800, force: 0.0000, energy: 557.7423, velocity: 15.3685, time: 3472.9623
- },
-  { distance: 57825, force: 0.0000, energy: 557.7423, velocity: 15.4440, time: 3474.8491
- },
-  { distance: 57850, force: 0.0000, energy: 557.7423, velocity: 15.5151, time: 3476.3019
- },
-  { distance: 57875, force: 0.0000, energy: 557.7423, velocity: 15.5858, time: 3477.7170
- },
-  { distance: 57900, force: 0.0000, energy: 557.7423, velocity: 15.6538, time: 3479.5385
- },
-  { distance: 57925, force: 0.0000, energy: 557.7423, velocity: 15.7212, time: 3481.4615
- },
-  { distance: 57950, force: 0.0000, energy: 557.7423, velocity: 15.7850, time: 3482.6429
- },
-  { distance: 57975, force: 0.0000, energy: 557.7423, velocity: 15.8497, time: 3484.3235
- },
-  { distance: 58000, force: 0.0000, energy: 557.7423, velocity: 15.9156, time: 3486.3333
- },
-  { distance: 58025, force: 0.0000, energy: 557.7423, velocity: 15.9804, time: 3487.7222
- },
-  { distance: 58050, force: 0.0000, energy: 557.7423, velocity: 16.0454, time: 3489.0769
- },
-  { distance: 58075, force: 0.0000, energy: 557.7423, velocity: 16.1125, time: 3490.1000
- },
-  { distance: 58100, force: 0.0000, energy: 557.7423, velocity: 16.1750, time: 3492.3000
- },
-  { distance: 58125, force: 0.0000, energy: 557.7423, velocity: 16.2375, time: 3493.5500
- },
-  { distance: 58150, force: 0.0000, energy: 557.7423, velocity: 16.2920, time: 3494.8000
- },
-  { distance: 58175, force: 0.0000, energy: 557.7423, velocity: 16.3420, time: 3497.0500
- },
-  { distance: 58200, force: 0.0000, energy: 557.7423, velocity: 16.3900, time: 3498.0000
- },
-  { distance: 58225, force: 0.0000, energy: 557.7423, velocity: 16.4407, time: 3499.3571
- },
-  { distance: 58250, force: 0.0000, energy: 557.7423, velocity: 16.4840, time: 3501.6000
- },
-  { distance: 58275, force: 0.0000, energy: 557.7423, velocity: 16.5315, time: 3503.0500
- },
-  { distance: 58300, force: 0.0000, energy: 557.7423, velocity: 16.5690, time: 3504.3000
- },
-  { distance: 58325, force: 0.0000, energy: 557.7423, velocity: 16.6065, time: 3505.5500
- },
-  { distance: 58350, force: 0.0000, energy: 557.7423, velocity: 16.6440, time: 3507.6000
- },
-  { distance: 58375, force: 0.0000, energy: 557.7423, velocity: 16.6815, time: 3509.0500
- },
-  { distance: 58400, force: 0.0000, energy: 557.7423, velocity: 16.7190, time: 3510.3000
- },
-  { distance: 58425, force: 0.0000, energy: 557.7423, velocity: 16.7510, time: 3511.5500
- },
-  { distance: 58450, force: 0.0000, energy: 557.7423, velocity: 16.7760, time: 3513.6000
- },
-  { distance: 58475, force: 0.0000, energy: 557.7423, velocity: 16.8110, time: 3515.0500
- },
-  { distance: 58500, force: 0.0000, energy: 557.7423, velocity: 16.8360, time: 3516.3000
- },
-  { distance: 58525, force: 0.0000, energy: 557.7423, velocity: 16.8569, time: 3517.6875
- },
-  { distance: 58550, force: 0.0000, energy: 557.7423, velocity: 16.8800, time: 3519.0000
- },
-  { distance: 58575, force: 0.0000, energy: 557.7423, velocity: 16.8955, time: 3520.5500
- },
-  { distance: 58600, force: 0.0000, energy: 557.7423, velocity: 16.9160, time: 3521.8000
- },
-  { distance: 58625, force: 0.0000, energy: 557.7423, velocity: 16.9300, time: 3524.0500
- },
-  { distance: 58650, force: 0.0000, energy: 557.7423, velocity: 16.9330, time: 3525.3000
- },
-  { distance: 58675, force: 0.0000, energy: 557.7423, velocity: 16.9400, time: 3526.5500
- },
-  { distance: 58700, force: 0.0000, energy: 557.7423, velocity: 16.9400, time: 3527.8000
- },
-  { distance: 58725, force: 0.0000, energy: 557.7423, velocity: 16.9400, time: 3530.0500
- },
-  { distance: 58750, force: 0.0000, energy: 557.7423, velocity: 16.9400, time: 3531.3000
- },
-  { distance: 58775, force: 0.0000, energy: 557.7423, velocity: 16.9400, time: 3532.5500
- },
-  { distance: 58800, force: 0.0000, energy: 557.7423, velocity: 16.9320, time: 3533.8000
- },
-  { distance: 58825, force: 0.0000, energy: 557.7423, velocity: 16.9300, time: 3535.2500
- },
-  { distance: 58850, force: 0.0000, energy: 557.7423, velocity: 16.9300, time: 3536.7143
- },
-  { distance: 58875, force: 0.0000, energy: 557.7423, velocity: 16.9295, time: 3538.1000
- },
-  { distance: 58900, force: 0.0000, energy: 557.7423, velocity: 16.9200, time: 3540.3000
- },
-  { distance: 58925, force: 0.0000, energy: 557.7423, velocity: 16.9200, time: 3541.5500
- },
-  { distance: 58950, force: 0.0000, energy: 557.7423, velocity: 16.9200, time: 3542.8000
- },
-  { distance: 58975, force: 0.0000, energy: 557.7423, velocity: 16.9195, time: 3544.0500
- },
-  { distance: 59000, force: 0.0000, energy: 557.7423, velocity: 16.9100, time: 3545.6000
- },
-  { distance: 59025, force: 0.0000, energy: 557.7423, velocity: 16.9100, time: 3547.5500
- },
-  { distance: 59050, force: 0.0000, energy: 557.7423, velocity: 16.9100, time: 3548.8000
- },
-  { distance: 59075, force: 0.0000, energy: 557.7423, velocity: 16.9100, time: 3550.0500
- },
-  { distance: 59100, force: 0.0000, energy: 557.7423, velocity: 16.9100, time: 3551.6000
- },
-  { distance: 59125, force: 0.0000, energy: 557.7423, velocity: 16.9100, time: 3553.5500
- },
-  { distance: 59150, force: 0.0000, energy: 557.7423, velocity: 16.9020, time: 3554.8000
- },
-  { distance: 59175, force: 0.0000, energy: 557.7423, velocity: 16.9000, time: 3556.0500
- },
-  { distance: 59200, force: 0.0000, energy: 557.7423, velocity: 16.9000, time: 3557.3000
- },
-  { distance: 59225, force: 0.0000, energy: 557.7423, velocity: 16.9000, time: 3559.1000
- },
-  { distance: 59250, force: 0.0000, energy: 557.7423, velocity: 16.9000, time: 3560.8000
- },
-  { distance: 59275, force: 0.0000, energy: 557.7423, velocity: 16.9000, time: 3562.0500
- },
-  { distance: 59300, force: 0.0000, energy: 557.7423, velocity: 16.9000, time: 3563.3000
- },
-  { distance: 59325, force: 0.0000, energy: 557.7423, velocity: 16.8945, time: 3565.1000
- },
-  { distance: 59350, force: 0.0000, energy: 557.7423, velocity: 16.8900, time: 3566.5000
- },
-  { distance: 59375, force: 0.0000, energy: 557.7423, velocity: 16.8900, time: 3568.0500
- },
-  { distance: 59400, force: 0.0000, energy: 557.7423, velocity: 16.8900, time: 3569.3000
- },
-  { distance: 59425, force: 0.0000, energy: 557.7423, velocity: 16.8845, time: 3570.5500
- },
-  { distance: 59450, force: 0.0000, energy: 557.7423, velocity: 16.8800, time: 3572.6000
- },
-  { distance: 59475, force: 0.0000, energy: 557.7423, velocity: 16.8700, time: 3574.0500
- },
-  { distance: 59500, force: 0.0000, energy: 557.7423, velocity: 16.8670, time: 3575.3000
- },
-  { distance: 59525, force: 0.0000, energy: 557.7423, velocity: 16.8545, time: 3576.5500
- },
-  { distance: 59550, force: 0.0000, energy: 557.7423, velocity: 16.8420, time: 3578.6000
- },
-  { distance: 59575, force: 0.0000, energy: 557.7423, velocity: 16.8295, time: 3580.0500
- },
-  { distance: 59600, force: 0.0000, energy: 557.7423, velocity: 16.8170, time: 3581.3000
- },
-  { distance: 59625, force: 0.0000, energy: 557.7423, velocity: 16.8031, time: 3582.6875
- },
-  { distance: 59650, force: 0.0000, energy: 557.7423, velocity: 16.7900, time: 3584.0000
- },
-  { distance: 59675, force: 0.0000, energy: 557.7423, velocity: 16.7745, time: 3585.5500
- },
-  { distance: 59700, force: 0.0000, energy: 557.7423, velocity: 16.7540, time: 3587.6000
- },
-  { distance: 59725, force: 0.0000, energy: 557.7423, velocity: 16.7347, time: 3589.2263
- },
-  { distance: 59750, force: 0.0000, energy: 557.7423, velocity: 16.7164, time: 3590.6861
- },
-  { distance: 59775, force: 0.0000, energy: 557.7423, velocity: 16.6982, time: 3592.1460
- },
-  { distance: 59800, force: 0.0000, energy: 557.7423, velocity: 16.6799, time: 3593.6058
- },
-  { distance: 59825, force: 0.0000, energy: 557.7423, velocity: 16.6617, time: 3595.0657
- },
-  { distance: 59850, force: 0.0000, energy: 557.7423, velocity: 16.6433, time: 3596.5333
- },
-  { distance: 59875, force: 0.0000, energy: 557.7423, velocity: 16.6248, time: 3598.0148
- },
-  { distance: 59900, force: 0.0000, energy: 557.7423, velocity: 16.6063, time: 3599.4963
- },
-  { distance: 59925, force: 0.0000, energy: 557.7423, velocity: 16.5878, time: 3600.9778
- },
-  { distance: 59950, force: 0.0000, energy: 557.7423, velocity: 16.5693, time: 3602.4593
- },
-  { distance: 59975, force: 0.0000, energy: 557.7423, velocity: 16.5507, time: 3603.9407
- },
-  { distance: 60000, force: 0.0000, energy: 557.7423, velocity: 16.5271, time: 3605.2857
- },
-  { distance: 60025, force: 0.0000, energy: 557.7423, velocity: 16.5113, time: 3606.8696
- },
-  { distance: 60050, force: 0.0000, energy: 557.7423, velocity: 16.4891, time: 3608.5455
- },
-  { distance: 60075, force: 0.0000, energy: 557.7423, velocity: 16.4670, time: 3609.6522
- },
-  { distance: 60100, force: 0.0000, energy: 557.7423, velocity: 16.4458, time: 3611.4167
- },
-  { distance: 60125, force: 0.0000, energy: 557.7423, velocity: 16.4250, time: 3612.7500
- },
-  { distance: 60150, force: 0.0000, energy: 557.7423, velocity: 16.4042, time: 3614.5833
- },
-  { distance: 60175, force: 0.0000, energy: 557.7423, velocity: 16.3833, time: 3615.8333
- },
-  { distance: 60200, force: 0.0000, energy: 557.7423, velocity: 16.3632, time: 3617.6800
- },
-  { distance: 60225, force: 0.0000, energy: 557.7423, velocity: 16.3438, time: 3618.8077
- },
-  { distance: 60250, force: 0.0000, energy: 557.7423, velocity: 16.3169, time: 3620.5385
- },
-  { distance: 60275, force: 0.0000, energy: 557.7423, velocity: 16.2954, time: 3622.4615
- },
-  { distance: 60300, force: 0.0000, energy: 557.7423, velocity: 16.2700, time: 3624.0000
- },
-  { distance: 60325, force: 0.0000, energy: 557.7423, velocity: 16.2529, time: 3625.3571
- },
-  { distance: 60350, force: 0.0000, energy: 557.7423, velocity: 16.2240, time: 3626.8000
- },
-  { distance: 60375, force: 0.0000, energy: 557.7423, velocity: 16.1990, time: 3628.0500
- },
-  { distance: 60400, force: 0.0000, energy: 557.7423, velocity: 16.1740, time: 3629.6000
- },
-  { distance: 60425, force: 0.0000, energy: 557.7423, velocity: 16.1490, time: 3631.5500
- },
-  { distance: 60450, force: 0.0000, energy: 557.7423, velocity: 16.1160, time: 3632.8000
- },
-  { distance: 60475, force: 0.0000, energy: 557.7423, velocity: 16.0890, time: 3634.1000
- },
-  { distance: 60500, force: 0.0000, energy: 557.7423, velocity: 16.0610, time: 3636.3000
- },
-  { distance: 60525, force: 0.0000, energy: 557.7423, velocity: 16.0295, time: 3637.5238
- },
-  { distance: 60550, force: 0.0000, energy: 557.7423, velocity: 15.9986, time: 3638.7143
- },
-  { distance: 60575, force: 0.0000, energy: 557.7423, velocity: 15.9650, time: 3640.7500
- },
-  { distance: 60600, force: 0.0000, energy: 557.7423, velocity: 15.9310, time: 3642.3000
- },
-  { distance: 60625, force: 0.0000, energy: 557.7423, velocity: 15.8935, time: 3643.5500
- },
-  { distance: 60650, force: 0.0000, energy: 557.7423, velocity: 15.8640, time: 3645.6000
- },
-  { distance: 60675, force: 0.0000, energy: 557.7423, velocity: 15.8285, time: 3647.0500
- },
-  { distance: 60700, force: 0.0000, energy: 557.7423, velocity: 15.7910, time: 3648.3000
- },
-  { distance: 60725, force: 0.0000, energy: 557.7423, velocity: 15.7480, time: 3650.1000
- },
-  { distance: 60750, force: 0.0000, energy: 557.7423, velocity: 15.7060, time: 3651.8000
- },
-  { distance: 60775, force: 0.0000, energy: 557.7423, velocity: 15.6685, time: 3653.0500
- },
-  { distance: 60800, force: 0.0000, energy: 557.7423, velocity: 15.6300, time: 3655.0000
- },
-  { distance: 60825, force: 0.0000, energy: 557.7423, velocity: 15.5850, time: 3656.4000
- },
-  { distance: 60850, force: 0.0000, energy: 557.7423, velocity: 15.5425, time: 3658.0323
- },
-  { distance: 60875, force: 0.0000, energy: 557.7423, velocity: 15.4995, time: 3659.6452
- },
-  { distance: 60900, force: 0.0000, energy: 557.7423, velocity: 15.4565, time: 3661.2581
- },
-  { distance: 60925, force: 0.0000, energy: 557.7423, velocity: 15.4134, time: 3662.8710
- },
-  { distance: 60950, force: 0.0000, energy: 557.7423, velocity: 15.3725, time: 3664.5000
- },
-  { distance: 60975, force: 0.0000, energy: 557.7423, velocity: 15.3317, time: 3666.1304
- },
-  { distance: 61000, force: 0.0000, energy: 557.7423, velocity: 15.2910, time: 3667.7609
- },
-  { distance: 61025, force: 0.0000, energy: 557.7423, velocity: 15.2494, time: 3669.3529
- },
-  { distance: 61050, force: 0.0000, energy: 557.7423, velocity: 15.2053, time: 3670.8235
- },
-  { distance: 61075, force: 0.0000, energy: 557.7423, velocity: 15.1629, time: 3672.4762
- },
-  { distance: 61100, force: 0.0000, energy: 557.7423, velocity: 15.1262, time: 3674.6923
- },
-  { distance: 61125, force: 0.0000, energy: 557.7423, velocity: 15.0885, time: 3676.0500
- },
-  { distance: 61150, force: 0.0000, energy: 557.7423, velocity: 15.0480, time: 3677.6000
- },
-  { distance: 61175, force: 0.0000, energy: 557.7423, velocity: 15.0035, time: 3679.5500
- },
-  { distance: 61200, force: 0.0000, energy: 557.7423, velocity: 14.9660, time: 3680.8000
- },
-  { distance: 61225, force: 0.0000, energy: 557.7423, velocity: 14.9385, time: 3683.0500
- },
-  { distance: 61250, force: 0.0000, energy: 557.7423, velocity: 14.9010, time: 3684.3000
- },
-  { distance: 61275, force: 0.0000, energy: 557.7423, velocity: 14.8635, time: 3686.1000
- },
-  { distance: 61300, force: 0.0000, energy: 557.7423, velocity: 14.8260, time: 3687.8000
- },
-  { distance: 61325, force: 0.0000, energy: 557.7423, velocity: 14.7985, time: 3689.1000
- },
-  { distance: 61350, force: 0.0000, energy: 557.7423, velocity: 14.7640, time: 3691.3000
- },
-  { distance: 61375, force: 0.0000, energy: 557.7423, velocity: 14.7335, time: 3692.5500
- },
-  { distance: 61400, force: 0.0000, energy: 557.7423, velocity: 14.7040, time: 3694.6000
- },
-  { distance: 61425, force: 0.0000, energy: 557.7423, velocity: 14.6690, time: 3696.1000
- },
-  { distance: 61450, force: 0.0000, energy: 557.7423, velocity: 14.6440, time: 3698.3000
- },
-  { distance: 61475, force: 0.0000, energy: 557.7423, velocity: 14.6190, time: 3700.0500
- },
-  { distance: 61500, force: 0.0000, energy: 557.7423, velocity: 14.5940, time: 3701.3000
- },
-  { distance: 61525, force: 0.0000, energy: 557.7423, velocity: 14.5690, time: 3703.1000
- },
-  { distance: 61550, force: 0.0000, energy: 557.7423, velocity: 14.5440, time: 3704.8000
- },
-  { distance: 61575, force: 0.0000, energy: 557.7423, velocity: 14.5190, time: 3706.1000
- },
-  { distance: 61600, force: 0.0000, energy: 557.7423, velocity: 14.4970, time: 3708.3000
- },
-  { distance: 61625, force: 0.0000, energy: 557.7423, velocity: 14.4790, time: 3710.1000
- },
-  { distance: 61650, force: 0.0000, energy: 557.7423, velocity: 14.4620, time: 3711.8000
- },
-  { distance: 61675, force: 0.0000, energy: 557.7423, velocity: 14.4395, time: 3713.1000
- },
-  { distance: 61700, force: 0.0000, energy: 557.7423, velocity: 14.4270, time: 3715.3000
- },
-  { distance: 61725, force: 0.0000, energy: 557.7423, velocity: 14.4145, time: 3716.5500
- },
-  { distance: 61750, force: 0.0000, energy: 557.7423, velocity: 14.4020, time: 3718.6000
- },
-  { distance: 61775, force: 0.0000, energy: 557.7423, velocity: 14.3900, time: 3720.1000
- },
-  { distance: 61800, force: 0.0000, energy: 557.7423, velocity: 14.3870, time: 3722.3000
- },
-  { distance: 61825, force: 0.0000, energy: 557.7423, velocity: 14.3800, time: 3723.5500
- },
-  { distance: 61850, force: 0.0000, energy: 557.7423, velocity: 14.3720, time: 3725.6000
- },
-  { distance: 61875, force: 0.0000, energy: 557.7423, velocity: 14.3700, time: 3727.1000
- },
-  { distance: 61900, force: 0.0000, energy: 557.7423, velocity: 14.3700, time: 3729.0000
- },
-  { distance: 61925, force: 0.0000, energy: 557.7423, velocity: 14.3700, time: 3730.4000
- },
-  { distance: 61950, force: 0.0000, energy: 557.7423, velocity: 14.3700, time: 3732.4500
- },
-  { distance: 61975, force: 0.0000, energy: 557.7423, velocity: 14.3800, time: 3734.1000
- },
-  { distance: 62000, force: 0.0000, energy: 557.7423, velocity: 14.3830, time: 3736.3000
- },
-  { distance: 62025, force: 0.0000, energy: 557.7423, velocity: 14.3900, time: 3737.5500
- },
-  { distance: 62050, force: 0.0000, energy: 557.7423, velocity: 14.3980, time: 3739.6000
- },
-  { distance: 62075, force: 0.0000, energy: 557.7423, velocity: 14.4005, time: 3741.0500
- },
-  { distance: 62100, force: 0.0000, energy: 557.7423, velocity: 14.4130, time: 3742.6000
- },
-  { distance: 62125, force: 0.0000, energy: 557.7423, velocity: 14.4255, time: 3744.5500
- },
-  { distance: 62150, force: 0.0000, energy: 557.7423, velocity: 14.4300, time: 3746.6000
- },
-  { distance: 62175, force: 0.0000, energy: 557.7423, velocity: 14.4405, time: 3748.0500
- },
-  { distance: 62200, force: 0.0000, energy: 557.7423, velocity: 14.4530, time: 3749.6000
- },
-  { distance: 62225, force: 0.0000, energy: 557.7423, velocity: 14.4655, time: 3751.5500
- },
-  { distance: 62250, force: 0.0000, energy: 557.7423, velocity: 14.4830, time: 3753.4054
- },
-  { distance: 62275, force: 0.0000, energy: 557.7423, velocity: 14.4957, time: 3755.0946
- },
-  { distance: 62300, force: 0.0000, energy: 557.7423, velocity: 14.5084, time: 3756.7838
- },
-  { distance: 62325, force: 0.0000, energy: 557.7423, velocity: 14.5210, time: 3758.4730
- },
-  { distance: 62350, force: 0.0000, energy: 557.7423, velocity: 14.5337, time: 3760.1622
- },
-  { distance: 62375, force: 0.0000, energy: 557.7423, velocity: 14.5464, time: 3761.8514
- },
-  { distance: 62400, force: 0.0000, energy: 557.7423, velocity: 14.5591, time: 3763.5405
- },
-  { distance: 62425, force: 0.0000, energy: 557.7423, velocity: 14.5717, time: 3765.2297
- },
-  { distance: 62450, force: 0.0000, energy: 557.7423, velocity: 14.5844, time: 3766.9189
- },
-  { distance: 62475, force: 0.0000, energy: 557.7423, velocity: 14.5971, time: 3768.6081
- },
-  { distance: 62500, force: 0.0000, energy: 557.7423, velocity: 14.6097, time: 3770.2973
- },
-  { distance: 62525, force: 0.0000, energy: 557.7423, velocity: 14.6224, time: 3771.9865
- },
-  { distance: 62550, force: 0.0000, energy: 557.7423, velocity: 14.6350, time: 3774.0000
- },
-  { distance: 62575, force: 0.0000, energy: 557.7423, velocity: 14.6500, time: 3776.0500
- },
-  { distance: 62600, force: 0.0000, energy: 557.7423, velocity: 14.6530, time: 3777.3000
- },
-  { distance: 62625, force: 0.0000, energy: 557.7423, velocity: 14.6655, time: 3779.1000
- },
-  { distance: 62650, force: 0.0000, energy: 557.7423, velocity: 14.6780, time: 3780.8000
- },
-  { distance: 62675, force: 0.0000, energy: 557.7423, velocity: 14.6805, time: 3782.1000
- },
-  { distance: 62700, force: 0.0000, energy: 557.7423, velocity: 14.6900, time: 3784.3000
- },
-  { distance: 62725, force: 0.0000, energy: 557.7423, velocity: 14.6900, time: 3785.5500
- },
-  { distance: 62750, force: 0.0000, energy: 557.7423, velocity: 14.6900, time: 3787.6000
- },
-  { distance: 62775, force: 0.0000, energy: 557.7423, velocity: 14.7000, time: 3789.1000
- },
-  { distance: 62800, force: 0.0000, energy: 557.7423, velocity: 14.7000, time: 3791.3000
- },
-  { distance: 62825, force: 0.0000, energy: 557.7423, velocity: 14.7000, time: 3792.6875
- },
-  { distance: 62850, force: 0.0000, energy: 557.7423, velocity: 14.6900, time: 3794.0000
- },
-  { distance: 62875, force: 0.0000, energy: 557.7423, velocity: 14.6900, time: 3796.2500
- },
-  { distance: 62900, force: 0.0000, energy: 557.7423, velocity: 14.6850, time: 3797.5000
- },
-  { distance: 62925, force: 0.0000, energy: 557.7423, velocity: 14.6800, time: 3799.5000
- },
-  { distance: 62950, force: 0.0000, energy: 557.7423, velocity: 14.6700, time: 3801.0000
- },
-  { distance: 62975, force: 0.0000, energy: 557.7423, velocity: 14.6675, time: 3803.2500
- },
-  { distance: 63000, force: 0.0000, energy: 557.7423, velocity: 14.6550, time: 3804.5000
- },
-  { distance: 63025, force: 0.0000, energy: 557.7423, velocity: 14.6425, time: 3806.5000
- },
-  { distance: 63050, force: 0.0000, energy: 557.7423, velocity: 14.6300, time: 3808.0000
- },
-  { distance: 63075, force: 0.0000, energy: 557.7423, velocity: 14.6175, time: 3809.5000
- },
-  { distance: 63100, force: 0.0000, energy: 557.7423, velocity: 14.6050, time: 3811.5000
- },
-  { distance: 63125, force: 0.0000, energy: 557.7423, velocity: 14.5925, time: 3812.7500
- },
-  { distance: 63150, force: 0.0000, energy: 557.7423, velocity: 14.5700, time: 3815.0000
- },
-  { distance: 63175, force: 0.0000, energy: 557.7423, velocity: 14.5550, time: 3816.5000
- },
-  { distance: 63200, force: 0.0000, energy: 557.7423, velocity: 14.5340, time: 3818.3000
- },
-  { distance: 63225, force: 0.0000, energy: 557.7423, velocity: 14.5145, time: 3820.1000
- },
-  { distance: 63250, force: 0.0000, energy: 557.7423, velocity: 14.4940, time: 3821.8000
- },
-  { distance: 63275, force: 0.0000, energy: 557.7423, velocity: 14.4695, time: 3823.1000
- },
-  { distance: 63300, force: 0.0000, energy: 557.7423, velocity: 14.4540, time: 3825.3000
- },
-  { distance: 63325, force: 0.0000, energy: 557.7423, velocity: 14.4290, time: 3826.5500
- },
-  { distance: 63350, force: 0.0000, energy: 557.7423, velocity: 14.4040, time: 3828.6000
- },
-  { distance: 63375, force: 0.0000, energy: 557.7423, velocity: 14.3790, time: 3830.1000
- },
-  { distance: 63400, force: 0.0000, energy: 557.7423, velocity: 14.3540, time: 3832.3000
- },
-  { distance: 63425, force: 0.0000, energy: 557.7423, velocity: 14.3290, time: 3833.5500
- },
-  { distance: 63450, force: 0.0000, energy: 557.7423, velocity: 14.3040, time: 3835.6000
- },
-  { distance: 63475, force: 0.0000, energy: 557.7423, velocity: 14.2790, time: 3837.1000
- },
-  { distance: 63500, force: 0.0000, energy: 557.7423, velocity: 14.2510, time: 3839.3000
- },
-  { distance: 63525, force: 0.0000, energy: 557.7423, velocity: 14.2190, time: 3840.5500
- },
-  { distance: 63550, force: 0.0000, energy: 557.7423, velocity: 14.1940, time: 3842.6000
- },
-  { distance: 63575, force: 0.0000, energy: 557.7423, velocity: 14.1590, time: 3844.1000
- },
-  { distance: 63600, force: 0.0000, energy: 557.7423, velocity: 14.1310, time: 3846.3000
- },
-  { distance: 63625, force: 0.0000, energy: 557.7423, velocity: 14.0990, time: 3848.1000
- },
-  { distance: 63650, force: 0.0000, energy: 557.7423, velocity: 14.0660, time: 3849.8000
- },
-  { distance: 63675, force: 0.0000, energy: 557.7423, velocity: 14.0290, time: 3851.1000
- },
-  { distance: 63700, force: 0.0000, energy: 557.7423, velocity: 14.0010, time: 3853.3000
- },
-  { distance: 63725, force: 0.0000, energy: 557.7423, velocity: 13.9637, time: 3854.8148
- },
-  { distance: 63750, force: 0.0000, energy: 557.7423, velocity: 13.9267, time: 3856.6667
- },
-  { distance: 63775, force: 0.0000, energy: 557.7423, velocity: 13.8922, time: 3858.5185
- },
-  { distance: 63800, force: 0.0000, energy: 557.7423, velocity: 13.8623, time: 3860.3846
- },
-  { distance: 63825, force: 0.0000, energy: 557.7423, velocity: 13.8254, time: 3862.3077
- },
-  { distance: 63850, force: 0.0000, energy: 557.7423, velocity: 13.7964, time: 3864.2400
- },
-  { distance: 63875, force: 13.3562, energy: 558.1973, velocity: 13.7700, time: 3866.1432
- },
-  { distance: 63900, force: 13.1158, energy: 559.0990, velocity: 13.7700, time: 3867.9328
- },
-  { distance: 63925, force: 12.8753, energy: 559.9843, velocity: 13.7700, time: 3869.7223
- },
-  { distance: 63950, force: 12.6349, energy: 560.8532, velocity: 13.7700, time: 3871.5119
- },
-  { distance: 63975, force: 12.3944, energy: 561.7058, velocity: 13.7700, time: 3873.3015
- },
-  { distance: 64000, force: 12.1539, energy: 562.5420, velocity: 13.7700, time: 3875.0911
- },
-  { distance: 64025, force: 11.9135, energy: 563.3618, velocity: 13.7700, time: 3876.8807
- },
-  { distance: 64050, force: 11.6730, energy: 564.1652, velocity: 13.7700, time: 3878.6703
- },
-  { distance: 64075, force: 11.4325, energy: 564.9522, velocity: 13.7700, time: 3880.4599
- },
-  { distance: 64100, force: 11.1921, energy: 565.7229, velocity: 13.7700, time: 3882.2495
- },
-  { distance: 64125, force: 10.9516, energy: 566.4771, velocity: 13.7700, time: 3884.0390
- },
-  { distance: 64150, force: 10.7112, energy: 567.2150, velocity: 13.7700, time: 3885.8286
- },
-  { distance: 64175, force: 10.4707, energy: 567.9365, velocity: 13.7700, time: 3887.6182
- },
-  { distance: 64200, force: 10.2302, energy: 568.6417, velocity: 13.7700, time: 3889.4078
- },
-  { distance: 64225, force: 9.9898, energy: 569.3304, velocity: 13.7700, time: 3891.1974
- },
-  { distance: 64250, force: 9.7493, energy: 570.0028, velocity: 13.7700, time: 3892.9870
- },
-  { distance: 64275, force: 9.5089, energy: 570.6588, velocity: 13.7700, time: 3894.7766
- },
-  { distance: 64300, force: 9.2684, energy: 571.2984, velocity: 13.7700, time: 3896.5662
- },
-  { distance: 64325, force: 9.0279, energy: 571.9216, velocity: 13.7700, time: 3898.3557
- },
-  { distance: 64350, force: 8.9414, energy: 572.5337, velocity: 13.7700, time: 3900.1594
- },
-  { distance: 64375, force: 8.9414, energy: 573.1428, velocity: 13.7700, time: 3901.9710
- },
-  { distance: 64400, force: 8.9414, energy: 573.7519, velocity: 13.7700, time: 3903.7826
- },
-  { distance: 64425, force: 8.9414, energy: 574.3611, velocity: 13.7700, time: 3905.5942
- },
-  { distance: 64450, force: 8.9414, energy: 574.9702, velocity: 13.7700, time: 3907.4058
- },
-  { distance: 64475, force: 8.9414, energy: 575.5793, velocity: 13.7700, time: 3909.2174
- },
-  { distance: 64500, force: 8.9414, energy: 576.1885, velocity: 13.7700, time: 3911.0290
- },
-  { distance: 64525, force: 8.9414, energy: 576.7976, velocity: 13.7700, time: 3912.8406
- },
-  { distance: 64550, force: 8.9414, energy: 577.4067, velocity: 13.7700, time: 3914.6522
- },
-  { distance: 64575, force: 8.9414, energy: 578.0158, velocity: 13.7700, time: 3916.4638
- },
-  { distance: 64600, force: 8.9414, energy: 578.6250, velocity: 13.7700, time: 3918.2754
- },
-  { distance: 64625, force: 8.9414, energy: 579.2341, velocity: 13.7700, time: 3920.0870
- },
-  { distance: 64650, force: 8.9414, energy: 579.8432, velocity: 13.7700, time: 3921.8986
- },
-  { distance: 64675, force: 8.9414, energy: 580.4524, velocity: 13.7700, time: 3923.7101
- },
-  { distance: 64700, force: 8.9414, energy: 581.0615, velocity: 13.7700, time: 3925.5217
- },
-  { distance: 64725, force: 8.9414, energy: 581.6706, velocity: 13.7700, time: 3927.3333
- },
-  { distance: 64750, force: 8.9414, energy: 582.2798, velocity: 13.7700, time: 3929.1449
- },
-  { distance: 64775, force: 8.9414, energy: 582.8889, velocity: 13.7700, time: 3930.9565
- },
-  { distance: 64800, force: 8.9414, energy: 583.4980, velocity: 13.7700, time: 3932.7681
- },
-  { distance: 64825, force: 8.9414, energy: 584.1072, velocity: 13.7700, time: 3934.5797
- },
-  { distance: 64850, force: 8.9414, energy: 584.7163, velocity: 13.7700, time: 3936.3913
- },
-  { distance: 64875, force: 8.9414, energy: 585.3254, velocity: 13.7700, time: 3938.2029
- },
-  { distance: 64900, force: 8.9414, energy: 585.9346, velocity: 13.7700, time: 3940.0145
- },
-  { distance: 64925, force: 8.9414, energy: 586.5437, velocity: 13.7700, time: 3941.8261
- },
-  { distance: 64950, force: 8.9414, energy: 587.1528, velocity: 13.7700, time: 3943.6377
- },
-  { distance: 64975, force: 8.9414, energy: 587.7619, velocity: 13.7700, time: 3945.4493
- },
-  { distance: 65000, force: 8.9414, energy: 588.3711, velocity: 13.7700, time: 3947.2609
- },
-  { distance: 65025, force: 8.9414, energy: 588.9802, velocity: 13.7700, time: 3949.0725
- },
-  { distance: 65050, force: 8.9414, energy: 589.5893, velocity: 13.7700, time: 3950.8841
- },
-  { distance: 65075, force: 8.9414, energy: 590.1985, velocity: 13.7700, time: 3952.6957
- },
-  { distance: 65100, force: 8.9414, energy: 590.8076, velocity: 13.7700, time: 3954.5072
- },
-  { distance: 65125, force: 8.9414, energy: 591.4167, velocity: 13.7700, time: 3956.3188
- },
-  { distance: 65150, force: 8.9414, energy: 592.0259, velocity: 13.7700, time: 3958.1304
- },
-  { distance: 65175, force: 8.9414, energy: 592.6350, velocity: 13.7700, time: 3959.9420
- },
-  { distance: 65200, force: 8.9414, energy: 593.2441, velocity: 13.7700, time: 3961.7536
- },
-  { distance: 65225, force: 8.9414, energy: 593.8533, velocity: 13.7700, time: 3963.5652
- },
-  { distance: 65250, force: 8.9414, energy: 594.4624, velocity: 13.7700, time: 3965.3768
- },
-  { distance: 65275, force: 8.9414, energy: 595.0715, velocity: 13.7700, time: 3967.1884
- },
-  { distance: 65300, force: 8.9414, energy: 595.6807, velocity: 13.7700, time: 3969.0000
- },
-  { distance: 65325, force: 9.2355, energy: 596.2998, velocity: 13.7700, time: 3971.2059
- },
-  { distance: 65350, force: 9.5466, energy: 596.9396, velocity: 13.7700, time: 3973.1566
- },
-  { distance: 65375, force: 9.8672, energy: 597.6008, velocity: 13.7700, time: 3974.9639
- },
-  { distance: 65400, force: 10.1878, energy: 598.2840, velocity: 13.7700, time: 3976.7711
- },
-  { distance: 65425, force: 10.5084, energy: 598.9889, velocity: 13.7700, time: 3978.5783
- },
-  { distance: 65450, force: 10.8290, energy: 599.7157, velocity: 13.7700, time: 3980.3855
- },
-  { distance: 65475, force: 11.1496, energy: 600.4644, velocity: 13.7700, time: 3982.1928
- },
-  { distance: 65500, force: 11.4703, energy: 601.2349, velocity: 13.7700, time: 3984.0000
- },
-  { distance: 65525, force: 12.6585, energy: 602.0568, velocity: 13.7700, time: 3985.4706
- },
-  { distance: 65550, force: 13.8968, energy: 602.9613, velocity: 13.7700, time: 3987.1803
- },
-  { distance: 65575, force: 15.1632, energy: 603.9512, velocity: 13.7700, time: 3989.0246
- },
-  { distance: 65600, force: 16.4297, energy: 605.0273, velocity: 13.7700, time: 3990.8689
- },
-  { distance: 65625, force: 17.6961, energy: 606.1897, velocity: 13.7700, time: 3992.7131
- },
-  { distance: 65650, force: 18.9625, energy: 607.4384, velocity: 13.7700, time: 3994.5574
- },
-  { distance: 65675, force: 20.2289, energy: 608.7733, velocity: 13.7700, time: 3996.4016
- },
-  { distance: 65700, force: 21.4954, energy: 610.1946, velocity: 13.7700, time: 3998.2459
- },
-  { distance: 65725, force: 22.7618, energy: 611.7021, velocity: 13.7700, time: 4000.0902
- },
-  { distance: 65750, force: 24.0282, energy: 613.2959, velocity: 13.7700, time: 4001.9344
- },
-  { distance: 65775, force: 25.2946, energy: 614.9759, velocity: 13.7700, time: 4003.7787
- },
-  { distance: 65800, force: 26.5611, energy: 616.7423, velocity: 13.7700, time: 4005.6230
- },
-  { distance: 65825, force: 27.8275, energy: 618.5949, velocity: 13.7700, time: 4007.4672
- },
-  { distance: 65850, force: 29.0939, energy: 620.5338, velocity: 13.7700, time: 4009.3115
- },
-  { distance: 65875, force: 30.3603, energy: 622.5589, velocity: 13.7700, time: 4011.1557
- },
-  { distance: 65900, force: 31.6268, energy: 624.6704, velocity: 13.7700, time: 4013.0000
- },
-  { distance: 65925, force: 33.0829, energy: 626.8745, velocity: 13.7700, time: 4014.4706
- },
-  { distance: 65950, force: 34.5500, energy: 629.1783, velocity: 13.7700, time: 4016.1852
- },
-  { distance: 65975, force: 36.0232, energy: 631.5822, velocity: 13.7700, time: 4018.0370
- },
-  { distance: 66000, force: 37.4964, energy: 634.0864, velocity: 13.7700, time: 4019.8889
- },
-  { distance: 66025, force: 38.9696, energy: 636.6911, velocity: 13.7700, time: 4021.7407
- },
-  { distance: 66050, force: 40.4428, energy: 639.3960, velocity: 13.7700, time: 4023.5926
- },
-  { distance: 66075, force: 41.9161, energy: 642.2014, velocity: 13.7700, time: 4025.4444
- },
-  { distance: 66100, force: 43.3893, energy: 645.1071, velocity: 13.7700, time: 4027.2963
- },
-  { distance: 66125, force: 44.8625, energy: 648.1132, velocity: 13.7700, time: 4029.1481
- },
-  { distance: 66150, force: 46.3357, energy: 651.2196, velocity: 13.7700, time: 4031.0000
- },
-  { distance: 66175, force: 47.8090, energy: 654.4264, velocity: 13.7700, time: 4032.8519
- },
-  { distance: 66200, force: 49.2822, energy: 657.7336, velocity: 13.7700, time: 4034.7037
- },
-  { distance: 66225, force: 50.7554, energy: 661.1411, velocity: 13.7700, time: 4036.5556
- },
-  { distance: 66250, force: 52.2286, energy: 664.6490, velocity: 13.7700, time: 4038.4074
- },
-  { distance: 66275, force: 53.7018, energy: 668.2573, velocity: 13.7700, time: 4040.2593
- },
-  { distance: 66300, force: 55.1751, energy: 671.9659, velocity: 13.7700, time: 4042.1111
- },
-  { distance: 66325, force: 56.6483, energy: 675.7749, velocity: 13.7700, time: 4043.9630
- },
-  { distance: 66350, force: 58.1215, energy: 679.6842, velocity: 13.7700, time: 4045.8148
- },
-  { distance: 66375, force: 59.5947, energy: 683.6939, velocity: 13.7700, time: 4047.6667
- },
-  { distance: 66400, force: 61.0679, energy: 687.8040, velocity: 13.7700, time: 4049.5185
- },
-  { distance: 66425, force: 62.5412, energy: 692.0144, velocity: 13.7700, time: 4051.3704
- },
-  { distance: 66450, force: 64.0144, energy: 696.3252, velocity: 13.7700, time: 4053.2222
- },
-  { distance: 66475, force: 65.4748, energy: 700.7360, velocity: 13.7700, time: 4055.0700
- },
-  { distance: 66500, force: 66.6274, energy: 705.2357, velocity: 13.7700, time: 4056.8200
- },
-  { distance: 66525, force: 67.7800, energy: 709.8139, velocity: 13.7700, time: 4058.5700
- },
-  { distance: 66550, force: 68.9326, energy: 714.4707, velocity: 13.7700, time: 4060.3200
- },
-  { distance: 66575, force: 70.0852, energy: 719.2060, velocity: 13.7700, time: 4062.0700
- },
-  { distance: 66600, force: 71.2378, energy: 724.0198, velocity: 13.7700, time: 4063.8200
- },
-  { distance: 66625, force: 72.3904, energy: 728.9122, velocity: 13.7700, time: 4065.5700
- },
-  { distance: 66650, force: 73.5430, energy: 733.8830, velocity: 13.7700, time: 4067.3200
- },
-  { distance: 66675, force: 74.6578, energy: 738.9311, velocity: 13.7700, time: 4069.0833
- },
-  { distance: 66700, force: 74.8646, energy: 744.0242, velocity: 13.7700, time: 4071.1667
- },
-  { distance: 66725, force: 74.7635, energy: 749.1209, velocity: 13.7700, time: 4072.8824
- },
-  { distance: 66750, force: 74.4459, energy: 754.2034, velocity: 13.7700, time: 4074.4286
- },
-  { distance: 66775, force: 74.0933, energy: 759.2630, velocity: 13.7700, time: 4076.2143
- },
-  { distance: 66800, force: 73.7406, energy: 764.2986, velocity: 13.7700, time: 4078.0000
- },
-  { distance: 66825, force: 73.3879, energy: 769.3101, velocity: 13.7700, time: 4079.7500
- },
-  { distance: 66850, force: 73.0352, energy: 774.2977, velocity: 13.7700, time: 4081.5000
- },
-  { distance: 66875, force: 72.6826, energy: 779.2612, velocity: 13.7700, time: 4083.2500
- },
-  { distance: 66900, force: 72.3299, energy: 784.2007, velocity: 13.7700, time: 4085.0000
- },
-  { distance: 66925, force: 71.4037, energy: 789.0966, velocity: 13.7700, time: 4087.2059
- },
-  { distance: 66950, force: 70.4444, energy: 793.9283, velocity: 13.7700, time: 4089.1429
- },
-  { distance: 66975, force: 69.4665, energy: 798.6940, velocity: 13.7700, time: 4090.9286
- },
-  { distance: 67000, force: 68.4887, energy: 803.3931, velocity: 13.7700, time: 4092.7143
- },
-  { distance: 67025, force: 67.5108, energy: 808.0256, velocity: 13.7700, time: 4094.5000
- },
-  { distance: 67050, force: 66.5329, energy: 812.5915, velocity: 13.7700, time: 4096.2857
- },
-  { distance: 67075, force: 65.5468, energy: 817.0904, velocity: 13.7700, time: 4098.0734
- },
-  { distance: 67100, force: 64.3621, energy: 821.5154, velocity: 13.7700, time: 4099.9091
- },
-  { distance: 67125, force: 63.1774, energy: 825.8598, velocity: 13.7700, time: 4101.7448
- },
-  { distance: 67150, force: 61.9928, energy: 830.1234, velocity: 13.7700, time: 4103.5804
- },
-  { distance: 67175, force: 60.8081, energy: 834.3063, velocity: 13.7700, time: 4105.4161
- },
-  { distance: 67200, force: 59.6234, energy: 838.4085, velocity: 13.7700, time: 4107.2517
- },
-  { distance: 67225, force: 58.4388, energy: 842.4300, velocity: 13.7700, time: 4109.0874
- },
-  { distance: 67250, force: 57.2541, energy: 846.3707, velocity: 13.7700, time: 4110.9231
- },
-  { distance: 67275, force: 56.0694, energy: 850.2308, velocity: 13.7700, time: 4112.7587
- },
-  { distance: 67300, force: 54.8847, energy: 854.0102, velocity: 13.7700, time: 4114.5944
- },
-  { distance: 67325, force: 53.7001, energy: 857.7089, velocity: 13.7700, time: 4116.4301
- },
-  { distance: 67350, force: 52.5154, energy: 861.3268, velocity: 13.7700, time: 4118.2657
- },
-  { distance: 67375, force: 51.7984, energy: 864.8800, velocity: 13.7700, time: 4119.8824
- },
-  { distance: 67400, force: 51.4100, energy: 868.3956, velocity: 13.7700, time: 4121.4369
- },
-  { distance: 67425, force: 51.0749, energy: 871.8865, velocity: 13.7700, time: 4123.2573
- },
-  { distance: 67450, force: 50.7399, energy: 875.3545, velocity: 13.7700, time: 4125.0777
- },
-  { distance: 67475, force: 50.4049, energy: 878.7998, velocity: 13.7700, time: 4126.8981
- },
-  { distance: 67500, force: 50.0698, energy: 882.2222, velocity: 13.7700, time: 4128.7184
- },
-  { distance: 67525, force: 49.7348, energy: 885.6218, velocity: 13.7700, time: 4130.5388
- },
-  { distance: 67550, force: 49.3997, energy: 888.9985, velocity: 13.7700, time: 4132.3592
- },
-  { distance: 67575, force: 49.0647, energy: 892.3525, velocity: 13.7700, time: 4134.1796
- },
-  { distance: 67600, force: 48.7296, energy: 895.6836, velocity: 13.7700, time: 4136.0000
- },
-  { distance: 67625, force: 48.6593, energy: 899.0009, velocity: 13.7700, time: 4138.2059
- },
-  { distance: 67650, force: 48.6042, energy: 902.3140, velocity: 13.7700, time: 4140.1520
- },
-  { distance: 67675, force: 48.5577, energy: 905.6235, velocity: 13.7700, time: 4141.9520
- },
-  { distance: 67700, force: 48.5113, energy: 908.9300, velocity: 13.7700, time: 4143.7520
- },
-  { distance: 67725, force: 48.4648, energy: 912.2332, velocity: 13.7700, time: 4145.5520
- },
-  { distance: 67750, force: 48.4183, energy: 915.5333, velocity: 13.7700, time: 4147.3520
- },
-  { distance: 67775, force: 48.3718, energy: 918.8302, velocity: 13.7700, time: 4149.1520
- },
-  { distance: 67800, force: 48.3253, energy: 922.1239, velocity: 13.7700, time: 4150.9520
- },
-  { distance: 67825, force: 48.2788, energy: 925.4145, velocity: 13.7700, time: 4152.7520
- },
-  { distance: 67850, force: 48.2323, energy: 928.7019, velocity: 13.7700, time: 4154.5520
- },
-  { distance: 67875, force: 48.1858, energy: 931.9862, velocity: 13.7700, time: 4156.3520
- },
-  { distance: 67900, force: 48.4974, energy: 935.2794, velocity: 13.7700, time: 4158.1789
- },
-  { distance: 67925, force: 49.0104, energy: 938.6008, velocity: 13.7700, time: 4160.0211
- },
-  { distance: 67950, force: 49.5234, energy: 941.9571, velocity: 13.7700, time: 4161.8632
- },
-  { distance: 67975, force: 50.0364, energy: 945.3484, velocity: 13.7700, time: 4163.7053
- },
-  { distance: 68000, force: 50.5493, energy: 948.7746, velocity: 13.7700, time: 4165.5474
- },
-  { distance: 68025, force: 51.0623, energy: 952.2357, velocity: 13.7700, time: 4167.3895
- },
-  { distance: 68050, force: 51.5753, energy: 955.7318, velocity: 13.7700, time: 4169.2316
- },
-  { distance: 68075, force: 52.1133, energy: 959.2637, velocity: 13.7700, time: 4171.0717
- },
-  { distance: 68100, force: 53.2515, energy: 962.8527, velocity: 13.7700, time: 4172.8652
- },
-  { distance: 68125, force: 54.3897, energy: 966.5192, velocity: 13.7700, time: 4174.6587
- },
-  { distance: 68150, force: 55.5278, energy: 970.2633, velocity: 13.7700, time: 4176.4522
- },
-  { distance: 68175, force: 56.6660, energy: 974.0849, velocity: 13.7700, time: 4178.2457
- },
-  { distance: 68200, force: 57.8042, energy: 977.9840, velocity: 13.7700, time: 4180.0391
- },
-  { distance: 68225, force: 58.9424, energy: 981.9607, velocity: 13.7700, time: 4181.8326
- },
-  { distance: 68250, force: 60.0806, energy: 986.0149, velocity: 13.7700, time: 4183.6261
- },
-  { distance: 68275, force: 61.2187, energy: 990.1467, velocity: 13.7700, time: 4185.4196
- },
-  { distance: 68300, force: 62.3569, energy: 994.3560, velocity: 13.7700, time: 4187.2130
- },
-  { distance: 68325, force: 63.4951, energy: 998.6428, velocity: 13.7700, time: 4189.0065
- },
-  { distance: 68350, force: 64.6333, energy: 1003.0072, velocity: 13.7700, time: 4190.8000
- },
-  { distance: 68375, force: 65.7715, energy: 1007.4491, velocity: 13.7700, time: 4192.5935
- },
-  { distance: 68400, force: 66.9096, energy: 1011.9685, velocity: 13.7700, time: 4194.3870
- },
-  { distance: 68425, force: 68.0478, energy: 1016.5655, velocity: 13.7700, time: 4196.1804
- },
-  { distance: 68450, force: 69.1860, energy: 1021.2400, velocity: 13.7700, time: 4197.9739
- },
-  { distance: 68475, force: 70.3242, energy: 1025.9921, velocity: 13.7700, time: 4199.7674
- },
-  { distance: 68500, force: 71.4623, energy: 1030.8217, velocity: 13.7700, time: 4201.5609
- },
-  { distance: 68525, force: 72.6005, energy: 1035.7289, velocity: 13.7700, time: 4203.3543
- },
-  { distance: 68550, force: 73.1949, energy: 1040.6950, velocity: 13.7700, time: 4205.2000
- },
-  { distance: 68575, force: 73.4835, energy: 1045.6912, velocity: 13.7700, time: 4207.0750
- },
-  { distance: 68600, force: 73.7721, energy: 1050.7071, velocity: 13.7700, time: 4208.9500
- },
-  { distance: 68625, force: 74.0606, energy: 1055.7427, velocity: 13.7700, time: 4210.8250
- },
-  { distance: 68650, force: 74.3492, energy: 1060.7979, velocity: 13.7700, time: 4212.7000
- },
-  { distance: 68675, force: 74.6377, energy: 1065.8728, velocity: 13.7700, time: 4214.5750
- },
-  { distance: 68700, force: 74.9263, energy: 1070.9673, velocity: 13.7700, time: 4216.4500
- },
-  { distance: 68725, force: 75.2148, energy: 1076.0815, velocity: 13.7700, time: 4218.3250
- },
-  { distance: 68750, force: 75.5034, energy: 1081.2153, velocity: 13.7700, time: 4220.2000
- },
-  { distance: 68775, force: 75.7804, energy: 1086.3684, velocity: 13.7700, time: 4222.0717
- },
-  { distance: 68800, force: 75.7804, energy: 1091.5309, velocity: 13.7700, time: 4223.8642
- },
-  { distance: 68825, force: 75.7804, energy: 1096.6935, velocity: 13.7700, time: 4225.6568
- },
-  { distance: 68850, force: 75.7804, energy: 1101.8560, velocity: 13.7700, time: 4227.4493
- },
-  { distance: 68875, force: 75.7804, energy: 1107.0186, velocity: 13.7700, time: 4229.2419
- },
-  { distance: 68900, force: 75.7804, energy: 1112.1811, velocity: 13.7700, time: 4231.0344
- },
-  { distance: 68925, force: 75.7804, energy: 1117.3436, velocity: 13.7700, time: 4232.8270
- },
-  { distance: 68950, force: 75.7804, energy: 1122.5062, velocity: 13.7700, time: 4234.6195
- },
-  { distance: 68975, force: 75.7804, energy: 1127.6687, velocity: 13.7700, time: 4236.4120
- },
-  { distance: 69000, force: 75.7804, energy: 1132.8312, velocity: 13.7700, time: 4238.2046
- },
-  { distance: 69025, force: 75.7804, energy: 1137.9938, velocity: 13.7700, time: 4239.9971
- },
-  { distance: 69050, force: 75.7804, energy: 1143.1563, velocity: 13.7700, time: 4241.7897
- },
-  { distance: 69075, force: 75.7804, energy: 1148.3189, velocity: 13.7700, time: 4243.5822
- },
-  { distance: 69100, force: 75.7804, energy: 1153.4814, velocity: 13.7700, time: 4245.3748
- },
-  { distance: 69125, force: 75.7804, energy: 1158.6439, velocity: 13.7700, time: 4247.1673
- },
-  { distance: 69150, force: 75.7804, energy: 1163.8065, velocity: 13.7700, time: 4248.9598
- },
-  { distance: 69175, force: 75.7804, energy: 1168.9690, velocity: 13.7700, time: 4250.7524
- },
-  { distance: 69200, force: 75.7804, energy: 1174.1316, velocity: 13.7700, time: 4252.5449
- },
-  { distance: 69225, force: 75.7804, energy: 1179.2941, velocity: 13.7700, time: 4254.3375
- },
-  { distance: 69250, force: 75.7804, energy: 1184.4566, velocity: 13.7700, time: 4256.1300
- },
-  { distance: 69275, force: 75.7804, energy: 1189.6192, velocity: 13.7700, time: 4257.9226
- },
-  { distance: 69300, force: 75.7804, energy: 1194.7817, velocity: 13.7700, time: 4259.7151
- },
-  { distance: 69325, force: 75.7804, energy: 1199.9442, velocity: 13.7700, time: 4261.5076
- },
-  { distance: 69350, force: 75.7804, energy: 1205.1068, velocity: 13.7700, time: 4263.3002
- },
-  { distance: 69375, force: 75.7804, energy: 1210.2693, velocity: 13.7700, time: 4265.0927
- },
-  { distance: 69400, force: 75.7804, energy: 1215.4319, velocity: 13.7700, time: 4266.8853
- },
-  { distance: 69425, force: 75.7804, energy: 1220.5944, velocity: 13.7700, time: 4268.6778
- },
-  { distance: 69450, force: 75.7804, energy: 1225.7569, velocity: 13.7700, time: 4270.4704
- },
-  { distance: 69475, force: 75.7804, energy: 1230.9195, velocity: 13.7700, time: 4272.2629
- },
-  { distance: 69500, force: 75.7804, energy: 1236.0820, velocity: 13.7700, time: 4274.0554
- },
-  { distance: 69525, force: 75.7804, energy: 1241.2445, velocity: 13.7700, time: 4275.8480
- },
-  { distance: 69550, force: 75.7804, energy: 1246.4071, velocity: 13.7700, time: 4277.6405
- },
-  { distance: 69575, force: 75.7804, energy: 1251.5696, velocity: 13.7700, time: 4279.4331
- },
-  { distance: 69600, force: 75.7804, energy: 1256.7322, velocity: 13.7700, time: 4281.2256
- },
-  { distance: 69625, force: 75.7804, energy: 1261.8947, velocity: 13.7700, time: 4283.0182
- },
-  { distance: 69650, force: 75.7804, energy: 1267.0572, velocity: 13.7700, time: 4284.8107
- },
-  { distance: 69675, force: 75.7804, energy: 1272.2198, velocity: 13.7700, time: 4286.6033
- },
-  { distance: 69700, force: 75.7804, energy: 1277.3823, velocity: 13.7700, time: 4288.3958
- },
-  { distance: 69725, force: 75.7804, energy: 1282.5449, velocity: 13.7700, time: 4290.1883
- },
-  { distance: 69750, force: 75.7804, energy: 1287.7074, velocity: 13.7700, time: 4291.9809
- },
-  { distance: 69775, force: 75.7804, energy: 1292.8699, velocity: 13.7700, time: 4293.7734
- },
-  { distance: 69800, force: 75.7804, energy: 1298.0325, velocity: 13.7700, time: 4295.5660
- },
-  { distance: 69825, force: 75.6363, energy: 1303.1901, velocity: 13.7700, time: 4297.4412
- },
-  { distance: 69850, force: 74.9157, energy: 1308.3183, velocity: 13.7700, time: 4299.6471
- },
-  { distance: 69875, force: 74.1406, energy: 1313.3955, velocity: 13.7700, time: 4301.5511
- },
-  { distance: 69900, force: 73.3550, energy: 1318.4196, velocity: 13.7700, time: 4303.3977
- },
-  { distance: 69925, force: 72.5695, energy: 1323.3901, velocity: 13.7700, time: 4305.2443
- },
-  { distance: 69950, force: 71.7840, energy: 1328.3072, velocity: 13.7700, time: 4307.0909
- },
-  { distance: 69975, force: 70.9985, energy: 1333.1707, velocity: 13.7700, time: 4308.9375
- },
-  { distance: 70000, force: 70.2130, energy: 1337.9807, velocity: 13.7700, time: 4310.7841
- },
-  { distance: 70025, force: 69.4275, energy: 1342.7372, velocity: 13.7700, time: 4312.6307
- },
-  { distance: 70050, force: 67.0773, energy: 1347.3869, velocity: 13.7700, time: 4314.1765
- },
-  { distance: 70075, force: 64.2584, energy: 1351.8605, velocity: 13.7700, time: 4315.8039
- },
-  { distance: 70100, force: 61.3408, energy: 1356.1388, velocity: 13.7700, time: 4317.6310
- },
-  { distance: 70125, force: 58.4232, energy: 1360.2182, velocity: 13.7700, time: 4319.4581
- },
-  { distance: 70150, force: 55.5056, energy: 1364.0989, velocity: 13.7700, time: 4321.2852
- },
-  { distance: 70175, force: 52.5881, energy: 1367.7809, velocity: 13.7700, time: 4323.1123
- },
-  { distance: 70200, force: 49.6705, energy: 1371.2641, velocity: 13.7700, time: 4324.9394
- },
-  { distance: 70225, force: 46.7529, energy: 1374.5485, velocity: 13.7700, time: 4326.7665
- },
-  { distance: 70250, force: 43.8353, energy: 1377.6341, velocity: 13.7700, time: 4328.5936
- },
-  { distance: 70275, force: 40.9177, energy: 1380.5210, velocity: 13.7700, time: 4330.4207
- },
-  { distance: 70300, force: 38.0001, energy: 1383.2092, velocity: 13.7700, time: 4332.2478
- },
-  { distance: 70325, force: 35.0825, energy: 1385.6986, velocity: 13.7700, time: 4334.0749
- },
-  { distance: 70350, force: 32.1649, energy: 1387.9892, velocity: 13.7700, time: 4335.9020
- },
-  { distance: 70375, force: 29.2474, energy: 1390.0810, velocity: 13.7700, time: 4337.7291
- },
-  { distance: 70400, force: 26.3298, energy: 1391.9741, velocity: 13.7700, time: 4339.5561
- },
-  { distance: 70425, force: 23.4122, energy: 1393.6685, velocity: 13.7700, time: 4341.3832
- },
-  { distance: 70450, force: 20.4946, energy: 1395.1640, velocity: 13.7700, time: 4343.2103
- },
-  { distance: 70475, force: 17.5770, energy: 1396.4608, velocity: 13.7700, time: 4345.0374
- },
-  { distance: 70500, force: 14.6594, energy: 1397.5589, velocity: 13.7700, time: 4346.8645
- },
-  { distance: 70525, force: 11.7418, energy: 1398.4582, velocity: 13.7700, time: 4348.6916
- },
-  { distance: 70550, force: 8.8242, energy: 1399.1587, velocity: 13.7700, time: 4350.5187
- },
-  { distance: 70575, force: 5.9066, energy: 1399.6605, velocity: 13.7700, time: 4352.3458
- },
-  { distance: 70600, force: 2.9891, energy: 1399.9635, velocity: 13.7700, time: 4354.1729
- },
-  { distance: 70625, force: 0.0000, energy: 1400.0653, velocity: 13.7700, time: 4356.0000
- },
-  { distance: 70650, force: 0.0000, energy: 1400.0653, velocity: 13.7700, time: 4357.5263
- },
-  { distance: 70675, force: 0.0000, energy: 1400.0653, velocity: 13.7810, time: 4359.5500
- },
-  { distance: 70700, force: 0.0000, energy: 1400.0653, velocity: 13.7980, time: 4361.6000
- },
-  { distance: 70725, force: 0.0000, energy: 1400.0653, velocity: 13.8210, time: 4363.1000
- },
-  { distance: 70750, force: 0.0000, energy: 1400.0653, velocity: 13.8490, time: 4365.3000
- },
-  { distance: 70775, force: 0.0000, energy: 1400.0653, velocity: 13.8865, time: 4366.5500
- },
-  { distance: 70800, force: 0.0000, energy: 1400.0653, velocity: 13.9320, time: 4368.6000
- },
-  { distance: 70825, force: 0.0000, energy: 1400.0653, velocity: 13.9825, time: 4370.1000
- },
-  { distance: 70850, force: 0.0000, energy: 1400.0653, velocity: 14.0450, time: 4372.3000
- },
-  { distance: 70875, force: 0.0000, energy: 1400.0653, velocity: 14.1075, time: 4374.1000
- },
-  { distance: 70900, force: 0.0000, energy: 1400.0653, velocity: 14.1800, time: 4376.0000
- },
-  { distance: 70925, force: 0.0000, energy: 1400.0653, velocity: 14.2543, time: 4377.3571
- },
-  { distance: 70950, force: 0.0000, energy: 1400.0653, velocity: 14.3360, time: 4378.8000
- },
-  { distance: 70975, force: 0.0000, energy: 1400.0653, velocity: 14.4240, time: 4381.0500
- },
-  { distance: 71000, force: 0.0000, energy: 1400.0653, velocity: 14.5240, time: 4382.6000
- },
+  { distance: 0, force: 103.97, energy: 0.0, velocity: 0.83, time: 0.0 },
+  { distance: 25, force: 103.97, energy: 7.083, velocity: 2.5754, time: 13.1923 },
+  { distance: 50, force: 103.6246, energy: 14.1541, velocity: 3.6162, time: 21.3077 },
+  { distance: 75, force: 102.7654, energy: 21.1843, velocity: 4.3315, time: 27.0769 },
+  { distance: 100, force: 101.9124, energy: 28.1561, velocity: 5.0469, time: 32.8462 },
+  { distance: 125, force: 101.2574, energy: 35.0766, velocity: 5.5998, time: 37.6066 },
+  { distance: 150, force: 100.6538, energy: 41.9542, velocity: 6.1121, time: 42.1148 },
+  { distance: 175, force: 100.096, energy: 48.7923, velocity: 6.588, time: 46.2203 },
+  { distance: 200, force: 99.6164, energy: 55.595, velocity: 6.999, time: 49.6102 },
+  { distance: 225, force: 99.1388, energy: 62.3651, velocity: 7.41, time: 53.0 },
+  { distance: 250, force: 98.7277, energy: 69.1049, velocity: 7.7653, time: 56.0702 },
+  { distance: 275, force: 98.3181, energy: 75.8168, velocity: 8.1205, time: 59.1404 },
+  { distance: 300, force: 97.9406, energy: 82.5018, velocity: 8.4491, time: 62.2909 },
+  { distance: 325, force: 97.5763, energy: 89.1616, velocity: 8.7673, time: 65.4727 },
+  { distance: 350, force: 97.2372, energy: 95.7975, velocity: 9.0644, time: 68.4444 },
+  { distance: 375, force: 96.9211, energy: 102.411, velocity: 9.3422, time: 71.2222 },
+  { distance: 400, force: 96.6134, energy: 109.0032, velocity: 9.6135, time: 73.8654 },
+  { distance: 425, force: 96.3198, energy: 115.575, velocity: 9.8731, time: 76.2692 },
+  { distance: 450, force: 96.033, energy: 122.127, velocity: 10.1273, time: 78.6863 },
+  { distance: 475, force: 95.7628, energy: 128.6601, velocity: 10.3675, time: 81.1373 },
+  { distance: 500, force: 95.4974, energy: 135.1749, velocity: 10.6039, time: 83.6122 },
+  { distance: 525, force: 95.2461, energy: 141.6721, velocity: 10.8284, time: 86.1633 },
+  { distance: 550, force: 95.0005, energy: 148.1524, velocity: 11.0483, time: 88.5833 },
+  { distance: 575, force: 94.7684, energy: 154.6164, velocity: 11.2567, time: 90.6667 },
+  { distance: 600, force: 94.5423, energy: 161.0648, velocity: 11.46, time: 93.0 },
+  { distance: 625, force: 94.3221, energy: 167.498, velocity: 11.6585, time: 94.4706 },
+  { distance: 650, force: 94.1046, energy: 173.9163, velocity: 11.8551, time: 96.4545 },
+  { distance: 675, force: 93.8887, energy: 180.3198, velocity: 12.0505, time: 98.7273 },
+  { distance: 700, force: 93.6766, energy: 186.7087, velocity: 12.243, time: 100.9649 },
+  { distance: 725, force: 93.4692, energy: 193.0834, velocity: 12.4316, time: 103.1579 },
+  { distance: 750, force: 93.2636, energy: 199.4439, velocity: 12.6189, time: 105.2963 },
+  { distance: 775, force: 93.0658, energy: 205.7908, velocity: 12.7994, time: 107.1481 },
+  { distance: 800, force: 92.8684, energy: 212.1242, velocity: 12.98, time: 109.0 },
+  { distance: 825, force: 92.6664, energy: 218.444, velocity: 13.1652, time: 110.8519 },
+  { distance: 850, force: 92.4685, energy: 224.7501, velocity: 13.3469, time: 112.6154 },
+  { distance: 875, force: 92.27, energy: 231.0428, velocity: 13.5296, time: 114.1538 },
+  { distance: 900, force: 92.0672, energy: 237.3218, velocity: 13.7167, time: 116.3333 },
+  { distance: 925, force: 14.5003, energy: 240.9517, velocity: 13.77, time: 118.2743 },
+  { distance: 950, force: 13.2499, energy: 241.897, velocity: 13.77, time: 120.0442 },
+  { distance: 975, force: 11.9995, energy: 242.757, velocity: 13.77, time: 121.8142 },
+  { distance: 1000, force: 10.7491, energy: 243.5319, velocity: 13.77, time: 123.5841 },
+  { distance: 1025, force: 9.4222, energy: 244.219, velocity: 13.77, time: 125.4412 },
+  { distance: 1050, force: 7.7895, energy: 244.8053, velocity: 13.77, time: 127.6471 },
+  { distance: 1075, force: 6.1278, energy: 245.2793, velocity: 13.77, time: 129.5 },
+  { distance: 1100, force: 4.4606, energy: 245.64, velocity: 13.77, time: 131.2857 },
+  { distance: 1125, force: 2.7934, energy: 245.8871, velocity: 13.77, time: 133.0714 },
+  { distance: 1150, force: 1.1262, energy: 246.0206, velocity: 13.77, time: 134.8571 },
+  { distance: 1175, force: 0.0, energy: 246.0589, velocity: 13.77, time: 136.2 },
+  { distance: 1200, force: 0.0, energy: 246.0589, velocity: 13.77, time: 138.1 },
+  { distance: 1225, force: 0.0, energy: 246.0589, velocity: 13.778, time: 139.8 },
+  { distance: 1250, force: 0.0, energy: 246.0589, velocity: 13.8005, time: 142.05 },
+  { distance: 1275, force: 0.0, energy: 246.0589, velocity: 13.816, time: 143.6 },
+  { distance: 1300, force: 0.0, energy: 246.0589, velocity: 13.84, time: 145.0 },
+  { distance: 1325, force: 0.0, energy: 246.0589, velocity: 13.8771, time: 147.3571 },
+  { distance: 1350, force: 0.0, energy: 246.0589, velocity: 13.914, time: 148.8 },
+  { distance: 1375, force: 0.0, energy: 246.0589, velocity: 13.952, time: 151.05 },
+  { distance: 1400, force: 0.0, energy: 246.0589, velocity: 14.002, time: 152.6 },
+  { distance: 1425, force: 0.0, energy: 246.0589, velocity: 14.052, time: 154.55 },
+  { distance: 1450, force: 0.0, energy: 246.0589, velocity: 14.11, time: 155.8 },
+  { distance: 1475, force: 0.0, energy: 246.0589, velocity: 14.1725, time: 158.05 },
+  { distance: 1500, force: 0.0, energy: 246.0589, velocity: 14.235, time: 159.6 },
+  { distance: 1525, force: 0.0, energy: 246.0589, velocity: 14.303, time: 161.55 },
+  { distance: 1550, force: 0.0, energy: 246.0589, velocity: 14.378, time: 162.8 },
+  { distance: 1575, force: 0.0, energy: 246.0589, velocity: 14.463, time: 165.05 },
+  { distance: 1600, force: 0.0, energy: 246.0589, velocity: 14.541, time: 166.6 },
+  { distance: 1625, force: 0.0, energy: 246.0589, velocity: 14.634, time: 168.55 },
+  { distance: 1650, force: 0.0, energy: 246.0589, velocity: 14.726, time: 169.8 },
+  { distance: 1675, force: 0.0, energy: 246.0589, velocity: 14.824, time: 172.05 },
+  { distance: 1700, force: 0.0, energy: 246.0589, velocity: 14.924, time: 173.3 },
+  { distance: 1725, force: 0.0, energy: 246.0589, velocity: 15.0295, time: 175.1 },
+  { distance: 1750, force: 0.0, energy: 246.0589, velocity: 15.142, time: 176.8 },
+  { distance: 1775, force: 0.0, energy: 246.0589, velocity: 15.2546, time: 178.0833 },
+  { distance: 1800, force: 0.0, energy: 246.0589, velocity: 15.3696, time: 180.16 },
+  { distance: 1825, force: 0.0, energy: 246.0589, velocity: 15.4896, time: 182.08 },
+  { distance: 1850, force: 0.0, energy: 246.0589, velocity: 15.6092, time: 183.1538 },
+  { distance: 1875, force: 0.0, energy: 246.0589, velocity: 15.7246, time: 185.0769 },
+  { distance: 1900, force: 0.0, energy: 246.0589, velocity: 15.84, time: 187.0 },
+  { distance: 1925, force: 0.0, energy: 246.0589, velocity: 15.9604, time: 187.9259 },
+  { distance: 1950, force: 0.0, energy: 246.0589, velocity: 16.0807, time: 189.7037 },
+  { distance: 1975, force: 0.0, energy: 246.0589, velocity: 16.205, time: 191.05 },
+  { distance: 2000, force: 0.0, energy: 246.0589, velocity: 16.33, time: 192.4615 },
+  { distance: 2025, force: 0.0, energy: 246.0589, velocity: 16.455, time: 194.3571 },
+  { distance: 2050, force: 0.0, energy: 246.0589, velocity: 16.5806, time: 196.1176 },
+  { distance: 2075, force: -65.3282, energy: 246.0589, velocity: 16.66, time: 197.5426 },
+  { distance: 2100, force: -66.3542, energy: 246.0589, velocity: 16.66, time: 198.8992 },
+  { distance: 2125, force: -67.3801, energy: 246.0589, velocity: 16.66, time: 200.2558 },
+  { distance: 2150, force: -68.4061, energy: 246.0589, velocity: 16.66, time: 201.6124 },
+  { distance: 2175, force: -69.4321, energy: 246.0589, velocity: 16.66, time: 202.969 },
+  { distance: 2200, force: -70.358, energy: 246.0589, velocity: 16.66, time: 204.3643 },
+  { distance: 2225, force: -70.9672, energy: 246.0589, velocity: 16.66, time: 205.8821 },
+  { distance: 2250, force: -71.5763, energy: 246.0589, velocity: 16.66, time: 207.4 },
+  { distance: 2275, force: -72.1855, energy: 246.0589, velocity: 16.66, time: 208.9179 },
+  { distance: 2300, force: -72.7947, energy: 246.0589, velocity: 16.66, time: 210.4357 },
+  { distance: 2325, force: -73.4038, energy: 246.0589, velocity: 16.66, time: 211.9536 },
+  { distance: 2350, force: -74.013, energy: 246.0589, velocity: 16.66, time: 213.4714 },
+  { distance: 2375, force: -74.6222, energy: 246.0589, velocity: 16.66, time: 214.9893 },
+  { distance: 2400, force: -75.2313, energy: 246.0589, velocity: 16.66, time: 216.5071 },
+  { distance: 2425, force: -75.8405, energy: 246.0589, velocity: 16.66, time: 218.025 },
+  { distance: 2450, force: -76.4497, energy: 246.0589, velocity: 16.66, time: 219.5429 },
+  { distance: 2475, force: -77.064, energy: 246.0589, velocity: 16.66, time: 221.0606 },
+  { distance: 2500, force: -77.8014, energy: 246.0589, velocity: 16.66, time: 222.5758 },
+  { distance: 2525, force: -78.5388, energy: 246.0589, velocity: 16.66, time: 224.0909 },
+  { distance: 2550, force: -78.7644, energy: 246.0589, velocity: 16.66, time: 225.5882 },
+  { distance: 2575, force: -78.2178, energy: 246.0589, velocity: 16.66, time: 227.06 },
+  { distance: 2600, force: -77.5606, energy: 246.0589, velocity: 16.66, time: 228.56 },
+  { distance: 2625, force: -76.9033, energy: 246.0589, velocity: 16.66, time: 230.06 },
+  { distance: 2650, force: -76.246, energy: 246.0589, velocity: 16.66, time: 231.56 },
+  { distance: 2675, force: -75.5888, energy: 246.0589, velocity: 16.66, time: 233.06 },
+  { distance: 2700, force: -74.9315, energy: 246.0589, velocity: 16.66, time: 234.56 },
+  { distance: 2725, force: -74.2743, energy: 246.0589, velocity: 16.66, time: 236.06 },
+  { distance: 2750, force: -73.617, energy: 246.0589, velocity: 16.66, time: 237.56 },
+  { distance: 2775, force: -72.9597, energy: 246.0589, velocity: 16.66, time: 239.06 },
+  { distance: 2800, force: -72.3025, energy: 246.0589, velocity: 16.66, time: 240.56 },
+  { distance: 2825, force: -71.6452, energy: 246.0589, velocity: 16.66, time: 242.06 },
+  { distance: 2850, force: -70.988, energy: 246.0589, velocity: 16.66, time: 243.56 },
+  { distance: 2875, force: -70.3307, energy: 246.0589, velocity: 16.66, time: 245.06 },
+  { distance: 2900, force: -69.6735, energy: 246.0589, velocity: 16.66, time: 246.56 },
+  { distance: 2925, force: -69.0162, energy: 246.0589, velocity: 16.66, time: 248.06 },
+  { distance: 2950, force: -68.3589, energy: 246.0589, velocity: 16.66, time: 249.56 },
+  { distance: 2975, force: 0.0, energy: 246.0589, velocity: 16.6652, time: 251.0652 },
+  { distance: 3000, force: 0.0, energy: 246.0589, velocity: 16.7957, time: 252.6957 },
+  { distance: 3025, force: 0.0, energy: 246.0589, velocity: 16.9256, time: 254.3333 },
+  { distance: 3050, force: 0.0, energy: 246.0589, velocity: 17.0533, time: 256.0 },
+  { distance: 3075, force: 0.0, energy: 246.0589, velocity: 17.18, time: 257.4545 },
+  { distance: 3100, force: 0.0, energy: 246.0589, velocity: 17.305, time: 258.5909 },
+  { distance: 3125, force: 0.0, energy: 246.0589, velocity: 17.4204, time: 260.28 },
+  { distance: 3150, force: 0.0, energy: 246.0589, velocity: 17.54, time: 261.8 },
+  { distance: 3175, force: 0.0, energy: 246.0589, velocity: 17.6545, time: 263.05 },
+  { distance: 3200, force: 0.0, energy: 246.0589, velocity: 17.767, time: 264.3 },
+  { distance: 3225, force: 0.0, energy: 246.0589, velocity: 17.874, time: 265.55 },
+  { distance: 3250, force: 0.0, energy: 246.0589, velocity: 17.974, time: 266.8 },
+  { distance: 3275, force: 0.0, energy: 246.0589, velocity: 18.074, time: 268.1 },
+  { distance: 3300, force: 0.0, energy: 246.0589, velocity: 18.17, time: 270.0 },
+  { distance: 3325, force: 0.0, energy: 246.0589, velocity: 18.2656, time: 271.4706 },
+  { distance: 3350, force: 0.0, energy: 246.0589, velocity: 18.361, time: 272.7619 },
+  { distance: 3375, force: 0.0, energy: 246.0589, velocity: 18.4562, time: 273.9524 },
+  { distance: 3400, force: 0.0, energy: 246.0589, velocity: 18.5478, time: 275.1707 },
+  { distance: 3425, force: 0.0, energy: 246.0589, velocity: 18.6373, time: 276.3902 },
+  { distance: 3450, force: 0.0, energy: 246.0589, velocity: 18.7227, time: 277.6098 },
+  { distance: 3475, force: 0.0, energy: 246.0589, velocity: 18.8095, time: 279.275 },
+  { distance: 3500, force: 0.0, energy: 246.0589, velocity: 18.8967, time: 281.1026 },
+  { distance: 3525, force: 0.0, energy: 246.0589, velocity: 18.98, time: 282.3846 },
+  { distance: 3550, force: 0.0, energy: 246.0589, velocity: 19.0633, time: 283.0 },
+  { distance: 3575, force: -103.5276, energy: 246.0589, velocity: 18.9787, time: 284.4348 },
+  { distance: 3600, force: -103.6413, energy: 246.0589, velocity: 18.8855, time: 286.05 },
+  { distance: 3625, force: -103.7754, energy: 246.0589, velocity: 18.7757, time: 287.2553 },
+  { distance: 3650, force: -103.8989, energy: 246.0589, velocity: 18.6747, time: 288.3191 },
+  { distance: 3675, force: -104.0239, energy: 246.0589, velocity: 18.5725, time: 289.5625 },
+  { distance: 3700, force: -104.1514, energy: 246.0589, velocity: 18.4683, time: 291.125 },
+  { distance: 3725, force: -104.2791, energy: 246.0589, velocity: 18.3642, time: 292.4583 },
+  { distance: 3750, force: -104.4072, energy: 246.0589, velocity: 18.2597, time: 293.7742 },
+  { distance: 3775, force: -104.5358, energy: 246.0589, velocity: 18.1548, time: 295.3871 },
+  { distance: 3800, force: -47.1048, energy: 246.0589, velocity: 18.05, time: 297.0 },
+  { distance: 3825, force: -47.9384, energy: 246.0589, velocity: 18.05, time: 298.3724 },
+  { distance: 3850, force: -48.772, energy: 246.0589, velocity: 18.05, time: 299.7448 },
+  { distance: 3875, force: -49.6056, energy: 246.0589, velocity: 18.05, time: 301.1172 },
+  { distance: 3900, force: -50.4391, energy: 246.0589, velocity: 18.05, time: 302.4896 },
+  { distance: 3925, force: -51.2727, energy: 246.0589, velocity: 18.05, time: 303.862 },
+  { distance: 3950, force: -52.1063, energy: 246.0589, velocity: 18.05, time: 305.2344 },
+  { distance: 3975, force: -52.9399, energy: 246.0589, velocity: 18.05, time: 306.6068 },
+  { distance: 4000, force: -53.7735, energy: 246.0589, velocity: 18.05, time: 307.9792 },
+  { distance: 4025, force: -54.6071, energy: 246.0589, velocity: 18.05, time: 309.3516 },
+  { distance: 4050, force: -55.4407, energy: 246.0589, velocity: 18.05, time: 310.724 },
+  { distance: 4075, force: -56.2743, energy: 246.0589, velocity: 18.05, time: 312.0964 },
+  { distance: 4100, force: -57.1079, energy: 246.0589, velocity: 18.05, time: 313.4688 },
+  { distance: 4125, force: -57.9415, energy: 246.0589, velocity: 18.05, time: 314.8412 },
+  { distance: 4150, force: -58.7751, energy: 246.0589, velocity: 18.05, time: 316.2136 },
+  { distance: 4175, force: -59.6087, energy: 246.0589, velocity: 18.05, time: 317.5861 },
+  { distance: 4200, force: -60.4423, energy: 246.0589, velocity: 18.05, time: 318.9585 },
+  { distance: 4225, force: -61.2759, energy: 246.0589, velocity: 18.05, time: 320.3309 },
+  { distance: 4250, force: -62.1095, energy: 246.0589, velocity: 18.05, time: 321.7033 },
+  { distance: 4275, force: -62.9431, energy: 246.0589, velocity: 18.05, time: 323.0757 },
+  { distance: 4300, force: -63.7767, energy: 246.0589, velocity: 18.05, time: 324.4481 },
+  { distance: 4325, force: -64.6103, energy: 246.0589, velocity: 18.05, time: 325.8205 },
+  { distance: 4350, force: -65.4439, energy: 246.0589, velocity: 18.05, time: 327.1929 },
+  { distance: 4375, force: -66.2775, energy: 246.0589, velocity: 18.05, time: 328.5653 },
+  { distance: 4400, force: -67.1111, energy: 246.0589, velocity: 18.05, time: 329.9377 },
+  { distance: 4425, force: -67.9447, energy: 246.0589, velocity: 18.05, time: 331.3101 },
+  { distance: 4450, force: -68.7783, energy: 246.0589, velocity: 18.05, time: 332.6825 },
+  { distance: 4475, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 334.0551 },
+  { distance: 4500, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 335.4325 },
+  { distance: 4525, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 336.8099 },
+  { distance: 4550, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 338.1873 },
+  { distance: 4575, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 339.5647 },
+  { distance: 4600, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 340.9421 },
+  { distance: 4625, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 342.3196 },
+  { distance: 4650, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 343.697 },
+  { distance: 4675, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 345.0744 },
+  { distance: 4700, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 346.4518 },
+  { distance: 4725, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 347.8292 },
+  { distance: 4750, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 349.2066 },
+  { distance: 4775, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 350.584 },
+  { distance: 4800, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 351.9614 },
+  { distance: 4825, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 353.3388 },
+  { distance: 4850, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 354.7163 },
+  { distance: 4875, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 356.0937 },
+  { distance: 4900, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 357.4711 },
+  { distance: 4925, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 358.8485 },
+  { distance: 4950, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 360.2259 },
+  { distance: 4975, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 361.6033 },
+  { distance: 5000, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 362.9807 },
+  { distance: 5025, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 364.3581 },
+  { distance: 5050, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 365.7355 },
+  { distance: 5075, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 367.1129 },
+  { distance: 5100, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 368.4904 },
+  { distance: 5125, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 369.8678 },
+  { distance: 5150, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 371.2452 },
+  { distance: 5175, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 372.6226 },
+  { distance: 5200, force: -69.5785, energy: 246.0589, velocity: 18.05, time: 374.0 },
+  { distance: 5225, force: -69.4462, energy: 246.0589, velocity: 18.05, time: 375.4706 },
+  { distance: 5250, force: -69.3062, energy: 246.0589, velocity: 18.05, time: 376.8948 },
+  { distance: 5275, force: -69.1619, energy: 246.0589, velocity: 18.05, time: 378.2929 },
+  { distance: 5300, force: -69.0176, energy: 246.0589, velocity: 18.05, time: 379.6911 },
+  { distance: 5325, force: -68.8734, energy: 246.0589, velocity: 18.05, time: 381.0892 },
+  { distance: 5350, force: -68.7291, energy: 246.0589, velocity: 18.05, time: 382.4874 },
+  { distance: 5375, force: -68.5848, energy: 246.0589, velocity: 18.05, time: 383.8855 },
+  { distance: 5400, force: -68.4405, energy: 246.0589, velocity: 18.05, time: 385.2836 },
+  { distance: 5425, force: -68.2963, energy: 246.0589, velocity: 18.05, time: 386.6818 },
+  { distance: 5450, force: -68.152, energy: 246.0589, velocity: 18.05, time: 388.0799 },
+  { distance: 5475, force: -68.0077, energy: 246.0589, velocity: 18.05, time: 389.478 },
+  { distance: 5500, force: -67.8634, energy: 246.0589, velocity: 18.05, time: 390.8762 },
+  { distance: 5525, force: -67.7191, energy: 246.0589, velocity: 18.05, time: 392.2743 },
+  { distance: 5550, force: -67.5749, energy: 246.0589, velocity: 18.05, time: 393.6724 },
+  { distance: 5575, force: -67.4306, energy: 246.0589, velocity: 18.05, time: 395.0706 },
+  { distance: 5600, force: -67.2863, energy: 246.0589, velocity: 18.05, time: 396.4687 },
+  { distance: 5625, force: -67.142, energy: 246.0589, velocity: 18.05, time: 397.8668 },
+  { distance: 5650, force: -66.9978, energy: 246.0589, velocity: 18.05, time: 399.265 },
+  { distance: 5675, force: -66.8535, energy: 246.0589, velocity: 18.05, time: 400.6631 },
+  { distance: 5700, force: -66.7092, energy: 246.0589, velocity: 18.05, time: 402.0613 },
+  { distance: 5725, force: -66.5649, energy: 246.0589, velocity: 18.05, time: 403.4594 },
+  { distance: 5750, force: -66.4207, energy: 246.0589, velocity: 18.05, time: 404.8575 },
+  { distance: 5775, force: -66.2764, energy: 246.0589, velocity: 18.05, time: 406.2557 },
+  { distance: 5800, force: -66.1321, energy: 246.0589, velocity: 18.05, time: 407.6538 },
+  { distance: 5825, force: -65.9878, energy: 246.0589, velocity: 18.05, time: 409.0519 },
+  { distance: 5850, force: -65.8436, energy: 246.0589, velocity: 18.05, time: 410.4501 },
+  { distance: 5875, force: -65.6993, energy: 246.0589, velocity: 18.05, time: 411.8482 },
+  { distance: 5900, force: -65.555, energy: 246.0589, velocity: 18.05, time: 413.2463 },
+  { distance: 5925, force: -65.4107, energy: 246.0589, velocity: 18.05, time: 414.6445 },
+  { distance: 5950, force: -65.2664, energy: 246.0589, velocity: 18.05, time: 416.0426 },
+  { distance: 5975, force: -65.1222, energy: 246.0589, velocity: 18.05, time: 417.4407 },
+  { distance: 6000, force: 0.0, energy: 246.0589, velocity: 18.1179, time: 418.8209 },
+  { distance: 6025, force: 0.0, energy: 246.0589, velocity: 18.2311, time: 420.1891 },
+  { distance: 6050, force: 0.0, energy: 246.0589, velocity: 18.3443, time: 421.5572 },
+  { distance: 6075, force: 0.0, energy: 246.0589, velocity: 18.4575, time: 422.9254 },
+  { distance: 6100, force: 0.0, energy: 246.0589, velocity: 18.5706, time: 424.2935 },
+  { distance: 6125, force: 0.0, energy: 246.0589, velocity: 18.6838, time: 425.6617 },
+  { distance: 6150, force: 0.0, energy: 246.0589, velocity: 18.797, time: 427.0299 },
+  { distance: 6175, force: 0.0, energy: 246.0589, velocity: 18.9102, time: 428.398 },
+  { distance: 6200, force: 0.0, energy: 246.0589, velocity: 19.0196, time: 429.6702 },
+  { distance: 6225, force: 0.0, energy: 246.0589, velocity: 19.126, time: 430.867 },
+  { distance: 6250, force: 0.0, energy: 246.0589, velocity: 19.2323, time: 432.0638 },
+  { distance: 6275, force: 0.0, energy: 246.0589, velocity: 19.3387, time: 433.2606 },
+  { distance: 6300, force: 0.0, energy: 246.0589, velocity: 19.4451, time: 434.4574 },
+  { distance: 6325, force: 0.0, energy: 246.0589, velocity: 19.5515, time: 435.6543 },
+  { distance: 6350, force: 0.0, energy: 246.0589, velocity: 19.6579, time: 436.8511 },
+  { distance: 6375, force: 0.0, energy: 246.0589, velocity: 19.7639, time: 438.0491 },
+  { distance: 6400, force: 0.0, energy: 246.0589, velocity: 19.8621, time: 439.2761 },
+  { distance: 6425, force: 0.0, energy: 246.0589, velocity: 19.9602, time: 440.5031 },
+  { distance: 6450, force: 0.0, energy: 246.0589, velocity: 20.0584, time: 441.7301 },
+  { distance: 6475, force: 0.0, energy: 246.0589, velocity: 20.1566, time: 442.9571 },
+  { distance: 6500, force: 0.0, energy: 246.0589, velocity: 20.2547, time: 444.184 },
+  { distance: 6525, force: 0.0, energy: 246.0589, velocity: 20.3529, time: 445.411 },
+  { distance: 6550, force: 0.0, energy: 246.0589, velocity: 20.451, time: 446.638 },
+  { distance: 6575, force: 0.0, energy: 246.0589, velocity: 20.5492, time: 447.865 },
+  { distance: 6600, force: 0.0, energy: 246.0589, velocity: 20.6474, time: 449.092 },
+  { distance: 6625, force: 0.0, energy: 246.0589, velocity: 20.7455, time: 450.319 },
+  { distance: 6650, force: 0.0, energy: 246.0589, velocity: 20.8437, time: 451.546 },
+  { distance: 6675, force: 0.0, energy: 246.0589, velocity: 20.9418, time: 452.773 },
+  { distance: 6700, force: 0.0, energy: 246.0589, velocity: 21.04, time: 454.0 },
+  { distance: 6725, force: 0.0, energy: 246.0589, velocity: 21.1356, time: 455.4706 },
+  { distance: 6750, force: 0.0, energy: 246.0589, velocity: 21.2298, time: 456.7402 },
+  { distance: 6775, force: 0.0, energy: 246.0589, velocity: 21.3232, time: 457.8968 },
+  { distance: 6800, force: 0.0, energy: 246.0589, velocity: 21.4166, time: 459.0534 },
+  { distance: 6825, force: 0.0, energy: 246.0589, velocity: 21.51, time: 460.21 },
+  { distance: 6850, force: 0.0, energy: 246.0589, velocity: 21.6035, time: 461.3665 },
+  { distance: 6875, force: 0.0, energy: 246.0589, velocity: 21.6969, time: 462.5231 },
+  { distance: 6900, force: 0.0, energy: 246.0589, velocity: 21.7903, time: 463.6797 },
+  { distance: 6925, force: 0.0, energy: 246.0589, velocity: 21.8837, time: 464.8363 },
+  { distance: 6950, force: 0.0, energy: 246.0589, velocity: 21.9771, time: 465.9929 },
+  { distance: 6975, force: 0.0, energy: 246.0589, velocity: 22.0705, time: 467.1495 },
+  { distance: 7000, force: 0.0, energy: 246.0589, velocity: 22.164, time: 468.306 },
+  { distance: 7025, force: -61.9009, energy: 246.0589, velocity: 22.22, time: 469.4424 },
+  { distance: 7050, force: -61.9971, energy: 246.0589, velocity: 22.22, time: 470.5483 },
+  { distance: 7075, force: -62.0933, energy: 246.0589, velocity: 22.22, time: 471.6542 },
+  { distance: 7100, force: -62.1895, energy: 246.0589, velocity: 22.22, time: 472.7602 },
+  { distance: 7125, force: -62.2857, energy: 246.0589, velocity: 22.22, time: 473.8661 },
+  { distance: 7150, force: -62.3818, energy: 246.0589, velocity: 22.22, time: 474.9721 },
+  { distance: 7175, force: -62.478, energy: 246.0589, velocity: 22.22, time: 476.078 },
+  { distance: 7200, force: -62.5742, energy: 246.0589, velocity: 22.22, time: 477.1839 },
+  { distance: 7225, force: -62.6704, energy: 246.0589, velocity: 22.22, time: 478.2899 },
+  { distance: 7250, force: -62.7666, energy: 246.0589, velocity: 22.22, time: 479.3958 },
+  { distance: 7275, force: -62.8628, energy: 246.0589, velocity: 22.22, time: 480.5017 },
+  { distance: 7300, force: -62.9589, energy: 246.0589, velocity: 22.22, time: 481.6077 },
+  { distance: 7325, force: -63.0551, energy: 246.0589, velocity: 22.22, time: 482.7136 },
+  { distance: 7350, force: -63.1513, energy: 246.0589, velocity: 22.22, time: 483.8196 },
+  { distance: 7375, force: -63.2475, energy: 246.0589, velocity: 22.22, time: 484.9255 },
+  { distance: 7400, force: -63.3437, energy: 246.0589, velocity: 22.22, time: 486.0314 },
+  { distance: 7425, force: -63.4399, energy: 246.0589, velocity: 22.22, time: 487.1374 },
+  { distance: 7450, force: -63.536, energy: 246.0589, velocity: 22.22, time: 488.2433 },
+  { distance: 7475, force: -63.6322, energy: 246.0589, velocity: 22.22, time: 489.3492 },
+  { distance: 7500, force: -63.7284, energy: 246.0589, velocity: 22.22, time: 490.4552 },
+  { distance: 7525, force: -63.8246, energy: 246.0589, velocity: 22.22, time: 491.5611 },
+  { distance: 7550, force: -63.9208, energy: 246.0589, velocity: 22.22, time: 492.6671 },
+  { distance: 7575, force: -64.017, energy: 246.0589, velocity: 22.22, time: 493.773 },
+  { distance: 7600, force: -64.1132, energy: 246.0589, velocity: 22.22, time: 494.8789 },
+  { distance: 7625, force: -64.2093, energy: 246.0589, velocity: 22.22, time: 495.9849 },
+  { distance: 7650, force: -64.3055, energy: 246.0589, velocity: 22.22, time: 497.0908 },
+  { distance: 7675, force: -64.4017, energy: 246.0589, velocity: 22.22, time: 498.1967 },
+  { distance: 7700, force: -64.4979, energy: 246.0589, velocity: 22.22, time: 499.3027 },
+  { distance: 7725, force: -64.5941, energy: 246.0589, velocity: 22.22, time: 500.4086 },
+  { distance: 7750, force: -64.6903, energy: 246.0589, velocity: 22.22, time: 501.5146 },
+  { distance: 7775, force: -64.7864, energy: 246.0589, velocity: 22.22, time: 502.6205 },
+  { distance: 7800, force: -64.8826, energy: 246.0589, velocity: 22.22, time: 503.7264 },
+  { distance: 7825, force: -64.9788, energy: 246.0589, velocity: 22.22, time: 504.8324 },
+  { distance: 7850, force: -65.075, energy: 246.0589, velocity: 22.22, time: 505.9383 },
+  { distance: 7875, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 507.0454 },
+  { distance: 7900, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 508.1793 },
+  { distance: 7925, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 509.3132 },
+  { distance: 7950, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 510.4471 },
+  { distance: 7975, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 511.581 },
+  { distance: 8000, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 512.7149 },
+  { distance: 8025, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 513.8488 },
+  { distance: 8050, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 514.9827 },
+  { distance: 8075, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 516.1166 },
+  { distance: 8100, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 517.2505 },
+  { distance: 8125, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 518.3844 },
+  { distance: 8150, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 519.5184 },
+  { distance: 8175, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 520.6523 },
+  { distance: 8200, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 521.7862 },
+  { distance: 8225, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 522.9201 },
+  { distance: 8250, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 524.054 },
+  { distance: 8275, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 525.1879 },
+  { distance: 8300, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 526.3218 },
+  { distance: 8325, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 527.4557 },
+  { distance: 8350, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 528.5896 },
+  { distance: 8375, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 529.7235 },
+  { distance: 8400, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 530.8575 },
+  { distance: 8425, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 531.9914 },
+  { distance: 8450, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 533.1253 },
+  { distance: 8475, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 534.2592 },
+  { distance: 8500, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 535.3931 },
+  { distance: 8525, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 536.527 },
+  { distance: 8550, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 537.6609 },
+  { distance: 8575, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 538.7948 },
+  { distance: 8600, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 539.9287 },
+  { distance: 8625, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 541.0626 },
+  { distance: 8650, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 542.1965 },
+  { distance: 8675, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 543.3305 },
+  { distance: 8700, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 544.4644 },
+  { distance: 8725, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 545.5983 },
+  { distance: 8750, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 546.7322 },
+  { distance: 8775, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 547.8661 },
+  { distance: 8800, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 549.0 },
+  { distance: 8825, force: -64.932, energy: 246.0589, velocity: 22.22, time: 550.4706 },
+  { distance: 8850, force: -64.6832, energy: 246.0589, velocity: 22.22, time: 551.6747 },
+  { distance: 8875, force: -64.4267, energy: 246.0589, velocity: 22.22, time: 552.7289 },
+  { distance: 8900, force: -64.1702, energy: 246.0589, velocity: 22.22, time: 553.7831 },
+  { distance: 8925, force: -63.9137, energy: 246.0589, velocity: 22.22, time: 554.8373 },
+  { distance: 8950, force: -63.6572, energy: 246.0589, velocity: 22.22, time: 555.8916 },
+  { distance: 8975, force: -63.4007, energy: 246.0589, velocity: 22.22, time: 556.9458 },
+  { distance: 9000, force: -63.1442, energy: 246.0589, velocity: 22.22, time: 558.0 },
+  { distance: 9025, force: -63.123, energy: 246.0589, velocity: 22.22, time: 559.4706 },
+  { distance: 9050, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 560.7149 },
+  { distance: 9075, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 561.8319 },
+  { distance: 9100, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 562.9489 },
+  { distance: 9125, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 564.066 },
+  { distance: 9150, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 565.183 },
+  { distance: 9175, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 566.3 },
+  { distance: 9200, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 567.417 },
+  { distance: 9225, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 568.534 },
+  { distance: 9250, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 569.6511 },
+  { distance: 9275, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 570.7681 },
+  { distance: 9300, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 571.8851 },
+  { distance: 9325, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 573.0021 },
+  { distance: 9350, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 574.1191 },
+  { distance: 9375, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 575.2362 },
+  { distance: 9400, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 576.3532 },
+  { distance: 9425, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 577.4702 },
+  { distance: 9450, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 578.5872 },
+  { distance: 9475, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 579.7043 },
+  { distance: 9500, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 580.8213 },
+  { distance: 9525, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 581.9383 },
+  { distance: 9550, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 583.0553 },
+  { distance: 9575, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 584.1723 },
+  { distance: 9600, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 585.2894 },
+  { distance: 9625, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 586.4064 },
+  { distance: 9650, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 587.5234 },
+  { distance: 9675, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 588.6404 },
+  { distance: 9700, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 589.7574 },
+  { distance: 9725, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 590.8745 },
+  { distance: 9750, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 591.9915 },
+  { distance: 9775, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 593.1085 },
+  { distance: 9800, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 594.2255 },
+  { distance: 9825, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 595.3426 },
+  { distance: 9850, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 596.4596 },
+  { distance: 9875, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 597.5766 },
+  { distance: 9900, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 598.6936 },
+  { distance: 9925, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 599.8106 },
+  { distance: 9950, force: -63.1154, energy: 246.0589, velocity: 22.22, time: 600.9277 },
+  { distance: 9975, force: -63.1257, energy: 246.0589, velocity: 22.22, time: 602.045 },
+  { distance: 10000, force: -63.3822, energy: 246.0589, velocity: 22.22, time: 603.17 },
+  { distance: 10025, force: -63.6386, energy: 246.0589, velocity: 22.22, time: 604.295 },
+  { distance: 10050, force: -63.8951, energy: 246.0589, velocity: 22.22, time: 605.42 },
+  { distance: 10075, force: -64.1516, energy: 246.0589, velocity: 22.22, time: 606.545 },
+  { distance: 10100, force: -64.4081, energy: 246.0589, velocity: 22.22, time: 607.67 },
+  { distance: 10125, force: -64.6646, energy: 246.0589, velocity: 22.22, time: 608.795 },
+  { distance: 10150, force: -64.9211, energy: 246.0589, velocity: 22.22, time: 609.92 },
+  { distance: 10175, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 611.0385 },
+  { distance: 10200, force: -65.1673, energy: 246.0589, velocity: 22.22, time: 612.0 },
+  { distance: 10225, force: -63.7409, energy: 246.0589, velocity: 22.22, time: 613.4706 },
+  { distance: 10250, force: -62.2321, energy: 246.0589, velocity: 22.22, time: 614.6747 },
+  { distance: 10275, force: -60.6772, energy: 246.0589, velocity: 22.22, time: 615.7289 },
+  { distance: 10300, force: -59.1222, energy: 246.0589, velocity: 22.22, time: 616.7831 },
+  { distance: 10325, force: -57.5672, energy: 246.0589, velocity: 22.22, time: 617.8373 },
+  { distance: 10350, force: -56.0122, energy: 246.0589, velocity: 22.22, time: 618.8916 },
+  { distance: 10375, force: -54.4573, energy: 246.0589, velocity: 22.22, time: 619.9458 },
+  { distance: 10400, force: -52.9023, energy: 246.0589, velocity: 22.22, time: 621.0 },
+  { distance: 10425, force: -52.7149, energy: 246.0589, velocity: 22.22, time: 622.4706 },
+  { distance: 10450, force: -52.6065, energy: 246.0589, velocity: 22.22, time: 623.7149 },
+  { distance: 10475, force: -52.5423, energy: 246.0589, velocity: 22.22, time: 624.8319 },
+  { distance: 10500, force: -52.4782, energy: 246.0589, velocity: 22.22, time: 625.9489 },
+  { distance: 10525, force: -52.4141, energy: 246.0589, velocity: 22.22, time: 627.066 },
+  { distance: 10550, force: -52.35, energy: 246.0589, velocity: 22.22, time: 628.183 },
+  { distance: 10575, force: -52.2859, energy: 246.0589, velocity: 22.22, time: 629.3 },
+  { distance: 10600, force: -52.2217, energy: 246.0589, velocity: 22.22, time: 630.417 },
+  { distance: 10625, force: -52.1576, energy: 246.0589, velocity: 22.22, time: 631.534 },
+  { distance: 10650, force: -52.0935, energy: 246.0589, velocity: 22.22, time: 632.6511 },
+  { distance: 10675, force: -52.0294, energy: 246.0589, velocity: 22.22, time: 633.7681 },
+  { distance: 10700, force: -51.9652, energy: 246.0589, velocity: 22.22, time: 634.8851 },
+  { distance: 10725, force: -51.9011, energy: 246.0589, velocity: 22.22, time: 636.0021 },
+  { distance: 10750, force: -51.837, energy: 246.0589, velocity: 22.22, time: 637.1191 },
+  { distance: 10775, force: -51.7729, energy: 246.0589, velocity: 22.22, time: 638.2362 },
+  { distance: 10800, force: -51.7087, energy: 246.0589, velocity: 22.22, time: 639.3532 },
+  { distance: 10825, force: -51.6446, energy: 246.0589, velocity: 22.22, time: 640.4702 },
+  { distance: 10850, force: -51.5805, energy: 246.0589, velocity: 22.22, time: 641.5872 },
+  { distance: 10875, force: -51.5164, energy: 246.0589, velocity: 22.22, time: 642.7043 },
+  { distance: 10900, force: -51.4523, energy: 246.0589, velocity: 22.22, time: 643.8213 },
+  { distance: 10925, force: -51.3881, energy: 246.0589, velocity: 22.22, time: 644.9383 },
+  { distance: 10950, force: -51.324, energy: 246.0589, velocity: 22.22, time: 646.0553 },
+  { distance: 10975, force: -51.2599, energy: 246.0589, velocity: 22.22, time: 647.1723 },
+  { distance: 11000, force: -51.1958, energy: 246.0589, velocity: 22.22, time: 648.2894 },
+  { distance: 11025, force: -51.1316, energy: 246.0589, velocity: 22.22, time: 649.4064 },
+  { distance: 11050, force: -51.0675, energy: 246.0589, velocity: 22.22, time: 650.5234 },
+  { distance: 11075, force: -51.0034, energy: 246.0589, velocity: 22.22, time: 651.6404 },
+  { distance: 11100, force: -50.9393, energy: 246.0589, velocity: 22.22, time: 652.7574 },
+  { distance: 11125, force: -50.8752, energy: 246.0589, velocity: 22.22, time: 653.8745 },
+  { distance: 11150, force: -50.811, energy: 246.0589, velocity: 22.22, time: 654.9915 },
+  { distance: 11175, force: -50.7469, energy: 246.0589, velocity: 22.22, time: 656.1085 },
+  { distance: 11200, force: -50.6828, energy: 246.0589, velocity: 22.22, time: 657.2255 },
+  { distance: 11225, force: -50.6187, energy: 246.0589, velocity: 22.22, time: 658.3426 },
+  { distance: 11250, force: -50.5545, energy: 246.0589, velocity: 22.22, time: 659.4596 },
+  { distance: 11275, force: -50.4904, energy: 246.0589, velocity: 22.22, time: 660.5766 },
+  { distance: 11300, force: -50.4263, energy: 246.0589, velocity: 22.22, time: 661.6936 },
+  { distance: 11325, force: -50.3622, energy: 246.0589, velocity: 22.22, time: 662.8106 },
+  { distance: 11350, force: -50.298, energy: 246.0589, velocity: 22.22, time: 663.9277 },
+  { distance: 11375, force: -50.2961, energy: 246.0589, velocity: 22.22, time: 665.045 },
+  { distance: 11400, force: -51.787, energy: 246.0589, velocity: 22.22, time: 666.17 },
+  { distance: 11425, force: -53.2778, energy: 246.0589, velocity: 22.22, time: 667.295 },
+  { distance: 11450, force: -54.7687, energy: 246.0589, velocity: 22.22, time: 668.42 },
+  { distance: 11475, force: -56.2595, energy: 246.0589, velocity: 22.22, time: 669.545 },
+  { distance: 11500, force: -57.7504, energy: 246.0589, velocity: 22.22, time: 670.67 },
+  { distance: 11525, force: -59.2413, energy: 246.0589, velocity: 22.22, time: 671.795 },
+  { distance: 11550, force: -60.7321, energy: 246.0589, velocity: 22.22, time: 672.92 },
+  { distance: 11575, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 674.0454 },
+  { distance: 11600, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 675.1795 },
+  { distance: 11625, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 676.3136 },
+  { distance: 11650, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 677.4477 },
+  { distance: 11675, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 678.5819 },
+  { distance: 11700, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 679.716 },
+  { distance: 11725, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 680.8501 },
+  { distance: 11750, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 681.9842 },
+  { distance: 11775, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 683.1183 },
+  { distance: 11800, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 684.2525 },
+  { distance: 11825, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 685.3866 },
+  { distance: 11850, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 686.5207 },
+  { distance: 11875, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 687.6548 },
+  { distance: 11900, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 688.789 },
+  { distance: 11925, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 689.9231 },
+  { distance: 11950, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 691.0572 },
+  { distance: 11975, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 692.1913 },
+  { distance: 12000, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 693.3254 },
+  { distance: 12025, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 694.4596 },
+  { distance: 12050, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 695.5937 },
+  { distance: 12075, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 696.7278 },
+  { distance: 12100, force: -99.6706, energy: 246.0589, velocity: 22.1781, time: 697.6441 },
+  { distance: 12125, force: -99.7362, energy: 246.0589, velocity: 22.1231, time: 698.4915 },
+  { distance: 12150, force: -99.8036, energy: 246.0589, velocity: 22.0665, time: 699.5882 },
+  { distance: 12175, force: -99.8737, energy: 246.0589, velocity: 22.0077, time: 701.04 },
+  { distance: 12200, force: -99.9413, energy: 246.0589, velocity: 21.9511, time: 702.04 },
+  { distance: 12225, force: -100.0089, energy: 246.0589, velocity: 21.8944, time: 703.04 },
+  { distance: 12250, force: -100.0766, energy: 246.0589, velocity: 21.8377, time: 704.0463 },
+  { distance: 12275, force: -100.1457, energy: 246.0589, velocity: 21.7798, time: 705.2037 },
+  { distance: 12300, force: -100.2149, energy: 246.0589, velocity: 21.7219, time: 706.3611 },
+  { distance: 12325, force: -100.284, energy: 246.0589, velocity: 21.6641, time: 707.5185 },
+  { distance: 12350, force: -100.3532, energy: 246.0589, velocity: 21.6062, time: 708.6759 },
+  { distance: 12375, force: -100.4246, energy: 246.0589, velocity: 21.5466, time: 709.9643 },
+  { distance: 12400, force: -100.4967, energy: 246.0589, velocity: 21.4863, time: 711.3036 },
+  { distance: 12425, force: -100.5689, energy: 246.0589, velocity: 21.4261, time: 712.6429 },
+  { distance: 12450, force: -100.6411, energy: 246.0589, velocity: 21.3658, time: 713.9821 },
+  { distance: 12475, force: -100.7143, energy: 246.0589, velocity: 21.3047, time: 715.2632 },
+  { distance: 12500, force: -100.7905, energy: 246.0589, velocity: 21.2411, time: 716.3596 },
+  { distance: 12525, force: -100.8668, energy: 246.0589, velocity: 21.1775, time: 717.4561 },
+  { distance: 12550, force: -100.9432, energy: 246.0589, velocity: 21.1139, time: 718.5526 },
+  { distance: 12575, force: -101.0195, energy: 246.0589, velocity: 21.0504, time: 719.6491 },
+  { distance: 12600, force: -101.0964, energy: 246.0589, velocity: 20.9864, time: 720.8718 },
+  { distance: 12625, force: -101.1734, energy: 246.0589, velocity: 20.9223, time: 722.1538 },
+  { distance: 12650, force: -101.2505, energy: 246.0589, velocity: 20.8582, time: 723.4359 },
+  { distance: 12675, force: -101.3277, energy: 246.0589, velocity: 20.7941, time: 724.7179 },
+  { distance: 12700, force: -101.4048, energy: 246.0589, velocity: 20.73, time: 726.0 },
+  { distance: 12725, force: -101.4845, energy: 246.0589, velocity: 20.6638, time: 726.7353 },
+  { distance: 12750, force: -101.566, energy: 246.0589, velocity: 20.5962, time: 727.8108 },
+  { distance: 12775, force: -101.6485, energy: 246.0589, velocity: 20.5278, time: 729.0777 },
+  { distance: 12800, force: -101.731, energy: 246.0589, velocity: 20.4594, time: 730.3446 },
+  { distance: 12825, force: -101.8136, energy: 246.0589, velocity: 20.391, time: 731.6115 },
+  { distance: 12850, force: -101.8962, energy: 246.0589, velocity: 20.3226, time: 732.8784 },
+  { distance: 12875, force: -101.9788, energy: 246.0589, velocity: 20.2542, time: 734.1453 },
+  { distance: 12900, force: -102.0615, energy: 246.0589, velocity: 20.1857, time: 735.4122 },
+  { distance: 12925, force: -102.1443, energy: 246.0589, velocity: 20.1173, time: 736.6791 },
+  { distance: 12950, force: -102.2271, energy: 246.0589, velocity: 20.0489, time: 737.9459 },
+  { distance: 12975, force: -102.3099, energy: 246.0589, velocity: 19.9805, time: 739.2128 },
+  { distance: 13000, force: -102.3927, energy: 246.0589, velocity: 19.9121, time: 740.4797 },
+  { distance: 13025, force: -102.4756, energy: 246.0589, velocity: 19.8437, time: 741.7466 },
+  { distance: 13050, force: -102.5636, energy: 246.0589, velocity: 19.7712, time: 743.1765 },
+  { distance: 13075, force: -102.651, energy: 246.0589, velocity: 19.6991, time: 744.5789 },
+  { distance: 13100, force: -102.7362, energy: 246.0589, velocity: 19.6289, time: 745.8947 },
+  { distance: 13125, force: -102.8224, energy: 246.0589, velocity: 19.5579, time: 747.1905 },
+  { distance: 13150, force: -102.914, energy: 246.0589, velocity: 19.4825, time: 748.381 },
+  { distance: 13175, force: -103.0057, energy: 246.0589, velocity: 19.4071, time: 749.5714 },
+  { distance: 13200, force: -103.0995, energy: 246.0589, velocity: 19.33, time: 750.75 },
+  { distance: 13225, force: -103.1946, energy: 246.0589, velocity: 19.2519, time: 751.9219 },
+  { distance: 13250, force: -103.2896, energy: 246.0589, velocity: 19.1739, time: 753.0909 },
+  { distance: 13275, force: -103.3819, energy: 246.0589, velocity: 19.0982, time: 754.2273 },
+  { distance: 13300, force: -103.4742, energy: 246.0589, velocity: 19.0224, time: 755.3636 },
+  { distance: 13325, force: -103.5725, energy: 246.0589, velocity: 18.9419, time: 756.8462 },
+  { distance: 13350, force: -103.6694, energy: 246.0589, velocity: 18.8625, time: 758.5 },
+  { distance: 13375, force: -103.774, energy: 246.0589, velocity: 18.7768, time: 760.0526 },
+  { distance: 13400, force: -103.8705, energy: 246.0589, velocity: 18.6979, time: 761.3684 },
+  { distance: 13425, force: -103.9699, energy: 246.0589, velocity: 18.6167, time: 762.619 },
+  { distance: 13450, force: -104.0719, energy: 246.0589, velocity: 18.5333, time: 763.8095 },
+  { distance: 13475, force: -104.1739, energy: 246.0589, velocity: 18.45, time: 765.0 },
+  { distance: 13500, force: -104.2711, energy: 246.0589, velocity: 18.3706, time: 766.5873 },
+  { distance: 13525, force: -104.3684, energy: 246.0589, velocity: 18.2913, time: 768.1746 },
+  { distance: 13550, force: -104.4665, energy: 246.0589, velocity: 18.2113, time: 769.5806 },
+  { distance: 13575, force: -104.5655, energy: 246.0589, velocity: 18.1306, time: 770.7903 },
+  { distance: 13600, force: -60.2381, energy: 246.0589, velocity: 18.05, time: 772.0 },
+  { distance: 13625, force: -60.5587, energy: 246.0589, velocity: 18.05, time: 773.3636 },
+  { distance: 13650, force: -60.8793, energy: 246.0589, velocity: 18.05, time: 774.7273 },
+  { distance: 13675, force: -61.2, energy: 246.0589, velocity: 18.05, time: 776.0909 },
+  { distance: 13700, force: -61.5206, energy: 246.0589, velocity: 18.05, time: 777.4545 },
+  { distance: 13725, force: -61.8412, energy: 246.0589, velocity: 18.05, time: 778.8182 },
+  { distance: 13750, force: -62.1618, energy: 246.0589, velocity: 18.05, time: 780.1818 },
+  { distance: 13775, force: -62.4824, energy: 246.0589, velocity: 18.05, time: 781.5455 },
+  { distance: 13800, force: -62.803, energy: 246.0589, velocity: 18.05, time: 782.9091 },
+  { distance: 13825, force: -63.006, energy: 246.0589, velocity: 18.05, time: 784.2941 },
+  { distance: 13850, force: -62.7384, energy: 246.0589, velocity: 18.05, time: 785.7647 },
+  { distance: 13875, force: -62.4198, energy: 246.0589, velocity: 18.05, time: 787.0556 },
+  { distance: 13900, force: -61.9389, energy: 246.0589, velocity: 18.05, time: 788.4444 },
+  { distance: 13925, force: -61.458, energy: 246.0589, velocity: 18.05, time: 789.8333 },
+  { distance: 13950, force: -60.9771, energy: 246.0589, velocity: 18.05, time: 791.2222 },
+  { distance: 13975, force: -60.4961, energy: 246.0589, velocity: 18.05, time: 792.6111 },
+  { distance: 14000, force: -60.0152, energy: 246.0589, velocity: 18.05, time: 794.0 },
+  { distance: 14025, force: -58.6372, energy: 246.0589, velocity: 18.05, time: 795.4706 },
+  { distance: 14050, force: -57.2075, energy: 246.0589, velocity: 18.05, time: 796.8471 },
+  { distance: 14075, force: -55.7488, energy: 246.0589, velocity: 18.05, time: 798.1706 },
+  { distance: 14100, force: -54.29, energy: 246.0589, velocity: 18.05, time: 799.4941 },
+  { distance: 14125, force: -52.8312, energy: 246.0589, velocity: 18.05, time: 800.8176 },
+  { distance: 14150, force: -51.3724, energy: 246.0589, velocity: 18.05, time: 802.1412 },
+  { distance: 14175, force: -49.9136, energy: 246.0589, velocity: 18.05, time: 803.4647 },
+  { distance: 14200, force: -48.4548, energy: 246.0589, velocity: 18.05, time: 804.7882 },
+  { distance: 14225, force: -47.2653, energy: 246.0589, velocity: 18.05, time: 806.2194 },
+  { distance: 14250, force: -46.1271, energy: 246.0589, velocity: 18.05, time: 807.671 },
+  { distance: 14275, force: -44.9889, energy: 246.0589, velocity: 18.05, time: 809.1226 },
+  { distance: 14300, force: -43.8508, energy: 246.0589, velocity: 18.05, time: 810.5742 },
+  { distance: 14325, force: -42.7126, energy: 246.0589, velocity: 18.05, time: 812.0258 },
+  { distance: 14350, force: -41.5744, energy: 246.0589, velocity: 18.05, time: 813.4774 },
+  { distance: 14375, force: -40.4362, energy: 246.0589, velocity: 18.05, time: 814.929 },
+  { distance: 14400, force: -39.298, energy: 246.0589, velocity: 18.05, time: 816.3806 },
+  { distance: 14425, force: -38.1599, energy: 246.0589, velocity: 18.05, time: 817.8323 },
+  { distance: 14450, force: -37.0217, energy: 246.0589, velocity: 18.05, time: 819.2839 },
+  { distance: 14475, force: -35.8835, energy: 246.0589, velocity: 18.05, time: 820.7355 },
+  { distance: 14500, force: -34.7453, energy: 246.0589, velocity: 18.05, time: 822.1871 },
+  { distance: 14525, force: -33.3955, energy: 246.0589, velocity: 18.05, time: 823.6111 },
+  { distance: 14550, force: -31.7764, energy: 246.0589, velocity: 18.05, time: 825.0 },
+  { distance: 14575, force: -31.6426, energy: 246.0589, velocity: 18.05, time: 825.7353 },
+  { distance: 14600, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 826.8976 },
+  { distance: 14625, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 828.3 },
+  { distance: 14650, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 829.7024 },
+  { distance: 14675, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 831.1049 },
+  { distance: 14700, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 832.5073 },
+  { distance: 14725, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 833.9098 },
+  { distance: 14750, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 835.3122 },
+  { distance: 14775, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 836.7146 },
+  { distance: 14800, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 838.1171 },
+  { distance: 14825, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 839.5195 },
+  { distance: 14850, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 840.922 },
+  { distance: 14875, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 842.3244 },
+  { distance: 14900, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 843.7268 },
+  { distance: 14925, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 845.1293 },
+  { distance: 14950, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 846.5317 },
+  { distance: 14975, force: -31.5945, energy: 246.0589, velocity: 18.05, time: 847.9341 },
+  { distance: 15000, force: -31.7484, energy: 246.0589, velocity: 18.05, time: 849.3333 },
+  { distance: 15025, force: -32.3896, energy: 246.0589, velocity: 18.05, time: 850.7222 },
+  { distance: 15050, force: -33.0308, energy: 246.0589, velocity: 18.05, time: 852.1111 },
+  { distance: 15075, force: -33.672, energy: 246.0589, velocity: 18.05, time: 853.5 },
+  { distance: 15100, force: -34.3133, energy: 246.0589, velocity: 18.05, time: 854.8889 },
+  { distance: 15125, force: -34.9545, energy: 246.0589, velocity: 18.05, time: 856.2778 },
+  { distance: 15150, force: -35.5957, energy: 246.0589, velocity: 18.05, time: 857.6667 },
+  { distance: 15175, force: -36.2761, energy: 246.0589, velocity: 18.05, time: 859.0564 },
+  { distance: 15200, force: -37.8952, energy: 246.0589, velocity: 18.05, time: 860.4655 },
+  { distance: 15225, force: -39.5143, energy: 246.0589, velocity: 18.05, time: 861.8745 },
+  { distance: 15250, force: -41.1334, energy: 246.0589, velocity: 18.05, time: 863.2836 },
+  { distance: 15275, force: -42.7525, energy: 246.0589, velocity: 18.05, time: 864.6927 },
+  { distance: 15300, force: -44.3716, energy: 246.0589, velocity: 18.05, time: 866.1018 },
+  { distance: 15325, force: -45.9907, energy: 246.0589, velocity: 18.05, time: 867.5109 },
+  { distance: 15350, force: -47.6098, energy: 246.0589, velocity: 18.05, time: 868.92 },
+  { distance: 15375, force: -49.2289, energy: 246.0589, velocity: 18.05, time: 870.3291 },
+  { distance: 15400, force: -50.848, energy: 246.0589, velocity: 18.05, time: 871.7382 },
+  { distance: 15425, force: -52.4671, energy: 246.0589, velocity: 18.05, time: 873.1473 },
+  { distance: 15450, force: -54.0862, energy: 246.0589, velocity: 18.05, time: 874.5564 },
+  { distance: 15475, force: -55.7053, energy: 246.0589, velocity: 18.05, time: 875.9655 },
+  { distance: 15500, force: -57.3244, energy: 246.0589, velocity: 18.05, time: 877.3745 },
+  { distance: 15525, force: -58.9435, energy: 246.0589, velocity: 18.05, time: 878.7836 },
+  { distance: 15550, force: -60.5626, energy: 246.0589, velocity: 18.05, time: 880.1927 },
+  { distance: 15575, force: -62.1817, energy: 246.0589, velocity: 18.05, time: 881.6018 },
+  { distance: 15600, force: -63.8008, energy: 246.0589, velocity: 18.05, time: 883.0109 },
+  { distance: 15625, force: -65.4199, energy: 246.0589, velocity: 18.05, time: 884.42 },
+  { distance: 15650, force: -67.039, energy: 246.0589, velocity: 18.05, time: 885.8291 },
+  { distance: 15675, force: -68.6581, energy: 246.0589, velocity: 18.05, time: 887.2382 },
+  { distance: 15700, force: -70.2772, energy: 246.0589, velocity: 18.05, time: 888.6473 },
+  { distance: 15725, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 890.0552 },
+  { distance: 15750, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 891.436 },
+  { distance: 15775, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 892.8169 },
+  { distance: 15800, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 894.1977 },
+  { distance: 15825, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 895.5785 },
+  { distance: 15850, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 896.9593 },
+  { distance: 15875, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 898.3401 },
+  { distance: 15900, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 899.7209 },
+  { distance: 15925, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 901.1017 },
+  { distance: 15950, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 902.4826 },
+  { distance: 15975, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 903.8634 },
+  { distance: 16000, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 905.2442 },
+  { distance: 16025, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 906.625 },
+  { distance: 16050, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 908.0058 },
+  { distance: 16075, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 909.3866 },
+  { distance: 16100, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 910.7674 },
+  { distance: 16125, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 912.1483 },
+  { distance: 16150, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 913.5291 },
+  { distance: 16175, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 914.9099 },
+  { distance: 16200, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 916.2907 },
+  { distance: 16225, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 917.6715 },
+  { distance: 16250, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 919.0523 },
+  { distance: 16275, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 920.4331 },
+  { distance: 16300, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 921.814 },
+  { distance: 16325, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 923.1948 },
+  { distance: 16350, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 924.5756 },
+  { distance: 16375, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 925.9564 },
+  { distance: 16400, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 927.3372 },
+  { distance: 16425, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 928.718 },
+  { distance: 16450, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 930.0988 },
+  { distance: 16475, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 931.4797 },
+  { distance: 16500, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 932.8605 },
+  { distance: 16525, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 934.2413 },
+  { distance: 16550, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 935.6221 },
+  { distance: 16575, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 937.0029 },
+  { distance: 16600, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 938.3837 },
+  { distance: 16625, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 939.7645 },
+  { distance: 16650, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 941.1453 },
+  { distance: 16675, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 942.5262 },
+  { distance: 16700, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 943.907 },
+  { distance: 16725, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 945.2878 },
+  { distance: 16750, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 946.6686 },
+  { distance: 16775, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 948.0494 },
+  { distance: 16800, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 949.4302 },
+  { distance: 16825, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 950.811 },
+  { distance: 16850, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 952.1919 },
+  { distance: 16875, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 953.5727 },
+  { distance: 16900, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 954.9535 },
+  { distance: 16925, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 956.3343 },
+  { distance: 16950, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 957.7151 },
+  { distance: 16975, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 959.0959 },
+  { distance: 17000, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 960.4767 },
+  { distance: 17025, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 961.8576 },
+  { distance: 17050, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 963.2384 },
+  { distance: 17075, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 964.6192 },
+  { distance: 17100, force: -71.8315, energy: 246.0589, velocity: 18.05, time: 966.0 },
+  { distance: 17125, force: -71.6845, energy: 246.0589, velocity: 18.05, time: 967.4706 },
+  { distance: 17150, force: -71.5289, energy: 246.0589, velocity: 18.05, time: 968.8842 },
+  { distance: 17175, force: -71.3686, energy: 246.0589, velocity: 18.05, time: 970.2658 },
+  { distance: 17200, force: -71.2083, energy: 246.0589, velocity: 18.05, time: 971.6474 },
+  { distance: 17225, force: -71.048, energy: 246.0589, velocity: 18.05, time: 973.0289 },
+  { distance: 17250, force: -70.8877, energy: 246.0589, velocity: 18.05, time: 974.4105 },
+  { distance: 17275, force: -70.7274, energy: 246.0589, velocity: 18.05, time: 975.7921 },
+  { distance: 17300, force: -70.5671, energy: 246.0589, velocity: 18.05, time: 977.1737 },
+  { distance: 17325, force: -70.4068, energy: 246.0589, velocity: 18.05, time: 978.5553 },
+  { distance: 17350, force: -70.2465, energy: 246.0589, velocity: 18.05, time: 979.9368 },
+  { distance: 17375, force: -70.0862, energy: 246.0589, velocity: 18.05, time: 981.3184 },
+  { distance: 17400, force: -69.9259, energy: 246.0589, velocity: 18.05, time: 982.7 },
+  { distance: 17425, force: -69.7655, energy: 246.0589, velocity: 18.05, time: 984.0816 },
+  { distance: 17450, force: -69.6052, energy: 246.0589, velocity: 18.05, time: 985.4632 },
+  { distance: 17475, force: -69.4449, energy: 246.0589, velocity: 18.05, time: 986.8447 },
+  { distance: 17500, force: -69.2846, energy: 246.0589, velocity: 18.05, time: 988.2263 },
+  { distance: 17525, force: -69.1243, energy: 246.0589, velocity: 18.05, time: 989.6079 },
+  { distance: 17550, force: -68.964, energy: 246.0589, velocity: 18.05, time: 990.9895 },
+  { distance: 17575, force: -68.8037, energy: 246.0589, velocity: 18.05, time: 992.3711 },
+  { distance: 17600, force: -68.6434, energy: 246.0589, velocity: 18.05, time: 993.7526 },
+  { distance: 17625, force: -68.4831, energy: 246.0589, velocity: 18.05, time: 995.1342 },
+  { distance: 17650, force: -68.3228, energy: 246.0589, velocity: 18.05, time: 996.5158 },
+  { distance: 17675, force: -68.1625, energy: 246.0589, velocity: 18.05, time: 997.8974 },
+  { distance: 17700, force: -68.0022, energy: 246.0589, velocity: 18.05, time: 999.2789 },
+  { distance: 17725, force: -67.8419, energy: 246.0589, velocity: 18.05, time: 1000.6605 },
+  { distance: 17750, force: -67.6816, energy: 246.0589, velocity: 18.05, time: 1002.0421 },
+  { distance: 17775, force: -67.5213, energy: 246.0589, velocity: 18.05, time: 1003.4237 },
+  { distance: 17800, force: -67.3609, energy: 246.0589, velocity: 18.05, time: 1004.8053 },
+  { distance: 17825, force: -67.2006, energy: 246.0589, velocity: 18.05, time: 1006.1868 },
+  { distance: 17850, force: -67.0403, energy: 246.0589, velocity: 18.05, time: 1007.5684 },
+  { distance: 17875, force: -66.88, energy: 246.0589, velocity: 18.05, time: 1008.95 },
+  { distance: 17900, force: -66.7197, energy: 246.0589, velocity: 18.05, time: 1010.3316 },
+  { distance: 17925, force: -66.5594, energy: 246.0589, velocity: 18.05, time: 1011.7132 },
+  { distance: 17950, force: -66.3991, energy: 246.0589, velocity: 18.05, time: 1013.0947 },
+  { distance: 17975, force: -66.2388, energy: 246.0589, velocity: 18.05, time: 1014.4763 },
+  { distance: 18000, force: -66.0785, energy: 246.0589, velocity: 18.05, time: 1015.8579 },
+  { distance: 18025, force: -65.9182, energy: 246.0589, velocity: 18.05, time: 1017.2395 },
+  { distance: 18050, force: -65.7579, energy: 246.0589, velocity: 18.05, time: 1018.6211 },
+  { distance: 18075, force: -65.5976, energy: 246.0589, velocity: 18.05, time: 1020.0026 },
+  { distance: 18100, force: -65.4373, energy: 246.0589, velocity: 18.05, time: 1021.3842 },
+  { distance: 18125, force: -65.277, energy: 246.0589, velocity: 18.05, time: 1022.7658 },
+  { distance: 18150, force: -65.1166, energy: 246.0589, velocity: 18.05, time: 1024.1474 },
+  { distance: 18175, force: -64.9563, energy: 246.0589, velocity: 18.05, time: 1025.5289 },
+  { distance: 18200, force: -64.796, energy: 246.0589, velocity: 18.05, time: 1026.9105 },
+  { distance: 18225, force: -64.6357, energy: 246.0589, velocity: 18.05, time: 1028.2921 },
+  { distance: 18250, force: -64.4754, energy: 246.0589, velocity: 18.05, time: 1029.6737 },
+  { distance: 18275, force: -64.3215, energy: 246.0589, velocity: 18.05, time: 1031.05 },
+  { distance: 18300, force: 0.0, energy: 246.0589, velocity: 18.0747, time: 1032.2956 },
+  { distance: 18325, force: 0.0, energy: 246.0589, velocity: 18.1774, time: 1033.5271 },
+  { distance: 18350, force: 0.0, energy: 246.0589, velocity: 18.2801, time: 1034.7586 },
+  { distance: 18375, force: 0.0, energy: 246.0589, velocity: 18.3828, time: 1035.9901 },
+  { distance: 18400, force: 0.0, energy: 246.0589, velocity: 18.4855, time: 1037.2217 },
+  { distance: 18425, force: 0.0, energy: 246.0589, velocity: 18.5882, time: 1038.4532 },
+  { distance: 18450, force: 0.0, energy: 246.0589, velocity: 18.6909, time: 1039.6847 },
+  { distance: 18475, force: 0.0, energy: 246.0589, velocity: 18.7936, time: 1040.9163 },
+  { distance: 18500, force: 0.0, energy: 246.0589, velocity: 18.8963, time: 1042.1478 },
+  { distance: 18525, force: 0.0, energy: 246.0589, velocity: 18.999, time: 1043.3793 },
+  { distance: 18550, force: 0.0, energy: 246.0589, velocity: 19.1017, time: 1044.6108 },
+  { distance: 18575, force: 0.0, energy: 246.0589, velocity: 19.2045, time: 1045.8424 },
+  { distance: 18600, force: 0.0, energy: 246.0589, velocity: 19.3072, time: 1047.0739 },
+  { distance: 18625, force: 0.0, energy: 246.0589, velocity: 19.4099, time: 1048.3054 },
+  { distance: 18650, force: 0.0, energy: 246.0589, velocity: 19.5126, time: 1049.5369 },
+  { distance: 18675, force: 0.0, energy: 246.0589, velocity: 19.6153, time: 1050.7685 },
+  { distance: 18700, force: 0.0, energy: 246.0589, velocity: 19.718, time: 1052.0 },
+  { distance: 18725, force: 0.0, energy: 246.0589, velocity: 19.8207, time: 1053.2315 },
+  { distance: 18750, force: 0.0, energy: 246.0589, velocity: 19.9234, time: 1054.4631 },
+  { distance: 18775, force: 0.0, energy: 246.0589, velocity: 20.0261, time: 1055.6946 },
+  { distance: 18800, force: 0.0, energy: 246.0589, velocity: 20.1288, time: 1056.9261 },
+  { distance: 18825, force: 0.0, energy: 246.0589, velocity: 20.2315, time: 1058.1576 },
+  { distance: 18850, force: 0.0, energy: 246.0589, velocity: 20.3343, time: 1059.3892 },
+  { distance: 18875, force: 0.0, energy: 246.0589, velocity: 20.437, time: 1060.6207 },
+  { distance: 18900, force: 0.0, energy: 246.0589, velocity: 20.5397, time: 1061.8522 },
+  { distance: 18925, force: 0.0, energy: 246.0589, velocity: 20.6424, time: 1063.0837 },
+  { distance: 18950, force: 0.0, energy: 246.0589, velocity: 20.7451, time: 1064.3153 },
+  { distance: 18975, force: 0.0, energy: 246.0589, velocity: 20.8478, time: 1065.5468 },
+  { distance: 19000, force: 0.0, energy: 246.0589, velocity: 20.9505, time: 1066.7783 },
+  { distance: 19025, force: 0.0, energy: 246.0589, velocity: 21.0532, time: 1068.0099 },
+  { distance: 19050, force: 0.0, energy: 246.0589, velocity: 21.1559, time: 1069.2414 },
+  { distance: 19075, force: 0.0, energy: 246.0589, velocity: 21.2586, time: 1070.4729 },
+  { distance: 19100, force: 0.0, energy: 246.0589, velocity: 21.3613, time: 1071.7044 },
+  { distance: 19125, force: 0.0, energy: 246.0589, velocity: 21.4641, time: 1072.936 },
+  { distance: 19150, force: 0.0, energy: 246.0589, velocity: 21.5668, time: 1074.1675 },
+  { distance: 19175, force: 0.0, energy: 246.0589, velocity: 21.6695, time: 1075.399 },
+  { distance: 19200, force: 0.0, energy: 246.0589, velocity: 21.7722, time: 1076.6305 },
+  { distance: 19225, force: 0.0, energy: 246.0589, velocity: 21.8749, time: 1077.8621 },
+  { distance: 19250, force: 0.0, energy: 246.0589, velocity: 21.9776, time: 1079.0936 },
+  { distance: 19275, force: 0.0, energy: 246.0589, velocity: 22.0803, time: 1080.3251 },
+  { distance: 19300, force: 0.0, energy: 246.0589, velocity: 22.183, time: 1081.5567 },
+  { distance: 19325, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1082.7169 },
+  { distance: 19350, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1083.8371 },
+  { distance: 19375, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1084.9572 },
+  { distance: 19400, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1086.0774 },
+  { distance: 19425, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1087.1976 },
+  { distance: 19450, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1088.3177 },
+  { distance: 19475, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1089.4379 },
+  { distance: 19500, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1090.558 },
+  { distance: 19525, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1091.6782 },
+  { distance: 19550, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1092.7984 },
+  { distance: 19575, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1093.9185 },
+  { distance: 19600, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1095.0387 },
+  { distance: 19625, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1096.1589 },
+  { distance: 19650, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1097.279 },
+  { distance: 19675, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1098.3992 },
+  { distance: 19700, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1099.5193 },
+  { distance: 19725, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1100.6395 },
+  { distance: 19750, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1101.7597 },
+  { distance: 19775, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1102.8798 },
+  { distance: 19800, force: -62.1633, energy: 246.0589, velocity: 22.22, time: 1104.0 },
+  { distance: 19825, force: -61.7222, energy: 246.0589, velocity: 22.22, time: 1105.4706 },
+  { distance: 19850, force: -61.2555, energy: 246.0589, velocity: 22.22, time: 1106.7362 },
+  { distance: 19875, force: -60.7746, energy: 246.0589, velocity: 22.22, time: 1107.8865 },
+  { distance: 19900, force: -60.2937, energy: 246.0589, velocity: 22.22, time: 1109.0368 },
+  { distance: 19925, force: -59.8128, energy: 246.0589, velocity: 22.22, time: 1110.1871 },
+  { distance: 19950, force: -59.3319, energy: 246.0589, velocity: 22.22, time: 1111.3374 },
+  { distance: 19975, force: -58.8509, energy: 246.0589, velocity: 22.22, time: 1112.4877 },
+  { distance: 20000, force: -58.37, energy: 246.0589, velocity: 22.22, time: 1113.638 },
+  { distance: 20025, force: -57.8891, energy: 246.0589, velocity: 22.22, time: 1114.7883 },
+  { distance: 20050, force: -57.4082, energy: 246.0589, velocity: 22.22, time: 1115.9387 },
+  { distance: 20075, force: -56.9272, energy: 246.0589, velocity: 22.22, time: 1117.089 },
+  { distance: 20100, force: -56.4463, energy: 246.0589, velocity: 22.22, time: 1118.2393 },
+  { distance: 20125, force: -55.9654, energy: 246.0589, velocity: 22.22, time: 1119.3896 },
+  { distance: 20150, force: -55.4845, energy: 246.0589, velocity: 22.22, time: 1120.5399 },
+  { distance: 20175, force: -54.6506, energy: 246.0589, velocity: 22.22, time: 1121.4412 },
+  { distance: 20200, force: -53.5687, energy: 246.0589, velocity: 22.22, time: 1122.266 },
+  { distance: 20225, force: -52.4466, energy: 246.0589, velocity: 22.22, time: 1123.3744 },
+  { distance: 20250, force: -51.3245, energy: 246.0589, velocity: 22.22, time: 1124.4828 },
+  { distance: 20275, force: -50.2023, energy: 246.0589, velocity: 22.22, time: 1125.5911 },
+  { distance: 20300, force: -49.0802, energy: 246.0589, velocity: 22.22, time: 1126.6995 },
+  { distance: 20325, force: -47.958, energy: 246.0589, velocity: 22.22, time: 1127.8079 },
+  { distance: 20350, force: -46.8359, energy: 246.0589, velocity: 22.22, time: 1128.9163 },
+  { distance: 20375, force: -45.7137, energy: 246.0589, velocity: 22.22, time: 1130.0246 },
+  { distance: 20400, force: -44.5916, energy: 246.0589, velocity: 22.22, time: 1131.133 },
+  { distance: 20425, force: -43.4694, energy: 246.0589, velocity: 22.22, time: 1132.2414 },
+  { distance: 20450, force: -42.3473, energy: 246.0589, velocity: 22.22, time: 1133.3498 },
+  { distance: 20475, force: -41.2251, energy: 246.0589, velocity: 22.22, time: 1134.4581 },
+  { distance: 20500, force: -40.103, energy: 246.0589, velocity: 22.22, time: 1135.5665 },
+  { distance: 20525, force: -38.9808, energy: 246.0589, velocity: 22.22, time: 1136.6749 },
+  { distance: 20550, force: -37.8587, energy: 246.0589, velocity: 22.22, time: 1137.7833 },
+  { distance: 20575, force: -36.7365, energy: 246.0589, velocity: 22.22, time: 1138.8916 },
+  { distance: 20600, force: -35.6144, energy: 246.0589, velocity: 22.22, time: 1140.0 },
+  { distance: 20625, force: -34.1981, energy: 246.0589, velocity: 22.22, time: 1141.4706 },
+  { distance: 20650, force: -32.7649, energy: 246.0589, velocity: 22.22, time: 1142.7089 },
+  { distance: 20675, force: -31.3221, energy: 246.0589, velocity: 22.22, time: 1143.8165 },
+  { distance: 20700, force: -29.8793, energy: 246.0589, velocity: 22.22, time: 1144.9241 },
+  { distance: 20725, force: -28.4366, energy: 246.0589, velocity: 22.22, time: 1146.0316 },
+  { distance: 20750, force: -26.9938, energy: 246.0589, velocity: 22.22, time: 1147.1392 },
+  { distance: 20775, force: -25.5511, energy: 246.0589, velocity: 22.22, time: 1148.2468 },
+  { distance: 20800, force: -24.1083, energy: 246.0589, velocity: 22.22, time: 1149.3544 },
+  { distance: 20825, force: -22.6655, energy: 246.0589, velocity: 22.22, time: 1150.462 },
+  { distance: 20850, force: -21.2228, energy: 246.0589, velocity: 22.22, time: 1151.5696 },
+  { distance: 20875, force: -19.78, energy: 246.0589, velocity: 22.22, time: 1152.6772 },
+  { distance: 20900, force: -18.3372, energy: 246.0589, velocity: 22.22, time: 1153.7848 },
+  { distance: 20925, force: -16.8945, energy: 246.0589, velocity: 22.22, time: 1154.8924 },
+  { distance: 20950, force: -15.4517, energy: 246.0589, velocity: 22.22, time: 1156.0 },
+  { distance: 20975, force: -14.6164, energy: 246.0589, velocity: 22.22, time: 1157.1 },
+  { distance: 21000, force: -14.2767, energy: 246.0589, velocity: 22.22, time: 1158.6667 },
+  { distance: 21025, force: -13.9561, energy: 246.0589, velocity: 22.22, time: 1159.7083 },
+  { distance: 21050, force: -13.6355, energy: 246.0589, velocity: 22.22, time: 1160.75 },
+  { distance: 21075, force: -13.3149, energy: 246.0589, velocity: 22.22, time: 1161.7917 },
+  { distance: 21100, force: -12.9943, energy: 246.0589, velocity: 22.22, time: 1162.8333 },
+  { distance: 21125, force: -12.6737, energy: 246.0589, velocity: 22.22, time: 1163.875 },
+  { distance: 21150, force: -12.353, energy: 246.0589, velocity: 22.22, time: 1164.9167 },
+  { distance: 21175, force: -12.0324, energy: 246.0589, velocity: 22.22, time: 1165.9583 },
+  { distance: 21200, force: -11.7118, energy: 246.0589, velocity: 22.22, time: 1167.0 },
+  { distance: 21225, force: -11.9794, energy: 246.0589, velocity: 22.22, time: 1168.4706 },
+  { distance: 21250, force: -12.281, energy: 246.0589, velocity: 22.22, time: 1169.64 },
+  { distance: 21275, force: -12.6016, energy: 246.0589, velocity: 22.22, time: 1170.64 },
+  { distance: 21300, force: -12.9222, energy: 246.0589, velocity: 22.22, time: 1171.64 },
+  { distance: 21325, force: -13.2428, energy: 246.0589, velocity: 22.22, time: 1172.64 },
+  { distance: 21350, force: -13.9738, energy: 246.0589, velocity: 22.22, time: 1173.7273 },
+  { distance: 21375, force: -14.9357, energy: 246.0589, velocity: 22.22, time: 1174.8636 },
+  { distance: 21400, force: -15.8975, energy: 246.0589, velocity: 22.22, time: 1176.0 },
+  { distance: 21425, force: -16.8593, energy: 246.0589, velocity: 22.22, time: 1177.1364 },
+  { distance: 21450, force: -17.8212, energy: 246.0589, velocity: 22.22, time: 1178.2727 },
+  { distance: 21475, force: -18.783, energy: 246.0589, velocity: 22.22, time: 1179.4091 },
+  { distance: 21500, force: -19.7449, energy: 246.0589, velocity: 22.22, time: 1180.5455 },
+  { distance: 21525, force: -20.7067, energy: 246.0589, velocity: 22.22, time: 1181.6818 },
+  { distance: 21550, force: -21.6686, energy: 246.0589, velocity: 22.22, time: 1182.8182 },
+  { distance: 21575, force: -22.6304, energy: 246.0589, velocity: 22.22, time: 1183.9545 },
+  { distance: 21600, force: -23.5922, energy: 246.0589, velocity: 22.22, time: 1185.0909 },
+  { distance: 21625, force: -24.5541, energy: 246.0589, velocity: 22.22, time: 1186.2273 },
+  { distance: 21650, force: -25.5159, energy: 246.0589, velocity: 22.22, time: 1187.3636 },
+  { distance: 21675, force: -26.4778, energy: 246.0589, velocity: 22.22, time: 1188.5 },
+  { distance: 21700, force: -27.4396, energy: 246.0589, velocity: 22.22, time: 1189.6364 },
+  { distance: 21725, force: -28.4015, energy: 246.0589, velocity: 22.22, time: 1190.7727 },
+  { distance: 21750, force: -29.3633, energy: 246.0589, velocity: 22.22, time: 1191.9091 },
+  { distance: 21775, force: -30.338, energy: 246.0589, velocity: 22.22, time: 1193.0457 },
+  { distance: 21800, force: -31.6204, energy: 246.0589, velocity: 22.22, time: 1194.1886 },
+  { distance: 21825, force: -32.9029, energy: 246.0589, velocity: 22.22, time: 1195.3314 },
+  { distance: 21850, force: -34.1853, energy: 246.0589, velocity: 22.22, time: 1196.4743 },
+  { distance: 21875, force: -35.4678, energy: 246.0589, velocity: 22.22, time: 1197.6171 },
+  { distance: 21900, force: -36.7502, energy: 246.0589, velocity: 22.22, time: 1198.76 },
+  { distance: 21925, force: -38.0327, energy: 246.0589, velocity: 22.22, time: 1199.9029 },
+  { distance: 21950, force: -39.3152, energy: 246.0589, velocity: 22.22, time: 1201.0457 },
+  { distance: 21975, force: -40.5976, energy: 246.0589, velocity: 22.22, time: 1202.1886 },
+  { distance: 22000, force: -41.8801, energy: 246.0589, velocity: 22.22, time: 1203.3314 },
+  { distance: 22025, force: -43.1625, energy: 246.0589, velocity: 22.22, time: 1204.4743 },
+  { distance: 22050, force: -44.445, energy: 246.0589, velocity: 22.22, time: 1205.6171 },
+  { distance: 22075, force: -45.7274, energy: 246.0589, velocity: 22.22, time: 1206.76 },
+  { distance: 22100, force: -47.0099, energy: 246.0589, velocity: 22.22, time: 1207.9029 },
+  { distance: 22125, force: -48.2667, energy: 246.0589, velocity: 22.22, time: 1209.044 },
+  { distance: 22150, force: -48.9079, energy: 246.0589, velocity: 22.22, time: 1210.144 },
+  { distance: 22175, force: -49.5492, energy: 246.0589, velocity: 22.22, time: 1211.244 },
+  { distance: 22200, force: -50.1904, energy: 246.0589, velocity: 22.22, time: 1212.344 },
+  { distance: 22225, force: -50.8316, energy: 246.0589, velocity: 22.22, time: 1213.444 },
+  { distance: 22250, force: -51.4728, energy: 246.0589, velocity: 22.22, time: 1214.544 },
+  { distance: 22275, force: -52.1141, energy: 246.0589, velocity: 22.22, time: 1215.644 },
+  { distance: 22300, force: -52.7553, energy: 246.0589, velocity: 22.22, time: 1216.744 },
+  { distance: 22325, force: -53.3965, energy: 246.0589, velocity: 22.22, time: 1217.844 },
+  { distance: 22350, force: -54.0378, energy: 246.0589, velocity: 22.22, time: 1218.944 },
+  { distance: 22375, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1220.0457 },
+  { distance: 22400, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1221.188 },
+  { distance: 22425, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1222.3303 },
+  { distance: 22450, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1223.4726 },
+  { distance: 22475, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1224.6149 },
+  { distance: 22500, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1225.7572 },
+  { distance: 22525, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1226.8995 },
+  { distance: 22550, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1228.0418 },
+  { distance: 22575, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1229.1841 },
+  { distance: 22600, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1230.3264 },
+  { distance: 22625, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1231.4687 },
+  { distance: 22650, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1232.611 },
+  { distance: 22675, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1233.7533 },
+  { distance: 22700, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1234.8956 },
+  { distance: 22725, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1236.0379 },
+  { distance: 22750, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1237.1802 },
+  { distance: 22775, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1238.3225 },
+  { distance: 22800, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1239.4648 },
+  { distance: 22825, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1240.607 },
+  { distance: 22850, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1241.7493 },
+  { distance: 22875, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1242.8916 },
+  { distance: 22900, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1244.0339 },
+  { distance: 22925, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1245.1762 },
+  { distance: 22950, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1246.3185 },
+  { distance: 22975, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1247.4608 },
+  { distance: 23000, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1248.6031 },
+  { distance: 23025, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1249.7454 },
+  { distance: 23050, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1250.8877 },
+  { distance: 23075, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1252.03 },
+  { distance: 23100, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1253.1723 },
+  { distance: 23125, force: -54.6533, energy: 246.0589, velocity: 22.22, time: 1254.3146 },
+  { distance: 23150, force: -54.4769, energy: 246.0589, velocity: 22.22, time: 1255.2941 },
+  { distance: 23175, force: -54.0341, energy: 246.0589, velocity: 22.22, time: 1256.0476 },
+  { distance: 23200, force: -53.5532, energy: 246.0589, velocity: 22.22, time: 1257.2381 },
+  { distance: 23225, force: -53.0723, energy: 246.0589, velocity: 22.22, time: 1258.4286 },
+  { distance: 23250, force: -52.5913, energy: 246.0589, velocity: 22.22, time: 1259.619 },
+  { distance: 23275, force: -52.1104, energy: 246.0589, velocity: 22.22, time: 1260.8095 },
+  { distance: 23300, force: -51.6295, energy: 246.0589, velocity: 22.22, time: 1262.0 },
+  { distance: 23325, force: -50.325, energy: 246.0589, velocity: 22.22, time: 1262.7353 },
+  { distance: 23350, force: -48.9731, energy: 246.0589, velocity: 22.22, time: 1263.7207 },
+  { distance: 23375, force: -47.5945, energy: 246.0589, velocity: 22.22, time: 1264.8468 },
+  { distance: 23400, force: -46.2158, energy: 246.0589, velocity: 22.22, time: 1265.973 },
+  { distance: 23425, force: -44.8372, energy: 246.0589, velocity: 22.22, time: 1267.0991 },
+  { distance: 23450, force: -43.4585, energy: 246.0589, velocity: 22.22, time: 1268.2252 },
+  { distance: 23475, force: -42.0799, energy: 246.0589, velocity: 22.22, time: 1269.3514 },
+  { distance: 23500, force: -40.7013, energy: 246.0589, velocity: 22.22, time: 1270.4775 },
+  { distance: 23525, force: -39.3226, energy: 246.0589, velocity: 22.22, time: 1271.6036 },
+  { distance: 23550, force: -37.944, energy: 246.0589, velocity: 22.22, time: 1272.7297 },
+  { distance: 23575, force: -36.5653, energy: 246.0589, velocity: 22.22, time: 1273.8559 },
+  { distance: 23600, force: -35.1867, energy: 246.0589, velocity: 22.22, time: 1274.982 },
+  { distance: 23625, force: -33.8081, energy: 246.0589, velocity: 22.22, time: 1276.1081 },
+  { distance: 23650, force: -32.4294, energy: 246.0589, velocity: 22.22, time: 1277.2342 },
+  { distance: 23675, force: -31.0508, energy: 246.0589, velocity: 22.22, time: 1278.3604 },
+  { distance: 23700, force: -29.6721, energy: 246.0589, velocity: 22.22, time: 1279.4865 },
+  { distance: 23725, force: -28.2935, energy: 246.0589, velocity: 22.22, time: 1280.6126 },
+  { distance: 23750, force: -26.9149, energy: 246.0589, velocity: 22.22, time: 1281.7387 },
+  { distance: 23775, force: -25.5362, energy: 246.0589, velocity: 22.22, time: 1282.8649 },
+  { distance: 23800, force: -24.1576, energy: 246.0589, velocity: 22.22, time: 1283.991 },
+  { distance: 23825, force: -22.7789, energy: 246.0589, velocity: 22.22, time: 1285.1171 },
+  { distance: 23850, force: -21.4003, energy: 246.0589, velocity: 22.22, time: 1286.2432 },
+  { distance: 23875, force: -20.0217, energy: 246.0589, velocity: 22.22, time: 1287.3694 },
+  { distance: 23900, force: -18.643, energy: 246.0589, velocity: 22.22, time: 1288.4955 },
+  { distance: 23925, force: -17.2644, energy: 246.0589, velocity: 22.22, time: 1289.6216 },
+  { distance: 23950, force: -15.8857, energy: 246.0589, velocity: 22.22, time: 1290.7477 },
+  { distance: 23975, force: -14.5071, energy: 246.0589, velocity: 22.22, time: 1291.8739 },
+  { distance: 24000, force: -13.1285, energy: 246.0589, velocity: 22.22, time: 1293.0 },
+  { distance: 24025, force: -13.3086, energy: 246.0589, velocity: 22.22, time: 1294.4706 },
+  { distance: 24050, force: -13.5787, energy: 246.0589, velocity: 22.22, time: 1295.7429 },
+  { distance: 24075, force: -13.8993, energy: 246.0589, velocity: 22.22, time: 1296.9036 },
+  { distance: 24100, force: -14.2199, energy: 246.0589, velocity: 22.22, time: 1298.0643 },
+  { distance: 24125, force: -14.5405, energy: 246.0589, velocity: 22.22, time: 1299.225 },
+  { distance: 24150, force: -14.8612, energy: 246.0589, velocity: 22.22, time: 1300.3857 },
+  { distance: 24175, force: -15.1818, energy: 246.0589, velocity: 22.22, time: 1301.5464 },
+  { distance: 24200, force: -15.5024, energy: 246.0589, velocity: 22.22, time: 1302.7071 },
+  { distance: 24225, force: -15.823, energy: 246.0589, velocity: 22.22, time: 1303.8679 },
+  { distance: 24250, force: -16.1436, energy: 246.0589, velocity: 22.22, time: 1305.0286 },
+  { distance: 24275, force: -16.4642, energy: 246.0589, velocity: 22.22, time: 1306.1893 },
+  { distance: 24300, force: -16.7848, energy: 246.0589, velocity: 22.22, time: 1307.35 },
+  { distance: 24325, force: -17.3171, energy: 246.0589, velocity: 22.22, time: 1308.4813 },
+  { distance: 24350, force: -18.1186, energy: 246.0589, velocity: 22.22, time: 1309.575 },
+  { distance: 24375, force: -18.9201, energy: 246.0589, velocity: 22.22, time: 1310.6688 },
+  { distance: 24400, force: -19.7217, energy: 246.0589, velocity: 22.22, time: 1311.7625 },
+  { distance: 24425, force: -20.5232, energy: 246.0589, velocity: 22.22, time: 1312.8563 },
+  { distance: 24450, force: -21.3247, energy: 246.0589, velocity: 22.22, time: 1313.95 },
+  { distance: 24475, force: -22.1622, energy: 246.0589, velocity: 22.22, time: 1315.0443 },
+  { distance: 24500, force: -23.8614, energy: 246.0589, velocity: 22.22, time: 1316.1514 },
+  { distance: 24525, force: -25.5607, energy: 246.0589, velocity: 22.22, time: 1317.2586 },
+  { distance: 24550, force: -27.2599, energy: 246.0589, velocity: 22.22, time: 1318.3657 },
+  { distance: 24575, force: -28.9592, energy: 246.0589, velocity: 22.22, time: 1319.4729 },
+  { distance: 24600, force: -30.6584, energy: 246.0589, velocity: 22.22, time: 1320.58 },
+  { distance: 24625, force: -32.3577, energy: 246.0589, velocity: 22.22, time: 1321.6871 },
+  { distance: 24650, force: -34.057, energy: 246.0589, velocity: 22.22, time: 1322.7943 },
+  { distance: 24675, force: -35.7562, energy: 246.0589, velocity: 22.22, time: 1323.9014 },
+  { distance: 24700, force: -37.4555, energy: 246.0589, velocity: 22.22, time: 1325.0086 },
+  { distance: 24725, force: -39.1547, energy: 246.0589, velocity: 22.22, time: 1326.1157 },
+  { distance: 24750, force: -40.854, energy: 246.0589, velocity: 22.22, time: 1327.2229 },
+  { distance: 24775, force: -42.5532, energy: 246.0589, velocity: 22.22, time: 1328.33 },
+  { distance: 24800, force: -44.2525, energy: 246.0589, velocity: 22.22, time: 1329.4371 },
+  { distance: 24825, force: -45.9517, energy: 246.0589, velocity: 22.22, time: 1330.5443 },
+  { distance: 24850, force: -47.651, energy: 246.0589, velocity: 22.22, time: 1331.6514 },
+  { distance: 24875, force: -49.3502, energy: 246.0589, velocity: 22.22, time: 1332.7586 },
+  { distance: 24900, force: -51.0495, energy: 246.0589, velocity: 22.22, time: 1333.8657 },
+  { distance: 24925, force: -52.7488, energy: 246.0589, velocity: 22.22, time: 1334.9729 },
+  { distance: 24950, force: -54.448, energy: 246.0589, velocity: 22.22, time: 1336.08 },
+  { distance: 24975, force: -56.1473, energy: 246.0589, velocity: 22.22, time: 1337.1871 },
+  { distance: 25000, force: -57.8465, energy: 246.0589, velocity: 22.22, time: 1338.2943 },
+  { distance: 25025, force: -59.5458, energy: 246.0589, velocity: 22.22, time: 1339.4014 },
+  { distance: 25050, force: -61.245, energy: 246.0589, velocity: 22.22, time: 1340.5086 },
+  { distance: 25075, force: -62.9443, energy: 246.0589, velocity: 22.22, time: 1341.6157 },
+  { distance: 25100, force: -64.6435, energy: 246.0589, velocity: 22.22, time: 1342.7229 },
+  { distance: 25125, force: -66.3428, energy: 246.0589, velocity: 22.22, time: 1343.83 },
+  { distance: 25150, force: -68.042, energy: 246.0589, velocity: 22.22, time: 1344.9371 },
+  { distance: 25175, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1346.0455 },
+  { distance: 25200, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1347.1818 },
+  { distance: 25225, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1348.3182 },
+  { distance: 25250, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1349.4545 },
+  { distance: 25275, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1350.5909 },
+  { distance: 25300, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1351.7273 },
+  { distance: 25325, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1352.8636 },
+  { distance: 25350, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1354.0 },
+  { distance: 25375, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1355.1364 },
+  { distance: 25400, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1356.2727 },
+  { distance: 25425, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1357.4091 },
+  { distance: 25450, force: -69.6733, energy: 246.0589, velocity: 22.22, time: 1358.5455 },
+  { distance: 25475, force: -67.8204, energy: 246.0589, velocity: 22.22, time: 1359.8824 },
+  { distance: 25500, force: -64.6654, energy: 246.0589, velocity: 22.22, time: 1361.2577 },
+  { distance: 25525, force: -61.2989, energy: 246.0589, velocity: 22.22, time: 1362.3313 },
+  { distance: 25550, force: -57.9325, energy: 246.0589, velocity: 22.22, time: 1363.4049 },
+  { distance: 25575, force: -54.566, energy: 246.0589, velocity: 22.22, time: 1364.4785 },
+  { distance: 25600, force: -51.1996, energy: 246.0589, velocity: 22.22, time: 1365.5521 },
+  { distance: 25625, force: -47.8331, energy: 246.0589, velocity: 22.22, time: 1366.6258 },
+  { distance: 25650, force: -44.4667, energy: 246.0589, velocity: 22.22, time: 1367.6994 },
+  { distance: 25675, force: -41.1003, energy: 246.0589, velocity: 22.22, time: 1368.773 },
+  { distance: 25700, force: -37.7338, energy: 246.0589, velocity: 22.22, time: 1369.8466 },
+  { distance: 25725, force: -34.3674, energy: 246.0589, velocity: 22.22, time: 1370.9202 },
+  { distance: 25750, force: -31.0009, energy: 246.0589, velocity: 22.22, time: 1371.9939 },
+  { distance: 25775, force: -27.6345, energy: 246.0589, velocity: 22.22, time: 1373.0675 },
+  { distance: 25800, force: -24.268, energy: 246.0589, velocity: 22.22, time: 1374.1411 },
+  { distance: 25825, force: -21.028, energy: 246.0589, velocity: 22.22, time: 1375.2941 },
+  { distance: 25850, force: -18.2939, energy: 246.0589, velocity: 22.22, time: 1376.7647 },
+  { distance: 25875, force: -15.6077, energy: 246.0589, velocity: 22.22, time: 1377.8855 },
+  { distance: 25900, force: -12.9306, energy: 246.0589, velocity: 22.22, time: 1378.9398 },
+  { distance: 25925, force: -10.2534, energy: 246.0589, velocity: 22.22, time: 1379.994 },
+  { distance: 25950, force: -7.5763, energy: 246.0589, velocity: 22.22, time: 1381.0482 },
+  { distance: 25975, force: -4.8992, energy: 246.0589, velocity: 22.22, time: 1382.1024 },
+  { distance: 26000, force: -2.2221, energy: 246.0589, velocity: 22.22, time: 1383.1566 },
+  { distance: 26025, force: 0.4551, energy: 246.0744, velocity: 22.22, time: 1384.2392 },
+  { distance: 26050, force: 3.1322, energy: 246.1966, velocity: 22.22, time: 1385.4354 },
+  { distance: 26075, force: 5.8093, energy: 246.5012, velocity: 22.22, time: 1386.6316 },
+  { distance: 26100, force: 8.4864, energy: 246.9882, velocity: 22.22, time: 1387.8278 },
+  { distance: 26125, force: 11.1636, energy: 247.6575, velocity: 22.22, time: 1389.0239 },
+  { distance: 26150, force: 13.8407, energy: 248.5092, velocity: 22.22, time: 1390.2201 },
+  { distance: 26175, force: 16.5178, energy: 249.5433, velocity: 22.22, time: 1391.4163 },
+  { distance: 26200, force: 19.195, energy: 250.7597, velocity: 22.22, time: 1392.6124 },
+  { distance: 26225, force: 21.8721, energy: 252.1586, velocity: 22.22, time: 1393.8086 },
+  { distance: 26250, force: 0.0, energy: 252.9036, velocity: 22.19, time: 1395.0 },
+  { distance: 26275, force: 0.0, energy: 252.9036, velocity: 22.1535, time: 1395.55 },
+  { distance: 26300, force: 0.0, energy: 252.9036, velocity: 22.116, time: 1396.8 },
+  { distance: 26325, force: 0.0, energy: 252.9036, velocity: 22.0785, time: 1398.05 },
+  { distance: 26350, force: 0.0, energy: 252.9036, velocity: 22.041, time: 1399.3 },
+  { distance: 26375, force: 0.0, energy: 252.9036, velocity: 21.998, time: 1400.55 },
+  { distance: 26400, force: 0.0, energy: 252.9036, velocity: 21.956, time: 1401.8 },
+  { distance: 26425, force: 0.0, energy: 252.9036, velocity: 21.908, time: 1403.0 },
+  { distance: 26450, force: 0.0, energy: 252.9036, velocity: 21.858, time: 1403.3 },
+  { distance: 26475, force: 0.0, energy: 252.9036, velocity: 21.808, time: 1404.55 },
+  { distance: 26500, force: 0.0, energy: 252.9036, velocity: 21.758, time: 1405.8 },
+  { distance: 26525, force: 0.0, energy: 252.9036, velocity: 21.708, time: 1407.05 },
+  { distance: 26550, force: 0.0, energy: 252.9036, velocity: 21.658, time: 1408.3 },
+  { distance: 26575, force: 0.0, energy: 252.9036, velocity: 21.6025, time: 1409.55 },
+  { distance: 26600, force: 0.0, energy: 252.9036, velocity: 21.54, time: 1411.0 },
+  { distance: 26625, force: 0.0, energy: 252.9036, velocity: 21.4857, time: 1412.0 },
+  { distance: 26650, force: 0.0, energy: 252.9036, velocity: 21.42, time: 1412.8 },
+  { distance: 26675, force: 0.0, energy: 252.9036, velocity: 21.358, time: 1414.05 },
+  { distance: 26700, force: 0.0, energy: 252.9036, velocity: 21.305, time: 1415.3 },
+  { distance: 26725, force: 0.0, energy: 252.9036, velocity: 21.248, time: 1416.55 },
+  { distance: 26750, force: 0.0, energy: 252.9036, velocity: 21.19, time: 1417.5 },
+  { distance: 26775, force: 0.0, energy: 252.9036, velocity: 21.138, time: 1419.05 },
+  { distance: 26800, force: 0.0, energy: 252.9036, velocity: 21.088, time: 1420.3 },
+  { distance: 26825, force: 0.0, energy: 252.9036, velocity: 21.0435, time: 1421.55 },
+  { distance: 26850, force: 0.0, energy: 252.9036, velocity: 20.998, time: 1422.8 },
+  { distance: 26875, force: 0.0, energy: 252.9036, velocity: 20.9585, time: 1424.05 },
+  { distance: 26900, force: 0.0, energy: 252.9036, velocity: 20.921, time: 1425.0 },
+  { distance: 26925, force: 0.0, energy: 252.9036, velocity: 20.889, time: 1425.55 },
+  { distance: 26950, force: 0.0, energy: 252.9036, velocity: 20.856, time: 1426.8 },
+  { distance: 26975, force: 0.0, energy: 252.9036, velocity: 20.829, time: 1428.05 },
+  { distance: 27000, force: 0.0, energy: 252.9036, velocity: 20.804, time: 1429.3 },
+  { distance: 27025, force: 0.0, energy: 252.9036, velocity: 20.779, time: 1430.55 },
+  { distance: 27050, force: 0.0, energy: 252.9036, velocity: 20.754, time: 1431.8 },
+  { distance: 27075, force: 0.0, energy: 252.9036, velocity: 20.7295, time: 1433.05 },
+  { distance: 27100, force: 0.0, energy: 252.9036, velocity: 20.71, time: 1434.0 },
+  { distance: 27125, force: 0.0, energy: 252.9036, velocity: 20.6964, time: 1435.3571 },
+  { distance: 27150, force: 0.0, energy: 252.9036, velocity: 20.682, time: 1436.8 },
+  { distance: 27175, force: 0.0, energy: 252.9036, velocity: 20.6695, time: 1438.05 },
+  { distance: 27200, force: 0.0, energy: 252.9036, velocity: 20.66, time: 1439.3 },
+  { distance: 27225, force: 0.0, energy: 252.9036, velocity: 20.6545, time: 1440.55 },
+  { distance: 27250, force: 0.0, energy: 252.9036, velocity: 20.65, time: 1441.8 },
+  { distance: 27275, force: 0.0, energy: 252.9036, velocity: 20.65, time: 1443.0 },
+  { distance: 27300, force: 0.0, energy: 252.9036, velocity: 20.65, time: 1443.75 },
+  { distance: 27325, force: -101.509, energy: 252.9036, velocity: 20.6435, time: 1445.0435 },
+  { distance: 27350, force: -101.7032, energy: 252.9036, velocity: 20.4824, time: 1446.2069 },
+  { distance: 27375, force: -101.8801, energy: 252.9036, velocity: 20.3359, time: 1447.931 },
+  { distance: 27400, force: -102.0633, energy: 252.9036, velocity: 20.1843, time: 1448.8571 },
+  { distance: 27425, force: -102.2515, energy: 252.9036, velocity: 20.0287, time: 1450.0938 },
+  { distance: 27450, force: -102.4407, energy: 252.9036, velocity: 19.8725, time: 1451.3958 },
+  { distance: 27475, force: -102.6302, energy: 252.9036, velocity: 19.7162, time: 1452.6979 },
+  { distance: 27500, force: -102.8199, energy: 252.9036, velocity: 19.56, time: 1454.0 },
+  { distance: 27525, force: -103.0165, energy: 252.9036, velocity: 19.3982, time: 1455.4706 },
+  { distance: 27550, force: -103.2227, energy: 252.9036, velocity: 19.2288, time: 1456.6364 },
+  { distance: 27575, force: -103.4212, energy: 252.9036, velocity: 19.0659, time: 1457.7727 },
+  { distance: 27600, force: -103.6199, energy: 252.9036, velocity: 18.903, time: 1458.9091 },
+  { distance: 27625, force: -103.8419, energy: 252.9036, velocity: 18.7213, time: 1460.5333 },
+  { distance: 27650, force: -104.0568, energy: 252.9036, velocity: 18.5456, time: 1462.0588 },
+  { distance: 27675, force: -104.2685, energy: 252.9036, velocity: 18.3728, time: 1463.5294 },
+  { distance: 27700, force: -104.4804, energy: 252.9036, velocity: 18.2, time: 1465.0 },
+  { distance: 27725, force: -104.7061, energy: 252.9036, velocity: 18.0162, time: 1465.7353 },
+  { distance: 27750, force: -104.9351, energy: 252.9036, velocity: 17.83, time: 1467.2 },
+  { distance: 27775, force: -105.1661, energy: 252.9036, velocity: 17.6423, time: 1469.0536 },
+  { distance: 27800, force: -105.4029, energy: 252.9036, velocity: 17.4504, time: 1470.3929 },
+  { distance: 27825, force: -105.6399, energy: 252.9036, velocity: 17.2584, time: 1471.7321 },
+  { distance: 27850, force: -105.8838, energy: 252.9036, velocity: 17.0612, time: 1473.1765 },
+  { distance: 27875, force: -106.1312, energy: 252.9036, velocity: 16.8614, time: 1474.6111 },
+  { distance: 27900, force: -1.3708, energy: 252.9036, velocity: 16.66, time: 1476.0 },
+  { distance: 27925, force: 0.0944, energy: 252.9068, velocity: 16.66, time: 1477.1197 },
+  { distance: 27950, force: 1.8738, energy: 252.9739, velocity: 16.66, time: 1478.6154 },
+  { distance: 27975, force: 3.6532, energy: 253.1621, velocity: 16.66, time: 1480.1111 },
+  { distance: 28000, force: 5.4326, energy: 253.4716, velocity: 16.66, time: 1481.6068 },
+  { distance: 28025, force: 7.2121, energy: 253.9023, velocity: 16.66, time: 1483.1026 },
+  { distance: 28050, force: 8.9915, energy: 254.4543, velocity: 16.66, time: 1484.5983 },
+  { distance: 28075, force: 10.7709, energy: 255.1274, velocity: 16.66, time: 1486.094 },
+  { distance: 28100, force: 12.5503, energy: 255.9218, velocity: 16.66, time: 1487.5897 },
+  { distance: 28125, force: 14.3297, energy: 256.8374, velocity: 16.66, time: 1489.0855 },
+  { distance: 28150, force: 16.1091, energy: 257.8742, velocity: 16.66, time: 1490.5812 },
+  { distance: 28175, force: 17.8885, energy: 259.0323, velocity: 16.66, time: 1492.0769 },
+  { distance: 28200, force: 19.6679, energy: 260.3115, velocity: 16.66, time: 1493.5726 },
+  { distance: 28225, force: 21.4473, energy: 261.712, velocity: 16.66, time: 1495.0684 },
+  { distance: 28250, force: 23.2267, energy: 263.2337, velocity: 16.66, time: 1496.5641 },
+  { distance: 28275, force: 0.0, energy: 264.0249, velocity: 16.658, time: 1498.1 },
+  { distance: 28300, force: 0.0, energy: 264.0249, velocity: 16.608, time: 1500.3 },
+  { distance: 28325, force: 0.0, energy: 264.0249, velocity: 16.5525, time: 1501.55 },
+  { distance: 28350, force: 0.0, energy: 264.0249, velocity: 16.49, time: 1502.8 },
+  { distance: 28375, force: 0.0, energy: 264.0249, velocity: 16.4275, time: 1505.05 },
+  { distance: 28400, force: 0.0, energy: 264.0249, velocity: 16.362, time: 1506.3 },
+  { distance: 28425, force: 0.0, energy: 264.0249, velocity: 16.287, time: 1507.55 },
+  { distance: 28450, force: 0.0, energy: 264.0249, velocity: 16.2076, time: 1509.5882 },
+  { distance: 28475, force: 0.0, energy: 264.0249, velocity: 16.1271, time: 1511.0526 },
+  { distance: 28500, force: 0.0, energy: 264.0249, velocity: 16.0547, time: 1512.3684 },
+  { distance: 28525, force: 0.0, energy: 264.0249, velocity: 15.9778, time: 1513.7027 },
+  { distance: 28550, force: 0.0, energy: 264.0249, velocity: 15.897, time: 1515.0811 },
+  { distance: 28575, force: 0.0, energy: 264.0249, velocity: 15.8227, time: 1517.1081 },
+  { distance: 28600, force: 0.0, energy: 264.0249, velocity: 15.7472, time: 1518.7778 },
+  { distance: 28625, force: 0.0, energy: 264.0249, velocity: 15.6714, time: 1520.1714 },
+  { distance: 28650, force: 0.0, energy: 264.0249, velocity: 15.6, time: 1521.6 },
+  { distance: 28675, force: 0.0, energy: 264.0249, velocity: 15.527, time: 1523.1 },
+  { distance: 28700, force: 0.0, energy: 264.0249, velocity: 15.455, time: 1525.3 },
+  { distance: 28725, force: 0.0, energy: 264.0249, velocity: 15.3856, time: 1526.6875 },
+  { distance: 28750, force: 0.0, energy: 264.0249, velocity: 15.32, time: 1528.0 },
+  { distance: 28775, force: 0.0, energy: 264.0249, velocity: 15.247, time: 1529.55 },
+  { distance: 28800, force: 0.0, energy: 264.0249, velocity: 15.172, time: 1531.6 },
+  { distance: 28825, force: 0.0, energy: 264.0249, velocity: 15.097, time: 1533.05 },
+  { distance: 28850, force: 0.0, energy: 264.0249, velocity: 15.019, time: 1534.6 },
+  { distance: 28875, force: 0.0, energy: 264.0249, velocity: 14.9365, time: 1536.1 },
+  { distance: 28900, force: 0.0, energy: 264.0249, velocity: 14.85, time: 1538.0 },
+  { distance: 28925, force: 0.0, energy: 264.0249, velocity: 14.7691, time: 1539.4706 },
+  { distance: 28950, force: 0.0, energy: 264.0249, velocity: 14.6851, time: 1541.1429 },
+  { distance: 28975, force: 0.0, energy: 264.0249, velocity: 14.5994, time: 1542.9286 },
+  { distance: 29000, force: 0.0, energy: 264.0249, velocity: 14.5137, time: 1544.7143 },
+  { distance: 29025, force: 0.0, energy: 264.0249, velocity: 14.427, time: 1547.05 },
+  { distance: 29050, force: 0.0, energy: 264.0249, velocity: 14.3513, time: 1548.375 },
+  { distance: 29075, force: 0.0, energy: 264.0249, velocity: 14.275, time: 1550.5 },
+  { distance: 29100, force: 0.0, energy: 264.0249, velocity: 14.205, time: 1552.3 },
+  { distance: 29125, force: 0.0, energy: 264.0249, velocity: 14.148, time: 1553.55 },
+  { distance: 29150, force: 0.0, energy: 264.0249, velocity: 14.09, time: 1555.6 },
+  { distance: 29175, force: 0.0, energy: 264.0249, velocity: 14.048, time: 1557.1 },
+  { distance: 29200, force: 0.0, energy: 264.0249, velocity: 14.001, time: 1559.3 },
+  { distance: 29225, force: 0.0, energy: 264.0249, velocity: 13.969, time: 1560.55 },
+  { distance: 29250, force: 0.0, energy: 264.0249, velocity: 13.944, time: 1562.6 },
+  { distance: 29275, force: 0.0, energy: 264.0249, velocity: 13.9295, time: 1564.1 },
+  { distance: 29300, force: 0.0, energy: 264.0249, velocity: 13.91, time: 1566.0 },
+  { distance: 29325, force: 0.0, energy: 264.0249, velocity: 13.91, time: 1568.3571 },
+  { distance: 29350, force: 0.0, energy: 264.0249, velocity: 13.91, time: 1569.7 },
+  { distance: 29375, force: 0.0, energy: 264.0249, velocity: 13.91, time: 1571.6 },
+  { distance: 29400, force: 0.0, energy: 264.0249, velocity: 13.9185, time: 1573.7 },
+  { distance: 29425, force: 0.0, energy: 264.0249, velocity: 13.931, time: 1575.1 },
+  { distance: 29450, force: 0.0, energy: 264.0249, velocity: 13.947, time: 1576.7 },
+  { distance: 29475, force: 0.0, energy: 264.0249, velocity: 13.972, time: 1578.6 },
+  { distance: 29500, force: 0.0, energy: 264.0249, velocity: 14.0, time: 1581.0 },
+  { distance: 29525, force: 0.0, energy: 264.0249, velocity: 14.0271, time: 1582.3571 },
+  { distance: 29550, force: 0.0, energy: 264.0249, velocity: 14.0552, time: 1583.7619 },
+  { distance: 29575, force: 0.0, energy: 264.0249, velocity: 14.0861, time: 1585.7391 },
+  { distance: 29600, force: 0.0, energy: 264.0249, velocity: 14.12, time: 1588.0 },
+  { distance: 29625, force: 0.0, energy: 264.0249, velocity: 14.1465, time: 1589.55 },
+  { distance: 29650, force: 0.0, energy: 264.0249, velocity: 14.176, time: 1590.8 },
+  { distance: 29675, force: 0.0, energy: 264.0249, velocity: 14.1905, time: 1593.05 },
+  { distance: 29700, force: 0.0, energy: 264.0249, velocity: 14.203, time: 1594.6 },
+  { distance: 29725, force: 0.0, energy: 264.0249, velocity: 14.2155, time: 1596.55 },
+  { distance: 29750, force: 0.0, energy: 264.0249, velocity: 14.22, time: 1598.6 },
+  { distance: 29775, force: 0.0, energy: 264.0249, velocity: 14.22, time: 1599.8 },
+  { distance: 29800, force: 0.0, energy: 264.0249, velocity: 14.2195, time: 1602.05 },
+  { distance: 29825, force: 0.0, energy: 264.0249, velocity: 14.207, time: 1603.6 },
+  { distance: 29850, force: 0.0, energy: 264.0249, velocity: 14.189, time: 1605.55 },
+  { distance: 29875, force: 0.0, energy: 264.0249, velocity: 14.164, time: 1606.8 },
+  { distance: 29900, force: 0.0, energy: 264.0249, velocity: 14.14, time: 1609.0 },
+  { distance: 29925, force: 0.0, energy: 264.0249, velocity: 14.1086, time: 1611.0476 },
+  { distance: 29950, force: 0.0, energy: 264.0249, velocity: 14.0752, time: 1612.2381 },
+  { distance: 29975, force: 0.0, energy: 264.0249, velocity: 14.0471, time: 1613.8571 },
+  { distance: 30000, force: 0.0, energy: 264.0249, velocity: 14.0123, time: 1616.1818 },
+  { distance: 30025, force: 0.0, energy: 264.0249, velocity: 13.9791, time: 1617.6957 },
+  { distance: 30050, force: 0.0, energy: 264.0249, velocity: 13.9455, time: 1619.6364 },
+  { distance: 30075, force: 0.0, energy: 264.0249, velocity: 13.9085, time: 1621.1 },
+  { distance: 30100, force: 0.0, energy: 264.0249, velocity: 13.871, time: 1623.3 },
+  { distance: 30125, force: 0.0, energy: 264.0249, velocity: 13.828, time: 1625.1 },
+  { distance: 30150, force: 0.0, energy: 264.0249, velocity: 13.778, time: 1626.8 },
+  { distance: 30175, force: 22.8643, energy: 264.8037, velocity: 13.77, time: 1628.4615 },
+  { distance: 30200, force: 24.7879, energy: 266.4268, velocity: 13.77, time: 1630.3846 },
+  { distance: 30225, force: 26.7116, energy: 268.1811, velocity: 13.77, time: 1632.3077 },
+  { distance: 30250, force: 29.1893, energy: 270.0852, velocity: 13.77, time: 1634.1333 },
+  { distance: 30275, force: 31.9787, energy: 272.1687, velocity: 13.77, time: 1635.9042 },
+  { distance: 30300, force: 34.768, energy: 274.4423, velocity: 13.77, time: 1637.675 },
+  { distance: 30325, force: 37.5574, energy: 276.9059, velocity: 13.77, time: 1639.4458 },
+  { distance: 30350, force: 40.3467, energy: 279.5595, velocity: 13.77, time: 1641.2167 },
+  { distance: 30375, force: 43.136, energy: 282.4031, velocity: 13.77, time: 1642.9875 },
+  { distance: 30400, force: 45.9254, energy: 285.4367, velocity: 13.77, time: 1644.7583 },
+  { distance: 30425, force: 48.7147, energy: 288.6604, velocity: 13.77, time: 1646.5292 },
+  { distance: 30450, force: 51.5041, energy: 292.0741, velocity: 13.77, time: 1648.3 },
+  { distance: 30475, force: 54.2485, energy: 295.6763, velocity: 13.77, time: 1650.075 },
+  { distance: 30500, force: 55.9157, energy: 299.4288, velocity: 13.77, time: 1651.95 },
+  { distance: 30525, force: 57.5829, energy: 303.2948, velocity: 13.77, time: 1653.825 },
+  { distance: 30550, force: 59.2501, energy: 307.2745, velocity: 13.77, time: 1655.7 },
+  { distance: 30575, force: 60.9173, energy: 311.3677, velocity: 13.77, time: 1657.575 },
+  { distance: 30600, force: 62.5845, energy: 315.5744, velocity: 13.77, time: 1659.45 },
+  { distance: 30625, force: 64.2517, energy: 319.8948, velocity: 13.77, time: 1661.325 },
+  { distance: 30650, force: 65.9189, energy: 324.3287, velocity: 13.77, time: 1663.2 },
+  { distance: 30675, force: 67.5194, energy: 328.874, velocity: 13.77, time: 1665.0706 },
+  { distance: 30700, force: 67.5194, energy: 333.4737, velocity: 13.77, time: 1666.8344 },
+  { distance: 30725, force: 67.5194, energy: 338.0735, velocity: 13.77, time: 1668.5982 },
+  { distance: 30750, force: 67.5194, energy: 342.6733, velocity: 13.77, time: 1670.362 },
+  { distance: 30775, force: 67.5194, energy: 347.273, velocity: 13.77, time: 1672.1258 },
+  { distance: 30800, force: 67.5194, energy: 351.8728, velocity: 13.77, time: 1673.8896 },
+  { distance: 30825, force: 67.5194, energy: 356.4725, velocity: 13.77, time: 1675.6534 },
+  { distance: 30850, force: 67.5194, energy: 361.0723, velocity: 13.77, time: 1677.4172 },
+  { distance: 30875, force: 67.5194, energy: 365.672, velocity: 13.77, time: 1679.181 },
+  { distance: 30900, force: 67.5194, energy: 370.2718, velocity: 13.77, time: 1680.9448 },
+  { distance: 30925, force: 67.5194, energy: 374.8716, velocity: 13.77, time: 1682.7086 },
+  { distance: 30950, force: 67.5194, energy: 379.4713, velocity: 13.77, time: 1684.4724 },
+  { distance: 30975, force: 67.5194, energy: 384.0711, velocity: 13.77, time: 1686.2362 },
+  { distance: 31000, force: 67.5194, energy: 388.6708, velocity: 13.77, time: 1688.0 },
+  { distance: 31025, force: 67.2694, energy: 393.2621, velocity: 13.77, time: 1690.2059 },
+  { distance: 31050, force: 67.005, energy: 397.8358, velocity: 13.77, time: 1692.1034 },
+  { distance: 31075, force: 66.7324, energy: 402.3912, velocity: 13.77, time: 1693.8276 },
+  { distance: 31100, force: 66.4599, energy: 406.9281, velocity: 13.77, time: 1695.5517 },
+  { distance: 31125, force: 66.1874, energy: 411.4464, velocity: 13.77, time: 1697.2759 },
+  { distance: 31150, force: 65.9149, energy: 415.9461, velocity: 13.77, time: 1699.0 },
+  { distance: 31175, force: 63.0835, energy: 420.3401, velocity: 13.77, time: 1701.2059 },
+  { distance: 31200, force: 60.1047, energy: 424.5362, velocity: 13.77, time: 1703.1429 },
+  { distance: 31225, force: 57.0428, energy: 428.5266, velocity: 13.77, time: 1704.9286 },
+  { distance: 31250, force: 53.9809, energy: 432.3083, velocity: 13.77, time: 1706.7143 },
+  { distance: 31275, force: 50.9191, energy: 435.8815, velocity: 13.77, time: 1708.5 },
+  { distance: 31300, force: 47.8572, energy: 439.246, velocity: 13.77, time: 1710.2857 },
+  { distance: 31325, force: 44.7953, energy: 442.402, velocity: 13.77, time: 1712.0714 },
+  { distance: 31350, force: 41.7335, energy: 445.3494, velocity: 13.77, time: 1713.8571 },
+  { distance: 31375, force: 38.6716, energy: 448.0882, velocity: 13.77, time: 1715.6429 },
+  { distance: 31400, force: 35.6097, energy: 450.6184, velocity: 13.77, time: 1717.4286 },
+  { distance: 31425, force: 32.5479, energy: 452.94, velocity: 13.77, time: 1719.2143 },
+  { distance: 31450, force: 29.486, energy: 455.053, velocity: 13.77, time: 1721.0 },
+  { distance: 31475, force: 26.4241, energy: 456.9575, velocity: 13.77, time: 1722.7857 },
+  { distance: 31500, force: 23.3623, energy: 458.6533, velocity: 13.77, time: 1724.5714 },
+  { distance: 31525, force: 20.3004, energy: 460.1406, velocity: 13.77, time: 1726.3571 },
+  { distance: 31550, force: 17.2386, energy: 461.4193, velocity: 13.77, time: 1728.1429 },
+  { distance: 31575, force: 14.1767, energy: 462.4894, velocity: 13.77, time: 1729.9286 },
+  { distance: 31600, force: 11.1148, energy: 463.3508, velocity: 13.77, time: 1731.7143 },
+  { distance: 31625, force: 8.053, energy: 464.0037, velocity: 13.77, time: 1733.5 },
+  { distance: 31650, force: 4.9911, energy: 464.4481, velocity: 13.77, time: 1735.2857 },
+  { distance: 31675, force: 3.0851, energy: 464.7232, velocity: 13.77, time: 1737.3235 },
+  { distance: 31700, force: 1.9914, energy: 464.8961, velocity: 13.77, time: 1739.4211 },
+  { distance: 31725, force: 1.0295, energy: 464.999, velocity: 13.77, time: 1741.1754 },
+  { distance: 31750, force: 0.0677, energy: 465.0363, velocity: 13.77, time: 1742.9298 },
+  { distance: 31775, force: 0.0, energy: 465.0387, velocity: 13.77, time: 1744.4 },
+  { distance: 31800, force: 0.0, energy: 465.0387, velocity: 13.77, time: 1746.45 },
+  { distance: 31825, force: 0.0, energy: 465.0387, velocity: 13.777, time: 1748.4 },
+  { distance: 31850, force: 0.0, energy: 465.0387, velocity: 13.7895, time: 1749.95 },
+  { distance: 31875, force: 0.0, energy: 465.0387, velocity: 13.792, time: 1752.2 },
+  { distance: 31900, force: 0.0, energy: 465.0387, velocity: 13.8045, time: 1753.9 },
+  { distance: 31925, force: 0.0, energy: 465.0387, velocity: 13.824, time: 1755.7 },
+  { distance: 31950, force: 0.0, energy: 465.0387, velocity: 13.8395, time: 1756.95 },
+  { distance: 31975, force: 0.0, energy: 465.0387, velocity: 13.854, time: 1759.2 },
+  { distance: 32000, force: 0.0, energy: 465.0387, velocity: 13.879, time: 1760.9 },
+  { distance: 32025, force: 0.0, energy: 465.0387, velocity: 13.904, time: 1762.7 },
+  { distance: 32050, force: 0.0, energy: 465.0387, velocity: 13.929, time: 1764.9 },
+  { distance: 32075, force: 0.0, energy: 465.0387, velocity: 13.956, time: 1766.4 },
+  { distance: 32100, force: 0.0, energy: 465.0387, velocity: 13.989, time: 1768.45 },
+  { distance: 32125, force: 0.0, energy: 465.0387, velocity: 14.021, time: 1769.7 },
+  { distance: 32150, force: 0.0, energy: 465.0387, velocity: 14.049, time: 1771.9 },
+  { distance: 32175, force: 0.0, energy: 465.0387, velocity: 14.0915, time: 1773.1 },
+  { distance: 32200, force: 0.0, energy: 465.0387, velocity: 14.129, time: 1775.3 },
+  { distance: 32225, force: 0.0, energy: 465.0387, velocity: 14.1665, time: 1777.1 },
+  { distance: 32250, force: 0.0, energy: 465.0387, velocity: 14.204, time: 1778.8 },
+  { distance: 32275, force: 0.0, energy: 465.0387, velocity: 14.2515, time: 1780.1 },
+  { distance: 32300, force: 0.0, energy: 465.0387, velocity: 14.292, time: 1782.3 },
+  { distance: 32325, force: 0.0, energy: 465.0387, velocity: 14.3415, time: 1784.05 },
+  { distance: 32350, force: 0.0, energy: 465.0387, velocity: 14.379, time: 1785.6 },
+  { distance: 32375, force: 0.0, energy: 465.0387, velocity: 14.4165, time: 1787.55 },
+  { distance: 32400, force: 0.0, energy: 465.0387, velocity: 14.454, time: 1789.6 },
+  { distance: 32425, force: 0.0, energy: 465.0387, velocity: 14.481, time: 1791.05 },
+  { distance: 32450, force: 0.0, energy: 465.0387, velocity: 14.506, time: 1792.6 },
+  { distance: 32475, force: 0.0, energy: 465.0387, velocity: 14.5255, time: 1794.55 },
+  { distance: 32500, force: 0.0, energy: 465.0387, velocity: 14.54, time: 1796.0 },
+  { distance: 32525, force: 0.0, energy: 465.0387, velocity: 14.55, time: 1798.0 },
+  { distance: 32550, force: 0.0, energy: 465.0387, velocity: 14.558, time: 1799.6 },
+  { distance: 32575, force: 0.0, energy: 465.0387, velocity: 14.56, time: 1801.15 },
+  { distance: 32600, force: 0.0, energy: 465.0387, velocity: 14.55, time: 1803.0 },
+  { distance: 32625, force: 0.0, energy: 465.0387, velocity: 14.55, time: 1804.3571 },
+  { distance: 32650, force: 0.0, energy: 465.0387, velocity: 14.542, time: 1806.6 },
+  { distance: 32675, force: 0.0, energy: 465.0387, velocity: 14.5395, time: 1808.05 },
+  { distance: 32700, force: 0.0, energy: 465.0387, velocity: 14.527, time: 1809.6 },
+  { distance: 32725, force: 0.0, energy: 465.0387, velocity: 14.52, time: 1811.55 },
+  { distance: 32750, force: 0.0, energy: 465.0387, velocity: 14.512, time: 1813.6 },
+  { distance: 32775, force: 0.0, energy: 465.0387, velocity: 14.4995, time: 1815.05 },
+  { distance: 32800, force: 0.0, energy: 465.0387, velocity: 14.487, time: 1816.6 },
+  { distance: 32825, force: 0.0, energy: 465.0387, velocity: 14.48, time: 1818.55 },
+  { distance: 32850, force: 0.0, energy: 465.0387, velocity: 14.472, time: 1819.8 },
+  { distance: 32875, force: 0.0, energy: 465.0387, velocity: 14.46, time: 1822.05 },
+  { distance: 32900, force: 0.0, energy: 465.0387, velocity: 14.46, time: 1823.4286 },
+  { distance: 32925, force: 0.0, energy: 465.0387, velocity: 14.46, time: 1825.7 },
+  { distance: 32950, force: 0.0, energy: 465.0387, velocity: 14.461, time: 1827.1 },
+  { distance: 32975, force: 0.0, energy: 465.0387, velocity: 14.4735, time: 1828.7 },
+  { distance: 33000, force: 0.0, energy: 465.0387, velocity: 14.486, time: 1830.6 },
+  { distance: 33025, force: 0.0, energy: 465.0387, velocity: 14.4985, time: 1832.7 },
+  { distance: 33050, force: 0.0, energy: 465.0387, velocity: 14.522, time: 1834.1 },
+  { distance: 33075, force: 0.0, energy: 465.0387, velocity: 14.547, time: 1835.7 },
+  { distance: 33100, force: 0.0, energy: 465.0387, velocity: 14.572, time: 1837.6 },
+  { distance: 33125, force: 0.0, energy: 465.0387, velocity: 14.6055, time: 1838.85 },
+  { distance: 33150, force: 0.0, energy: 465.0387, velocity: 14.643, time: 1841.1 },
+  { distance: 33175, force: 0.0, energy: 465.0387, velocity: 14.6805, time: 1842.7 },
+  { distance: 33200, force: 0.0, energy: 465.0387, velocity: 14.724, time: 1844.6 },
+  { distance: 33225, force: 0.0, energy: 465.0387, velocity: 14.774, time: 1845.85 },
+  { distance: 33250, force: 0.0, energy: 465.0387, velocity: 14.824, time: 1848.1 },
+  { distance: 33275, force: 0.0, energy: 465.0387, velocity: 14.8775, time: 1849.35 },
+  { distance: 33300, force: 0.0, energy: 465.0387, velocity: 14.94, time: 1851.2 },
+  { distance: 33325, force: 0.0, energy: 465.0387, velocity: 15.0025, time: 1852.85 },
+  { distance: 33350, force: 0.0, energy: 465.0387, velocity: 15.065, time: 1854.2 },
+  { distance: 33375, force: 0.0, energy: 465.0387, velocity: 15.131, time: 1856.35 },
+  { distance: 33400, force: 0.0, energy: 465.0387, velocity: 15.206, time: 1857.6 },
+  { distance: 33425, force: 0.0, energy: 465.0387, velocity: 15.281, time: 1859.7 },
+  { distance: 33450, force: 0.0, energy: 465.0387, velocity: 15.357, time: 1861.1 },
+  { distance: 33475, force: 0.0, energy: 465.0387, velocity: 15.441, time: 1862.35 },
+  { distance: 33500, force: 0.0, energy: 465.0387, velocity: 15.52, time: 1864.0 },
+  { distance: 33525, force: 0.0, energy: 465.0387, velocity: 15.6082, time: 1865.4706 },
+  { distance: 33550, force: 0.0, energy: 465.0387, velocity: 15.695, time: 1867.0 },
+  { distance: 33575, force: 0.0, energy: 465.0387, velocity: 15.7809, time: 1868.5625 },
+  { distance: 33600, force: 0.0, energy: 465.0387, velocity: 15.8671, time: 1870.1538 },
+  { distance: 33625, force: 0.0, energy: 465.0387, velocity: 15.9555, time: 1872.0769 },
+  { distance: 33650, force: 0.0, energy: 465.0387, velocity: 16.044, time: 1874.0 },
+  { distance: 33675, force: 0.0, energy: 465.0387, velocity: 16.1335, time: 1875.0606 },
+  { distance: 33700, force: 0.0, energy: 465.0387, velocity: 16.2206, time: 1876.5758 },
+  { distance: 33725, force: 0.0, energy: 465.0387, velocity: 16.3077, time: 1878.0909 },
+  { distance: 33750, force: 0.0, energy: 465.0387, velocity: 16.395, time: 1879.5 },
+  { distance: 33775, force: 0.0, energy: 465.0387, velocity: 16.4834, time: 1881.0755 },
+  { distance: 33800, force: 0.0, energy: 465.0387, velocity: 16.5683, time: 1882.9623 },
+  { distance: 33825, force: 0.0, energy: 465.0387, velocity: 16.6532, time: 1884.8491 },
+  { distance: 33850, force: -43.5725, energy: 465.0387, velocity: 16.66, time: 1886.3577 },
+  { distance: 33875, force: -43.3016, energy: 465.0387, velocity: 16.66, time: 1887.8335 },
+  { distance: 33900, force: -43.0307, energy: 465.0387, velocity: 16.66, time: 1889.3093 },
+  { distance: 33925, force: -42.7598, energy: 465.0387, velocity: 16.66, time: 1890.7851 },
+  { distance: 33950, force: -42.4888, energy: 465.0387, velocity: 16.66, time: 1892.2609 },
+  { distance: 33975, force: -42.2179, energy: 465.0387, velocity: 16.66, time: 1893.7367 },
+  { distance: 34000, force: -41.947, energy: 465.0387, velocity: 16.66, time: 1895.2125 },
+  { distance: 34025, force: -41.6761, energy: 465.0387, velocity: 16.66, time: 1896.6883 },
+  { distance: 34050, force: -41.4052, energy: 465.0387, velocity: 16.66, time: 1898.1641 },
+  { distance: 34075, force: -41.1343, energy: 465.0387, velocity: 16.66, time: 1899.6399 },
+  { distance: 34100, force: -40.8633, energy: 465.0387, velocity: 16.66, time: 1901.1157 },
+  { distance: 34125, force: -40.5924, energy: 465.0387, velocity: 16.66, time: 1902.5915 },
+  { distance: 34150, force: -40.3215, energy: 465.0387, velocity: 16.66, time: 1904.0673 },
+  { distance: 34175, force: -40.0506, energy: 465.0387, velocity: 16.66, time: 1905.5431 },
+  { distance: 34200, force: -39.7797, energy: 465.0387, velocity: 16.66, time: 1907.0189 },
+  { distance: 34225, force: -39.5087, energy: 465.0387, velocity: 16.66, time: 1908.4947 },
+  { distance: 34250, force: -39.2378, energy: 465.0387, velocity: 16.66, time: 1909.9705 },
+  { distance: 34275, force: -38.9669, energy: 465.0387, velocity: 16.66, time: 1911.4463 },
+  { distance: 34300, force: -38.696, energy: 465.0387, velocity: 16.66, time: 1912.9221 },
+  { distance: 34325, force: -38.4251, energy: 465.0387, velocity: 16.66, time: 1914.3979 },
+  { distance: 34350, force: -38.1541, energy: 465.0387, velocity: 16.66, time: 1915.8737 },
+  { distance: 34375, force: -37.8832, energy: 465.0387, velocity: 16.66, time: 1917.3495 },
+  { distance: 34400, force: -37.6123, energy: 465.0387, velocity: 16.66, time: 1918.8253 },
+  { distance: 34425, force: -37.3414, energy: 465.0387, velocity: 16.66, time: 1920.3011 },
+  { distance: 34450, force: -37.0705, energy: 465.0387, velocity: 16.66, time: 1921.7769 },
+  { distance: 34475, force: -36.7996, energy: 465.0387, velocity: 16.66, time: 1923.2527 },
+  { distance: 34500, force: -36.5286, energy: 465.0387, velocity: 16.66, time: 1924.7285 },
+  { distance: 34525, force: -36.2577, energy: 465.0387, velocity: 16.66, time: 1926.2043 },
+  { distance: 34550, force: -35.9868, energy: 465.0387, velocity: 16.66, time: 1927.68 },
+  { distance: 34575, force: -35.7159, energy: 465.0387, velocity: 16.66, time: 1929.1558 },
+  { distance: 34600, force: -35.445, energy: 465.0387, velocity: 16.66, time: 1930.6316 },
+  { distance: 34625, force: -35.174, energy: 465.0387, velocity: 16.66, time: 1932.1074 },
+  { distance: 34650, force: -34.9031, energy: 465.0387, velocity: 16.66, time: 1933.5832 },
+  { distance: 34675, force: -34.6911, energy: 465.0387, velocity: 16.66, time: 1935.0619 },
+  { distance: 34700, force: -35.8934, energy: 465.0387, velocity: 16.66, time: 1936.6106 },
+  { distance: 34725, force: -37.0957, energy: 465.0387, velocity: 16.66, time: 1938.1593 },
+  { distance: 34750, force: -38.298, energy: 465.0387, velocity: 16.66, time: 1939.708 },
+  { distance: 34775, force: -39.5003, energy: 465.0387, velocity: 16.66, time: 1941.2566 },
+  { distance: 34800, force: -40.7026, energy: 465.0387, velocity: 16.66, time: 1942.8053 },
+  { distance: 34825, force: -41.9049, energy: 465.0387, velocity: 16.66, time: 1944.354 },
+  { distance: 34850, force: -43.1072, energy: 465.0387, velocity: 16.66, time: 1945.9027 },
+  { distance: 34875, force: -44.3095, energy: 465.0387, velocity: 16.66, time: 1947.4513 },
+  { distance: 34900, force: -45.5119, energy: 465.0387, velocity: 16.66, time: 1949.0 },
+  { distance: 34925, force: -44.3469, energy: 465.0387, velocity: 16.66, time: 1950.55 },
+  { distance: 34950, force: -42.4027, energy: 465.0387, velocity: 16.66, time: 1951.9796 },
+  { distance: 34975, force: -40.3988, energy: 465.0387, velocity: 16.66, time: 1953.5102 },
+  { distance: 35000, force: -38.395, energy: 465.0387, velocity: 16.66, time: 1955.0408 },
+  { distance: 35025, force: -36.3912, energy: 465.0387, velocity: 16.66, time: 1956.5714 },
+  { distance: 35050, force: -34.3873, energy: 465.0387, velocity: 16.66, time: 1958.102 },
+  { distance: 35075, force: -32.3835, energy: 465.0387, velocity: 16.66, time: 1959.6327 },
+  { distance: 35100, force: -30.3797, energy: 465.0387, velocity: 16.66, time: 1961.1633 },
+  { distance: 35125, force: -28.3758, energy: 465.0387, velocity: 16.66, time: 1962.6939 },
+  { distance: 35150, force: -25.972, energy: 465.0387, velocity: 16.66, time: 1964.1765 },
+  { distance: 35175, force: -23.4483, energy: 465.0387, velocity: 16.66, time: 1965.6525 },
+  { distance: 35200, force: -20.8994, energy: 465.0387, velocity: 16.66, time: 1967.1356 },
+  { distance: 35225, force: -18.3506, energy: 465.0387, velocity: 16.66, time: 1968.6186 },
+  { distance: 35250, force: -15.8017, energy: 465.0387, velocity: 16.66, time: 1970.1017 },
+  { distance: 35275, force: -13.2528, energy: 465.0387, velocity: 16.66, time: 1971.5847 },
+  { distance: 35300, force: -10.7039, energy: 465.0387, velocity: 16.66, time: 1973.0678 },
+  { distance: 35325, force: -8.155, energy: 465.0387, velocity: 16.66, time: 1974.5508 },
+  { distance: 35350, force: -5.6062, energy: 465.0387, velocity: 16.66, time: 1976.0339 },
+  { distance: 35375, force: -3.0573, energy: 465.0387, velocity: 16.66, time: 1977.5169 },
+  { distance: 35400, force: -0.5084, energy: 465.0387, velocity: 16.66, time: 1979.0 },
+  { distance: 35425, force: -0.5463, energy: 465.0387, velocity: 16.66, time: 1980.4706 },
+  { distance: 35450, force: -0.7333, energy: 465.0387, velocity: 16.66, time: 1981.9611 },
+  { distance: 35475, force: -1.0042, energy: 465.0387, velocity: 16.66, time: 1983.4629 },
+  { distance: 35500, force: -1.2751, energy: 465.0387, velocity: 16.66, time: 1984.9647 },
+  { distance: 35525, force: -1.5461, energy: 465.0387, velocity: 16.66, time: 1986.4664 },
+  { distance: 35550, force: -1.817, energy: 465.0387, velocity: 16.66, time: 1987.9682 },
+  { distance: 35575, force: -2.0879, energy: 465.0387, velocity: 16.66, time: 1989.47 },
+  { distance: 35600, force: -2.3588, energy: 465.0387, velocity: 16.66, time: 1990.9717 },
+  { distance: 35625, force: -2.6297, energy: 465.0387, velocity: 16.66, time: 1992.4735 },
+  { distance: 35650, force: -2.9007, energy: 465.0387, velocity: 16.66, time: 1993.9753 },
+  { distance: 35675, force: -3.1716, energy: 465.0387, velocity: 16.66, time: 1995.477 },
+  { distance: 35700, force: -3.4425, energy: 465.0387, velocity: 16.66, time: 1996.9788 },
+  { distance: 35725, force: -3.7134, energy: 465.0387, velocity: 16.66, time: 1998.4806 },
+  { distance: 35750, force: -3.9843, energy: 465.0387, velocity: 16.66, time: 1999.9823 },
+  { distance: 35775, force: -4.2552, energy: 465.0387, velocity: 16.66, time: 2001.4841 },
+  { distance: 35800, force: -4.5262, energy: 465.0387, velocity: 16.66, time: 2002.9859 },
+  { distance: 35825, force: -4.7971, energy: 465.0387, velocity: 16.66, time: 2004.4876 },
+  { distance: 35850, force: -5.068, energy: 465.0387, velocity: 16.66, time: 2005.9894 },
+  { distance: 35875, force: -5.3389, energy: 465.0387, velocity: 16.66, time: 2007.4912 },
+  { distance: 35900, force: -5.6098, energy: 465.0387, velocity: 16.66, time: 2008.9929 },
+  { distance: 35925, force: -5.8808, energy: 465.0387, velocity: 16.66, time: 2010.4947 },
+  { distance: 35950, force: -6.1517, energy: 465.0387, velocity: 16.66, time: 2011.9965 },
+  { distance: 35975, force: -6.4226, energy: 465.0387, velocity: 16.66, time: 2013.4982 },
+  { distance: 36000, force: -6.6935, energy: 465.0387, velocity: 16.66, time: 2015.0 },
+  { distance: 36025, force: -5.613, energy: 465.0387, velocity: 16.66, time: 2016.4706 },
+  { distance: 36050, force: -4.4545, energy: 465.0387, velocity: 16.66, time: 2017.8 },
+  { distance: 36075, force: -3.3323, energy: 465.0387, velocity: 16.66, time: 2019.0714 },
+  { distance: 36100, force: -4.1339, energy: 465.0387, velocity: 16.66, time: 2020.8571 },
+  { distance: 36125, force: -4.9354, energy: 465.0387, velocity: 16.66, time: 2022.6429 },
+  { distance: 36150, force: -7.1252, energy: 465.0387, velocity: 16.66, time: 2024.1765 },
+  { distance: 36175, force: -9.7308, energy: 465.0387, velocity: 16.66, time: 2025.6286 },
+  { distance: 36200, force: -12.424, energy: 465.0387, velocity: 16.66, time: 2027.0571 },
+  { distance: 36225, force: -15.1171, energy: 465.0387, velocity: 16.66, time: 2028.4857 },
+  { distance: 36250, force: -17.8103, energy: 465.0387, velocity: 16.66, time: 2029.9143 },
+  { distance: 36275, force: -20.5034, energy: 465.0387, velocity: 16.66, time: 2031.3429 },
+  { distance: 36300, force: -23.1966, energy: 465.0387, velocity: 16.66, time: 2032.7714 },
+  { distance: 36325, force: -26.3476, energy: 465.0387, velocity: 16.66, time: 2034.2444 },
+  { distance: 36350, force: -29.5858, energy: 465.0387, velocity: 16.66, time: 2035.7259 },
+  { distance: 36375, force: -32.824, energy: 465.0387, velocity: 16.66, time: 2037.2074 },
+  { distance: 36400, force: -36.0622, energy: 465.0387, velocity: 16.66, time: 2038.6889 },
+  { distance: 36425, force: -39.3004, energy: 465.0387, velocity: 16.66, time: 2040.1704 },
+  { distance: 36450, force: -42.5386, energy: 465.0387, velocity: 16.66, time: 2041.6519 },
+  { distance: 36475, force: -45.7768, energy: 465.0387, velocity: 16.66, time: 2043.1333 },
+  { distance: 36500, force: -49.015, energy: 465.0387, velocity: 16.66, time: 2044.6148 },
+  { distance: 36525, force: -52.2532, energy: 465.0387, velocity: 16.66, time: 2046.0963 },
+  { distance: 36550, force: -55.4914, energy: 465.0387, velocity: 16.66, time: 2047.5778 },
+  { distance: 36575, force: -58.6168, energy: 465.0387, velocity: 16.66, time: 2049.0641 },
+  { distance: 36600, force: -59.0352, energy: 465.0387, velocity: 16.66, time: 2050.6667 },
+  { distance: 36625, force: -59.4536, energy: 465.0387, velocity: 16.66, time: 2052.2692 },
+  { distance: 36650, force: -59.872, energy: 465.0387, velocity: 16.66, time: 2053.8718 },
+  { distance: 36675, force: -60.2904, energy: 465.0387, velocity: 16.66, time: 2055.4744 },
+  { distance: 36700, force: -60.7088, energy: 465.0387, velocity: 16.66, time: 2057.0769 },
+  { distance: 36725, force: -61.1272, energy: 465.0387, velocity: 16.66, time: 2058.6795 },
+  { distance: 36750, force: -60.1574, energy: 465.0387, velocity: 16.66, time: 2060.1765 },
+  { distance: 36775, force: -58.7717, energy: 465.0387, velocity: 16.66, time: 2061.6525 },
+  { distance: 36800, force: -57.2985, energy: 465.0387, velocity: 16.66, time: 2063.1356 },
+  { distance: 36825, force: -55.8253, energy: 465.0387, velocity: 16.66, time: 2064.6186 },
+  { distance: 36850, force: -54.352, energy: 465.0387, velocity: 16.66, time: 2066.1017 },
+  { distance: 36875, force: -52.8788, energy: 465.0387, velocity: 16.66, time: 2067.5847 },
+  { distance: 36900, force: -51.4056, energy: 465.0387, velocity: 16.66, time: 2069.0678 },
+  { distance: 36925, force: -49.9324, energy: 465.0387, velocity: 16.66, time: 2070.5508 },
+  { distance: 36950, force: -48.4592, energy: 465.0387, velocity: 16.66, time: 2072.0339 },
+  { distance: 36975, force: -46.9859, energy: 465.0387, velocity: 16.66, time: 2073.5169 },
+  { distance: 37000, force: -45.5127, energy: 465.0387, velocity: 16.66, time: 2075.0 },
+  { distance: 37025, force: -44.1865, energy: 465.0387, velocity: 16.66, time: 2076.4706 },
+  { distance: 37050, force: -42.8689, energy: 465.0387, velocity: 16.66, time: 2077.9143 },
+  { distance: 37075, force: -41.5559, energy: 465.0387, velocity: 16.66, time: 2079.3429 },
+  { distance: 37100, force: -40.243, energy: 465.0387, velocity: 16.66, time: 2080.7714 },
+  { distance: 37125, force: -38.9301, energy: 465.0387, velocity: 16.66, time: 2082.2 },
+  { distance: 37150, force: -37.6172, energy: 465.0387, velocity: 16.66, time: 2083.6286 },
+  { distance: 37175, force: -36.3632, energy: 465.0387, velocity: 16.66, time: 2085.0615 },
+  { distance: 37200, force: -36.5235, energy: 465.0387, velocity: 16.66, time: 2086.6 },
+  { distance: 37225, force: -36.6838, energy: 465.0387, velocity: 16.66, time: 2088.1385 },
+  { distance: 37250, force: -36.8441, energy: 465.0387, velocity: 16.66, time: 2089.6769 },
+  { distance: 37275, force: -37.0044, energy: 465.0387, velocity: 16.66, time: 2091.2154 },
+  { distance: 37300, force: -37.1648, energy: 465.0387, velocity: 16.66, time: 2092.7538 },
+  { distance: 37325, force: -35.7361, energy: 465.0387, velocity: 16.66, time: 2094.3125 },
+  { distance: 37350, force: -34.0048, energy: 465.0387, velocity: 16.66, time: 2095.875 },
+  { distance: 37375, force: -32.2735, energy: 465.0387, velocity: 16.66, time: 2097.4375 },
+  { distance: 37400, force: -30.5422, energy: 465.0387, velocity: 16.66, time: 2099.0 },
+  { distance: 37425, force: -28.6638, energy: 465.0387, velocity: 16.66, time: 2100.4706 },
+  { distance: 37450, force: -26.7769, energy: 465.0387, velocity: 16.66, time: 2101.9624 },
+  { distance: 37475, force: -24.8853, energy: 465.0387, velocity: 16.66, time: 2103.4662 },
+  { distance: 37500, force: -22.9937, energy: 465.0387, velocity: 16.66, time: 2104.9699 },
+  { distance: 37525, force: -21.1021, energy: 465.0387, velocity: 16.66, time: 2106.4737 },
+  { distance: 37550, force: -19.2104, energy: 465.0387, velocity: 16.66, time: 2107.9774 },
+  { distance: 37575, force: -17.3188, energy: 465.0387, velocity: 16.66, time: 2109.4812 },
+  { distance: 37600, force: -15.4272, energy: 465.0387, velocity: 16.66, time: 2110.985 },
+  { distance: 37625, force: -13.5356, energy: 465.0387, velocity: 16.66, time: 2112.4887 },
+  { distance: 37650, force: -11.6439, energy: 465.0387, velocity: 16.66, time: 2113.9925 },
+  { distance: 37675, force: -9.7523, energy: 465.0387, velocity: 16.66, time: 2115.4962 },
+  { distance: 37700, force: -7.8607, energy: 465.0387, velocity: 16.66, time: 2117.0 },
+  { distance: 37725, force: -6.1897, energy: 465.0387, velocity: 16.66, time: 2118.4706 },
+  { distance: 37750, force: -4.5313, energy: 465.0387, velocity: 16.66, time: 2119.9524 },
+  { distance: 37775, force: -2.8802, energy: 465.0387, velocity: 16.66, time: 2121.4405 },
+  { distance: 37800, force: -1.229, energy: 465.0387, velocity: 16.66, time: 2122.9286 },
+  { distance: 37825, force: 0.4221, energy: 465.053, velocity: 16.66, time: 2124.407 },
+  { distance: 37850, force: 2.0733, energy: 465.138, velocity: 16.66, time: 2125.8605 },
+  { distance: 37875, force: 3.7245, energy: 465.3355, velocity: 16.66, time: 2127.314 },
+  { distance: 37900, force: 5.3756, energy: 465.6455, velocity: 16.66, time: 2128.7674 },
+  { distance: 37925, force: 0.0, energy: 465.8286, velocity: 16.6495, time: 2130.1 },
+  { distance: 37950, force: 0.0, energy: 465.8286, velocity: 16.64, time: 2132.3 },
+  { distance: 37975, force: 0.0, energy: 465.8286, velocity: 16.6345, time: 2133.55 },
+  { distance: 38000, force: 0.0, energy: 465.8286, velocity: 16.622, time: 2134.8 },
+  { distance: 38025, force: 0.0, energy: 465.8286, velocity: 16.61, time: 2136.1 },
+  { distance: 38050, force: 0.0, energy: 465.8286, velocity: 16.607, time: 2138.3 },
+  { distance: 38075, force: 0.0, energy: 465.8286, velocity: 16.5945, time: 2139.55 },
+  { distance: 38100, force: 0.0, energy: 465.8286, velocity: 16.59, time: 2141.0 },
+  { distance: 38125, force: 0.0, energy: 465.8286, velocity: 16.58, time: 2142.3571 },
+  { distance: 38150, force: 0.0, energy: 465.8286, velocity: 16.58, time: 2143.8 },
+  { distance: 38175, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2145.1 },
+  { distance: 38200, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2147.3 },
+  { distance: 38225, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2148.55 },
+  { distance: 38250, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2149.8 },
+  { distance: 38275, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2151.75 },
+  { distance: 38300, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2153.0 },
+  { distance: 38325, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2154.3571 },
+  { distance: 38350, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2155.6667 },
+  { distance: 38375, force: 0.0, energy: 465.8286, velocity: 16.57, time: 2157.4167 },
+  { distance: 38400, force: 0.0, energy: 465.8286, velocity: 16.5778, time: 2158.7826 },
+  { distance: 38425, force: 0.0, energy: 465.8286, velocity: 16.58, time: 2160.7391 },
+  { distance: 38450, force: 0.0, energy: 465.8286, velocity: 16.58, time: 2161.9565 },
+  { distance: 38475, force: 0.0, energy: 465.8286, velocity: 16.58, time: 2163.1905 },
+  { distance: 38500, force: 0.0, energy: 465.8286, velocity: 16.58, time: 2165.3 },
+  { distance: 38525, force: 0.0, energy: 465.8286, velocity: 16.58, time: 2166.5238 },
+  { distance: 38550, force: 0.0, energy: 465.8286, velocity: 16.58, time: 2167.75 },
+  { distance: 38575, force: 0.0, energy: 465.8286, velocity: 16.59, time: 2169.1 },
+  { distance: 38600, force: 0.0, energy: 465.8286, velocity: 16.59, time: 2171.3 },
+  { distance: 38625, force: 0.0, energy: 465.8286, velocity: 16.59, time: 2172.55 },
+  { distance: 38650, force: 0.0, energy: 465.8286, velocity: 16.59, time: 2173.8 },
+  { distance: 38675, force: 0.0, energy: 465.8286, velocity: 16.5905, time: 2176.05 },
+  { distance: 38700, force: 0.0, energy: 465.8286, velocity: 16.6, time: 2177.3 },
+  { distance: 38725, force: 0.0, energy: 465.8286, velocity: 16.6, time: 2178.55 },
+  { distance: 38750, force: 0.0, energy: 465.8286, velocity: 16.6, time: 2179.8 },
+  { distance: 38775, force: 0.0, energy: 465.8286, velocity: 16.61, time: 2182.05 },
+  { distance: 38800, force: 0.0, energy: 465.8286, velocity: 16.61, time: 2183.3 },
+  { distance: 38825, force: 0.0, energy: 465.8286, velocity: 16.61, time: 2184.55 },
+  { distance: 38850, force: 0.0, energy: 465.8286, velocity: 16.618, time: 2185.8 },
+  { distance: 38875, force: 0.0, energy: 465.8286, velocity: 16.6205, time: 2188.05 },
+  { distance: 38900, force: 0.0, energy: 465.8286, velocity: 16.63, time: 2189.3 },
+  { distance: 38925, force: 0.0, energy: 465.8286, velocity: 16.63, time: 2190.55 },
+  { distance: 38950, force: 0.0, energy: 465.8286, velocity: 16.638, time: 2191.8 },
+  { distance: 38975, force: 0.0, energy: 465.8286, velocity: 16.64, time: 2194.05 },
+  { distance: 39000, force: 0.0, energy: 465.8286, velocity: 16.643, time: 2195.3 },
+  { distance: 39025, force: 0.0, energy: 465.8286, velocity: 16.65, time: 2196.55 },
+  { distance: 39050, force: 0.0, energy: 465.8286, velocity: 16.65, time: 2197.8 },
+  { distance: 39075, force: 0.0, energy: 465.8286, velocity: 16.6505, time: 2200.05 },
+  { distance: 39100, force: 0.0, energy: 465.8286, velocity: 16.66, time: 2201.3 },
+  { distance: 39125, force: 0.0, energy: 465.8286, velocity: 16.66, time: 2202.55 },
+  { distance: 39150, force: -1.3283, energy: 465.8286, velocity: 16.66, time: 2204.4275 },
+  { distance: 39175, force: -1.2321, energy: 465.8286, velocity: 16.66, time: 2205.9542 },
+  { distance: 39200, force: -1.136, energy: 465.8286, velocity: 16.66, time: 2207.4809 },
+  { distance: 39225, force: -1.0398, energy: 465.8286, velocity: 16.66, time: 2209.0076 },
+  { distance: 39250, force: -0.9436, energy: 465.8286, velocity: 16.66, time: 2210.5344 },
+  { distance: 39275, force: -0.8301, energy: 465.8286, velocity: 16.66, time: 2212.05 },
+  { distance: 39300, force: 0.0, energy: 465.8286, velocity: 16.66, time: 2213.3 },
+  { distance: 39325, force: 0.0, energy: 465.8286, velocity: 16.66, time: 2214.55 },
+  { distance: 39350, force: 0.0, energy: 465.8286, velocity: 16.66, time: 2215.8421 },
+  { distance: 39375, force: 0.0, energy: 465.8286, velocity: 16.66, time: 2218.1 },
+  { distance: 39400, force: 0.0, energy: 465.8286, velocity: 16.66, time: 2219.0 },
+  { distance: 39425, force: 0.0, energy: 465.8286, velocity: 16.65, time: 2220.3571 },
+  { distance: 39450, force: 0.0, energy: 465.8286, velocity: 16.65, time: 2221.8 },
+  { distance: 39475, force: 0.0, energy: 465.8286, velocity: 16.6395, time: 2224.05 },
+  { distance: 39500, force: 0.0, energy: 465.8286, velocity: 16.63, time: 2225.3 },
+  { distance: 39525, force: 0.0, energy: 465.8286, velocity: 16.6245, time: 2226.55 },
+  { distance: 39550, force: 0.0, energy: 465.8286, velocity: 16.612, time: 2227.8 },
+  { distance: 39575, force: 0.0, energy: 465.8286, velocity: 16.6095, time: 2230.05 },
+  { distance: 39600, force: 0.0, energy: 465.8286, velocity: 16.6, time: 2231.0 },
+  { distance: 39625, force: 0.0, energy: 465.8286, velocity: 16.5922, time: 2232.5625 },
+  { distance: 39650, force: 0.0, energy: 465.8286, velocity: 16.5833, time: 2234.3333 },
+  { distance: 39675, force: 0.0, energy: 465.8286, velocity: 16.5729, time: 2235.7083 },
+  { distance: 39700, force: 0.0, energy: 465.8286, velocity: 16.5622, time: 2237.5652 },
+  { distance: 39725, force: 0.0, energy: 465.8286, velocity: 16.5517, time: 2238.8333 },
+  { distance: 39750, force: 0.0, energy: 465.8286, velocity: 16.55, time: 2239.9545 },
+  { distance: 39775, force: 0.0, energy: 465.8286, velocity: 16.5391, time: 2242.0909 },
+  { distance: 39800, force: 0.0, energy: 465.8286, velocity: 16.53, time: 2243.0 },
+  { distance: 39825, force: 0.0, energy: 465.8286, velocity: 16.5275, time: 2244.5 },
+  { distance: 39850, force: 0.0, energy: 465.8286, velocity: 16.52, time: 2246.0 },
+  { distance: 39875, force: 0.0, energy: 465.8286, velocity: 16.51, time: 2248.05 },
+  { distance: 39900, force: 0.0, energy: 465.8286, velocity: 16.51, time: 2249.3 },
+  { distance: 39925, force: 0.0, energy: 465.8286, velocity: 16.51, time: 2250.55 },
+  { distance: 39950, force: 0.0, energy: 465.8286, velocity: 16.51, time: 2252.6842 },
+  { distance: 39975, force: 0.0, energy: 465.8286, velocity: 16.51, time: 2254.1 },
+  { distance: 40000, force: 0.0, energy: 465.8286, velocity: 16.51, time: 2255.35 },
+  { distance: 40025, force: 0.0, energy: 465.8286, velocity: 16.51, time: 2256.6 },
+  { distance: 40050, force: 0.0, energy: 465.8286, velocity: 16.5185, time: 2258.7 },
+  { distance: 40075, force: 0.0, energy: 465.8286, velocity: 16.521, time: 2260.1 },
+  { distance: 40100, force: 0.0, energy: 465.8286, velocity: 16.5335, time: 2261.35 },
+  { distance: 40125, force: 0.0, energy: 465.8286, velocity: 16.54, time: 2262.6 },
+  { distance: 40150, force: 0.0, energy: 465.8286, velocity: 16.5485, time: 2264.7 },
+  { distance: 40175, force: 0.0, energy: 465.8286, velocity: 16.561, time: 2266.1 },
+  { distance: 40200, force: 0.0, energy: 465.8286, velocity: 16.5735, time: 2267.35 },
+  { distance: 40225, force: 0.0, energy: 465.8286, velocity: 16.592, time: 2268.6 },
+  { distance: 40250, force: 0.0, energy: 465.8286, velocity: 16.6085, time: 2270.7 },
+  { distance: 40275, force: 0.0, energy: 465.8286, velocity: 16.622, time: 2272.1 },
+  { distance: 40300, force: 0.0, energy: 465.8286, velocity: 16.64, time: 2273.0 },
+  { distance: 40325, force: -10.1611, energy: 465.8286, velocity: 16.66, time: 2275.0 },
+  { distance: 40350, force: -10.3537, energy: 465.8286, velocity: 16.66, time: 2276.0 },
+  { distance: 40375, force: -10.53, energy: 465.8286, velocity: 16.66, time: 2277.5625 },
+  { distance: 40400, force: -10.7063, energy: 465.8286, velocity: 16.66, time: 2279.125 },
+  { distance: 40425, force: -10.8827, energy: 465.8286, velocity: 16.66, time: 2280.6875 },
+  { distance: 40450, force: -11.059, energy: 465.8286, velocity: 16.66, time: 2282.25 },
+  { distance: 40475, force: -11.2354, energy: 465.8286, velocity: 16.66, time: 2283.8125 },
+  { distance: 40500, force: -11.4117, energy: 465.8286, velocity: 16.66, time: 2285.375 },
+  { distance: 40525, force: -11.588, energy: 465.8286, velocity: 16.66, time: 2286.9375 },
+  { distance: 40550, force: -11.7644, energy: 465.8286, velocity: 16.66, time: 2288.5 },
+  { distance: 40575, force: -11.9465, energy: 465.8286, velocity: 16.66, time: 2290.06 },
+  { distance: 40600, force: -12.2671, energy: 465.8286, velocity: 16.66, time: 2291.56 },
+  { distance: 40625, force: -12.5877, energy: 465.8286, velocity: 16.66, time: 2293.06 },
+  { distance: 40650, force: -12.9083, energy: 465.8286, velocity: 16.66, time: 2294.56 },
+  { distance: 40675, force: -13.2289, energy: 465.8286, velocity: 16.66, time: 2296.06 },
+  { distance: 40700, force: -13.5495, energy: 465.8286, velocity: 16.66, time: 2297.56 },
+  { distance: 40725, force: -13.8702, energy: 465.8286, velocity: 16.66, time: 2299.06 },
+  { distance: 40750, force: -14.1908, energy: 465.8286, velocity: 16.66, time: 2300.56 },
+  { distance: 40775, force: -14.5024, energy: 465.8286, velocity: 16.66, time: 2302.0581 },
+  { distance: 40800, force: -14.5986, energy: 465.8286, velocity: 16.66, time: 2303.5116 },
+  { distance: 40825, force: -14.6948, energy: 465.8286, velocity: 16.66, time: 2304.9651 },
+  { distance: 40850, force: -14.791, energy: 465.8286, velocity: 16.66, time: 2306.4186 },
+  { distance: 40875, force: -14.9842, energy: 465.8286, velocity: 16.66, time: 2307.8824 },
+  { distance: 40900, force: -15.2457, energy: 465.8286, velocity: 16.66, time: 2309.36 },
+  { distance: 40925, force: -15.5182, energy: 465.8286, velocity: 16.66, time: 2310.86 },
+  { distance: 40950, force: -15.7907, energy: 465.8286, velocity: 16.66, time: 2312.36 },
+  { distance: 40975, force: -16.0632, energy: 465.8286, velocity: 16.66, time: 2313.86 },
+  { distance: 41000, force: -16.1818, energy: 465.8286, velocity: 16.66, time: 2315.3625 },
+  { distance: 41025, force: -15.8131, energy: 465.8286, velocity: 16.66, time: 2316.8729 },
+  { distance: 41050, force: -15.4444, energy: 465.8286, velocity: 16.66, time: 2318.3833 },
+  { distance: 41075, force: -15.0757, energy: 465.8286, velocity: 16.66, time: 2319.8938 },
+  { distance: 41100, force: -14.707, energy: 465.8286, velocity: 16.66, time: 2321.4042 },
+  { distance: 41125, force: -14.3383, energy: 465.8286, velocity: 16.66, time: 2322.9146 },
+  { distance: 41150, force: -13.9696, energy: 465.8286, velocity: 16.66, time: 2324.425 },
+  { distance: 41175, force: -13.6009, energy: 465.8286, velocity: 16.66, time: 2325.9354 },
+  { distance: 41200, force: -13.2322, energy: 465.8286, velocity: 16.66, time: 2327.4458 },
+  { distance: 41225, force: -12.8635, energy: 465.8286, velocity: 16.66, time: 2328.9563 },
+  { distance: 41250, force: -12.4948, energy: 465.8286, velocity: 16.66, time: 2330.4667 },
+  { distance: 41275, force: -12.1261, energy: 465.8286, velocity: 16.66, time: 2331.9771 },
+  { distance: 41300, force: -11.7574, energy: 465.8286, velocity: 16.66, time: 2333.4875 },
+  { distance: 41325, force: -11.3887, energy: 465.8286, velocity: 16.66, time: 2334.9979 },
+  { distance: 41350, force: -11.02, energy: 465.8286, velocity: 16.66, time: 2336.5083 },
+  { distance: 41375, force: -10.6513, energy: 465.8286, velocity: 16.66, time: 2338.0188 },
+  { distance: 41400, force: -10.2825, energy: 465.8286, velocity: 16.66, time: 2339.5292 },
+  { distance: 41425, force: -9.9138, energy: 465.8286, velocity: 16.66, time: 2341.0396 },
+  { distance: 41450, force: -9.5451, energy: 465.8286, velocity: 16.66, time: 2342.55 },
+  { distance: 41475, force: -9.1982, energy: 465.8286, velocity: 16.66, time: 2344.0602 },
+  { distance: 41500, force: -9.3746, energy: 465.8286, velocity: 16.66, time: 2345.5639 },
+  { distance: 41525, force: -9.5509, energy: 465.8286, velocity: 16.66, time: 2347.0677 },
+  { distance: 41550, force: -9.7272, energy: 465.8286, velocity: 16.66, time: 2348.5714 },
+  { distance: 41575, force: -9.9036, energy: 465.8286, velocity: 16.66, time: 2350.0752 },
+  { distance: 41600, force: -10.0799, energy: 465.8286, velocity: 16.66, time: 2351.5789 },
+  { distance: 41625, force: -10.2563, energy: 465.8286, velocity: 16.66, time: 2353.0827 },
+  { distance: 41650, force: -10.4326, energy: 465.8286, velocity: 16.66, time: 2354.5865 },
+  { distance: 41675, force: -10.6089, energy: 465.8286, velocity: 16.66, time: 2356.0902 },
+  { distance: 41700, force: -10.7853, energy: 465.8286, velocity: 16.66, time: 2357.594 },
+  { distance: 41725, force: -10.9616, energy: 465.8286, velocity: 16.66, time: 2359.0977 },
+  { distance: 41750, force: -10.9262, energy: 465.8286, velocity: 16.66, time: 2360.5882 },
+  { distance: 41775, force: -10.5712, energy: 465.8286, velocity: 16.66, time: 2362.0575 },
+  { distance: 41800, force: -10.1704, energy: 465.8286, velocity: 16.66, time: 2363.4956 },
+  { distance: 41825, force: -9.7697, energy: 465.8286, velocity: 16.66, time: 2364.9336 },
+  { distance: 41850, force: -9.3689, energy: 465.8286, velocity: 16.66, time: 2366.3717 },
+  { distance: 41875, force: -8.9681, energy: 465.8286, velocity: 16.66, time: 2367.8097 },
+  { distance: 41900, force: -8.5674, energy: 465.8286, velocity: 16.66, time: 2369.2478 },
+  { distance: 41925, force: -8.1666, energy: 465.8286, velocity: 16.66, time: 2370.6858 },
+  { distance: 41950, force: -7.7658, energy: 465.8286, velocity: 16.66, time: 2372.1239 },
+  { distance: 41975, force: -7.3651, energy: 465.8286, velocity: 16.66, time: 2373.5619 },
+  { distance: 42000, force: -6.9643, energy: 465.8286, velocity: 16.66, time: 2375.0 },
+  { distance: 42025, force: -6.9606, energy: 465.8286, velocity: 16.66, time: 2376.4706 },
+  { distance: 42050, force: -6.8669, energy: 465.8286, velocity: 16.66, time: 2377.9639 },
+  { distance: 42075, force: -6.7226, energy: 465.8286, velocity: 16.66, time: 2379.4699 },
+  { distance: 42100, force: -6.5784, energy: 465.8286, velocity: 16.66, time: 2380.9759 },
+  { distance: 42125, force: -6.4341, energy: 465.8286, velocity: 16.66, time: 2382.4819 },
+  { distance: 42150, force: -6.2898, energy: 465.8286, velocity: 16.66, time: 2383.988 },
+  { distance: 42175, force: -6.1455, energy: 465.8286, velocity: 16.66, time: 2385.494 },
+  { distance: 42200, force: -6.0013, energy: 465.8286, velocity: 16.66, time: 2387.0 },
+  { distance: 42225, force: -5.5334, energy: 465.8286, velocity: 16.66, time: 2388.4706 },
+  { distance: 42250, force: -5.047, energy: 465.8286, velocity: 16.66, time: 2389.9624 },
+  { distance: 42275, force: -4.55, energy: 465.8286, velocity: 16.66, time: 2391.4662 },
+  { distance: 42300, force: -4.0531, energy: 465.8286, velocity: 16.66, time: 2392.9699 },
+  { distance: 42325, force: -3.5561, energy: 465.8286, velocity: 16.66, time: 2394.4737 },
+  { distance: 42350, force: -3.0592, energy: 465.8286, velocity: 16.66, time: 2395.9774 },
+  { distance: 42375, force: -2.5622, energy: 465.8286, velocity: 16.66, time: 2397.4812 },
+  { distance: 42400, force: -2.0653, energy: 465.8286, velocity: 16.66, time: 2398.985 },
+  { distance: 42425, force: -1.5683, energy: 465.8286, velocity: 16.66, time: 2400.4887 },
+  { distance: 42450, force: -1.0714, energy: 465.8286, velocity: 16.66, time: 2401.9925 },
+  { distance: 42475, force: -0.5744, energy: 465.8286, velocity: 16.66, time: 2403.4962 },
+  { distance: 42500, force: -0.0775, energy: 465.8286, velocity: 16.66, time: 2405.0 },
+  { distance: 42525, force: 0.9342, energy: 465.8604, velocity: 16.66, time: 2406.5152 },
+  { distance: 42550, force: 0.0, energy: 465.8922, velocity: 16.66, time: 2408.8 },
+  { distance: 42575, force: 0.0, energy: 465.8922, velocity: 16.65, time: 2410.05 },
+  { distance: 42600, force: 0.0, energy: 465.8922, velocity: 16.647, time: 2411.3 },
+  { distance: 42625, force: 0.0, energy: 465.8922, velocity: 16.6345, time: 2413.1 },
+  { distance: 42650, force: 0.0, energy: 465.8922, velocity: 16.63, time: 2414.8 },
+  { distance: 42675, force: 0.0, energy: 465.8922, velocity: 16.6095, time: 2416.05 },
+  { distance: 42700, force: 0.0, energy: 465.8922, velocity: 16.597, time: 2417.3 },
+  { distance: 42725, force: 0.0, energy: 465.8922, velocity: 16.579, time: 2419.1 },
+  { distance: 42750, force: 0.0, energy: 465.8922, velocity: 16.562, time: 2420.8 },
+  { distance: 42775, force: 0.0, energy: 465.8922, velocity: 16.539, time: 2422.05 },
+  { distance: 42800, force: 0.0, energy: 465.8922, velocity: 16.514, time: 2423.3 },
+  { distance: 42825, force: 0.0, energy: 465.8922, velocity: 16.489, time: 2425.1 },
+  { distance: 42850, force: 0.0, energy: 465.8922, velocity: 16.464, time: 2426.8 },
+  { distance: 42875, force: 0.0, energy: 465.8922, velocity: 16.429, time: 2428.05 },
+  { distance: 42900, force: 0.0, energy: 465.8922, velocity: 16.401, time: 2429.3 },
+  { distance: 42925, force: 0.0, energy: 465.8922, velocity: 16.3635, time: 2431.1 },
+  { distance: 42950, force: 0.0, energy: 465.8922, velocity: 16.334, time: 2432.8 },
+  { distance: 42975, force: 0.0, energy: 465.8922, velocity: 16.2985, time: 2434.05 },
+  { distance: 43000, force: 0.0, energy: 465.8922, velocity: 16.261, time: 2435.6 },
+  { distance: 43025, force: 0.0, energy: 465.8922, velocity: 16.2235, time: 2437.55 },
+  { distance: 43050, force: 0.0, energy: 465.8922, velocity: 16.178, time: 2438.8 },
+  { distance: 43075, force: 0.0, energy: 465.8922, velocity: 16.1385, time: 2440.1 },
+  { distance: 43100, force: 0.0, energy: 465.8922, velocity: 16.1, time: 2442.0 },
+  { distance: 43125, force: 0.0, energy: 465.8922, velocity: 16.0593, time: 2443.3571 },
+  { distance: 43150, force: 0.0, energy: 465.8922, velocity: 16.016, time: 2444.8 },
+  { distance: 43175, force: 0.0, energy: 465.8922, velocity: 15.9785, time: 2447.05 },
+  { distance: 43200, force: 0.0, energy: 465.8922, velocity: 15.944, time: 2448.3 },
+  { distance: 43225, force: 0.0, energy: 465.8922, velocity: 15.9135, time: 2449.55 },
+  { distance: 43250, force: 0.0, energy: 465.8922, velocity: 15.884, time: 2451.6 },
+  { distance: 43275, force: 0.0, energy: 465.8922, velocity: 15.849, time: 2453.05 },
+  { distance: 43300, force: 0.0, energy: 465.8922, velocity: 15.821, time: 2454.3 },
+  { distance: 43325, force: 0.0, energy: 465.8922, velocity: 15.789, time: 2456.1 },
+  { distance: 43350, force: 0.0, energy: 465.8922, velocity: 15.764, time: 2457.8 },
+  { distance: 43375, force: 0.0, energy: 465.8922, velocity: 15.739, time: 2459.05 },
+  { distance: 43400, force: 0.0, energy: 465.8922, velocity: 15.714, time: 2460.6 },
+  { distance: 43425, force: 0.0, energy: 465.8922, velocity: 15.6931, time: 2462.6875 },
+  { distance: 43450, force: 0.0, energy: 465.8922, velocity: 15.6724, time: 2464.1765 },
+  { distance: 43475, force: 0.0, energy: 465.8922, velocity: 15.6516, time: 2465.681 },
+  { distance: 43500, force: 0.0, energy: 465.8922, velocity: 15.6326, time: 2467.2286 },
+  { distance: 43525, force: 0.0, energy: 465.8922, velocity: 15.6135, time: 2468.7762 },
+  { distance: 43550, force: 0.0, energy: 465.8922, velocity: 15.5945, time: 2470.3238 },
+  { distance: 43575, force: 0.0, energy: 465.8922, velocity: 15.5754, time: 2471.8714 },
+  { distance: 43600, force: 0.0, energy: 465.8922, velocity: 15.5564, time: 2473.419 },
+  { distance: 43625, force: 0.0, energy: 465.8922, velocity: 15.5373, time: 2474.9667 },
+  { distance: 43650, force: 0.0, energy: 465.8922, velocity: 15.5183, time: 2476.5143 },
+  { distance: 43675, force: 0.0, energy: 465.8922, velocity: 15.499, time: 2478.1 },
+  { distance: 43700, force: 0.0, energy: 465.8922, velocity: 15.477, time: 2480.3 },
+  { distance: 43725, force: 0.0, energy: 465.8922, velocity: 15.459, time: 2481.55 },
+  { distance: 43750, force: 0.0, energy: 465.8922, velocity: 15.442, time: 2483.6 },
+  { distance: 43775, force: 0.0, energy: 465.8922, velocity: 15.4295, time: 2485.05 },
+  { distance: 43800, force: 0.0, energy: 465.8922, velocity: 15.41, time: 2486.0 },
+  { distance: 43825, force: 0.0, energy: 465.8922, velocity: 15.4026, time: 2488.2059 },
+  { distance: 43850, force: 0.0, energy: 465.8922, velocity: 15.391, time: 2490.0787 },
+  { distance: 43875, force: 0.0, energy: 465.8922, velocity: 15.377, time: 2491.764 },
+  { distance: 43900, force: 0.0, energy: 465.8922, velocity: 15.3629, time: 2493.4494 },
+  { distance: 43925, force: 0.0, energy: 465.8922, velocity: 15.3489, time: 2495.1099 },
+  { distance: 43950, force: 0.0, energy: 465.8922, velocity: 15.3352, time: 2496.4835 },
+  { distance: 43975, force: 0.0, energy: 465.8922, velocity: 15.3214, time: 2497.8571 },
+  { distance: 44000, force: 0.0, energy: 465.8922, velocity: 15.3077, time: 2499.2308 },
+  { distance: 44025, force: 0.0, energy: 465.8922, velocity: 15.2928, time: 2500.7174 },
+  { distance: 44050, force: 0.0, energy: 465.8922, velocity: 15.2765, time: 2502.3478 },
+  { distance: 44075, force: 0.0, energy: 465.8922, velocity: 15.2602, time: 2503.9783 },
+  { distance: 44100, force: 0.0, energy: 465.8922, velocity: 15.2439, time: 2505.6087 },
+  { distance: 44125, force: 0.0, energy: 465.8922, velocity: 15.2299, time: 2507.4149 },
+  { distance: 44150, force: 0.0, energy: 465.8922, velocity: 15.2166, time: 2509.2766 },
+  { distance: 44175, force: 0.0, energy: 465.8922, velocity: 15.2033, time: 2511.1383 },
+  { distance: 44200, force: 0.0, energy: 465.8922, velocity: 15.19, time: 2513.0 },
+  { distance: 44225, force: 0.0, energy: 465.8922, velocity: 15.1731, time: 2514.3514 },
+  { distance: 44250, force: 0.0, energy: 465.8922, velocity: 15.1562, time: 2515.7027 },
+  { distance: 44275, force: 0.0, energy: 465.8922, velocity: 15.1395, time: 2517.1 },
+  { distance: 44300, force: 0.0, energy: 465.8922, velocity: 15.127, time: 2519.3 },
+  { distance: 44325, force: 0.0, energy: 465.8922, velocity: 15.109, time: 2520.55 },
+  { distance: 44350, force: 0.0, energy: 465.8922, velocity: 15.084, time: 2522.6 },
+  { distance: 44375, force: 0.0, energy: 465.8922, velocity: 15.0585, time: 2524.05 },
+  { distance: 44400, force: 0.0, energy: 465.8922, velocity: 15.0225, time: 2525.75 },
+  { distance: 44425, force: 0.0, energy: 465.8922, velocity: 14.9875, time: 2527.75 },
+  { distance: 44450, force: 0.0, energy: 465.8922, velocity: 14.9517, time: 2529.4138 },
+  { distance: 44475, force: 0.0, energy: 465.8922, velocity: 14.9174, time: 2531.129 },
+  { distance: 44500, force: 0.0, energy: 465.8922, velocity: 14.8852, time: 2532.7419 },
+  { distance: 44525, force: 0.0, energy: 465.8922, velocity: 14.8461, time: 2534.3548 },
+  { distance: 44550, force: 0.0, energy: 465.8922, velocity: 14.8058, time: 2535.9677 },
+  { distance: 44575, force: 0.0, energy: 465.8922, velocity: 14.7664, time: 2537.5455 },
+  { distance: 44600, force: 0.0, energy: 465.8922, velocity: 14.728, time: 2539.2 },
+  { distance: 44625, force: 0.0, energy: 465.8922, velocity: 14.6885, time: 2541.05 },
+  { distance: 44650, force: 0.0, energy: 465.8922, velocity: 14.654, time: 2542.6 },
+  { distance: 44675, force: 0.0, energy: 465.8922, velocity: 14.6235, time: 2544.55 },
+  { distance: 44700, force: 0.0, energy: 465.8922, velocity: 14.586, time: 2545.8 },
+  { distance: 44725, force: 0.0, energy: 465.8922, velocity: 14.5585, time: 2548.05 },
+  { distance: 44750, force: 0.0, energy: 465.8922, velocity: 14.524, time: 2549.3 },
+  { distance: 44775, force: 0.0, energy: 465.8922, velocity: 14.499, time: 2551.1 },
+  { distance: 44800, force: 0.0, energy: 465.8922, velocity: 14.474, time: 2552.8 },
+  { distance: 44825, force: 0.0, energy: 465.8922, velocity: 14.449, time: 2555.05 },
+  { distance: 44850, force: 0.0, energy: 465.8922, velocity: 14.424, time: 2556.3 },
+  { distance: 44875, force: 0.0, energy: 465.8922, velocity: 14.4045, time: 2558.1 },
+  { distance: 44900, force: 0.0, energy: 465.8922, velocity: 14.384, time: 2559.8 },
+  { distance: 44925, force: 0.0, energy: 465.8922, velocity: 14.3671, time: 2561.4412 },
+  { distance: 44950, force: 0.0, energy: 465.8922, velocity: 14.3524, time: 2563.6471 },
+  { distance: 44975, force: 0.0, energy: 465.8922, velocity: 14.3295, time: 2565.05 },
+  { distance: 45000, force: 0.0, energy: 465.8922, velocity: 14.317, time: 2566.6 },
+  { distance: 45025, force: 0.0, energy: 465.8922, velocity: 14.3045, time: 2568.55 },
+  { distance: 45050, force: 0.0, energy: 465.8922, velocity: 14.292, time: 2570.6 },
+  { distance: 45075, force: 0.0, energy: 465.8922, velocity: 14.2795, time: 2572.05 },
+  { distance: 45100, force: 0.0, energy: 465.8922, velocity: 14.267, time: 2573.6 },
+  { distance: 45125, force: 0.0, energy: 465.8922, velocity: 14.2545, time: 2575.55 },
+  { distance: 45150, force: 0.0, energy: 465.8922, velocity: 14.242, time: 2577.6 },
+  { distance: 45175, force: 0.0, energy: 465.8922, velocity: 14.2395, time: 2579.05 },
+  { distance: 45200, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2580.6 },
+  { distance: 45225, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2582.55 },
+  { distance: 45250, force: 0.0, energy: 465.8922, velocity: 14.222, time: 2584.6 },
+  { distance: 45275, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2586.05 },
+  { distance: 45300, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2588.0 },
+  { distance: 45325, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2589.3571 },
+  { distance: 45350, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2591.6 },
+  { distance: 45375, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2593.1 },
+  { distance: 45400, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2595.3 },
+  { distance: 45425, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2596.55 },
+  { distance: 45450, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2598.6 },
+  { distance: 45475, force: 0.0, energy: 465.8922, velocity: 14.2205, time: 2600.1 },
+  { distance: 45500, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2602.3 },
+  { distance: 45525, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2603.55 },
+  { distance: 45550, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2605.6 },
+  { distance: 45575, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2607.1 },
+  { distance: 45600, force: 0.0, energy: 465.8922, velocity: 14.24, time: 2609.0 },
+  { distance: 45625, force: 0.0, energy: 465.8922, velocity: 14.24, time: 2610.3571 },
+  { distance: 45650, force: 0.0, energy: 465.8922, velocity: 14.238, time: 2612.4 },
+  { distance: 45675, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2614.45 },
+  { distance: 45700, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2615.7 },
+  { distance: 45725, force: 0.0, energy: 465.8922, velocity: 14.23, time: 2617.9 },
+  { distance: 45750, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2619.4 },
+  { distance: 45775, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2621.45 },
+  { distance: 45800, force: 0.0, energy: 465.8922, velocity: 14.213, time: 2622.7 },
+  { distance: 45825, force: 0.0, energy: 465.8922, velocity: 14.2005, time: 2624.9 },
+  { distance: 45850, force: 0.0, energy: 465.8922, velocity: 14.198, time: 2626.4 },
+  { distance: 45875, force: 0.0, energy: 465.8922, velocity: 14.1855, time: 2628.45 },
+  { distance: 45900, force: 0.0, energy: 465.8922, velocity: 14.18, time: 2630.0 },
+  { distance: 45925, force: 0.0, energy: 465.8922, velocity: 14.1664, time: 2632.0 },
+  { distance: 45950, force: 0.0, energy: 465.8922, velocity: 14.152, time: 2633.6 },
+  { distance: 45975, force: 0.0, energy: 465.8922, velocity: 14.139, time: 2635.1 },
+  { distance: 46000, force: 0.0, energy: 465.8922, velocity: 14.117, time: 2637.3 },
+  { distance: 46025, force: 0.0, energy: 465.8922, velocity: 14.099, time: 2639.1 },
+  { distance: 46050, force: 0.0, energy: 465.8922, velocity: 14.08, time: 2640.5 },
+  { distance: 46075, force: 0.0, energy: 465.8922, velocity: 14.059, time: 2642.1 },
+  { distance: 46100, force: 0.0, energy: 465.8922, velocity: 14.034, time: 2644.3 },
+  { distance: 46125, force: 0.0, energy: 465.8922, velocity: 14.005, time: 2646.0 },
+  { distance: 46150, force: 0.0, energy: 465.8922, velocity: 13.9767, time: 2647.6667 },
+  { distance: 46175, force: 0.0, energy: 465.8922, velocity: 13.9455, time: 2649.6364 },
+  { distance: 46200, force: 0.0, energy: 465.8922, velocity: 13.92, time: 2651.0 },
+  { distance: 46225, force: 0.0, energy: 465.8922, velocity: 13.8929, time: 2653.3571 },
+  { distance: 46250, force: 0.0, energy: 465.8922, velocity: 13.864, time: 2654.8 },
+  { distance: 46275, force: 0.0, energy: 465.8922, velocity: 13.8395, time: 2657.05 },
+  { distance: 46300, force: 0.0, energy: 465.8922, velocity: 13.824, time: 2658.6 },
+  { distance: 46325, force: 0.0, energy: 465.8922, velocity: 13.799, time: 2660.55 },
+  { distance: 46350, force: 0.0, energy: 465.8922, velocity: 13.782, time: 2662.6 },
+  { distance: 46375, force: 0.0, energy: 465.8922, velocity: 13.7695, time: 2664.05 },
+  { distance: 46400, force: 0.0, energy: 465.8922, velocity: 13.75, time: 2666.0 },
+  { distance: 46425, force: 0.0, energy: 465.8922, velocity: 13.74, time: 2667.3571 },
+  { distance: 46450, force: 0.0, energy: 465.8922, velocity: 13.732, time: 2669.6 },
+  { distance: 46475, force: 0.0, energy: 465.8922, velocity: 13.72, time: 2671.1 },
+  { distance: 46500, force: 0.0, energy: 465.8922, velocity: 13.717, time: 2673.3 },
+  { distance: 46525, force: 0.0, energy: 465.8922, velocity: 13.71, time: 2675.1 },
+  { distance: 46550, force: 0.0, energy: 465.8922, velocity: 13.71, time: 2676.7 },
+  { distance: 46575, force: 0.0, energy: 465.8922, velocity: 13.7195, time: 2678.9 },
+  { distance: 46600, force: 0.0, energy: 465.8922, velocity: 13.72, time: 2680.0 },
+  { distance: 46625, force: 0.0, energy: 465.8922, velocity: 13.73, time: 2682.3571 },
+  { distance: 46650, force: 0.0, energy: 465.8922, velocity: 13.738, time: 2683.8 },
+  { distance: 46675, force: 0.0, energy: 465.8922, velocity: 13.7505, time: 2686.05 },
+  { distance: 46700, force: 0.0, energy: 465.8922, velocity: 13.763, time: 2687.6 },
+  { distance: 46725, force: 0.0, energy: 465.8922, velocity: 13.7755, time: 2689.55 },
+  { distance: 46750, force: 0.0, energy: 465.8922, velocity: 13.788, time: 2691.6 },
+  { distance: 46775, force: 0.0, energy: 465.8922, velocity: 13.8105, time: 2693.1 },
+  { distance: 46800, force: 0.0, energy: 465.8922, velocity: 13.823, time: 2695.3 },
+  { distance: 46825, force: 0.0, energy: 465.8922, velocity: 13.8355, time: 2696.55 },
+  { distance: 46850, force: 0.0, energy: 465.8922, velocity: 13.856, time: 2698.6 },
+  { distance: 46875, force: 0.0, energy: 465.8922, velocity: 13.8705, time: 2700.1 },
+  { distance: 46900, force: 0.0, energy: 465.8922, velocity: 13.88, time: 2702.0 },
+  { distance: 46925, force: 0.0, energy: 465.8922, velocity: 13.8936, time: 2704.3571 },
+  { distance: 46950, force: 0.0, energy: 465.8922, velocity: 13.908, time: 2705.8 },
+  { distance: 46975, force: 0.0, energy: 465.8922, velocity: 13.9105, time: 2707.1 },
+  { distance: 47000, force: 0.0, energy: 465.8922, velocity: 13.923, time: 2709.3 },
+  { distance: 47025, force: 0.0, energy: 465.8922, velocity: 13.93, time: 2711.1 },
+  { distance: 47050, force: 0.0, energy: 465.8922, velocity: 13.938, time: 2712.8 },
+  { distance: 47075, force: 0.0, energy: 465.8922, velocity: 13.94, time: 2715.05 },
+  { distance: 47100, force: 0.0, energy: 465.8922, velocity: 13.94, time: 2716.6 },
+  { distance: 47125, force: 0.0, energy: 465.8922, velocity: 13.9455, time: 2718.55 },
+  { distance: 47150, force: 0.0, energy: 465.8922, velocity: 13.95, time: 2719.8 },
+  { distance: 47175, force: 0.0, energy: 465.8922, velocity: 13.95, time: 2722.05 },
+  { distance: 47200, force: 0.0, energy: 465.8922, velocity: 13.95, time: 2723.6 },
+  { distance: 47225, force: 0.0, energy: 465.8922, velocity: 13.95, time: 2725.55 },
+  { distance: 47250, force: 0.0, energy: 465.8922, velocity: 13.95, time: 2727.6 },
+  { distance: 47275, force: 0.0, energy: 465.8922, velocity: 13.9575, time: 2728.75 },
+  { distance: 47300, force: 0.0, energy: 465.8922, velocity: 13.96, time: 2730.6 },
+  { distance: 47325, force: 0.0, energy: 465.8922, velocity: 13.9655, time: 2732.55 },
+  { distance: 47350, force: 0.0, energy: 465.8922, velocity: 13.97, time: 2734.6 },
+  { distance: 47375, force: 0.0, energy: 465.8922, velocity: 13.9805, time: 2736.1 },
+  { distance: 47400, force: 0.0, energy: 465.8922, velocity: 13.99, time: 2738.0 },
+  { distance: 47425, force: 0.0, energy: 465.8922, velocity: 14.0, time: 2739.3571 },
+  { distance: 47450, force: 0.0, energy: 465.8922, velocity: 14.0, time: 2741.6 },
+  { distance: 47475, force: 0.0, energy: 465.8922, velocity: 14.01, time: 2743.1 },
+  { distance: 47500, force: 0.0, energy: 465.8922, velocity: 14.01, time: 2745.3 },
+  { distance: 47525, force: 0.0, energy: 465.8922, velocity: 14.0155, time: 2747.1 },
+  { distance: 47550, force: 0.0, energy: 465.8922, velocity: 14.02, time: 2748.8 },
+  { distance: 47575, force: 0.0, energy: 465.8922, velocity: 14.02, time: 2750.1 },
+  { distance: 47600, force: 0.0, energy: 465.8922, velocity: 14.02, time: 2752.0 },
+  { distance: 47625, force: 0.0, energy: 465.8922, velocity: 14.02, time: 2754.4 },
+  { distance: 47650, force: 0.0, energy: 465.8922, velocity: 14.02, time: 2756.2 },
+  { distance: 47675, force: 0.0, energy: 465.8922, velocity: 14.02, time: 2757.45 },
+  { distance: 47700, force: 0.0, energy: 465.8922, velocity: 14.027, time: 2759.4 },
+  { distance: 47725, force: 0.0, energy: 465.8922, velocity: 14.03, time: 2760.95 },
+  { distance: 47750, force: 0.0, energy: 465.8922, velocity: 14.042, time: 2763.2 },
+  { distance: 47775, force: 0.0, energy: 465.8922, velocity: 14.0505, time: 2765.05 },
+  { distance: 47800, force: 0.0, energy: 465.8922, velocity: 14.066, time: 2766.6 },
+  { distance: 47825, force: 0.0, energy: 465.8922, velocity: 14.0855, time: 2768.55 },
+  { distance: 47850, force: 0.0, energy: 465.8922, velocity: 14.106, time: 2769.8 },
+  { distance: 47875, force: 0.0, energy: 465.8922, velocity: 14.1332, time: 2771.8824 },
+  { distance: 47900, force: 0.0, energy: 465.8922, velocity: 14.156, time: 2773.6 },
+  { distance: 47925, force: 0.0, energy: 465.8922, velocity: 14.1755, time: 2775.55 },
+  { distance: 47950, force: 0.0, energy: 465.8922, velocity: 14.196, time: 2776.8 },
+  { distance: 47975, force: 0.0, energy: 465.8922, velocity: 14.221, time: 2779.05 },
+  { distance: 48000, force: 0.0, energy: 465.8922, velocity: 14.243, time: 2780.6 },
+  { distance: 48025, force: 0.0, energy: 465.8922, velocity: 14.261, time: 2782.55 },
+  { distance: 48050, force: 0.0, energy: 465.8922, velocity: 14.278, time: 2783.8 },
+  { distance: 48075, force: 0.0, energy: 465.8922, velocity: 14.3007, time: 2786.0705 },
+  { distance: 48100, force: 0.0, energy: 465.8922, velocity: 14.3195, time: 2787.8326 },
+  { distance: 48125, force: 0.0, energy: 465.8922, velocity: 14.3382, time: 2789.5947 },
+  { distance: 48150, force: 0.0, energy: 465.8922, velocity: 14.3569, time: 2791.3568 },
+  { distance: 48175, force: 0.0, energy: 465.8922, velocity: 14.3756, time: 2793.1189 },
+  { distance: 48200, force: 0.0, energy: 465.8922, velocity: 14.3944, time: 2794.8811 },
+  { distance: 48225, force: 0.0, energy: 465.8922, velocity: 14.4131, time: 2796.6432 },
+  { distance: 48250, force: 0.0, energy: 465.8922, velocity: 14.4318, time: 2798.4053 },
+  { distance: 48275, force: 0.0, energy: 465.8922, velocity: 14.4505, time: 2800.1674 },
+  { distance: 48300, force: 0.0, energy: 465.8922, velocity: 14.4693, time: 2801.9295 },
+  { distance: 48325, force: 0.0, energy: 465.8922, velocity: 14.488, time: 2803.6241 },
+  { distance: 48350, force: 0.0, energy: 465.8922, velocity: 14.5068, time: 2805.3158 },
+  { distance: 48375, force: 0.0, energy: 465.8922, velocity: 14.5256, time: 2807.0075 },
+  { distance: 48400, force: 0.0, energy: 465.8922, velocity: 14.5444, time: 2808.6992 },
+  { distance: 48425, force: 0.0, energy: 465.8922, velocity: 14.5632, time: 2810.391 },
+  { distance: 48450, force: 0.0, energy: 465.8922, velocity: 14.578, time: 2811.8 },
+  { distance: 48475, force: 0.0, energy: 465.8922, velocity: 14.591, time: 2814.05 },
+  { distance: 48500, force: 0.0, energy: 465.8922, velocity: 14.613, time: 2815.3 },
+  { distance: 48525, force: 0.0, energy: 465.8922, velocity: 14.6255, time: 2817.1 },
+  { distance: 48550, force: 0.0, energy: 465.8922, velocity: 14.638, time: 2818.8 },
+  { distance: 48575, force: 0.0, energy: 465.8922, velocity: 14.65, time: 2820.1 },
+  { distance: 48600, force: 0.0, energy: 465.8922, velocity: 14.653, time: 2822.3 },
+  { distance: 48625, force: 0.0, energy: 465.8922, velocity: 14.6655, time: 2823.55 },
+  { distance: 48650, force: 0.0, energy: 465.8922, velocity: 14.67, time: 2825.6 },
+  { distance: 48675, force: 0.0, energy: 465.8922, velocity: 14.68, time: 2827.1 },
+  { distance: 48700, force: 0.0, energy: 465.8922, velocity: 14.683, time: 2829.3 },
+  { distance: 48725, force: 0.0, energy: 465.8922, velocity: 14.69, time: 2830.55 },
+  { distance: 48750, force: 0.0, energy: 465.8922, velocity: 14.69, time: 2832.5 },
+  { distance: 48775, force: 0.0, energy: 465.8922, velocity: 14.7, time: 2834.0556 },
+  { distance: 48800, force: 0.0, energy: 465.8922, velocity: 14.7, time: 2835.8 },
+  { distance: 48825, force: 0.0, energy: 465.8922, velocity: 14.6935, time: 2837.65 },
+  { distance: 48850, force: 0.0, energy: 465.8922, velocity: 14.69, time: 2838.9 },
+  { distance: 48875, force: 0.0, energy: 465.8922, velocity: 14.6785, time: 2841.15 },
+  { distance: 48900, force: 0.0, energy: 465.8922, velocity: 14.66, time: 2843.0 },
+  { distance: 48925, force: 0.0, energy: 465.8922, velocity: 14.6464, time: 2844.3571 },
+  { distance: 48950, force: 0.0, energy: 465.8922, velocity: 14.624, time: 2845.8 },
+  { distance: 48975, force: 0.0, energy: 465.8922, velocity: 14.599, time: 2848.05 },
+  { distance: 49000, force: 0.0, energy: 465.8922, velocity: 14.574, time: 2849.3 },
+  { distance: 49025, force: 0.0, energy: 465.8922, velocity: 14.5435, time: 2851.1 },
+  { distance: 49050, force: 0.0, energy: 465.8922, velocity: 14.514, time: 2852.8 },
+  { distance: 49075, force: 0.0, energy: 465.8922, velocity: 14.4824, time: 2854.4545 },
+  { distance: 49100, force: 0.0, energy: 465.8922, velocity: 14.4445, time: 2856.7273 },
+  { distance: 49125, force: 0.0, energy: 465.8922, velocity: 14.416, time: 2858.2 },
+  { distance: 49150, force: 0.0, energy: 465.8922, velocity: 14.3871, time: 2859.6471 },
+  { distance: 49175, force: 0.0, energy: 465.8922, velocity: 14.3576, time: 2861.1765 },
+  { distance: 49200, force: 0.0, energy: 465.8922, velocity: 14.3282, time: 2863.3824 },
+  { distance: 49225, force: 0.0, energy: 465.8922, velocity: 14.2982, time: 2865.0909 },
+  { distance: 49250, force: 0.0, energy: 465.8922, velocity: 14.2679, time: 2866.6061 },
+  { distance: 49275, force: 0.0, energy: 465.8922, velocity: 14.2378, time: 2868.1481 },
+  { distance: 49300, force: 0.0, energy: 465.8922, velocity: 14.21, time: 2870.0 },
+  { distance: 49325, force: 0.0, energy: 465.8922, velocity: 14.1764, time: 2872.3571 },
+  { distance: 49350, force: 0.0, energy: 465.8922, velocity: 14.154, time: 2873.8 },
+  { distance: 49375, force: 0.0, energy: 465.8922, velocity: 14.129, time: 2875.1 },
+  { distance: 49400, force: 0.0, energy: 465.8922, velocity: 14.104, time: 2877.3 },
+  { distance: 49425, force: 0.0, energy: 465.8922, velocity: 14.079, time: 2879.1 },
+  { distance: 49450, force: 0.0, energy: 465.8922, velocity: 14.054, time: 2880.8 },
+  { distance: 49475, force: 0.0, energy: 465.8922, velocity: 14.029, time: 2883.05 },
+  { distance: 49500, force: 0.0, energy: 465.8922, velocity: 14.007, time: 2884.3 },
+  { distance: 49525, force: 0.0, energy: 465.8922, velocity: 13.989, time: 2886.1 },
+  { distance: 49550, force: 0.0, energy: 465.8922, velocity: 13.964, time: 2887.8 },
+  { distance: 49575, force: 0.0, energy: 465.8922, velocity: 13.9495, time: 2890.05 },
+  { distance: 49600, force: 0.0, energy: 465.8922, velocity: 13.934, time: 2891.6 },
+  { distance: 49625, force: 0.0, energy: 465.8922, velocity: 13.9145, time: 2893.55 },
+  { distance: 49650, force: 0.0, energy: 465.8922, velocity: 13.895, time: 2895.0 },
+  { distance: 49675, force: 0.0, energy: 465.8922, velocity: 13.8795, time: 2897.05 },
+  { distance: 49700, force: 0.0, energy: 465.8922, velocity: 13.87, time: 2898.6 },
+  { distance: 49725, force: 0.0, energy: 465.8922, velocity: 13.8645, time: 2900.55 },
+  { distance: 49750, force: 0.0, energy: 465.8922, velocity: 13.852, time: 2902.6 },
+  { distance: 49775, force: 0.0, energy: 465.8922, velocity: 13.84, time: 2904.1 },
+  { distance: 49800, force: 0.0, energy: 465.8922, velocity: 13.837, time: 2906.3 },
+  { distance: 49825, force: 0.0, energy: 465.8922, velocity: 13.83, time: 2907.55 },
+  { distance: 49850, force: 0.0, energy: 465.8922, velocity: 13.83, time: 2909.6 },
+  { distance: 49875, force: 0.0, energy: 465.8922, velocity: 13.83, time: 2911.1111 },
+  { distance: 49900, force: 0.0, energy: 465.8922, velocity: 13.83, time: 2912.85 },
+  { distance: 49925, force: 0.0, energy: 465.8922, velocity: 13.83, time: 2915.1 },
+  { distance: 49950, force: 0.0, energy: 465.8922, velocity: 13.83, time: 2916.8 },
+  { distance: 49975, force: 0.0, energy: 465.8922, velocity: 13.84, time: 2919.05 },
+  { distance: 50000, force: 0.0, energy: 465.8922, velocity: 13.843, time: 2920.3 },
+  { distance: 50025, force: 0.0, energy: 465.8922, velocity: 13.85, time: 2922.1 },
+  { distance: 50050, force: 0.0, energy: 465.8922, velocity: 13.858, time: 2923.8 },
+  { distance: 50075, force: 0.0, energy: 465.8922, velocity: 13.87, time: 2926.05 },
+  { distance: 50100, force: 0.0, energy: 465.8922, velocity: 13.873, time: 2927.6 },
+  { distance: 50125, force: 0.0, energy: 465.8922, velocity: 13.8855, time: 2929.55 },
+  { distance: 50150, force: 0.0, energy: 465.8922, velocity: 13.898, time: 2931.6 },
+  { distance: 50175, force: 0.0, energy: 465.8922, velocity: 13.9105, time: 2933.05 },
+  { distance: 50200, force: 0.0, energy: 465.8922, velocity: 13.923, time: 2934.6 },
+  { distance: 50225, force: 0.0, energy: 465.8922, velocity: 13.941, time: 2936.55 },
+  { distance: 50250, force: 0.0, energy: 465.8922, velocity: 13.953, time: 2938.3 },
+  { distance: 50275, force: 0.0, energy: 465.8922, velocity: 13.971, time: 2940.1 },
+  { distance: 50300, force: 0.0, energy: 465.8922, velocity: 13.988, time: 2941.8 },
+  { distance: 50325, force: 0.0, energy: 465.8922, velocity: 14.0105, time: 2944.05 },
+  { distance: 50350, force: 0.0, energy: 465.8922, velocity: 14.026, time: 2945.6 },
+  { distance: 50375, force: 0.0, energy: 465.8922, velocity: 14.051, time: 2947.55 },
+  { distance: 50400, force: 0.0, energy: 465.8922, velocity: 14.068, time: 2948.8 },
+  { distance: 50425, force: 0.0, energy: 465.8922, velocity: 14.091, time: 2951.05 },
+  { distance: 50450, force: 0.0, energy: 465.8922, velocity: 14.116, time: 2952.6 },
+  { distance: 50475, force: 0.0, energy: 465.8922, velocity: 14.141, time: 2954.1 },
+  { distance: 50500, force: 0.0, energy: 465.8922, velocity: 14.166, time: 2956.3 },
+  { distance: 50525, force: 0.0, energy: 465.8922, velocity: 14.1938, time: 2957.6875 },
+  { distance: 50550, force: 0.0, energy: 465.8922, velocity: 14.22, time: 2960.0 },
+  { distance: 50575, force: 0.0, energy: 465.8922, velocity: 14.251, time: 2961.55 },
+  { distance: 50600, force: 0.0, energy: 465.8922, velocity: 14.276, time: 2963.6 },
+  { distance: 50625, force: 0.0, energy: 465.8922, velocity: 14.301, time: 2965.05 },
+  { distance: 50650, force: 0.0, energy: 465.8922, velocity: 14.323, time: 2966.6 },
+  { distance: 50675, force: 0.0, energy: 465.8922, velocity: 14.341, time: 2968.55 },
+  { distance: 50700, force: 0.0, energy: 465.8922, velocity: 14.366, time: 2970.6 },
+  { distance: 50725, force: 0.0, energy: 465.8922, velocity: 14.381, time: 2972.05 },
+  { distance: 50750, force: 0.0, energy: 465.8922, velocity: 14.403, time: 2973.6 },
+  { distance: 50775, force: 0.0, energy: 465.8922, velocity: 14.421, time: 2975.55 },
+  { distance: 50800, force: 0.0, energy: 465.8922, velocity: 14.438, time: 2976.8 },
+  { distance: 50825, force: 0.0, energy: 465.8922, velocity: 14.4555, time: 2979.1 },
+  { distance: 50850, force: 0.0, energy: 465.8922, velocity: 14.468, time: 2980.8 },
+  { distance: 50875, force: 0.0, energy: 465.8922, velocity: 14.4805, time: 2982.1 },
+  { distance: 50900, force: 0.0, energy: 465.8922, velocity: 14.49, time: 2984.3 },
+  { distance: 50925, force: 0.0, energy: 465.8922, velocity: 14.4955, time: 2985.55 },
+  { distance: 50950, force: 0.0, energy: 465.8922, velocity: 14.508, time: 2987.6 },
+  { distance: 50975, force: 0.0, energy: 465.8922, velocity: 14.5105, time: 2989.1 },
+  { distance: 51000, force: 0.0, energy: 465.8922, velocity: 14.52, time: 2991.3 },
+  { distance: 51025, force: 0.0, energy: 465.8922, velocity: 14.52, time: 2992.55 },
+  { distance: 51050, force: 0.0, energy: 465.8922, velocity: 14.52, time: 2994.6 },
+  { distance: 51075, force: 0.0, energy: 465.8922, velocity: 14.52, time: 2996.0625 },
+  { distance: 51100, force: 0.0, energy: 465.8922, velocity: 14.52, time: 2998.0 },
+  { distance: 51125, force: 0.0, energy: 465.8922, velocity: 14.5125, time: 2999.75 },
+  { distance: 51150, force: 0.0, energy: 465.8922, velocity: 14.51, time: 3001.0 },
+  { distance: 51175, force: 0.0, energy: 465.8922, velocity: 14.5, time: 3003.25 },
+  { distance: 51200, force: 0.0, energy: 465.8922, velocity: 14.495, time: 3004.5 },
+  { distance: 51225, force: 0.0, energy: 465.8922, velocity: 14.4825, time: 3006.5 },
+  { distance: 51250, force: 0.0, energy: 465.8922, velocity: 14.47, time: 3008.0 },
+  { distance: 51275, force: 0.0, energy: 465.8922, velocity: 14.4575, time: 3010.25 },
+  { distance: 51300, force: 0.0, energy: 465.8922, velocity: 14.445, time: 3011.5 },
+  { distance: 51325, force: 0.0, energy: 465.8922, velocity: 14.4325, time: 3013.5 },
+  { distance: 51350, force: 0.0, energy: 465.8922, velocity: 14.41, time: 3015.0 },
+  { distance: 51375, force: 0.0, energy: 465.8922, velocity: 14.3945, time: 3016.55 },
+  { distance: 51400, force: 0.0, energy: 465.8922, velocity: 14.374, time: 3018.6 },
+  { distance: 51425, force: 0.0, energy: 465.8922, velocity: 14.349, time: 3020.1 },
+  { distance: 51450, force: 0.0, energy: 465.8922, velocity: 14.327, time: 3022.3 },
+  { distance: 51475, force: 0.0, energy: 465.8922, velocity: 14.309, time: 3023.55 },
+  { distance: 51500, force: 0.0, energy: 465.8922, velocity: 14.284, time: 3025.6 },
+  { distance: 51525, force: 0.0, energy: 465.8922, velocity: 14.2585, time: 3027.1 },
+  { distance: 51550, force: 0.0, energy: 465.8922, velocity: 14.2263, time: 3029.375 },
+  { distance: 51575, force: 0.0, energy: 465.8922, velocity: 14.1975, time: 3030.75 },
+  { distance: 51600, force: 0.0, energy: 465.8922, velocity: 14.174, time: 3032.6 },
+  { distance: 51625, force: 0.0, energy: 465.8922, velocity: 14.149, time: 3034.55 },
+  { distance: 51650, force: 0.0, energy: 465.8922, velocity: 14.116, time: 3035.8 },
+  { distance: 51675, force: 0.0, energy: 465.8922, velocity: 14.0895, time: 3038.05 },
+  { distance: 51700, force: 0.0, energy: 465.8922, velocity: 14.074, time: 3039.6 },
+  { distance: 51725, force: 0.0, energy: 465.8922, velocity: 14.049, time: 3041.1 },
+  { distance: 51750, force: 0.0, energy: 465.8922, velocity: 14.024, time: 3043.3 },
+  { distance: 51775, force: 0.0, energy: 465.8922, velocity: 14.0045, time: 3045.1 },
+  { distance: 51800, force: 0.0, energy: 465.8922, velocity: 13.992, time: 3046.8 },
+  { distance: 51825, force: 0.0, energy: 465.8922, velocity: 13.9795, time: 3049.05 },
+  { distance: 51850, force: 0.0, energy: 465.8922, velocity: 13.967, time: 3050.3 },
+  { distance: 51875, force: 0.0, energy: 465.8922, velocity: 13.96, time: 3052.1 },
+  { distance: 51900, force: 0.0, energy: 465.8922, velocity: 13.952, time: 3053.8 },
+  { distance: 51925, force: 0.0, energy: 465.8922, velocity: 13.95, time: 3056.05 },
+  { distance: 51950, force: 0.0, energy: 465.8922, velocity: 13.95, time: 3057.4 },
+  { distance: 51975, force: 0.0, energy: 465.8922, velocity: 13.95, time: 3059.45 },
+  { distance: 52000, force: 0.0, energy: 465.8922, velocity: 13.957, time: 3061.4 },
+  { distance: 52025, force: 0.0, energy: 465.8922, velocity: 13.96, time: 3062.95 },
+  { distance: 52050, force: 0.0, energy: 465.8922, velocity: 13.97, time: 3064.5 },
+  { distance: 52075, force: 0.0, energy: 465.8922, velocity: 13.9805, time: 3066.1 },
+  { distance: 52100, force: 0.0, energy: 465.8922, velocity: 13.993, time: 3068.3 },
+  { distance: 52125, force: 0.0, energy: 465.8922, velocity: 14.0, time: 3070.1 },
+  { distance: 52150, force: 0.0, energy: 465.8922, velocity: 14.008, time: 3071.8 },
+  { distance: 52175, force: 0.0, energy: 465.8922, velocity: 14.0205, time: 3074.05 },
+  { distance: 52200, force: 0.0, energy: 465.8922, velocity: 14.03, time: 3075.0 },
+  { distance: 52225, force: 0.0, energy: 465.8922, velocity: 14.0485, time: 3076.8519 },
+  { distance: 52250, force: 0.0, energy: 465.8922, velocity: 14.058, time: 3078.8 },
+  { distance: 52275, force: 0.0, energy: 465.8922, velocity: 14.0705, time: 3081.05 },
+  { distance: 52300, force: 0.0, energy: 465.8922, velocity: 14.083, time: 3082.6 },
+  { distance: 52325, force: 0.0, energy: 465.8922, velocity: 14.0955, time: 3084.55 },
+  { distance: 52350, force: 0.0, energy: 465.8922, velocity: 14.105, time: 3086.0 },
+  { distance: 52375, force: 0.0, energy: 465.8922, velocity: 14.1105, time: 3088.05 },
+  { distance: 52400, force: 0.0, energy: 465.8922, velocity: 14.123, time: 3089.6 },
+  { distance: 52425, force: 0.0, energy: 465.8922, velocity: 14.141, time: 3091.55 },
+  { distance: 52450, force: 0.0, energy: 465.8922, velocity: 14.158, time: 3092.8 },
+  { distance: 52475, force: 0.0, energy: 465.8922, velocity: 14.1705, time: 3095.05 },
+  { distance: 52500, force: 0.0, energy: 465.8922, velocity: 14.186, time: 3096.6 },
+  { distance: 52525, force: 0.0, energy: 465.8922, velocity: 14.201, time: 3098.1 },
+  { distance: 52550, force: 0.0, energy: 465.8922, velocity: 14.223, time: 3100.3 },
+  { distance: 52575, force: 0.0, energy: 465.8922, velocity: 14.241, time: 3102.1 },
+  { distance: 52600, force: 0.0, energy: 465.8922, velocity: 14.258, time: 3103.8 },
+  { distance: 52625, force: 0.0, energy: 465.8922, velocity: 14.2805, time: 3105.1 },
+  { distance: 52650, force: 0.0, energy: 465.8922, velocity: 14.296, time: 3107.3 },
+  { distance: 52675, force: 0.0, energy: 465.8922, velocity: 14.3155, time: 3109.1 },
+  { distance: 52700, force: 0.0, energy: 465.8922, velocity: 14.336, time: 3110.8 },
+  { distance: 52725, force: 0.0, energy: 465.8922, velocity: 14.361, time: 3112.1 },
+  { distance: 52750, force: 0.0, energy: 465.8922, velocity: 14.38, time: 3114.0 },
+  { distance: 52775, force: 0.0, energy: 465.8922, velocity: 14.4005, time: 3116.05 },
+  { distance: 52800, force: 0.0, energy: 465.8922, velocity: 14.413, time: 3117.6 },
+  { distance: 52825, force: 0.0, energy: 465.8922, velocity: 14.4255, time: 3119.55 },
+  { distance: 52850, force: 0.0, energy: 465.8922, velocity: 14.438, time: 3120.8 },
+  { distance: 52875, force: 0.0, energy: 465.8922, velocity: 14.45, time: 3123.05 },
+  { distance: 52900, force: 0.0, energy: 465.8922, velocity: 14.453, time: 3124.6 },
+  { distance: 52925, force: 0.0, energy: 465.8922, velocity: 14.46, time: 3126.55 },
+  { distance: 52950, force: 0.0, energy: 465.8922, velocity: 14.46, time: 3128.0 },
+  { distance: 52975, force: 0.0, energy: 465.8922, velocity: 14.4542, time: 3129.5789 },
+  { distance: 53000, force: 0.0, energy: 465.8922, velocity: 14.45, time: 3131.6 },
+  { distance: 53025, force: 0.0, energy: 465.8922, velocity: 14.4395, time: 3133.1 },
+  { distance: 53050, force: 0.0, energy: 465.8922, velocity: 14.4263, time: 3135.375 },
+  { distance: 53075, force: 0.0, energy: 465.8922, velocity: 14.405, time: 3136.75 },
+  { distance: 53100, force: 0.0, energy: 465.8922, velocity: 14.387, time: 3138.3 },
+  { distance: 53125, force: 0.0, energy: 465.8922, velocity: 14.3695, time: 3140.0476 },
+  { distance: 53150, force: 0.0, energy: 465.8922, velocity: 14.3529, time: 3141.7143 },
+  { distance: 53175, force: 0.0, energy: 465.8922, velocity: 14.3327, time: 3143.7273 },
+  { distance: 53200, force: 0.0, energy: 465.8922, velocity: 14.3093, time: 3145.0667 },
+  { distance: 53225, force: 0.0, energy: 465.8922, velocity: 14.289, time: 3147.1 },
+  { distance: 53250, force: 0.0, energy: 465.8922, velocity: 14.272, time: 3148.8 },
+  { distance: 53275, force: 0.0, energy: 465.8922, velocity: 14.259, time: 3151.05 },
+  { distance: 53300, force: 0.0, energy: 465.8922, velocity: 14.237, time: 3152.3 },
+  { distance: 53325, force: 0.0, energy: 465.8922, velocity: 14.2245, time: 3154.1 },
+  { distance: 53350, force: 0.0, energy: 465.8922, velocity: 14.212, time: 3155.8 },
+  { distance: 53375, force: 0.0, energy: 465.8922, velocity: 14.1995, time: 3158.05 },
+  { distance: 53400, force: 0.0, energy: 465.8922, velocity: 14.19, time: 3159.3 },
+  { distance: 53425, force: 0.0, energy: 465.8922, velocity: 14.1845, time: 3161.1 },
+  { distance: 53450, force: 0.0, energy: 465.8922, velocity: 14.18, time: 3162.8 },
+  { distance: 53475, force: 0.0, energy: 465.8922, velocity: 14.18, time: 3165.0833 },
+  { distance: 53500, force: 0.0, energy: 465.8922, velocity: 14.18, time: 3166.7 },
+  { distance: 53525, force: 0.0, energy: 465.8922, velocity: 14.18, time: 3168.1 },
+  { distance: 53550, force: 0.0, energy: 465.8922, velocity: 14.188, time: 3169.8 },
+  { distance: 53575, force: 0.0, energy: 465.8922, velocity: 14.19, time: 3172.05 },
+  { distance: 53600, force: 0.0, energy: 465.8922, velocity: 14.193, time: 3173.3 },
+  { distance: 53625, force: 0.0, energy: 465.8922, velocity: 14.2, time: 3175.375 },
+  { distance: 53650, force: 0.0, energy: 465.8922, velocity: 14.21, time: 3177.0 },
+  { distance: 53675, force: 0.0, energy: 465.8922, velocity: 14.2155, time: 3178.55 },
+  { distance: 53700, force: 0.0, energy: 465.8922, velocity: 14.22, time: 3180.6 },
+  { distance: 53725, force: 0.0, energy: 465.8922, velocity: 14.23, time: 3182.1 },
+  { distance: 53750, force: 0.0, energy: 465.8922, velocity: 14.233, time: 3184.3 },
+  { distance: 53775, force: 0.0, energy: 465.8922, velocity: 14.24, time: 3185.55 },
+  { distance: 53800, force: 0.0, energy: 465.8922, velocity: 14.248, time: 3187.6 },
+  { distance: 53825, force: 0.0, energy: 465.8922, velocity: 14.25, time: 3189.25 },
+  { distance: 53850, force: 0.0, energy: 465.8922, velocity: 14.25, time: 3190.7143 },
+  { distance: 53875, force: 0.0, energy: 465.8922, velocity: 14.26, time: 3193.05 },
+  { distance: 53900, force: 0.0, energy: 465.8922, velocity: 14.26, time: 3194.6 },
+  { distance: 53925, force: 0.0, energy: 465.8922, velocity: 14.26, time: 3196.55 },
+  { distance: 53950, force: 0.0, energy: 465.8922, velocity: 14.26, time: 3197.8 },
+  { distance: 53975, force: 0.0, energy: 465.8922, velocity: 14.26, time: 3200.05 },
+  { distance: 54000, force: 0.0, energy: 465.8922, velocity: 14.26, time: 3201.6 },
+  { distance: 54025, force: 0.0, energy: 465.8922, velocity: 14.2655, time: 3203.55 },
+  { distance: 54050, force: 0.0, energy: 465.8922, velocity: 14.27, time: 3204.8 },
+  { distance: 54075, force: 0.0, energy: 465.8922, velocity: 14.27, time: 3207.05 },
+  { distance: 54100, force: 0.0, energy: 465.8922, velocity: 14.27, time: 3208.6 },
+  { distance: 54125, force: 0.0, energy: 465.8922, velocity: 14.2705, time: 3210.1 },
+  { distance: 54150, force: 0.0, energy: 465.8922, velocity: 14.28, time: 3212.3 },
+  { distance: 54175, force: 0.0, energy: 465.8922, velocity: 14.2855, time: 3213.55 },
+  { distance: 54200, force: 0.0, energy: 465.8922, velocity: 14.29, time: 3215.6 },
+  { distance: 54225, force: 0.0, energy: 465.8922, velocity: 14.3, time: 3217.3571 },
+  { distance: 54250, force: 0.0, energy: 465.8922, velocity: 14.308, time: 3218.8 },
+  { distance: 54275, force: 0.0, energy: 465.8922, velocity: 14.3105, time: 3221.05 },
+  { distance: 54300, force: 0.0, energy: 465.8922, velocity: 14.32, time: 3222.6 },
+  { distance: 54325, force: 0.0, energy: 465.8922, velocity: 14.3255, time: 3224.55 },
+  { distance: 54350, force: 0.0, energy: 465.8922, velocity: 14.33, time: 3225.8 },
+  { distance: 54375, force: 0.0, energy: 465.8922, velocity: 14.33, time: 3228.0 },
+  { distance: 54400, force: 0.0, energy: 465.8922, velocity: 14.33, time: 3229.8 },
+  { distance: 54425, force: 0.0, energy: 465.8922, velocity: 14.3285, time: 3231.3 },
+  { distance: 54450, force: 0.0, energy: 465.8922, velocity: 14.32, time: 3233.4 },
+  { distance: 54475, force: 0.0, energy: 465.8922, velocity: 14.3175, time: 3234.5 },
+  { distance: 54500, force: 0.0, energy: 465.8922, velocity: 14.31, time: 3236.7143 },
+  { distance: 54525, force: 0.0, energy: 465.8922, velocity: 14.2995, time: 3238.1 },
+  { distance: 54550, force: 0.0, energy: 465.8922, velocity: 14.287, time: 3240.3 },
+  { distance: 54575, force: 0.0, energy: 465.8922, velocity: 14.2745, time: 3241.55 },
+  { distance: 54600, force: 0.0, energy: 465.8922, velocity: 14.262, time: 3243.6 },
+  { distance: 54625, force: 0.0, energy: 465.8922, velocity: 14.249, time: 3245.1 },
+  { distance: 54650, force: 0.0, energy: 465.8922, velocity: 14.224, time: 3247.3 },
+  { distance: 54675, force: 0.0, energy: 465.8922, velocity: 14.2045, time: 3248.55 },
+  { distance: 54700, force: 0.0, energy: 465.8922, velocity: 14.184, time: 3250.6 },
+  { distance: 54725, force: 0.0, energy: 465.8922, velocity: 14.1585, time: 3252.1 },
+  { distance: 54750, force: 0.0, energy: 465.8922, velocity: 14.124, time: 3254.3 },
+  { distance: 54775, force: 0.0, energy: 465.8922, velocity: 14.099, time: 3256.1 },
+  { distance: 54800, force: 0.0, energy: 465.8922, velocity: 14.066, time: 3257.8 },
+  { distance: 54825, force: 0.0, energy: 465.8922, velocity: 14.03, time: 3259.0 },
+  { distance: 54850, force: 0.0, energy: 465.8922, velocity: 13.9945, time: 3261.3636 },
+  { distance: 54875, force: 0.0, energy: 465.8922, velocity: 13.9605, time: 3263.3182 },
+  { distance: 54900, force: 0.0, energy: 465.8922, velocity: 13.9226, time: 3264.8696 },
+  { distance: 54925, force: 0.0, energy: 465.8922, velocity: 13.8843, time: 3266.5217 },
+  { distance: 54950, force: 0.0, energy: 465.8922, velocity: 13.8457, time: 3268.2174 },
+  { distance: 54975, force: 0.0, energy: 465.8922, velocity: 13.81, time: 3270.3333 },
+  { distance: 55000, force: 0.0, energy: 465.8922, velocity: 13.7725, time: 3272.0 },
+  { distance: 55025, force: 16.7379, energy: 466.4624, velocity: 13.77, time: 3273.84 },
+  { distance: 55050, force: 16.7699, energy: 467.6037, velocity: 13.77, time: 3275.6921 },
+  { distance: 55075, force: 16.802, energy: 468.7473, velocity: 13.77, time: 3277.5313 },
+  { distance: 55100, force: 16.834, energy: 469.893, velocity: 13.77, time: 3279.3706 },
+  { distance: 55125, force: 16.8661, energy: 471.0409, velocity: 13.77, time: 3281.2098 },
+  { distance: 55150, force: 16.8982, energy: 472.191, velocity: 13.77, time: 3283.049 },
+  { distance: 55175, force: 16.9302, energy: 473.3433, velocity: 13.77, time: 3284.8883 },
+  { distance: 55200, force: 16.9623, energy: 474.4978, velocity: 13.77, time: 3286.7275 },
+  { distance: 55225, force: 16.9943, energy: 475.6544, velocity: 13.77, time: 3288.5668 },
+  { distance: 55250, force: 17.0264, energy: 476.8132, velocity: 13.77, time: 3290.406 },
+  { distance: 55275, force: 17.0585, energy: 477.9742, velocity: 13.77, time: 3292.2452 },
+  { distance: 55300, force: 17.0905, energy: 479.1374, velocity: 13.77, time: 3294.0845 },
+  { distance: 55325, force: 17.1226, energy: 480.3028, velocity: 13.77, time: 3295.9237 },
+  { distance: 55350, force: 17.1547, energy: 481.4704, velocity: 13.77, time: 3297.7629 },
+  { distance: 55375, force: 17.1867, energy: 482.6402, velocity: 13.77, time: 3299.6022 },
+  { distance: 55400, force: 17.2649, energy: 483.8137, velocity: 13.77, time: 3301.432 },
+  { distance: 55425, force: 17.4894, energy: 484.9975, velocity: 13.77, time: 3303.232 },
+  { distance: 55450, force: 17.7138, energy: 486.1966, velocity: 13.77, time: 3305.032 },
+  { distance: 55475, force: 17.9382, energy: 487.411, velocity: 13.77, time: 3306.832 },
+  { distance: 55500, force: 18.1627, energy: 488.6407, velocity: 13.77, time: 3308.632 },
+  { distance: 55525, force: 18.3871, energy: 489.8856, velocity: 13.77, time: 3310.432 },
+  { distance: 55550, force: 18.6115, energy: 491.1459, velocity: 13.77, time: 3312.232 },
+  { distance: 55575, force: 18.836, energy: 492.4215, velocity: 13.77, time: 3314.032 },
+  { distance: 55600, force: 19.0604, energy: 493.7123, velocity: 13.77, time: 3315.832 },
+  { distance: 55625, force: 19.2848, energy: 495.0184, velocity: 13.77, time: 3317.632 },
+  { distance: 55650, force: 19.4554, energy: 496.338, velocity: 13.77, time: 3319.43 },
+  { distance: 55675, force: 19.4554, energy: 497.6634, velocity: 13.77, time: 3321.2218 },
+  { distance: 55700, force: 19.4554, energy: 498.9888, velocity: 13.77, time: 3323.0137 },
+  { distance: 55725, force: 19.4554, energy: 500.3142, velocity: 13.77, time: 3324.8055 },
+  { distance: 55750, force: 19.4554, energy: 501.6396, velocity: 13.77, time: 3326.5973 },
+  { distance: 55775, force: 19.4554, energy: 502.965, velocity: 13.77, time: 3328.3891 },
+  { distance: 55800, force: 19.4554, energy: 504.2904, velocity: 13.77, time: 3330.1809 },
+  { distance: 55825, force: 19.4554, energy: 505.6158, velocity: 13.77, time: 3331.9727 },
+  { distance: 55850, force: 19.4554, energy: 506.9412, velocity: 13.77, time: 3333.7645 },
+  { distance: 55875, force: 19.4554, energy: 508.2666, velocity: 13.77, time: 3335.5563 },
+  { distance: 55900, force: 19.4554, energy: 509.592, velocity: 13.77, time: 3337.3481 },
+  { distance: 55925, force: 19.4554, energy: 510.9174, velocity: 13.77, time: 3339.1399 },
+  { distance: 55950, force: 19.4554, energy: 512.2428, velocity: 13.77, time: 3340.9317 },
+  { distance: 55975, force: 19.4554, energy: 513.5682, velocity: 13.77, time: 3342.7235 },
+  { distance: 56000, force: 19.4554, energy: 514.8936, velocity: 13.77, time: 3344.5154 },
+  { distance: 56025, force: 19.4554, energy: 516.219, velocity: 13.77, time: 3346.3072 },
+  { distance: 56050, force: 19.4554, energy: 517.5444, velocity: 13.77, time: 3348.099 },
+  { distance: 56075, force: 19.4554, energy: 518.8698, velocity: 13.77, time: 3349.8908 },
+  { distance: 56100, force: 19.4554, energy: 520.1952, velocity: 13.77, time: 3351.6826 },
+  { distance: 56125, force: 19.4554, energy: 521.5206, velocity: 13.77, time: 3353.4744 },
+  { distance: 56150, force: 19.4554, energy: 522.846, velocity: 13.77, time: 3355.2662 },
+  { distance: 56175, force: 19.4554, energy: 524.1714, velocity: 13.77, time: 3357.058 },
+  { distance: 56200, force: 19.4554, energy: 525.4968, velocity: 13.77, time: 3358.8498 },
+  { distance: 56225, force: 19.4554, energy: 526.8222, velocity: 13.77, time: 3360.6416 },
+  { distance: 56250, force: 19.2907, energy: 528.142, velocity: 13.77, time: 3362.7647 },
+  { distance: 56275, force: 19.0766, energy: 529.4489, velocity: 13.77, time: 3364.7857 },
+  { distance: 56300, force: 18.8522, energy: 530.7408, velocity: 13.77, time: 3366.5714 },
+  { distance: 56325, force: 18.6278, energy: 532.0175, velocity: 13.77, time: 3368.3571 },
+  { distance: 56350, force: 18.4033, energy: 533.2788, velocity: 13.77, time: 3370.1429 },
+  { distance: 56375, force: 18.1789, energy: 534.5249, velocity: 13.77, time: 3371.9286 },
+  { distance: 56400, force: 17.9545, energy: 535.7557, velocity: 13.77, time: 3373.7143 },
+  { distance: 56425, force: 17.7301, energy: 536.9712, velocity: 13.77, time: 3375.5 },
+  { distance: 56450, force: 17.5056, energy: 538.1714, velocity: 13.77, time: 3377.2857 },
+  { distance: 56475, force: 17.2812, energy: 539.3564, velocity: 13.77, time: 3379.0714 },
+  { distance: 56500, force: 17.0568, energy: 540.526, velocity: 13.77, time: 3380.8571 },
+  { distance: 56525, force: 16.8323, energy: 541.6803, velocity: 13.77, time: 3382.6429 },
+  { distance: 56550, force: 16.6079, energy: 542.8194, velocity: 13.77, time: 3384.4286 },
+  { distance: 56575, force: 16.3835, energy: 543.9432, velocity: 13.77, time: 3386.2143 },
+  { distance: 56600, force: 16.159, energy: 545.0516, velocity: 13.77, time: 3388.0 },
+  { distance: 56625, force: 15.6699, energy: 546.1358, velocity: 13.77, time: 3390.2059 },
+  { distance: 56650, force: 15.1655, energy: 547.1862, velocity: 13.77, time: 3392.1429 },
+  { distance: 56675, force: 14.6525, energy: 548.2018, velocity: 13.77, time: 3393.9286 },
+  { distance: 56700, force: 14.1395, energy: 549.1826, velocity: 13.77, time: 3395.7143 },
+  { distance: 56725, force: 13.6266, energy: 550.1283, velocity: 13.77, time: 3397.5 },
+  { distance: 56750, force: 13.1136, energy: 551.0392, velocity: 13.77, time: 3399.2857 },
+  { distance: 56775, force: 12.6006, energy: 551.9151, velocity: 13.77, time: 3401.0714 },
+  { distance: 56800, force: 12.0876, energy: 552.756, velocity: 13.77, time: 3402.8571 },
+  { distance: 56825, force: 11.5746, energy: 553.562, velocity: 13.77, time: 3404.6429 },
+  { distance: 56850, force: 11.0616, energy: 554.3331, velocity: 13.77, time: 3406.4286 },
+  { distance: 56875, force: 10.5487, energy: 555.0692, velocity: 13.77, time: 3408.2143 },
+  { distance: 56900, force: 10.0357, energy: 555.7703, velocity: 13.77, time: 3410.0 },
+  { distance: 56925, force: 8.3462, energy: 556.3964, velocity: 13.77, time: 3411.4706 },
+  { distance: 56950, force: 6.5889, energy: 556.9052, velocity: 13.77, time: 3413.1963 },
+  { distance: 56975, force: 4.7935, energy: 557.2929, velocity: 13.77, time: 3415.0654 },
+  { distance: 57000, force: 2.9981, energy: 557.5583, velocity: 13.77, time: 3416.9346 },
+  { distance: 57025, force: 1.2026, energy: 557.7014, velocity: 13.77, time: 3418.8037 },
+  { distance: 57050, force: 0.0, energy: 557.7423, velocity: 13.77, time: 3420.9 },
+  { distance: 57075, force: 0.0, energy: 557.7423, velocity: 13.77, time: 3422.7 },
+  { distance: 57100, force: 0.0, energy: 557.7423, velocity: 13.7795, time: 3424.9 },
+  { distance: 57125, force: 0.0, energy: 557.7423, velocity: 13.792, time: 3426.4 },
+  { distance: 57150, force: 0.0, energy: 557.7423, velocity: 13.809, time: 3428.45 },
+  { distance: 57175, force: 0.0, energy: 557.7423, velocity: 13.827, time: 3429.7 },
+  { distance: 57200, force: 0.0, energy: 557.7423, velocity: 13.849, time: 3431.9 },
+  { distance: 57225, force: 0.0, energy: 557.7423, velocity: 13.884, time: 3433.4 },
+  { distance: 57250, force: 0.0, energy: 557.7423, velocity: 13.9135, time: 3435.45 },
+  { distance: 57275, force: 0.0, energy: 557.7423, velocity: 13.951, time: 3437.4 },
+  { distance: 57300, force: 0.0, energy: 557.7423, velocity: 13.9885, time: 3438.95 },
+  { distance: 57325, force: 0.0, energy: 557.7423, velocity: 14.038, time: 3440.4 },
+  { distance: 57350, force: 0.0, energy: 557.7423, velocity: 14.088, time: 3442.45 },
+  { distance: 57375, force: 0.0, energy: 557.7423, velocity: 14.138, time: 3444.4 },
+  { distance: 57400, force: 0.0, energy: 557.7423, velocity: 14.1975, time: 3445.95 },
+  { distance: 57425, force: 0.0, energy: 557.7423, velocity: 14.2525, time: 3448.05 },
+  { distance: 57450, force: 0.0, energy: 557.7423, velocity: 14.318, time: 3449.3 },
+  { distance: 57475, force: 0.0, energy: 557.7423, velocity: 14.3875, time: 3451.1 },
+  { distance: 57500, force: 0.0, energy: 557.7423, velocity: 14.458, time: 3452.8 },
+  { distance: 57525, force: 0.0, energy: 557.7423, velocity: 14.533, time: 3455.05 },
+  { distance: 57550, force: 0.0, energy: 557.7423, velocity: 14.61, time: 3456.0 },
+  { distance: 57575, force: 0.0, energy: 557.7423, velocity: 14.6835, time: 3458.2059 },
+  { distance: 57600, force: 0.0, energy: 557.7423, velocity: 14.7588, time: 3460.0105 },
+  { distance: 57625, force: 0.0, energy: 557.7423, velocity: 14.8352, time: 3461.5895 },
+  { distance: 57650, force: 0.0, energy: 557.7423, velocity: 14.9115, time: 3463.1684 },
+  { distance: 57675, force: 0.0, energy: 557.7423, velocity: 14.9878, time: 3464.7474 },
+  { distance: 57700, force: 0.0, energy: 557.7423, velocity: 15.0641, time: 3466.3263 },
+  { distance: 57725, force: 0.0, energy: 557.7423, velocity: 15.1404, time: 3467.9053 },
+  { distance: 57750, force: 0.0, energy: 557.7423, velocity: 15.2167, time: 3469.4842 },
+  { distance: 57775, force: 0.0, energy: 557.7423, velocity: 15.293, time: 3471.0755 },
+  { distance: 57800, force: 0.0, energy: 557.7423, velocity: 15.3685, time: 3472.9623 },
+  { distance: 57825, force: 0.0, energy: 557.7423, velocity: 15.444, time: 3474.8491 },
+  { distance: 57850, force: 0.0, energy: 557.7423, velocity: 15.5151, time: 3476.3019 },
+  { distance: 57875, force: 0.0, energy: 557.7423, velocity: 15.5858, time: 3477.717 },
+  { distance: 57900, force: 0.0, energy: 557.7423, velocity: 15.6538, time: 3479.5385 },
+  { distance: 57925, force: 0.0, energy: 557.7423, velocity: 15.7212, time: 3481.4615 },
+  { distance: 57950, force: 0.0, energy: 557.7423, velocity: 15.785, time: 3482.6429 },
+  { distance: 57975, force: 0.0, energy: 557.7423, velocity: 15.8497, time: 3484.3235 },
+  { distance: 58000, force: 0.0, energy: 557.7423, velocity: 15.9156, time: 3486.3333 },
+  { distance: 58025, force: 0.0, energy: 557.7423, velocity: 15.9804, time: 3487.7222 },
+  { distance: 58050, force: 0.0, energy: 557.7423, velocity: 16.0454, time: 3489.0769 },
+  { distance: 58075, force: 0.0, energy: 557.7423, velocity: 16.1125, time: 3490.1 },
+  { distance: 58100, force: 0.0, energy: 557.7423, velocity: 16.175, time: 3492.3 },
+  { distance: 58125, force: 0.0, energy: 557.7423, velocity: 16.2375, time: 3493.55 },
+  { distance: 58150, force: 0.0, energy: 557.7423, velocity: 16.292, time: 3494.8 },
+  { distance: 58175, force: 0.0, energy: 557.7423, velocity: 16.342, time: 3497.05 },
+  { distance: 58200, force: 0.0, energy: 557.7423, velocity: 16.39, time: 3498.0 },
+  { distance: 58225, force: 0.0, energy: 557.7423, velocity: 16.4407, time: 3499.3571 },
+  { distance: 58250, force: 0.0, energy: 557.7423, velocity: 16.484, time: 3501.6 },
+  { distance: 58275, force: 0.0, energy: 557.7423, velocity: 16.5315, time: 3503.05 },
+  { distance: 58300, force: 0.0, energy: 557.7423, velocity: 16.569, time: 3504.3 },
+  { distance: 58325, force: 0.0, energy: 557.7423, velocity: 16.6065, time: 3505.55 },
+  { distance: 58350, force: 0.0, energy: 557.7423, velocity: 16.644, time: 3507.6 },
+  { distance: 58375, force: 0.0, energy: 557.7423, velocity: 16.6815, time: 3509.05 },
+  { distance: 58400, force: 0.0, energy: 557.7423, velocity: 16.719, time: 3510.3 },
+  { distance: 58425, force: 0.0, energy: 557.7423, velocity: 16.751, time: 3511.55 },
+  { distance: 58450, force: 0.0, energy: 557.7423, velocity: 16.776, time: 3513.6 },
+  { distance: 58475, force: 0.0, energy: 557.7423, velocity: 16.811, time: 3515.05 },
+  { distance: 58500, force: 0.0, energy: 557.7423, velocity: 16.836, time: 3516.3 },
+  { distance: 58525, force: 0.0, energy: 557.7423, velocity: 16.8569, time: 3517.6875 },
+  { distance: 58550, force: 0.0, energy: 557.7423, velocity: 16.88, time: 3519.0 },
+  { distance: 58575, force: 0.0, energy: 557.7423, velocity: 16.8955, time: 3520.55 },
+  { distance: 58600, force: 0.0, energy: 557.7423, velocity: 16.916, time: 3521.8 },
+  { distance: 58625, force: 0.0, energy: 557.7423, velocity: 16.93, time: 3524.05 },
+  { distance: 58650, force: 0.0, energy: 557.7423, velocity: 16.933, time: 3525.3 },
+  { distance: 58675, force: 0.0, energy: 557.7423, velocity: 16.94, time: 3526.55 },
+  { distance: 58700, force: 0.0, energy: 557.7423, velocity: 16.94, time: 3527.8 },
+  { distance: 58725, force: 0.0, energy: 557.7423, velocity: 16.94, time: 3530.05 },
+  { distance: 58750, force: 0.0, energy: 557.7423, velocity: 16.94, time: 3531.3 },
+  { distance: 58775, force: 0.0, energy: 557.7423, velocity: 16.94, time: 3532.55 },
+  { distance: 58800, force: 0.0, energy: 557.7423, velocity: 16.932, time: 3533.8 },
+  { distance: 58825, force: 0.0, energy: 557.7423, velocity: 16.93, time: 3535.25 },
+  { distance: 58850, force: 0.0, energy: 557.7423, velocity: 16.93, time: 3536.7143 },
+  { distance: 58875, force: 0.0, energy: 557.7423, velocity: 16.9295, time: 3538.1 },
+  { distance: 58900, force: 0.0, energy: 557.7423, velocity: 16.92, time: 3540.3 },
+  { distance: 58925, force: 0.0, energy: 557.7423, velocity: 16.92, time: 3541.55 },
+  { distance: 58950, force: 0.0, energy: 557.7423, velocity: 16.92, time: 3542.8 },
+  { distance: 58975, force: 0.0, energy: 557.7423, velocity: 16.9195, time: 3544.05 },
+  { distance: 59000, force: 0.0, energy: 557.7423, velocity: 16.91, time: 3545.6 },
+  { distance: 59025, force: 0.0, energy: 557.7423, velocity: 16.91, time: 3547.55 },
+  { distance: 59050, force: 0.0, energy: 557.7423, velocity: 16.91, time: 3548.8 },
+  { distance: 59075, force: 0.0, energy: 557.7423, velocity: 16.91, time: 3550.05 },
+  { distance: 59100, force: 0.0, energy: 557.7423, velocity: 16.91, time: 3551.6 },
+  { distance: 59125, force: 0.0, energy: 557.7423, velocity: 16.91, time: 3553.55 },
+  { distance: 59150, force: 0.0, energy: 557.7423, velocity: 16.902, time: 3554.8 },
+  { distance: 59175, force: 0.0, energy: 557.7423, velocity: 16.9, time: 3556.05 },
+  { distance: 59200, force: 0.0, energy: 557.7423, velocity: 16.9, time: 3557.3 },
+  { distance: 59225, force: 0.0, energy: 557.7423, velocity: 16.9, time: 3559.1 },
+  { distance: 59250, force: 0.0, energy: 557.7423, velocity: 16.9, time: 3560.8 },
+  { distance: 59275, force: 0.0, energy: 557.7423, velocity: 16.9, time: 3562.05 },
+  { distance: 59300, force: 0.0, energy: 557.7423, velocity: 16.9, time: 3563.3 },
+  { distance: 59325, force: 0.0, energy: 557.7423, velocity: 16.8945, time: 3565.1 },
+  { distance: 59350, force: 0.0, energy: 557.7423, velocity: 16.89, time: 3566.5 },
+  { distance: 59375, force: 0.0, energy: 557.7423, velocity: 16.89, time: 3568.05 },
+  { distance: 59400, force: 0.0, energy: 557.7423, velocity: 16.89, time: 3569.3 },
+  { distance: 59425, force: 0.0, energy: 557.7423, velocity: 16.8845, time: 3570.55 },
+  { distance: 59450, force: 0.0, energy: 557.7423, velocity: 16.88, time: 3572.6 },
+  { distance: 59475, force: 0.0, energy: 557.7423, velocity: 16.87, time: 3574.05 },
+  { distance: 59500, force: 0.0, energy: 557.7423, velocity: 16.867, time: 3575.3 },
+  { distance: 59525, force: 0.0, energy: 557.7423, velocity: 16.8545, time: 3576.55 },
+  { distance: 59550, force: 0.0, energy: 557.7423, velocity: 16.842, time: 3578.6 },
+  { distance: 59575, force: 0.0, energy: 557.7423, velocity: 16.8295, time: 3580.05 },
+  { distance: 59600, force: 0.0, energy: 557.7423, velocity: 16.817, time: 3581.3 },
+  { distance: 59625, force: 0.0, energy: 557.7423, velocity: 16.8031, time: 3582.6875 },
+  { distance: 59650, force: 0.0, energy: 557.7423, velocity: 16.79, time: 3584.0 },
+  { distance: 59675, force: 0.0, energy: 557.7423, velocity: 16.7745, time: 3585.55 },
+  { distance: 59700, force: 0.0, energy: 557.7423, velocity: 16.754, time: 3587.6 },
+  { distance: 59725, force: 0.0, energy: 557.7423, velocity: 16.7347, time: 3589.2263 },
+  { distance: 59750, force: 0.0, energy: 557.7423, velocity: 16.7164, time: 3590.6861 },
+  { distance: 59775, force: 0.0, energy: 557.7423, velocity: 16.6982, time: 3592.146 },
+  { distance: 59800, force: 0.0, energy: 557.7423, velocity: 16.6799, time: 3593.6058 },
+  { distance: 59825, force: 0.0, energy: 557.7423, velocity: 16.6617, time: 3595.0657 },
+  { distance: 59850, force: 0.0, energy: 557.7423, velocity: 16.6433, time: 3596.5333 },
+  { distance: 59875, force: 0.0, energy: 557.7423, velocity: 16.6248, time: 3598.0148 },
+  { distance: 59900, force: 0.0, energy: 557.7423, velocity: 16.6063, time: 3599.4963 },
+  { distance: 59925, force: 0.0, energy: 557.7423, velocity: 16.5878, time: 3600.9778 },
+  { distance: 59950, force: 0.0, energy: 557.7423, velocity: 16.5693, time: 3602.4593 },
+  { distance: 59975, force: 0.0, energy: 557.7423, velocity: 16.5507, time: 3603.9407 },
+  { distance: 60000, force: 0.0, energy: 557.7423, velocity: 16.5271, time: 3605.2857 },
+  { distance: 60025, force: 0.0, energy: 557.7423, velocity: 16.5113, time: 3606.8696 },
+  { distance: 60050, force: 0.0, energy: 557.7423, velocity: 16.4891, time: 3608.5455 },
+  { distance: 60075, force: 0.0, energy: 557.7423, velocity: 16.467, time: 3609.6522 },
+  { distance: 60100, force: 0.0, energy: 557.7423, velocity: 16.4458, time: 3611.4167 },
+  { distance: 60125, force: 0.0, energy: 557.7423, velocity: 16.425, time: 3612.75 },
+  { distance: 60150, force: 0.0, energy: 557.7423, velocity: 16.4042, time: 3614.5833 },
+  { distance: 60175, force: 0.0, energy: 557.7423, velocity: 16.3833, time: 3615.8333 },
+  { distance: 60200, force: 0.0, energy: 557.7423, velocity: 16.3632, time: 3617.68 },
+  { distance: 60225, force: 0.0, energy: 557.7423, velocity: 16.3438, time: 3618.8077 },
+  { distance: 60250, force: 0.0, energy: 557.7423, velocity: 16.3169, time: 3620.5385 },
+  { distance: 60275, force: 0.0, energy: 557.7423, velocity: 16.2954, time: 3622.4615 },
+  { distance: 60300, force: 0.0, energy: 557.7423, velocity: 16.27, time: 3624.0 },
+  { distance: 60325, force: 0.0, energy: 557.7423, velocity: 16.2529, time: 3625.3571 },
+  { distance: 60350, force: 0.0, energy: 557.7423, velocity: 16.224, time: 3626.8 },
+  { distance: 60375, force: 0.0, energy: 557.7423, velocity: 16.199, time: 3628.05 },
+  { distance: 60400, force: 0.0, energy: 557.7423, velocity: 16.174, time: 3629.6 },
+  { distance: 60425, force: 0.0, energy: 557.7423, velocity: 16.149, time: 3631.55 },
+  { distance: 60450, force: 0.0, energy: 557.7423, velocity: 16.116, time: 3632.8 },
+  { distance: 60475, force: 0.0, energy: 557.7423, velocity: 16.089, time: 3634.1 },
+  { distance: 60500, force: 0.0, energy: 557.7423, velocity: 16.061, time: 3636.3 },
+  { distance: 60525, force: 0.0, energy: 557.7423, velocity: 16.0295, time: 3637.5238 },
+  { distance: 60550, force: 0.0, energy: 557.7423, velocity: 15.9986, time: 3638.7143 },
+  { distance: 60575, force: 0.0, energy: 557.7423, velocity: 15.965, time: 3640.75 },
+  { distance: 60600, force: 0.0, energy: 557.7423, velocity: 15.931, time: 3642.3 },
+  { distance: 60625, force: 0.0, energy: 557.7423, velocity: 15.8935, time: 3643.55 },
+  { distance: 60650, force: 0.0, energy: 557.7423, velocity: 15.864, time: 3645.6 },
+  { distance: 60675, force: 0.0, energy: 557.7423, velocity: 15.8285, time: 3647.05 },
+  { distance: 60700, force: 0.0, energy: 557.7423, velocity: 15.791, time: 3648.3 },
+  { distance: 60725, force: 0.0, energy: 557.7423, velocity: 15.748, time: 3650.1 },
+  { distance: 60750, force: 0.0, energy: 557.7423, velocity: 15.706, time: 3651.8 },
+  { distance: 60775, force: 0.0, energy: 557.7423, velocity: 15.6685, time: 3653.05 },
+  { distance: 60800, force: 0.0, energy: 557.7423, velocity: 15.63, time: 3655.0 },
+  { distance: 60825, force: 0.0, energy: 557.7423, velocity: 15.585, time: 3656.4 },
+  { distance: 60850, force: 0.0, energy: 557.7423, velocity: 15.5425, time: 3658.0323 },
+  { distance: 60875, force: 0.0, energy: 557.7423, velocity: 15.4995, time: 3659.6452 },
+  { distance: 60900, force: 0.0, energy: 557.7423, velocity: 15.4565, time: 3661.2581 },
+  { distance: 60925, force: 0.0, energy: 557.7423, velocity: 15.4134, time: 3662.871 },
+  { distance: 60950, force: 0.0, energy: 557.7423, velocity: 15.3725, time: 3664.5 },
+  { distance: 60975, force: 0.0, energy: 557.7423, velocity: 15.3317, time: 3666.1304 },
+  { distance: 61000, force: 0.0, energy: 557.7423, velocity: 15.291, time: 3667.7609 },
+  { distance: 61025, force: 0.0, energy: 557.7423, velocity: 15.2494, time: 3669.3529 },
+  { distance: 61050, force: 0.0, energy: 557.7423, velocity: 15.2053, time: 3670.8235 },
+  { distance: 61075, force: 0.0, energy: 557.7423, velocity: 15.1629, time: 3672.4762 },
+  { distance: 61100, force: 0.0, energy: 557.7423, velocity: 15.1262, time: 3674.6923 },
+  { distance: 61125, force: 0.0, energy: 557.7423, velocity: 15.0885, time: 3676.05 },
+  { distance: 61150, force: 0.0, energy: 557.7423, velocity: 15.048, time: 3677.6 },
+  { distance: 61175, force: 0.0, energy: 557.7423, velocity: 15.0035, time: 3679.55 },
+  { distance: 61200, force: 0.0, energy: 557.7423, velocity: 14.966, time: 3680.8 },
+  { distance: 61225, force: 0.0, energy: 557.7423, velocity: 14.9385, time: 3683.05 },
+  { distance: 61250, force: 0.0, energy: 557.7423, velocity: 14.901, time: 3684.3 },
+  { distance: 61275, force: 0.0, energy: 557.7423, velocity: 14.8635, time: 3686.1 },
+  { distance: 61300, force: 0.0, energy: 557.7423, velocity: 14.826, time: 3687.8 },
+  { distance: 61325, force: 0.0, energy: 557.7423, velocity: 14.7985, time: 3689.1 },
+  { distance: 61350, force: 0.0, energy: 557.7423, velocity: 14.764, time: 3691.3 },
+  { distance: 61375, force: 0.0, energy: 557.7423, velocity: 14.7335, time: 3692.55 },
+  { distance: 61400, force: 0.0, energy: 557.7423, velocity: 14.704, time: 3694.6 },
+  { distance: 61425, force: 0.0, energy: 557.7423, velocity: 14.669, time: 3696.1 },
+  { distance: 61450, force: 0.0, energy: 557.7423, velocity: 14.644, time: 3698.3 },
+  { distance: 61475, force: 0.0, energy: 557.7423, velocity: 14.619, time: 3700.05 },
+  { distance: 61500, force: 0.0, energy: 557.7423, velocity: 14.594, time: 3701.3 },
+  { distance: 61525, force: 0.0, energy: 557.7423, velocity: 14.569, time: 3703.1 },
+  { distance: 61550, force: 0.0, energy: 557.7423, velocity: 14.544, time: 3704.8 },
+  { distance: 61575, force: 0.0, energy: 557.7423, velocity: 14.519, time: 3706.1 },
+  { distance: 61600, force: 0.0, energy: 557.7423, velocity: 14.497, time: 3708.3 },
+  { distance: 61625, force: 0.0, energy: 557.7423, velocity: 14.479, time: 3710.1 },
+  { distance: 61650, force: 0.0, energy: 557.7423, velocity: 14.462, time: 3711.8 },
+  { distance: 61675, force: 0.0, energy: 557.7423, velocity: 14.4395, time: 3713.1 },
+  { distance: 61700, force: 0.0, energy: 557.7423, velocity: 14.427, time: 3715.3 },
+  { distance: 61725, force: 0.0, energy: 557.7423, velocity: 14.4145, time: 3716.55 },
+  { distance: 61750, force: 0.0, energy: 557.7423, velocity: 14.402, time: 3718.6 },
+  { distance: 61775, force: 0.0, energy: 557.7423, velocity: 14.39, time: 3720.1 },
+  { distance: 61800, force: 0.0, energy: 557.7423, velocity: 14.387, time: 3722.3 },
+  { distance: 61825, force: 0.0, energy: 557.7423, velocity: 14.38, time: 3723.55 },
+  { distance: 61850, force: 0.0, energy: 557.7423, velocity: 14.372, time: 3725.6 },
+  { distance: 61875, force: 0.0, energy: 557.7423, velocity: 14.37, time: 3727.1 },
+  { distance: 61900, force: 0.0, energy: 557.7423, velocity: 14.37, time: 3729.0 },
+  { distance: 61925, force: 0.0, energy: 557.7423, velocity: 14.37, time: 3730.4 },
+  { distance: 61950, force: 0.0, energy: 557.7423, velocity: 14.37, time: 3732.45 },
+  { distance: 61975, force: 0.0, energy: 557.7423, velocity: 14.38, time: 3734.1 },
+  { distance: 62000, force: 0.0, energy: 557.7423, velocity: 14.383, time: 3736.3 },
+  { distance: 62025, force: 0.0, energy: 557.7423, velocity: 14.39, time: 3737.55 },
+  { distance: 62050, force: 0.0, energy: 557.7423, velocity: 14.398, time: 3739.6 },
+  { distance: 62075, force: 0.0, energy: 557.7423, velocity: 14.4005, time: 3741.05 },
+  { distance: 62100, force: 0.0, energy: 557.7423, velocity: 14.413, time: 3742.6 },
+  { distance: 62125, force: 0.0, energy: 557.7423, velocity: 14.4255, time: 3744.55 },
+  { distance: 62150, force: 0.0, energy: 557.7423, velocity: 14.43, time: 3746.6 },
+  { distance: 62175, force: 0.0, energy: 557.7423, velocity: 14.4405, time: 3748.05 },
+  { distance: 62200, force: 0.0, energy: 557.7423, velocity: 14.453, time: 3749.6 },
+  { distance: 62225, force: 0.0, energy: 557.7423, velocity: 14.4655, time: 3751.55 },
+  { distance: 62250, force: 0.0, energy: 557.7423, velocity: 14.483, time: 3753.4054 },
+  { distance: 62275, force: 0.0, energy: 557.7423, velocity: 14.4957, time: 3755.0946 },
+  { distance: 62300, force: 0.0, energy: 557.7423, velocity: 14.5084, time: 3756.7838 },
+  { distance: 62325, force: 0.0, energy: 557.7423, velocity: 14.521, time: 3758.473 },
+  { distance: 62350, force: 0.0, energy: 557.7423, velocity: 14.5337, time: 3760.1622 },
+  { distance: 62375, force: 0.0, energy: 557.7423, velocity: 14.5464, time: 3761.8514 },
+  { distance: 62400, force: 0.0, energy: 557.7423, velocity: 14.5591, time: 3763.5405 },
+  { distance: 62425, force: 0.0, energy: 557.7423, velocity: 14.5717, time: 3765.2297 },
+  { distance: 62450, force: 0.0, energy: 557.7423, velocity: 14.5844, time: 3766.9189 },
+  { distance: 62475, force: 0.0, energy: 557.7423, velocity: 14.5971, time: 3768.6081 },
+  { distance: 62500, force: 0.0, energy: 557.7423, velocity: 14.6097, time: 3770.2973 },
+  { distance: 62525, force: 0.0, energy: 557.7423, velocity: 14.6224, time: 3771.9865 },
+  { distance: 62550, force: 0.0, energy: 557.7423, velocity: 14.635, time: 3774.0 },
+  { distance: 62575, force: 0.0, energy: 557.7423, velocity: 14.65, time: 3776.05 },
+  { distance: 62600, force: 0.0, energy: 557.7423, velocity: 14.653, time: 3777.3 },
+  { distance: 62625, force: 0.0, energy: 557.7423, velocity: 14.6655, time: 3779.1 },
+  { distance: 62650, force: 0.0, energy: 557.7423, velocity: 14.678, time: 3780.8 },
+  { distance: 62675, force: 0.0, energy: 557.7423, velocity: 14.6805, time: 3782.1 },
+  { distance: 62700, force: 0.0, energy: 557.7423, velocity: 14.69, time: 3784.3 },
+  { distance: 62725, force: 0.0, energy: 557.7423, velocity: 14.69, time: 3785.55 },
+  { distance: 62750, force: 0.0, energy: 557.7423, velocity: 14.69, time: 3787.6 },
+  { distance: 62775, force: 0.0, energy: 557.7423, velocity: 14.7, time: 3789.1 },
+  { distance: 62800, force: 0.0, energy: 557.7423, velocity: 14.7, time: 3791.3 },
+  { distance: 62825, force: 0.0, energy: 557.7423, velocity: 14.7, time: 3792.6875 },
+  { distance: 62850, force: 0.0, energy: 557.7423, velocity: 14.69, time: 3794.0 },
+  { distance: 62875, force: 0.0, energy: 557.7423, velocity: 14.69, time: 3796.25 },
+  { distance: 62900, force: 0.0, energy: 557.7423, velocity: 14.685, time: 3797.5 },
+  { distance: 62925, force: 0.0, energy: 557.7423, velocity: 14.68, time: 3799.5 },
+  { distance: 62950, force: 0.0, energy: 557.7423, velocity: 14.67, time: 3801.0 },
+  { distance: 62975, force: 0.0, energy: 557.7423, velocity: 14.6675, time: 3803.25 },
+  { distance: 63000, force: 0.0, energy: 557.7423, velocity: 14.655, time: 3804.5 },
+  { distance: 63025, force: 0.0, energy: 557.7423, velocity: 14.6425, time: 3806.5 },
+  { distance: 63050, force: 0.0, energy: 557.7423, velocity: 14.63, time: 3808.0 },
+  { distance: 63075, force: 0.0, energy: 557.7423, velocity: 14.6175, time: 3809.5 },
+  { distance: 63100, force: 0.0, energy: 557.7423, velocity: 14.605, time: 3811.5 },
+  { distance: 63125, force: 0.0, energy: 557.7423, velocity: 14.5925, time: 3812.75 },
+  { distance: 63150, force: 0.0, energy: 557.7423, velocity: 14.57, time: 3815.0 },
+  { distance: 63175, force: 0.0, energy: 557.7423, velocity: 14.555, time: 3816.5 },
+  { distance: 63200, force: 0.0, energy: 557.7423, velocity: 14.534, time: 3818.3 },
+  { distance: 63225, force: 0.0, energy: 557.7423, velocity: 14.5145, time: 3820.1 },
+  { distance: 63250, force: 0.0, energy: 557.7423, velocity: 14.494, time: 3821.8 },
+  { distance: 63275, force: 0.0, energy: 557.7423, velocity: 14.4695, time: 3823.1 },
+  { distance: 63300, force: 0.0, energy: 557.7423, velocity: 14.454, time: 3825.3 },
+  { distance: 63325, force: 0.0, energy: 557.7423, velocity: 14.429, time: 3826.55 },
+  { distance: 63350, force: 0.0, energy: 557.7423, velocity: 14.404, time: 3828.6 },
+  { distance: 63375, force: 0.0, energy: 557.7423, velocity: 14.379, time: 3830.1 },
+  { distance: 63400, force: 0.0, energy: 557.7423, velocity: 14.354, time: 3832.3 },
+  { distance: 63425, force: 0.0, energy: 557.7423, velocity: 14.329, time: 3833.55 },
+  { distance: 63450, force: 0.0, energy: 557.7423, velocity: 14.304, time: 3835.6 },
+  { distance: 63475, force: 0.0, energy: 557.7423, velocity: 14.279, time: 3837.1 },
+  { distance: 63500, force: 0.0, energy: 557.7423, velocity: 14.251, time: 3839.3 },
+  { distance: 63525, force: 0.0, energy: 557.7423, velocity: 14.219, time: 3840.55 },
+  { distance: 63550, force: 0.0, energy: 557.7423, velocity: 14.194, time: 3842.6 },
+  { distance: 63575, force: 0.0, energy: 557.7423, velocity: 14.159, time: 3844.1 },
+  { distance: 63600, force: 0.0, energy: 557.7423, velocity: 14.131, time: 3846.3 },
+  { distance: 63625, force: 0.0, energy: 557.7423, velocity: 14.099, time: 3848.1 },
+  { distance: 63650, force: 0.0, energy: 557.7423, velocity: 14.066, time: 3849.8 },
+  { distance: 63675, force: 0.0, energy: 557.7423, velocity: 14.029, time: 3851.1 },
+  { distance: 63700, force: 0.0, energy: 557.7423, velocity: 14.001, time: 3853.3 },
+  { distance: 63725, force: 0.0, energy: 557.7423, velocity: 13.9637, time: 3854.8148 },
+  { distance: 63750, force: 0.0, energy: 557.7423, velocity: 13.9267, time: 3856.6667 },
+  { distance: 63775, force: 0.0, energy: 557.7423, velocity: 13.8922, time: 3858.5185 },
+  { distance: 63800, force: 0.0, energy: 557.7423, velocity: 13.8623, time: 3860.3846 },
+  { distance: 63825, force: 0.0, energy: 557.7423, velocity: 13.8254, time: 3862.3077 },
+  { distance: 63850, force: 0.0, energy: 557.7423, velocity: 13.7964, time: 3864.24 },
+  { distance: 63875, force: 13.3562, energy: 558.1973, velocity: 13.77, time: 3866.1432 },
+  { distance: 63900, force: 13.1158, energy: 559.099, velocity: 13.77, time: 3867.9328 },
+  { distance: 63925, force: 12.8753, energy: 559.9843, velocity: 13.77, time: 3869.7223 },
+  { distance: 63950, force: 12.6349, energy: 560.8532, velocity: 13.77, time: 3871.5119 },
+  { distance: 63975, force: 12.3944, energy: 561.7058, velocity: 13.77, time: 3873.3015 },
+  { distance: 64000, force: 12.1539, energy: 562.542, velocity: 13.77, time: 3875.0911 },
+  { distance: 64025, force: 11.9135, energy: 563.3618, velocity: 13.77, time: 3876.8807 },
+  { distance: 64050, force: 11.673, energy: 564.1652, velocity: 13.77, time: 3878.6703 },
+  { distance: 64075, force: 11.4325, energy: 564.9522, velocity: 13.77, time: 3880.4599 },
+  { distance: 64100, force: 11.1921, energy: 565.7229, velocity: 13.77, time: 3882.2495 },
+  { distance: 64125, force: 10.9516, energy: 566.4771, velocity: 13.77, time: 3884.039 },
+  { distance: 64150, force: 10.7112, energy: 567.215, velocity: 13.77, time: 3885.8286 },
+  { distance: 64175, force: 10.4707, energy: 567.9365, velocity: 13.77, time: 3887.6182 },
+  { distance: 64200, force: 10.2302, energy: 568.6417, velocity: 13.77, time: 3889.4078 },
+  { distance: 64225, force: 9.9898, energy: 569.3304, velocity: 13.77, time: 3891.1974 },
+  { distance: 64250, force: 9.7493, energy: 570.0028, velocity: 13.77, time: 3892.987 },
+  { distance: 64275, force: 9.5089, energy: 570.6588, velocity: 13.77, time: 3894.7766 },
+  { distance: 64300, force: 9.2684, energy: 571.2984, velocity: 13.77, time: 3896.5662 },
+  { distance: 64325, force: 9.0279, energy: 571.9216, velocity: 13.77, time: 3898.3557 },
+  { distance: 64350, force: 8.9414, energy: 572.5337, velocity: 13.77, time: 3900.1594 },
+  { distance: 64375, force: 8.9414, energy: 573.1428, velocity: 13.77, time: 3901.971 },
+  { distance: 64400, force: 8.9414, energy: 573.7519, velocity: 13.77, time: 3903.7826 },
+  { distance: 64425, force: 8.9414, energy: 574.3611, velocity: 13.77, time: 3905.5942 },
+  { distance: 64450, force: 8.9414, energy: 574.9702, velocity: 13.77, time: 3907.4058 },
+  { distance: 64475, force: 8.9414, energy: 575.5793, velocity: 13.77, time: 3909.2174 },
+  { distance: 64500, force: 8.9414, energy: 576.1885, velocity: 13.77, time: 3911.029 },
+  { distance: 64525, force: 8.9414, energy: 576.7976, velocity: 13.77, time: 3912.8406 },
+  { distance: 64550, force: 8.9414, energy: 577.4067, velocity: 13.77, time: 3914.6522 },
+  { distance: 64575, force: 8.9414, energy: 578.0158, velocity: 13.77, time: 3916.4638 },
+  { distance: 64600, force: 8.9414, energy: 578.625, velocity: 13.77, time: 3918.2754 },
+  { distance: 64625, force: 8.9414, energy: 579.2341, velocity: 13.77, time: 3920.087 },
+  { distance: 64650, force: 8.9414, energy: 579.8432, velocity: 13.77, time: 3921.8986 },
+  { distance: 64675, force: 8.9414, energy: 580.4524, velocity: 13.77, time: 3923.7101 },
+  { distance: 64700, force: 8.9414, energy: 581.0615, velocity: 13.77, time: 3925.5217 },
+  { distance: 64725, force: 8.9414, energy: 581.6706, velocity: 13.77, time: 3927.3333 },
+  { distance: 64750, force: 8.9414, energy: 582.2798, velocity: 13.77, time: 3929.1449 },
+  { distance: 64775, force: 8.9414, energy: 582.8889, velocity: 13.77, time: 3930.9565 },
+  { distance: 64800, force: 8.9414, energy: 583.498, velocity: 13.77, time: 3932.7681 },
+  { distance: 64825, force: 8.9414, energy: 584.1072, velocity: 13.77, time: 3934.5797 },
+  { distance: 64850, force: 8.9414, energy: 584.7163, velocity: 13.77, time: 3936.3913 },
+  { distance: 64875, force: 8.9414, energy: 585.3254, velocity: 13.77, time: 3938.2029 },
+  { distance: 64900, force: 8.9414, energy: 585.9346, velocity: 13.77, time: 3940.0145 },
+  { distance: 64925, force: 8.9414, energy: 586.5437, velocity: 13.77, time: 3941.8261 },
+  { distance: 64950, force: 8.9414, energy: 587.1528, velocity: 13.77, time: 3943.6377 },
+  { distance: 64975, force: 8.9414, energy: 587.7619, velocity: 13.77, time: 3945.4493 },
+  { distance: 65000, force: 8.9414, energy: 588.3711, velocity: 13.77, time: 3947.2609 },
+  { distance: 65025, force: 8.9414, energy: 588.9802, velocity: 13.77, time: 3949.0725 },
+  { distance: 65050, force: 8.9414, energy: 589.5893, velocity: 13.77, time: 3950.8841 },
+  { distance: 65075, force: 8.9414, energy: 590.1985, velocity: 13.77, time: 3952.6957 },
+  { distance: 65100, force: 8.9414, energy: 590.8076, velocity: 13.77, time: 3954.5072 },
+  { distance: 65125, force: 8.9414, energy: 591.4167, velocity: 13.77, time: 3956.3188 },
+  { distance: 65150, force: 8.9414, energy: 592.0259, velocity: 13.77, time: 3958.1304 },
+  { distance: 65175, force: 8.9414, energy: 592.635, velocity: 13.77, time: 3959.942 },
+  { distance: 65200, force: 8.9414, energy: 593.2441, velocity: 13.77, time: 3961.7536 },
+  { distance: 65225, force: 8.9414, energy: 593.8533, velocity: 13.77, time: 3963.5652 },
+  { distance: 65250, force: 8.9414, energy: 594.4624, velocity: 13.77, time: 3965.3768 },
+  { distance: 65275, force: 8.9414, energy: 595.0715, velocity: 13.77, time: 3967.1884 },
+  { distance: 65300, force: 8.9414, energy: 595.6807, velocity: 13.77, time: 3969.0 },
+  { distance: 65325, force: 9.2355, energy: 596.2998, velocity: 13.77, time: 3971.2059 },
+  { distance: 65350, force: 9.5466, energy: 596.9396, velocity: 13.77, time: 3973.1566 },
+  { distance: 65375, force: 9.8672, energy: 597.6008, velocity: 13.77, time: 3974.9639 },
+  { distance: 65400, force: 10.1878, energy: 598.284, velocity: 13.77, time: 3976.7711 },
+  { distance: 65425, force: 10.5084, energy: 598.9889, velocity: 13.77, time: 3978.5783 },
+  { distance: 65450, force: 10.829, energy: 599.7157, velocity: 13.77, time: 3980.3855 },
+  { distance: 65475, force: 11.1496, energy: 600.4644, velocity: 13.77, time: 3982.1928 },
+  { distance: 65500, force: 11.4703, energy: 601.2349, velocity: 13.77, time: 3984.0 },
+  { distance: 65525, force: 12.6585, energy: 602.0568, velocity: 13.77, time: 3985.4706 },
+  { distance: 65550, force: 13.8968, energy: 602.9613, velocity: 13.77, time: 3987.1803 },
+  { distance: 65575, force: 15.1632, energy: 603.9512, velocity: 13.77, time: 3989.0246 },
+  { distance: 65600, force: 16.4297, energy: 605.0273, velocity: 13.77, time: 3990.8689 },
+  { distance: 65625, force: 17.6961, energy: 606.1897, velocity: 13.77, time: 3992.7131 },
+  { distance: 65650, force: 18.9625, energy: 607.4384, velocity: 13.77, time: 3994.5574 },
+  { distance: 65675, force: 20.2289, energy: 608.7733, velocity: 13.77, time: 3996.4016 },
+  { distance: 65700, force: 21.4954, energy: 610.1946, velocity: 13.77, time: 3998.2459 },
+  { distance: 65725, force: 22.7618, energy: 611.7021, velocity: 13.77, time: 4000.0902 },
+  { distance: 65750, force: 24.0282, energy: 613.2959, velocity: 13.77, time: 4001.9344 },
+  { distance: 65775, force: 25.2946, energy: 614.9759, velocity: 13.77, time: 4003.7787 },
+  { distance: 65800, force: 26.5611, energy: 616.7423, velocity: 13.77, time: 4005.623 },
+  { distance: 65825, force: 27.8275, energy: 618.5949, velocity: 13.77, time: 4007.4672 },
+  { distance: 65850, force: 29.0939, energy: 620.5338, velocity: 13.77, time: 4009.3115 },
+  { distance: 65875, force: 30.3603, energy: 622.5589, velocity: 13.77, time: 4011.1557 },
+  { distance: 65900, force: 31.6268, energy: 624.6704, velocity: 13.77, time: 4013.0 },
+  { distance: 65925, force: 33.0829, energy: 626.8745, velocity: 13.77, time: 4014.4706 },
+  { distance: 65950, force: 34.55, energy: 629.1783, velocity: 13.77, time: 4016.1852 },
+  { distance: 65975, force: 36.0232, energy: 631.5822, velocity: 13.77, time: 4018.037 },
+  { distance: 66000, force: 37.4964, energy: 634.0864, velocity: 13.77, time: 4019.8889 },
+  { distance: 66025, force: 38.9696, energy: 636.6911, velocity: 13.77, time: 4021.7407 },
+  { distance: 66050, force: 40.4428, energy: 639.396, velocity: 13.77, time: 4023.5926 },
+  { distance: 66075, force: 41.9161, energy: 642.2014, velocity: 13.77, time: 4025.4444 },
+  { distance: 66100, force: 43.3893, energy: 645.1071, velocity: 13.77, time: 4027.2963 },
+  { distance: 66125, force: 44.8625, energy: 648.1132, velocity: 13.77, time: 4029.1481 },
+  { distance: 66150, force: 46.3357, energy: 651.2196, velocity: 13.77, time: 4031.0 },
+  { distance: 66175, force: 47.809, energy: 654.4264, velocity: 13.77, time: 4032.8519 },
+  { distance: 66200, force: 49.2822, energy: 657.7336, velocity: 13.77, time: 4034.7037 },
+  { distance: 66225, force: 50.7554, energy: 661.1411, velocity: 13.77, time: 4036.5556 },
+  { distance: 66250, force: 52.2286, energy: 664.649, velocity: 13.77, time: 4038.4074 },
+  { distance: 66275, force: 53.7018, energy: 668.2573, velocity: 13.77, time: 4040.2593 },
+  { distance: 66300, force: 55.1751, energy: 671.9659, velocity: 13.77, time: 4042.1111 },
+  { distance: 66325, force: 56.6483, energy: 675.7749, velocity: 13.77, time: 4043.963 },
+  { distance: 66350, force: 58.1215, energy: 679.6842, velocity: 13.77, time: 4045.8148 },
+  { distance: 66375, force: 59.5947, energy: 683.6939, velocity: 13.77, time: 4047.6667 },
+  { distance: 66400, force: 61.0679, energy: 687.804, velocity: 13.77, time: 4049.5185 },
+  { distance: 66425, force: 62.5412, energy: 692.0144, velocity: 13.77, time: 4051.3704 },
+  { distance: 66450, force: 64.0144, energy: 696.3252, velocity: 13.77, time: 4053.2222 },
+  { distance: 66475, force: 65.4748, energy: 700.736, velocity: 13.77, time: 4055.07 },
+  { distance: 66500, force: 66.6274, energy: 705.2357, velocity: 13.77, time: 4056.82 },
+  { distance: 66525, force: 67.78, energy: 709.8139, velocity: 13.77, time: 4058.57 },
+  { distance: 66550, force: 68.9326, energy: 714.4707, velocity: 13.77, time: 4060.32 },
+  { distance: 66575, force: 70.0852, energy: 719.206, velocity: 13.77, time: 4062.07 },
+  { distance: 66600, force: 71.2378, energy: 724.0198, velocity: 13.77, time: 4063.82 },
+  { distance: 66625, force: 72.3904, energy: 728.9122, velocity: 13.77, time: 4065.57 },
+  { distance: 66650, force: 73.543, energy: 733.883, velocity: 13.77, time: 4067.32 },
+  { distance: 66675, force: 74.6578, energy: 738.9311, velocity: 13.77, time: 4069.0833 },
+  { distance: 66700, force: 74.8646, energy: 744.0242, velocity: 13.77, time: 4071.1667 },
+  { distance: 66725, force: 74.7635, energy: 749.1209, velocity: 13.77, time: 4072.8824 },
+  { distance: 66750, force: 74.4459, energy: 754.2034, velocity: 13.77, time: 4074.4286 },
+  { distance: 66775, force: 74.0933, energy: 759.263, velocity: 13.77, time: 4076.2143 },
+  { distance: 66800, force: 73.7406, energy: 764.2986, velocity: 13.77, time: 4078.0 },
+  { distance: 66825, force: 73.3879, energy: 769.3101, velocity: 13.77, time: 4079.75 },
+  { distance: 66850, force: 73.0352, energy: 774.2977, velocity: 13.77, time: 4081.5 },
+  { distance: 66875, force: 72.6826, energy: 779.2612, velocity: 13.77, time: 4083.25 },
+  { distance: 66900, force: 72.3299, energy: 784.2007, velocity: 13.77, time: 4085.0 },
+  { distance: 66925, force: 71.4037, energy: 789.0966, velocity: 13.77, time: 4087.2059 },
+  { distance: 66950, force: 70.4444, energy: 793.9283, velocity: 13.77, time: 4089.1429 },
+  { distance: 66975, force: 69.4665, energy: 798.694, velocity: 13.77, time: 4090.9286 },
+  { distance: 67000, force: 68.4887, energy: 803.3931, velocity: 13.77, time: 4092.7143 },
+  { distance: 67025, force: 67.5108, energy: 808.0256, velocity: 13.77, time: 4094.5 },
+  { distance: 67050, force: 66.5329, energy: 812.5915, velocity: 13.77, time: 4096.2857 },
+  { distance: 67075, force: 65.5468, energy: 817.0904, velocity: 13.77, time: 4098.0734 },
+  { distance: 67100, force: 64.3621, energy: 821.5154, velocity: 13.77, time: 4099.9091 },
+  { distance: 67125, force: 63.1774, energy: 825.8598, velocity: 13.77, time: 4101.7448 },
+  { distance: 67150, force: 61.9928, energy: 830.1234, velocity: 13.77, time: 4103.5804 },
+  { distance: 67175, force: 60.8081, energy: 834.3063, velocity: 13.77, time: 4105.4161 },
+  { distance: 67200, force: 59.6234, energy: 838.4085, velocity: 13.77, time: 4107.2517 },
+  { distance: 67225, force: 58.4388, energy: 842.43, velocity: 13.77, time: 4109.0874 },
+  { distance: 67250, force: 57.2541, energy: 846.3707, velocity: 13.77, time: 4110.9231 },
+  { distance: 67275, force: 56.0694, energy: 850.2308, velocity: 13.77, time: 4112.7587 },
+  { distance: 67300, force: 54.8847, energy: 854.0102, velocity: 13.77, time: 4114.5944 },
+  { distance: 67325, force: 53.7001, energy: 857.7089, velocity: 13.77, time: 4116.4301 },
+  { distance: 67350, force: 52.5154, energy: 861.3268, velocity: 13.77, time: 4118.2657 },
+  { distance: 67375, force: 51.7984, energy: 864.88, velocity: 13.77, time: 4119.8824 },
+  { distance: 67400, force: 51.41, energy: 868.3956, velocity: 13.77, time: 4121.4369 },
+  { distance: 67425, force: 51.0749, energy: 871.8865, velocity: 13.77, time: 4123.2573 },
+  { distance: 67450, force: 50.7399, energy: 875.3545, velocity: 13.77, time: 4125.0777 },
+  { distance: 67475, force: 50.4049, energy: 878.7998, velocity: 13.77, time: 4126.8981 },
+  { distance: 67500, force: 50.0698, energy: 882.2222, velocity: 13.77, time: 4128.7184 },
+  { distance: 67525, force: 49.7348, energy: 885.6218, velocity: 13.77, time: 4130.5388 },
+  { distance: 67550, force: 49.3997, energy: 888.9985, velocity: 13.77, time: 4132.3592 },
+  { distance: 67575, force: 49.0647, energy: 892.3525, velocity: 13.77, time: 4134.1796 },
+  { distance: 67600, force: 48.7296, energy: 895.6836, velocity: 13.77, time: 4136.0 },
+  { distance: 67625, force: 48.6593, energy: 899.0009, velocity: 13.77, time: 4138.2059 },
+  { distance: 67650, force: 48.6042, energy: 902.314, velocity: 13.77, time: 4140.152 },
+  { distance: 67675, force: 48.5577, energy: 905.6235, velocity: 13.77, time: 4141.952 },
+  { distance: 67700, force: 48.5113, energy: 908.93, velocity: 13.77, time: 4143.752 },
+  { distance: 67725, force: 48.4648, energy: 912.2332, velocity: 13.77, time: 4145.552 },
+  { distance: 67750, force: 48.4183, energy: 915.5333, velocity: 13.77, time: 4147.352 },
+  { distance: 67775, force: 48.3718, energy: 918.8302, velocity: 13.77, time: 4149.152 },
+  { distance: 67800, force: 48.3253, energy: 922.1239, velocity: 13.77, time: 4150.952 },
+  { distance: 67825, force: 48.2788, energy: 925.4145, velocity: 13.77, time: 4152.752 },
+  { distance: 67850, force: 48.2323, energy: 928.7019, velocity: 13.77, time: 4154.552 },
+  { distance: 67875, force: 48.1858, energy: 931.9862, velocity: 13.77, time: 4156.352 },
+  { distance: 67900, force: 48.4974, energy: 935.2794, velocity: 13.77, time: 4158.1789 },
+  { distance: 67925, force: 49.0104, energy: 938.6008, velocity: 13.77, time: 4160.0211 },
+  { distance: 67950, force: 49.5234, energy: 941.9571, velocity: 13.77, time: 4161.8632 },
+  { distance: 67975, force: 50.0364, energy: 945.3484, velocity: 13.77, time: 4163.7053 },
+  { distance: 68000, force: 50.5493, energy: 948.7746, velocity: 13.77, time: 4165.5474 },
+  { distance: 68025, force: 51.0623, energy: 952.2357, velocity: 13.77, time: 4167.3895 },
+  { distance: 68050, force: 51.5753, energy: 955.7318, velocity: 13.77, time: 4169.2316 },
+  { distance: 68075, force: 52.1133, energy: 959.2637, velocity: 13.77, time: 4171.0717 },
+  { distance: 68100, force: 53.2515, energy: 962.8527, velocity: 13.77, time: 4172.8652 },
+  { distance: 68125, force: 54.3897, energy: 966.5192, velocity: 13.77, time: 4174.6587 },
+  { distance: 68150, force: 55.5278, energy: 970.2633, velocity: 13.77, time: 4176.4522 },
+  { distance: 68175, force: 56.666, energy: 974.0849, velocity: 13.77, time: 4178.2457 },
+  { distance: 68200, force: 57.8042, energy: 977.984, velocity: 13.77, time: 4180.0391 },
+  { distance: 68225, force: 58.9424, energy: 981.9607, velocity: 13.77, time: 4181.8326 },
+  { distance: 68250, force: 60.0806, energy: 986.0149, velocity: 13.77, time: 4183.6261 },
+  { distance: 68275, force: 61.2187, energy: 990.1467, velocity: 13.77, time: 4185.4196 },
+  { distance: 68300, force: 62.3569, energy: 994.356, velocity: 13.77, time: 4187.213 },
+  { distance: 68325, force: 63.4951, energy: 998.6428, velocity: 13.77, time: 4189.0065 },
+  { distance: 68350, force: 64.6333, energy: 1003.0072, velocity: 13.77, time: 4190.8 },
+  { distance: 68375, force: 65.7715, energy: 1007.4491, velocity: 13.77, time: 4192.5935 },
+  { distance: 68400, force: 66.9096, energy: 1011.9685, velocity: 13.77, time: 4194.387 },
+  { distance: 68425, force: 68.0478, energy: 1016.5655, velocity: 13.77, time: 4196.1804 },
+  { distance: 68450, force: 69.186, energy: 1021.24, velocity: 13.77, time: 4197.9739 },
+  { distance: 68475, force: 70.3242, energy: 1025.9921, velocity: 13.77, time: 4199.7674 },
+  { distance: 68500, force: 71.4623, energy: 1030.8217, velocity: 13.77, time: 4201.5609 },
+  { distance: 68525, force: 72.6005, energy: 1035.7289, velocity: 13.77, time: 4203.3543 },
+  { distance: 68550, force: 73.1949, energy: 1040.695, velocity: 13.77, time: 4205.2 },
+  { distance: 68575, force: 73.4835, energy: 1045.6912, velocity: 13.77, time: 4207.075 },
+  { distance: 68600, force: 73.7721, energy: 1050.7071, velocity: 13.77, time: 4208.95 },
+  { distance: 68625, force: 74.0606, energy: 1055.7427, velocity: 13.77, time: 4210.825 },
+  { distance: 68650, force: 74.3492, energy: 1060.7979, velocity: 13.77, time: 4212.7 },
+  { distance: 68675, force: 74.6377, energy: 1065.8728, velocity: 13.77, time: 4214.575 },
+  { distance: 68700, force: 74.9263, energy: 1070.9673, velocity: 13.77, time: 4216.45 },
+  { distance: 68725, force: 75.2148, energy: 1076.0815, velocity: 13.77, time: 4218.325 },
+  { distance: 68750, force: 75.5034, energy: 1081.2153, velocity: 13.77, time: 4220.2 },
+  { distance: 68775, force: 75.7804, energy: 1086.3684, velocity: 13.77, time: 4222.0717 },
+  { distance: 68800, force: 75.7804, energy: 1091.5309, velocity: 13.77, time: 4223.8642 },
+  { distance: 68825, force: 75.7804, energy: 1096.6935, velocity: 13.77, time: 4225.6568 },
+  { distance: 68850, force: 75.7804, energy: 1101.856, velocity: 13.77, time: 4227.4493 },
+  { distance: 68875, force: 75.7804, energy: 1107.0186, velocity: 13.77, time: 4229.2419 },
+  { distance: 68900, force: 75.7804, energy: 1112.1811, velocity: 13.77, time: 4231.0344 },
+  { distance: 68925, force: 75.7804, energy: 1117.3436, velocity: 13.77, time: 4232.827 },
+  { distance: 68950, force: 75.7804, energy: 1122.5062, velocity: 13.77, time: 4234.6195 },
+  { distance: 68975, force: 75.7804, energy: 1127.6687, velocity: 13.77, time: 4236.412 },
+  { distance: 69000, force: 75.7804, energy: 1132.8312, velocity: 13.77, time: 4238.2046 },
+  { distance: 69025, force: 75.7804, energy: 1137.9938, velocity: 13.77, time: 4239.9971 },
+  { distance: 69050, force: 75.7804, energy: 1143.1563, velocity: 13.77, time: 4241.7897 },
+  { distance: 69075, force: 75.7804, energy: 1148.3189, velocity: 13.77, time: 4243.5822 },
+  { distance: 69100, force: 75.7804, energy: 1153.4814, velocity: 13.77, time: 4245.3748 },
+  { distance: 69125, force: 75.7804, energy: 1158.6439, velocity: 13.77, time: 4247.1673 },
+  { distance: 69150, force: 75.7804, energy: 1163.8065, velocity: 13.77, time: 4248.9598 },
+  { distance: 69175, force: 75.7804, energy: 1168.969, velocity: 13.77, time: 4250.7524 },
+  { distance: 69200, force: 75.7804, energy: 1174.1316, velocity: 13.77, time: 4252.5449 },
+  { distance: 69225, force: 75.7804, energy: 1179.2941, velocity: 13.77, time: 4254.3375 },
+  { distance: 69250, force: 75.7804, energy: 1184.4566, velocity: 13.77, time: 4256.13 },
+  { distance: 69275, force: 75.7804, energy: 1189.6192, velocity: 13.77, time: 4257.9226 },
+  { distance: 69300, force: 75.7804, energy: 1194.7817, velocity: 13.77, time: 4259.7151 },
+  { distance: 69325, force: 75.7804, energy: 1199.9442, velocity: 13.77, time: 4261.5076 },
+  { distance: 69350, force: 75.7804, energy: 1205.1068, velocity: 13.77, time: 4263.3002 },
+  { distance: 69375, force: 75.7804, energy: 1210.2693, velocity: 13.77, time: 4265.0927 },
+  { distance: 69400, force: 75.7804, energy: 1215.4319, velocity: 13.77, time: 4266.8853 },
+  { distance: 69425, force: 75.7804, energy: 1220.5944, velocity: 13.77, time: 4268.6778 },
+  { distance: 69450, force: 75.7804, energy: 1225.7569, velocity: 13.77, time: 4270.4704 },
+  { distance: 69475, force: 75.7804, energy: 1230.9195, velocity: 13.77, time: 4272.2629 },
+  { distance: 69500, force: 75.7804, energy: 1236.082, velocity: 13.77, time: 4274.0554 },
+  { distance: 69525, force: 75.7804, energy: 1241.2445, velocity: 13.77, time: 4275.848 },
+  { distance: 69550, force: 75.7804, energy: 1246.4071, velocity: 13.77, time: 4277.6405 },
+  { distance: 69575, force: 75.7804, energy: 1251.5696, velocity: 13.77, time: 4279.4331 },
+  { distance: 69600, force: 75.7804, energy: 1256.7322, velocity: 13.77, time: 4281.2256 },
+  { distance: 69625, force: 75.7804, energy: 1261.8947, velocity: 13.77, time: 4283.0182 },
+  { distance: 69650, force: 75.7804, energy: 1267.0572, velocity: 13.77, time: 4284.8107 },
+  { distance: 69675, force: 75.7804, energy: 1272.2198, velocity: 13.77, time: 4286.6033 },
+  { distance: 69700, force: 75.7804, energy: 1277.3823, velocity: 13.77, time: 4288.3958 },
+  { distance: 69725, force: 75.7804, energy: 1282.5449, velocity: 13.77, time: 4290.1883 },
+  { distance: 69750, force: 75.7804, energy: 1287.7074, velocity: 13.77, time: 4291.9809 },
+  { distance: 69775, force: 75.7804, energy: 1292.8699, velocity: 13.77, time: 4293.7734 },
+  { distance: 69800, force: 75.7804, energy: 1298.0325, velocity: 13.77, time: 4295.566 },
+  { distance: 69825, force: 75.6363, energy: 1303.1901, velocity: 13.77, time: 4297.4412 },
+  { distance: 69850, force: 74.9157, energy: 1308.3183, velocity: 13.77, time: 4299.6471 },
+  { distance: 69875, force: 74.1406, energy: 1313.3955, velocity: 13.77, time: 4301.5511 },
+  { distance: 69900, force: 73.355, energy: 1318.4196, velocity: 13.77, time: 4303.3977 },
+  { distance: 69925, force: 72.5695, energy: 1323.3901, velocity: 13.77, time: 4305.2443 },
+  { distance: 69950, force: 71.784, energy: 1328.3072, velocity: 13.77, time: 4307.0909 },
+  { distance: 69975, force: 70.9985, energy: 1333.1707, velocity: 13.77, time: 4308.9375 },
+  { distance: 70000, force: 70.213, energy: 1337.9807, velocity: 13.77, time: 4310.7841 },
+  { distance: 70025, force: 69.4275, energy: 1342.7372, velocity: 13.77, time: 4312.6307 },
+  { distance: 70050, force: 67.0773, energy: 1347.3869, velocity: 13.77, time: 4314.1765 },
+  { distance: 70075, force: 64.2584, energy: 1351.8605, velocity: 13.77, time: 4315.8039 },
+  { distance: 70100, force: 61.3408, energy: 1356.1388, velocity: 13.77, time: 4317.631 },
+  { distance: 70125, force: 58.4232, energy: 1360.2182, velocity: 13.77, time: 4319.4581 },
+  { distance: 70150, force: 55.5056, energy: 1364.0989, velocity: 13.77, time: 4321.2852 },
+  { distance: 70175, force: 52.5881, energy: 1367.7809, velocity: 13.77, time: 4323.1123 },
+  { distance: 70200, force: 49.6705, energy: 1371.2641, velocity: 13.77, time: 4324.9394 },
+  { distance: 70225, force: 46.7529, energy: 1374.5485, velocity: 13.77, time: 4326.7665 },
+  { distance: 70250, force: 43.8353, energy: 1377.6341, velocity: 13.77, time: 4328.5936 },
+  { distance: 70275, force: 40.9177, energy: 1380.521, velocity: 13.77, time: 4330.4207 },
+  { distance: 70300, force: 38.0001, energy: 1383.2092, velocity: 13.77, time: 4332.2478 },
+  { distance: 70325, force: 35.0825, energy: 1385.6986, velocity: 13.77, time: 4334.0749 },
+  { distance: 70350, force: 32.1649, energy: 1387.9892, velocity: 13.77, time: 4335.902 },
+  { distance: 70375, force: 29.2474, energy: 1390.081, velocity: 13.77, time: 4337.7291 },
+  { distance: 70400, force: 26.3298, energy: 1391.9741, velocity: 13.77, time: 4339.5561 },
+  { distance: 70425, force: 23.4122, energy: 1393.6685, velocity: 13.77, time: 4341.3832 },
+  { distance: 70450, force: 20.4946, energy: 1395.164, velocity: 13.77, time: 4343.2103 },
+  { distance: 70475, force: 17.577, energy: 1396.4608, velocity: 13.77, time: 4345.0374 },
+  { distance: 70500, force: 14.6594, energy: 1397.5589, velocity: 13.77, time: 4346.8645 },
+  { distance: 70525, force: 11.7418, energy: 1398.4582, velocity: 13.77, time: 4348.6916 },
+  { distance: 70550, force: 8.8242, energy: 1399.1587, velocity: 13.77, time: 4350.5187 },
+  { distance: 70575, force: 5.9066, energy: 1399.6605, velocity: 13.77, time: 4352.3458 },
+  { distance: 70600, force: 2.9891, energy: 1399.9635, velocity: 13.77, time: 4354.1729 },
+  { distance: 70625, force: 0.0, energy: 1400.0653, velocity: 13.77, time: 4356.0 },
+  { distance: 70650, force: 0.0, energy: 1400.0653, velocity: 13.77, time: 4357.5263 },
+  { distance: 70675, force: 0.0, energy: 1400.0653, velocity: 13.781, time: 4359.55 },
+  { distance: 70700, force: 0.0, energy: 1400.0653, velocity: 13.798, time: 4361.6 },
+  { distance: 70725, force: 0.0, energy: 1400.0653, velocity: 13.821, time: 4363.1 },
+  { distance: 70750, force: 0.0, energy: 1400.0653, velocity: 13.849, time: 4365.3 },
+  { distance: 70775, force: 0.0, energy: 1400.0653, velocity: 13.8865, time: 4366.55 },
+  { distance: 70800, force: 0.0, energy: 1400.0653, velocity: 13.932, time: 4368.6 },
+  { distance: 70825, force: 0.0, energy: 1400.0653, velocity: 13.9825, time: 4370.1 },
+  { distance: 70850, force: 0.0, energy: 1400.0653, velocity: 14.045, time: 4372.3 },
+  { distance: 70875, force: 0.0, energy: 1400.0653, velocity: 14.1075, time: 4374.1 },
+  { distance: 70900, force: 0.0, energy: 1400.0653, velocity: 14.18, time: 4376.0 },
+  { distance: 70925, force: 0.0, energy: 1400.0653, velocity: 14.2543, time: 4377.3571 },
+  { distance: 70950, force: 0.0, energy: 1400.0653, velocity: 14.336, time: 4378.8 },
+  { distance: 70975, force: 0.0, energy: 1400.0653, velocity: 14.424, time: 4381.05 },
+  { distance: 71000, force: 0.0, energy: 1400.0653, velocity: 14.524, time: 4382.6 },
   /*{ distance: 71025, force: 0.0000, energy: 1400.0653, velocity: 14.6240, time: 4384.5500
  },
   { distance: 71050, force: 0.0000, energy: 1400.0653, velocity: 14.7320, time: 4385.8000
@@ -13739,4 +10898,4 @@ export const trainForceData = [
  },
   { distance: 171725, force: 0.0000, energy: 5410.9468, velocity: 2.6827, time: 10971.3636
  },*/
-  ]
+];

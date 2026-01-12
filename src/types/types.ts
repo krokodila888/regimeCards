@@ -12,7 +12,7 @@ export type PaletteObject = {
   icon: React.ReactNode;
   category: string;
   description?: string;
-  canvasIcon?: any
+  canvasIcon?: any;
 };
 
 export type PlacedObject = {

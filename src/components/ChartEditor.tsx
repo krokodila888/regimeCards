@@ -1,46 +1,27 @@
-// ИСПРАВЛЕННЫЙ КОМПОНЕНТ ChartEditor
-//
-// This component handles the main chart editing canvas with full programmatic rendering.
-// All charts now use the drawWorkflowCanvas function for consistent visualization.
+import { GitBranch, ZoomIn, ZoomOut, Settings } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
 
-import React, { useState, useRef, useEffect } from "react";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "./ui/context-menu";
-import {
-  GitBranch,
-  Signal,
-  Gauge,
-  ZoomIn,
-  ZoomOut,
-  Move,
-  Shapes,
-  Settings,
-} from "lucide-react";
-import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
-import { Button } from "./ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "./ui/dialog";
-import { Checkbox } from "./ui/checkbox";
-import ObjectPalette from "./ObjectPalette";
-import VisioObjectPalette from "./VisioObjectPalette";
 import type {
   ChartData,
   CanvasObject,
   OperationModeSegment,
   OperationMode,
   SpeedLimit,
-} from "../types/chart-data";
-import { trainForceData } from "../types/trainForceData";
+} from '../types/chart-data';
+import { trainForceData } from '../types/trainForceData';
+
+import ObjectPalette from './ObjectPalette';
+import { Button } from './ui/button';
+import { Checkbox } from './ui/checkbox';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from './ui/context-menu';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
+import { Label } from './ui/label';
+import VisioObjectPalette from './VisioObjectPalette';
 
 const PIXELS_PER_KM = 40;
 
@@ -51,10 +32,7 @@ interface ChartEditorProps {
 
 // Helper function to calculate kmToX conversion
 // This is extracted so it can be used by both drawing and interaction handlers
-const createKmToXConverter = (
-  chartData: ChartData,
-  marginLeft: number = 80,
-) => {
+const createKmToXConverter = (chartData: ChartData, marginLeft: number = 80) => {
   if (!chartData.workflow?.trackSection) {
     return (km: number) => marginLeft;
   }
@@ -65,23 +43,14 @@ const createKmToXConverter = (
   let actualStartCoord = 0;
   let actualEndCoord = trackLength;
 
-  if (
-    trackSection.stations &&
-    trackSection.stations.length > 0
-  ) {
+  if (trackSection.stations && trackSection.stations.length > 0) {
     actualStartCoord = trackSection.stations[0].startCoord;
-    actualEndCoord =
-      trackSection.stations[trackSection.stations.length - 1]
-        .endCoord;
+    actualEndCoord = trackSection.stations[trackSection.stations.length - 1].endCoord;
   }
 
   const isReversed = actualStartCoord > actualEndCoord;
-  const displayStartCoord = isReversed
-    ? actualEndCoord
-    : actualStartCoord;
-  const displayEndCoord = isReversed
-    ? actualStartCoord
-    : actualEndCoord;
+  const displayStartCoord = isReversed ? actualEndCoord : actualStartCoord;
+  const displayEndCoord = isReversed ? actualStartCoord : actualEndCoord;
 
   return (km: number) => {
     if (!isFinite(km)) {
@@ -89,9 +58,7 @@ const createKmToXConverter = (
     }
 
     const normalizedKm = isReversed ? displayEndCoord - km : km;
-    const x =
-      marginLeft +
-      (normalizedKm - displayStartCoord) * PIXELS_PER_KM;
+    const x = marginLeft + (normalizedKm - displayStartCoord) * PIXELS_PER_KM;
 
     if (!isFinite(x)) {
       return marginLeft;
@@ -101,14 +68,10 @@ const createKmToXConverter = (
   };
 };
 
-export default function ChartEditor({
-  chartData,
-  onUpdateChartData,
-}: ChartEditorProps) {
+export default function ChartEditor({ chartData, onUpdateChartData }: ChartEditorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const prevDepsRef = useRef<any>(null);
 
   const [zoom, setZoom] = useState(1);
   const [panX, setPanX] = useState(0);
@@ -136,10 +99,8 @@ export default function ChartEditor({
     y: number;
   } | null>(null);
 
-  const [hoveredObject, setHoveredObject] =
-    useState<CanvasObject | null>(null);
-  const [draggedObject, setDraggedObject] =
-    useState<CanvasObject | null>(null);
+  const [hoveredObject, setHoveredObject] = useState<CanvasObject | null>(null);
+  const [draggedObject, setDraggedObject] = useState<CanvasObject | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const mousePosRef = useRef({ x: 0, y: 0 });
   const [screenMousePos, setScreenMousePos] = useState({
@@ -148,9 +109,7 @@ export default function ChartEditor({
   });
 
   const [showPalette, setShowPalette] = useState(false);
-  const [placingObject, setPlacingObject] = useState<
-    string | null
-  >(null);
+  const [placingObject, setPlacingObject] = useState<string | null>(null);
 
   const [hoveredDataPoint, setHoveredDataPoint] = useState<{
     label: string;
@@ -159,23 +118,19 @@ export default function ChartEditor({
   } | null>(null);
 
   // Arrow interaction state
-  const [selectedArrow, setSelectedArrow] = useState<
-    string | null
-  >(null);
+  const [selectedArrow, setSelectedArrow] = useState<string | null>(null);
   const [draggedArrow, setDraggedArrow] = useState<{
     arrowId: string;
-    handle: "start" | "end";
+    handle: 'start' | 'end';
   } | null>(null);
   const [hoveredArrow, setHoveredArrow] = useState<{
     arrowId: string;
-    handle?: "start" | "end";
+    handle?: 'start' | 'end';
   } | null>(null);
-  const [resizeLimitReached, setResizeLimitReached] =
-    useState<boolean>(false);
+  const [resizeLimitReached, setResizeLimitReached] = useState<boolean>(false);
 
   // Display Settings state
-  const [showDisplaySettings, setShowDisplaySettings] =
-    useState(false);
+  const [showDisplaySettings, setShowDisplaySettings] = useState(false);
   const [displaySettings, setDisplaySettings] = useState({
     trackProfile: true,
     optimalSpeedCurve: true,
@@ -185,10 +140,7 @@ export default function ChartEditor({
     objectMarkers: true,
   });
 
-  const throttledLog = (
-    message: string,
-    interval: number = 1000,
-  ) => {
+  const throttledLog = (message: string, interval: number = 1000) => {
     const now = Date.now();
     if (!(window as any).lastLogTime) {
       (window as any).lastLogTime = {};
@@ -203,8 +155,7 @@ export default function ChartEditor({
   };
 
   // VisioObjectPalette collapse state
-  const [paletteCollapsed, setPaletteCollapsed] =
-    useState(true);
+  const [paletteCollapsed, setPaletteCollapsed] = useState(true);
 
   // Screenshot state variables (currently unused but kept for future use)
   // const [screenshotImage, setScreenshotImage] = useState<HTMLImageElement | null>(null);
@@ -214,10 +165,7 @@ export default function ChartEditor({
   useEffect(() => {
     setSelectedArrow(null);
     setDraggedArrow(null);
-  }, [
-    chartData.workflow?.trackSection?.id,
-    chartData.workflow?.locomotive?.id,
-  ]);
+  }, [chartData.workflow?.trackSection?.id, chartData.workflow?.locomotive?.id]);
 
   // Расчёт базовой высоты (using fixed 4-layer structure)
   const calculateBaseHeight = () => {
@@ -245,15 +193,10 @@ export default function ChartEditor({
 
   // Обновление ширины холста по длине участка
   useEffect(() => {
-    const trackLength =
-      chartData.workflow?.trackSection?.length || 200;
+    const trackLength = chartData.workflow?.trackSection?.length || 200;
 
     // VALIDATION: Check for unreasonable values
-    if (
-      !isFinite(trackLength) ||
-      trackLength <= 0 ||
-      trackLength > 10000
-    ) {
+    if (!isFinite(trackLength) || trackLength <= 0 || trackLength > 10000) {
       if (baseWidth !== 2400) {
         setBaseWidth(2400);
       }
@@ -263,10 +206,7 @@ export default function ChartEditor({
     const pixelsPerKm = 40;
     const marginLeft = 100;
     const marginRight = 100;
-    const calculatedWidth = Math.max(
-      2400,
-      marginLeft + trackLength * pixelsPerKm + marginRight,
-    );
+    const calculatedWidth = Math.max(2400, marginLeft + trackLength * pixelsPerKm + marginRight);
 
     // Обновляем только если значение изменилось
     if (calculatedWidth !== baseWidth) {
@@ -300,10 +240,10 @@ export default function ChartEditor({
     if (!containerRef.current) return;
 
     // Параметры, которые дают правильный вид
-    const marginLeft = 80;
+    /*const marginLeft = 80;
     const leftPadding = 30;
     const marginTop = 50;
-    const topOffset = 20;
+    const topOffset = 20;*/
 
     // Устанавливаем значения, которые работают в первом случае
     setZoom(1);
@@ -431,25 +371,20 @@ export default function ChartEditor({
       const marginRight = 50;
       const marginBottom = 240;
       const arrowY = baseHeight - marginBottom + 180;
-      const trackLength =
-        chartData.workflow.trackSection.length;
+      const trackLength = chartData.workflow.trackSection.length;
       const chartWidth = baseWidth - marginLeft - marginRight;
 
       let gridInterval;
 
       let foundHover: {
         arrowId: string;
-        handle?: "start" | "end";
+        handle?: 'start' | 'end';
       } | null = null;
 
       // Create kmToX converter for this interaction
       const kmToX = createKmToXConverter(chartData, marginLeft);
 
-      for (
-        let i = 0;
-        i < chartData.workflow.regimeArrows.length;
-        i++
-      ) {
+      for (let i = 0; i < chartData.workflow.regimeArrows.length; i++) {
         const arrow = chartData.workflow.regimeArrows[i];
         const startX = kmToX(arrow.startKm);
         const endX = kmToX(arrow.endKm);
@@ -458,24 +393,22 @@ export default function ChartEditor({
         if (selectedArrow === arrow.id) {
           if (i > 0) {
             const distToStart = Math.sqrt(
-              Math.pow(newMousePosX - startX, 2) +
-                Math.pow(newMousePosY - arrowY, 2),
+              Math.pow(newMousePosX - startX, 2) + Math.pow(newMousePosY - arrowY, 2)
             );
             if (distToStart <= handleRadius) {
               foundHover = {
                 arrowId: arrow.id,
-                handle: "start",
+                handle: 'start',
               };
               break;
             }
           }
 
           const distToEnd = Math.sqrt(
-            Math.pow(newMousePosX - endX, 2) +
-              Math.pow(newMousePosY - arrowY, 2),
+            Math.pow(newMousePosX - endX, 2) + Math.pow(newMousePosY - arrowY, 2)
           );
           if (distToEnd <= handleRadius) {
-            foundHover = { arrowId: arrow.id, handle: "end" };
+            foundHover = { arrowId: arrow.id, handle: 'end' };
             break;
           }
         }
@@ -498,13 +431,8 @@ export default function ChartEditor({
     }
 
     // Перетаскивание концов стрелок — тоже в мировой системе координат
-    if (
-      draggedArrow &&
-      chartData.workflow?.regimeArrows &&
-      chartData.workflow?.trackSection
-    ) {
-      const trackLength =
-        chartData.workflow.trackSection.length;
+    if (draggedArrow && chartData.workflow?.regimeArrows && chartData.workflow?.trackSection) {
+      const trackLength = chartData.workflow.trackSection.length;
       const marginLeft = 80;
       const marginRight = 50;
       const chartWidth = baseWidth - marginLeft - marginRight;
@@ -513,32 +441,23 @@ export default function ChartEditor({
         0,
         Math.min(
           trackLength,
-          (newMousePosX - marginLeft) / PIXELS_PER_KM, // Фиксированный масштаб
-        ),
+          (newMousePosX - marginLeft) / PIXELS_PER_KM // Фиксированный масштаб
+        )
       );
 
       const minArrowLength = 1;
-      const updatedArrows = [
-        ...chartData.workflow.regimeArrows,
-      ];
-      const currentIndex = updatedArrows.findIndex(
-        (a) => a.id === draggedArrow.arrowId,
-      );
+      const updatedArrows = [...chartData.workflow.regimeArrows];
+      const currentIndex = updatedArrows.findIndex((a) => a.id === draggedArrow.arrowId);
 
       let limitReached = false;
 
       if (currentIndex !== -1) {
         const currentArrow = updatedArrows[currentIndex];
-        const leftNeighbor =
-          currentIndex > 0
-            ? updatedArrows[currentIndex - 1]
-            : null;
+        const leftNeighbor = currentIndex > 0 ? updatedArrows[currentIndex - 1] : null;
         const rightNeighbor =
-          currentIndex < updatedArrows.length - 1
-            ? updatedArrows[currentIndex + 1]
-            : null;
+          currentIndex < updatedArrows.length - 1 ? updatedArrows[currentIndex + 1] : null;
 
-        if (draggedArrow.handle === "start") {
+        if (draggedArrow.handle === 'start') {
           if (currentIndex === 0) return;
 
           let minStartKm = currentArrow.startKm;
@@ -552,10 +471,7 @@ export default function ChartEditor({
             limitReached = true;
           }
 
-          const constrainedStartKm = Math.max(
-            minStartKm,
-            Math.min(maxStartKm, mouseKm),
-          );
+          const constrainedStartKm = Math.max(minStartKm, Math.min(maxStartKm, mouseKm));
 
           updatedArrows[currentIndex] = {
             ...currentArrow,
@@ -580,10 +496,7 @@ export default function ChartEditor({
             limitReached = true;
           }
 
-          const constrainedEndKm = Math.max(
-            minEndKm,
-            Math.min(maxEndKm, mouseKm),
-          );
+          const constrainedEndKm = Math.max(minEndKm, Math.min(maxEndKm, mouseKm));
 
           updatedArrows[currentIndex] = {
             ...currentArrow,
@@ -610,9 +523,7 @@ export default function ChartEditor({
     } else if (draggedObject && !isPanning) {
       // Перетаскивание объектов — в общей мировой системе координат
       const newObjects = chartData.canvasObjects.map((obj) =>
-        obj.id === draggedObject.id
-          ? { ...obj, x: newMousePosX, y: newMousePosY }
-          : obj,
+        obj.id === draggedObject.id ? { ...obj, x: newMousePosX, y: newMousePosY } : obj
       );
       onUpdateChartData({ canvasObjects: newObjects });
     } else if (isPanning && !draggedObject && !draggedArrow) {
@@ -624,19 +535,13 @@ export default function ChartEditor({
 
   const handlePanEnd = () => {
     if (draggedObject) {
-      const finalY =
-        mousePos.y >= xAxisY ? xAxisY - 30 : mousePos.y;
+      const finalY = mousePos.y >= xAxisY ? xAxisY - 30 : mousePos.y;
       const finalX = mousePos.x;
 
-      const stackedPosition = getStackedPosition(
-        finalX,
-        finalY,
-      );
+      const stackedPosition = getStackedPosition(finalX, finalY);
 
       const newObjects = chartData.canvasObjects.map((obj) =>
-        obj.id === draggedObject.id
-          ? { ...obj, x: finalX, y: stackedPosition }
-          : obj,
+        obj.id === draggedObject.id ? { ...obj, x: finalX, y: stackedPosition } : obj
       );
       onUpdateChartData({ canvasObjects: newObjects });
     }
@@ -650,19 +555,15 @@ export default function ChartEditor({
     const tolerance = 20;
     const stackSpacing = 30;
 
-    const objectsAtSameX = chartData.canvasObjects.filter(
-      (obj) => {
-        return Math.abs(obj.x - x) < tolerance;
-      },
-    );
+    const objectsAtSameX = chartData.canvasObjects.filter((obj) => {
+      return Math.abs(obj.x - x) < tolerance;
+    });
 
     if (objectsAtSameX.length === 0) {
       return y;
     }
 
-    const sorted = [...objectsAtSameX].sort(
-      (a, b) => a.y - b.y,
-    );
+    const sorted = [...objectsAtSameX].sort((a, b) => a.y - b.y);
 
     let finalY = y;
     for (const obj of sorted) {
@@ -691,14 +592,13 @@ export default function ChartEditor({
 
       y = getStackedPosition(x, y);
 
-      const [objectType, subtype] = placingObject.split(":");
+      const [objectType, subtype] = placingObject.split(':');
 
       const newObject: CanvasObject = {
         id: Date.now().toString(),
         type: objectType as any,
         subtype: subtype || undefined,
-        label:
-          (window as any).__placingObjectLabel || undefined,
+        label: (window as any).__placingObjectLabel || undefined,
         x,
         y,
       };
@@ -717,9 +617,7 @@ export default function ChartEditor({
     e.preventDefault();
 
     try {
-      const objectData = JSON.parse(
-        e.dataTransfer.getData("application/json"),
-      );
+      const objectData = JSON.parse(e.dataTransfer.getData('application/json'));
       const rect = canvasRef.current?.getBoundingClientRect();
       if (!rect) return;
 
@@ -749,7 +647,7 @@ export default function ChartEditor({
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "copy";
+    e.dataTransfer.dropEffect = 'copy';
   };
 
   const handleContextMenuSelect = () => {
@@ -764,54 +662,30 @@ export default function ChartEditor({
 
   // ОСНОВНАЯ ОТРИСОВКА WORKFLOW-ГРАФИКА
   const drawWorkflowCanvas = React.useCallback(
-    (
-      ctx: CanvasRenderingContext2D,
-      baseWidth: number,
-      baseHeight: number,
-      zoom: number,
-    ) => {
+    (ctx: CanvasRenderingContext2D, baseWidth: number, baseHeight: number, zoom: number) => {
       try {
         const trackSection = chartData.workflow?.trackSection;
         const trackLength = trackSection?.length ?? 0;
 
         // VALIDATION: Check track length
-        if (
-          !isFinite(trackLength) ||
-          trackLength <= 0 ||
-          trackLength > 10000
-        ) {
-          throw new Error(
-            `Invalid track length: ${trackLength} km`,
-          );
+        if (!isFinite(trackLength) || trackLength <= 0 || trackLength > 10000) {
+          throw new Error(`Invalid track length: ${trackLength} km`);
         }
         let actualStartCoord = 0;
         let actualEndCoord = trackLength;
 
-        if (
-          trackSection &&
-          trackSection.stations &&
-          trackSection.stations.length > 0
-        ) {
-          actualStartCoord =
-            trackSection.stations[0].startCoord;
-          actualEndCoord =
-            trackSection.stations[
-              trackSection.stations.length - 1
-            ].endCoord;
+        if (trackSection && trackSection.stations && trackSection.stations.length > 0) {
+          actualStartCoord = trackSection.stations[0].startCoord;
+          actualEndCoord = trackSection.stations[trackSection.stations.length - 1].endCoord;
         }
 
         const isReversed = actualStartCoord > actualEndCoord;
-        const displayStartCoord = isReversed
-          ? actualEndCoord
-          : actualStartCoord;
-        const displayEndCoord = isReversed
-          ? actualStartCoord
-          : actualEndCoord;
-        const displayTrackLength =
-          displayEndCoord - displayStartCoord;
+        const displayStartCoord = isReversed ? actualEndCoord : actualStartCoord;
+        const displayEndCoord = isReversed ? actualStartCoord : actualEndCoord;
+        const displayTrackLength = displayEndCoord - displayStartCoord;
 
         // Фон (без трансформаций)
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, baseWidth, baseHeight);
 
         // ЕДИНАЯ СИСТЕМА КООРДИНАТ ДЛЯ ВСЕГО КОНТЕНТА:
@@ -843,14 +717,10 @@ export default function ChartEditor({
             return marginLeft;
           }
 
-          const normalizedKm = isReversed
-            ? displayEndCoord - km
-            : km;
+          const normalizedKm = isReversed ? displayEndCoord - km : km;
 
           // ФИКСИРОВАННЫЙ МАСШТАБ: 40px на 1 км
-          const x =
-            marginLeft +
-            (normalizedKm - displayStartCoord) * PIXELS_PER_KM;
+          const x = marginLeft + (normalizedKm - displayStartCoord) * PIXELS_PER_KM;
 
           return x;
         };
@@ -868,35 +738,26 @@ export default function ChartEditor({
           const layer1Height = layer1Bottom - layer1Top;
 
           // ЛОГИРОВАНИЕ данных
-          console.log("[LAYER 1] Рисование слоя усилий:", {
+          console.log('[LAYER 1] Рисование слоя усилий:', {
             layer1Top,
             layer1Bottom,
             layer1Center,
             layer1Height,
             displayStartCoord,
             displayEndCoord,
-            trackSectionStart:
-              trackSection?.stations?.[0]?.startCoord,
-            trackSectionEnd:
-              trackSection?.stations?.[
-                trackSection?.stations?.length - 1
-              ]?.endCoord,
+            trackSectionStart: trackSection?.stations?.[0]?.startCoord,
+            trackSectionEnd: trackSection?.stations?.[trackSection?.stations?.length - 1]?.endCoord,
             isReversed,
             trainForceDataLength: trainForceData?.length || 0,
           });
 
           // Draw layer border
-          ctx.strokeStyle = "#d1d5db";
+          ctx.strokeStyle = '#d1d5db';
           ctx.lineWidth = lineWidth(1);
-          ctx.strokeRect(
-            marginLeft,
-            LAYER1_TOP,
-            chartWidth,
-            LAYER1_HEIGHT,
-          );
+          ctx.strokeRect(marginLeft, LAYER1_TOP, chartWidth, LAYER1_HEIGHT);
 
           // Draw baseline (blue)
-          ctx.strokeStyle = "#3b82f6";
+          ctx.strokeStyle = '#3b82f6';
           ctx.lineWidth = lineWidth(2);
           ctx.beginPath();
           ctx.moveTo(marginLeft, layer1Center);
@@ -905,17 +766,16 @@ export default function ChartEditor({
 
           // Y-СКАЛА от -100 до 100 кН
           ctx.save();
-          ctx.strokeStyle = "#9ca3af";
+          ctx.strokeStyle = '#9ca3af';
           ctx.lineWidth = lineWidth(1);
-          ctx.fillStyle = "#6b7280";
+          ctx.fillStyle = '#6b7280';
           ctx.font = fontSize(11);
-          ctx.textAlign = "right";
+          ctx.textAlign = 'right';
 
           // Горизонтальные пунктирные линии для каждой десятки
           for (let force = -100; force <= 100; force += 10) {
             // Преобразование силы в координату Y
-            const y =
-              layer1Center - force * (layer1Height / 2 / 100);
+            const y = layer1Center - force * (layer1Height / 2 / 100);
 
             // Пунктирная линия через весь слой
             ctx.setLineDash([3, 3]); // Пунктирный стиль
@@ -948,35 +808,30 @@ export default function ChartEditor({
             // Поэтому добавляем displayStartCoord к локальным координатам данных
             const dataOffset = displayStartCoord; // 1781 км
 
-            console.log("[LAYER 1] Смещение данных:", {
+            console.log('[LAYER 1] Смещение данных:', {
               dataOffset,
               displayStartCoord,
               displayEndCoord,
               firstDataPointMeters: trainForceData[0]?.distance,
-              lastDataPointMeters:
-                trainForceData[trainForceData.length - 1]
-                  ?.distance,
+              lastDataPointMeters: trainForceData[trainForceData.length - 1]?.distance,
             });
 
             // Find max absolute force for scaling
             const maxForce = Math.max(
               ...trainForceData.map((d) => Math.abs(d.force)),
-              1, // Добавляем минимальное значение для избежания деления на ноль
+              1 // Добавляем минимальное значение для избежания деления на ноль
             );
 
             const forceScale = layer1Height / 2 / maxForce;
 
-            console.log(
-              "[LAYER 1] Параметры масштабирования:",
-              {
-                maxForce,
-                forceScale,
-                layer1Height,
-              },
-            );
+            console.log('[LAYER 1] Параметры масштабирования:', {
+              maxForce,
+              forceScale,
+              layer1Height,
+            });
 
             // Draw force curve (RED for positive, BLUE for negative)
-            ctx.strokeStyle = "#ef4444";
+            ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = lineWidth(2);
             ctx.beginPath();
             let started = false;
@@ -984,24 +839,16 @@ export default function ChartEditor({
 
             trainForceData.forEach((point, index) => {
               // КОНВЕРТИРУЕМ МЕТРЫ В КИЛОМЕТРЫ и добавляем смещение участка
-              const distanceKm =
-                point.distance / 1000 + dataOffset;
+              const distanceKm = point.distance / 1000 + dataOffset;
 
               // Проверяем, попадает ли точка в отображаемый диапазон
-              if (
-                distanceKm >= displayStartCoord &&
-                distanceKm <= displayEndCoord
-              ) {
+              if (distanceKm >= displayStartCoord && distanceKm <= displayEndCoord) {
                 const x = kmToX(distanceKm); // Используем абсолютные километры
-                const y =
-                  layer1Center - point.force * forceScale;
+                const y = layer1Center - point.force * forceScale;
 
                 // Логирование первых и последних точек
-                if (
-                  pointsDrawn < 3 ||
-                  pointsDrawn === trainForceData.length - 1
-                ) {
-                  console.log("[LAYER 1] Точка данных:", {
+                if (pointsDrawn < 3 || pointsDrawn === trainForceData.length - 1) {
+                  console.log('[LAYER 1] Точка данных:', {
                     index,
                     distanceMeters: point.distance,
                     distanceKm,
@@ -1025,7 +872,7 @@ export default function ChartEditor({
 
             ctx.stroke();
 
-            console.log("[LAYER 1] Статистика отрисовки:", {
+            console.log('[LAYER 1] Статистика отрисовки:', {
               totalPoints: trainForceData.length,
               pointsDrawn,
               dataOffset,
@@ -1033,28 +880,19 @@ export default function ChartEditor({
 
             // Если данных нет в видимом диапазоне (для отладки)
             if (pointsDrawn === 0) {
-              console.warn(
-                "[LAYER 1] Нет данных в видимом диапазоне! Подробности:",
-                {
-                  displayStartCoord,
-                  displayEndCoord,
-                  displayLength:
-                    displayEndCoord - displayStartCoord,
-                  dataRangeStart:
-                    trainForceData[0]?.distance / 1000 +
-                    dataOffset,
-                  dataRangeEnd:
-                    trainForceData[trainForceData.length - 1]
-                      ?.distance /
-                      1000 +
-                    dataOffset,
-                  dataOffset,
-                  isReversed,
-                },
-              );
+              console.warn('[LAYER 1] Нет данных в видимом диапазоне! Подробности:', {
+                displayStartCoord,
+                displayEndCoord,
+                displayLength: displayEndCoord - displayStartCoord,
+                dataRangeStart: trainForceData[0]?.distance / 1000 + dataOffset,
+                dataRangeEnd:
+                  trainForceData[trainForceData.length - 1]?.distance / 1000 + dataOffset,
+                dataOffset,
+                isReversed,
+              });
 
               // Для отладки: рисуем тестовую линию
-              ctx.strokeStyle = "#ef4444";
+              ctx.strokeStyle = '#ef4444';
               ctx.lineWidth = lineWidth(2);
               ctx.beginPath();
               const testX1 = kmToX(displayStartCoord + 0.1);
@@ -1066,26 +904,21 @@ export default function ChartEditor({
 
             // ВЕРТИКАЛЬНАЯ ПОДПИСЬ (слева от слоя, повернутая на 90 градусов)
             ctx.save();
-            ctx.translate(
-              marginLeft - 25,
-              layer1Top + layer1Height / 2,
-            );
+            ctx.translate(marginLeft - 25, layer1Top + layer1Height / 2);
             ctx.rotate(-Math.PI / 2);
-            ctx.fillStyle = "#374151";
+            ctx.fillStyle = '#374151';
             ctx.font = fontSize(12);
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText("Динамика реализованная", 0, 0);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Динамика реализованная', 0, 0);
             ctx.restore();
 
             // Подпись оси X (километры)
-            ctx.fillStyle = "#6b7280";
+            ctx.fillStyle = '#6b7280';
             ctx.font = fontSize(11);
-            ctx.textAlign = "center";
+            ctx.textAlign = 'center';
           } else {
-            console.warn(
-              "[LAYER 1] trainForceData пуст или не определен",
-            );
+            console.warn('[LAYER 1] trainForceData пуст или не определен');
           }
         }
 
@@ -1099,14 +932,9 @@ export default function ChartEditor({
         const layer2Height = layer2Bottom - layer2Top;
 
         // Draw layer border
-        ctx.strokeStyle = "#d1d5db";
+        ctx.strokeStyle = '#d1d5db';
         ctx.lineWidth = lineWidth(1);
-        ctx.strokeRect(
-          marginLeft,
-          LAYER2_TOP,
-          chartWidth,
-          LAYER2_HEIGHT,
-        );
+        ctx.strokeRect(marginLeft, LAYER2_TOP, chartWidth, LAYER2_HEIGHT);
 
         // Преобразование скорости (км/ч → Y) for Layer 2
         const speedToY = (speed: number) => {
@@ -1114,10 +942,7 @@ export default function ChartEditor({
             return layer2Bottom;
           }
           const maxSpeed = 320;
-          const y =
-            layer2Top +
-            layer2Height -
-            (speed / maxSpeed) * layer2Height;
+          const y = layer2Top + layer2Height - (speed / maxSpeed) * layer2Height;
 
           if (!isFinite(y)) {
             return layer2Bottom;
@@ -1127,11 +952,11 @@ export default function ChartEditor({
 
         // Сетка по Y (скорость 0–320)
         ctx.save();
-        ctx.strokeStyle = "#e5e7eb";
+        ctx.strokeStyle = '#e5e7eb';
         ctx.lineWidth = lineWidth(1);
-        ctx.fillStyle = "#9ca3af";
+        ctx.fillStyle = '#9ca3af';
         ctx.font = fontSize(13);
-        ctx.textAlign = "right";
+        ctx.textAlign = 'right';
 
         for (let speed = 0; speed <= 320; speed += 40) {
           const y = speedToY(speed);
@@ -1143,8 +968,8 @@ export default function ChartEditor({
         }
 
         // Сетка по X (км) с адаптивным шагом
-        ctx.textAlign = "center";
-        ctx.fillStyle = "#9ca3af";
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#9ca3af';
 
         // ФИКСИРОВАННАЯ СЕТКА (зум отключен)
         let gridInterval = 10; // сетка каждые 10 км
@@ -1173,10 +998,7 @@ export default function ChartEditor({
             current += gridInterval;
           }
 
-          if (
-            coordinates[coordinates.length - 1] <
-            displayEndCoord
-          ) {
+          if (coordinates[coordinates.length - 1] < displayEndCoord) {
             coordinates.push(displayEndCoord);
           }
 
@@ -1187,30 +1009,24 @@ export default function ChartEditor({
 
         for (const coord of displayCoordinates) {
           const x = kmToX(coord);
-          ctx.strokeStyle = "#e5e7eb";
+          ctx.strokeStyle = '#e5e7eb';
           ctx.beginPath();
           ctx.moveTo(x, layer2Top);
           ctx.lineTo(x, layer2Bottom);
           ctx.stroke();
 
-          const displayValue = isReversed
-            ? displayEndCoord - (coord - displayStartCoord)
-            : coord;
+          const displayValue = isReversed ? displayEndCoord - (coord - displayStartCoord) : coord;
           if (
             Math.round(displayValue) % labelInterval === 0 ||
             coord === displayStartCoord ||
             coord === displayEndCoord
           ) {
-            ctx.fillText(
-              `${displayValue.toFixed(coord % 1 === 0 ? 0 : 1)}`,
-              x,
-              layer2Bottom + 18,
-            );
+            ctx.fillText(`${displayValue.toFixed(coord % 1 === 0 ? 0 : 1)}`, x, layer2Bottom + 18);
           }
         }
 
         // Axes
-        ctx.strokeStyle = "#374151";
+        ctx.strokeStyle = '#374151';
         ctx.lineWidth = lineWidth(2);
 
         // X axis
@@ -1226,22 +1042,15 @@ export default function ChartEditor({
         ctx.stroke();
 
         // Axis labels
-        ctx.fillStyle = "#374151";
+        ctx.fillStyle = '#374151';
         ctx.font = fontSize(12);
-        ctx.textAlign = "center";
-        ctx.fillText(
-          "Координата (км)",
-          marginLeft + chartWidth / 2,
-          layer2Bottom + 40,
-        );
+        ctx.textAlign = 'center';
+        ctx.fillText('Координата (км)', marginLeft + chartWidth / 2, layer2Bottom + 40);
 
         ctx.save();
-        ctx.translate(
-          marginLeft - 50,
-          layer2Top + layer2Height / 2,
-        );
+        ctx.translate(marginLeft - 50, layer2Top + layer2Height / 2);
         ctx.rotate(-Math.PI / 2);
-        ctx.fillText("Скорость (км/ч)", 0, 0);
+        ctx.fillText('Скорость (км/ч)', 0, 0);
         ctx.restore();
 
         // Кривая скоростных ограничений
@@ -1250,38 +1059,24 @@ export default function ChartEditor({
           trackSection?.speedLimits?.length &&
           trackSection?.speedLimits?.length > 0
         ) {
-          ctx.strokeStyle = "#ef4444";
+          ctx.strokeStyle = '#ef4444';
           ctx.lineWidth = lineWidth(2.5);
           ctx.beginPath();
 
-          const relevantLimits =
-            trackSection?.speedLimits?.filter(
-              (limit) =>
-                limit.endCoord >= displayStartCoord &&
-                limit.startCoord <= displayEndCoord,
-            );
+          const relevantLimits = trackSection?.speedLimits?.filter(
+            (limit) => limit.endCoord >= displayStartCoord && limit.startCoord <= displayEndCoord
+          );
 
           if (relevantLimits && relevantLimits?.length > 0) {
             let lastSpeed = relevantLimits[0].limitValue;
 
             const firstLimit = relevantLimits[0];
-            const firstX = kmToX(
-              Math.max(
-                displayStartCoord,
-                firstLimit.startCoord,
-              ),
-            );
+            const firstX = kmToX(Math.max(displayStartCoord, firstLimit.startCoord));
             ctx.moveTo(firstX, speedToY(lastSpeed));
 
             relevantLimits.forEach((limit) => {
-              const segmentStart = Math.max(
-                displayStartCoord,
-                limit.startCoord,
-              );
-              const segmentEnd = Math.min(
-                displayEndCoord,
-                limit.endCoord,
-              );
+              const segmentStart = Math.max(displayStartCoord, limit.startCoord);
+              const segmentEnd = Math.min(displayEndCoord, limit.endCoord);
 
               const startX = kmToX(segmentStart);
               const endX = kmToX(segmentEnd);
@@ -1301,27 +1096,20 @@ export default function ChartEditor({
 
           ctx.stroke();
 
-          ctx.fillStyle = "#ef4444";
+          ctx.fillStyle = '#ef4444';
           ctx.font = fontSize(11);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "Скоростные ограничения",
-            marginLeft + 10,
-            layer2Top + 15,
-          );
+          ctx.textAlign = 'left';
+          ctx.fillText('Скоростные ограничения', marginLeft + 10, layer2Top + 15);
         }
 
         // Calculated Speed Curve (from trainForceData velocity)
         if (trainForceData && trainForceData.length > 0) {
-          ctx.strokeStyle = "#10b981";
+          ctx.strokeStyle = '#10b981';
           ctx.lineWidth = lineWidth(2);
           ctx.beginPath();
           let started = false;
           trainForceData.forEach((point) => {
-            if (
-              point.distance >= displayStartCoord &&
-              point.distance <= displayEndCoord
-            ) {
+            if (point.distance >= displayStartCoord && point.distance <= displayEndCoord) {
               const x = kmToX(point.distance);
               // Convert m/s to km/h: velocity is in m/s, multiply by 3.6
               const speedKmh = point.velocity * 3.6;
@@ -1336,32 +1124,21 @@ export default function ChartEditor({
           });
           ctx.stroke();
 
-          ctx.fillStyle = "#10b981";
+          ctx.fillStyle = '#10b981';
           ctx.font = fontSize(11);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "Расчётная скорость",
-            marginLeft + 10,
-            layer2Top + 30,
-          );
+          ctx.textAlign = 'left';
+          ctx.fillText('Расчётная скорость', marginLeft + 10, layer2Top + 30);
         }
 
         // Station markers (vertical lines in Layer 2)
-        if (
-          trackSection &&
-          trackSection.stations &&
-          trackSection.stations.length > 0
-        ) {
+        if (trackSection && trackSection.stations && trackSection.stations.length > 0) {
           trackSection.stations.forEach((station, index) => {
-            const isLastStation =
-              index === trackSection.stations.length - 1;
-            const stationKm = isLastStation
-              ? station.endCoord
-              : station.startCoord;
+            const isLastStation = index === trackSection.stations.length - 1;
+            const stationKm = isLastStation ? station.endCoord : station.startCoord;
             const xWorld = kmToX(stationKm);
 
             // Vertical dashed line
-            ctx.strokeStyle = "#6b7280";
+            ctx.strokeStyle = '#6b7280';
             ctx.lineWidth = lineWidth(1.5);
             ctx.setLineDash([4, 4]);
             ctx.beginPath();
@@ -1374,9 +1151,9 @@ export default function ChartEditor({
             ctx.save();
             ctx.translate(xWorld, layer2Top - 5);
             ctx.rotate(-Math.PI / 4);
-            ctx.fillStyle = "#374151";
+            ctx.fillStyle = '#374151';
             ctx.font = fontSize(10);
-            ctx.textAlign = "right";
+            ctx.textAlign = 'right';
             ctx.fillText(station.stationName, 0, 0);
             ctx.restore();
           });
@@ -1398,20 +1175,15 @@ export default function ChartEditor({
           const layer3Bottom = layer3Top + layer3Height;
 
           // Draw layer border
-          ctx.strokeStyle = "#d1d5db";
+          ctx.strokeStyle = '#d1d5db';
           ctx.lineWidth = lineWidth(1);
-          ctx.strokeRect(
-            marginLeft,
-            LAYER3_TOP,
-            chartWidth,
-            LAYER3_HEIGHT,
-          );
+          ctx.strokeRect(marginLeft, LAYER3_TOP, chartWidth, LAYER3_HEIGHT);
 
           // Top and bottom lines
           const profileStripTop = layer3Top;
           const profileStripBottom = layer3Bottom;
 
-          ctx.strokeStyle = "#374151";
+          ctx.strokeStyle = '#374151';
           ctx.lineWidth = lineWidth(2);
           ctx.beginPath();
           ctx.moveTo(kmToX(displayStartCoord), profileStripTop);
@@ -1419,38 +1191,24 @@ export default function ChartEditor({
           ctx.stroke();
 
           ctx.beginPath();
-          ctx.moveTo(
-            kmToX(displayStartCoord),
-            profileStripBottom,
-          );
-          ctx.lineTo(
-            kmToX(displayEndCoord),
-            profileStripBottom,
-          );
+          ctx.moveTo(kmToX(displayStartCoord), profileStripBottom);
+          ctx.lineTo(kmToX(displayEndCoord), profileStripBottom);
           ctx.stroke();
 
-          const relevantProfiles =
-            trackSection.pathProfiles.filter(
-              (profile) =>
-                profile.endCoord >= displayStartCoord &&
-                profile.startCoord <= displayEndCoord,
-            );
+          const relevantProfiles = trackSection.pathProfiles.filter(
+            (profile) =>
+              profile.endCoord >= displayStartCoord && profile.startCoord <= displayEndCoord
+          );
 
           relevantProfiles.forEach((profile) => {
-            const segmentStart = Math.max(
-              displayStartCoord,
-              profile.startCoord,
-            );
-            const segmentEnd = Math.min(
-              displayEndCoord,
-              profile.endCoord,
-            );
+            const segmentStart = Math.max(displayStartCoord, profile.startCoord);
+            const segmentEnd = Math.min(displayEndCoord, profile.endCoord);
 
             const startX = kmToX(segmentStart);
             const endX = kmToX(segmentEnd);
 
             if (segmentStart > displayStartCoord) {
-              ctx.strokeStyle = "#374151";
+              ctx.strokeStyle = '#374151';
               ctx.lineWidth = lineWidth(2);
               ctx.beginPath();
               ctx.moveTo(startX, profileStripTop);
@@ -1465,11 +1223,8 @@ export default function ChartEditor({
               ctx.stroke();
             }
 
-            if (
-              profile.slopePromille !== 0 &&
-              endX - startX > 2
-            ) {
-              ctx.strokeStyle = "#64748b";
+            if (profile.slopePromille !== 0 && endX - startX > 2) {
+              ctx.strokeStyle = '#64748b';
               ctx.lineWidth = lineWidth(2);
 
               ctx.beginPath();
@@ -1484,120 +1239,81 @@ export default function ChartEditor({
             }
 
             // Label slope value in the center
-            if (
-              profile.slopePromille !== 0 &&
-              endX - startX > 20
-            ) {
-              ctx.fillStyle = "#475569";
+            if (profile.slopePromille !== 0 && endX - startX > 20) {
+              ctx.fillStyle = '#475569';
               ctx.font = fontSize(11);
-              ctx.textAlign = "center";
+              ctx.textAlign = 'center';
               ctx.fillText(
                 `${profile.slopePromille}‰`,
                 (startX + endX) / 2,
-                (layer3Top + layer3Bottom) / 2,
+                (layer3Top + layer3Bottom) / 2
               );
             }
           });
 
           // Label
-          ctx.fillStyle = "#374151";
+          ctx.fillStyle = '#374151';
           ctx.font = fontSize(12);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "Профиль пути",
-            marginLeft + 10,
-            layer3Top - 5,
-          );
+          ctx.textAlign = 'left';
+          ctx.fillText('Профиль пути', marginLeft + 10, layer3Top - 5);
         }
 
         // Оптимальная кривая скорости
-        if (
-          displaySettings.optimalSpeedCurve &&
-          chartData?.workflow?.optimalSpeedCurve
-        ) {
-          ctx.strokeStyle = "#3b82f6";
+        if (displaySettings.optimalSpeedCurve && chartData?.workflow?.optimalSpeedCurve) {
+          ctx.strokeStyle = '#3b82f6';
           ctx.lineWidth = lineWidth(2);
           ctx.setLineDash([5, 5]);
           ctx.beginPath();
 
-          const pointsInRange =
-            chartData?.workflow.optimalSpeedCurve.filter(
-              (point) =>
-                point.km >= displayStartCoord &&
-                point.km <= displayEndCoord,
-            );
+          const pointsInRange = chartData?.workflow.optimalSpeedCurve.filter(
+            (point) => point.km >= displayStartCoord && point.km <= displayEndCoord
+          );
 
           if (pointsInRange.length > 0) {
             const firstPoint = pointsInRange[0];
-            ctx.moveTo(
-              kmToX(firstPoint.km),
-              speedToY(firstPoint.speed),
-            );
+            ctx.moveTo(kmToX(firstPoint.km), speedToY(firstPoint.speed));
 
             for (let i = 1; i < pointsInRange.length; i++) {
               const point = pointsInRange[i];
-              ctx.lineTo(
-                kmToX(point.km),
-                speedToY(point.speed),
-              );
+              ctx.lineTo(kmToX(point.km), speedToY(point.speed));
             }
           }
 
           ctx.stroke();
           ctx.setLineDash([]);
 
-          ctx.fillStyle = "#3b82f6";
+          ctx.fillStyle = '#3b82f6';
           ctx.font = fontSize(11);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "Оптимальная кривая",
-            marginLeft + 10,
-            layer2Top + 45,
-          );
+          ctx.textAlign = 'left';
+          ctx.fillText('Оптимальная кривая', marginLeft + 10, layer2Top + 45);
         }
 
         // Фактическая кривая скорости
-        if (
-          displaySettings.actualSpeedCurve &&
-          chartData?.workflow?.actualSpeedCurve
-        ) {
-          ctx.strokeStyle = "#22c55e";
+        if (displaySettings.actualSpeedCurve && chartData?.workflow?.actualSpeedCurve) {
+          ctx.strokeStyle = '#22c55e';
           ctx.lineWidth = lineWidth(2.5);
           ctx.beginPath();
 
-          const pointsInRange =
-            chartData.workflow.actualSpeedCurve.filter(
-              (point) =>
-                point.km >= displayStartCoord &&
-                point.km <= displayEndCoord,
-            );
+          const pointsInRange = chartData.workflow.actualSpeedCurve.filter(
+            (point) => point.km >= displayStartCoord && point.km <= displayEndCoord
+          );
 
           if (pointsInRange.length > 0) {
             const firstPoint = pointsInRange[0];
-            ctx.moveTo(
-              kmToX(firstPoint.km),
-              speedToY(firstPoint.speed),
-            );
+            ctx.moveTo(kmToX(firstPoint.km), speedToY(firstPoint.speed));
 
             for (let i = 1; i < pointsInRange.length; i++) {
               const point = pointsInRange[i];
-              ctx.lineTo(
-                kmToX(point.km),
-                speedToY(point.speed),
-              );
+              ctx.lineTo(kmToX(point.km), speedToY(point.speed));
             }
           }
 
           ctx.stroke();
 
-          ctx.fillStyle = "#22c55e";
+          ctx.fillStyle = '#22c55e';
           ctx.font = fontSize(11);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "Фактическая кривая",
-            marginLeft + 10,
-            layer2Top + 60,
-          );
+          ctx.textAlign = 'left';
+          ctx.fillText('Фактическая кривая', marginLeft + 10, layer2Top + 60);
         }
 
         // ====================================
@@ -1612,267 +1328,178 @@ export default function ChartEditor({
           const arrowY = layer4Top + 30;
 
           // Draw layer border
-          ctx.strokeStyle = "#d1d5db";
+          ctx.strokeStyle = '#d1d5db';
           ctx.lineWidth = lineWidth(1);
-          ctx.strokeRect(
-            marginLeft,
-            LAYER4_TOP,
-            chartWidth,
-            LAYER4_HEIGHT,
-          );
+          ctx.strokeRect(marginLeft, LAYER4_TOP, chartWidth, LAYER4_HEIGHT);
 
-          chartData.workflow.regimeArrows.forEach(
-            (arrow, index) => {
-              const mode =
-                chartData.workflow?.locomotive?.tractionModes.find(
-                  (m) => m.id === arrow.modeId,
-                );
-              if (!mode) return;
+          chartData.workflow.regimeArrows.forEach((arrow, index) => {
+            const mode = chartData.workflow?.locomotive?.tractionModes.find(
+              (m) => m.id === arrow.modeId
+            );
+            if (!mode) return;
 
-              const startX = kmToX(arrow.startKm);
-              const endX = kmToX(arrow.endKm);
-              const isSelected = selectedArrow === arrow.id;
-              const isHovered =
-                hoveredArrow?.arrowId === arrow.id;
+            const startX = kmToX(arrow.startKm);
+            const endX = kmToX(arrow.endKm);
+            const isSelected = selectedArrow === arrow.id;
+            const isHovered = hoveredArrow?.arrowId === arrow.id;
 
-              if (isSelected) {
-                ctx.globalAlpha = 0.15;
-                for (let i = 0; i < 3; i++) {
-                  ctx.strokeStyle = "#fbbf24";
-                  ctx.lineWidth = lineWidth(12 + i * 4);
-                  ctx.beginPath();
-                  ctx.moveTo(startX, arrowY);
-                  ctx.lineTo(endX, arrowY);
-                  ctx.stroke();
-                }
-                ctx.globalAlpha = 1;
-
-                ctx.strokeStyle = "#fbbf24";
-                ctx.lineWidth = lineWidth(5);
-                ctx.globalAlpha = 0.6;
+            if (isSelected) {
+              ctx.globalAlpha = 0.15;
+              for (let i = 0; i < 3; i++) {
+                ctx.strokeStyle = '#fbbf24';
+                ctx.lineWidth = lineWidth(12 + i * 4);
                 ctx.beginPath();
                 ctx.moveTo(startX, arrowY);
                 ctx.lineTo(endX, arrowY);
                 ctx.stroke();
-                ctx.globalAlpha = 1;
               }
+              ctx.globalAlpha = 1;
 
-              ctx.strokeStyle = mode.color;
-              ctx.lineWidth = isSelected
-                ? lineWidth(4)
-                : isHovered
-                  ? lineWidth(4)
-                  : lineWidth(3);
-              ctx.setLineDash(
-                mode.lineStyle === "dashed"
-                  ? [8, 4]
-                  : mode.lineStyle === "dotted"
-                    ? [2, 4]
-                    : [],
-              );
-
+              ctx.strokeStyle = '#fbbf24';
+              ctx.lineWidth = lineWidth(5);
+              ctx.globalAlpha = 0.6;
               ctx.beginPath();
               ctx.moveTo(startX, arrowY);
               ctx.lineTo(endX, arrowY);
               ctx.stroke();
+              ctx.globalAlpha = 1;
+            }
 
-              const arrowheadSize = isSelected ? 12 : 10;
+            ctx.strokeStyle = mode.color;
+            ctx.lineWidth = isSelected ? lineWidth(4) : isHovered ? lineWidth(4) : lineWidth(3);
+            ctx.setLineDash(
+              mode.lineStyle === 'dashed' ? [8, 4] : mode.lineStyle === 'dotted' ? [2, 4] : []
+            );
+
+            ctx.beginPath();
+            ctx.moveTo(startX, arrowY);
+            ctx.lineTo(endX, arrowY);
+            ctx.stroke();
+
+            const arrowheadSize = isSelected ? 12 : 10;
+            ctx.fillStyle = mode.color;
+            ctx.beginPath();
+            ctx.moveTo(endX, arrowY);
+            ctx.lineTo(endX - arrowheadSize, arrowY - arrowheadSize / 2);
+            ctx.lineTo(endX - arrowheadSize, arrowY + arrowheadSize / 2);
+            ctx.fill();
+
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = mode.color;
+            ctx.font = fontSize(isSelected ? 15 : 13);
+            ctx.textAlign = 'center';
+
+            if (isSelected) {
+              const labelText = mode.label;
+              const textMetrics = ctx.measureText(labelText);
+              const labelX = (startX + endX) / 2;
+              const labelY = arrowY - 10;
+              const padding = 4 / zoom;
+
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+              ctx.fillRect(
+                labelX - textMetrics.width / 2 - padding,
+                labelY - 12 / zoom,
+                textMetrics.width + padding * 2,
+                16 / zoom
+              );
               ctx.fillStyle = mode.color;
-              ctx.beginPath();
-              ctx.moveTo(endX, arrowY);
-              ctx.lineTo(
-                endX - arrowheadSize,
-                arrowY - arrowheadSize / 2,
-              );
-              ctx.lineTo(
-                endX - arrowheadSize,
-                arrowY + arrowheadSize / 2,
-              );
-              ctx.fill();
+            }
 
-              ctx.setLineDash([]);
+            ctx.fillText(mode.label, (startX + endX) / 2, arrowY - 12);
 
-              ctx.fillStyle = mode.color;
-              ctx.font = fontSize(isSelected ? 15 : 13);
-              ctx.textAlign = "center";
+            if (isSelected) {
+              const handleRadius = 7 / zoom;
+              const handleStrokeWidth = 2.5 / zoom;
 
-              if (isSelected) {
-                const labelText = mode.label;
-                const textMetrics = ctx.measureText(labelText);
-                const labelX = (startX + endX) / 2;
-                const labelY = arrowY - 10;
-                const padding = 4 / zoom;
+              if (index > 0) {
+                const isStartHovered =
+                  hoveredArrow?.handle === 'start' && hoveredArrow?.arrowId === arrow.id;
+                const isStartDragged =
+                  draggedArrow?.handle === 'start' && draggedArrow?.arrowId === arrow.id;
+                const showLimitFeedback = isStartDragged && resizeLimitReached;
 
-                ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-                ctx.fillRect(
-                  labelX - textMetrics.width / 2 - padding,
-                  labelY - 12 / zoom,
-                  textMetrics.width + padding * 2,
-                  16 / zoom,
-                );
-                ctx.fillStyle = mode.color;
-              }
-
-              ctx.fillText(
-                mode.label,
-                (startX + endX) / 2,
-                arrowY - 12,
-              );
-
-              if (isSelected) {
-                const handleRadius = 7 / zoom;
-                const handleStrokeWidth = 2.5 / zoom;
-
-                if (index > 0) {
-                  const isStartHovered =
-                    hoveredArrow?.handle === "start" &&
-                    hoveredArrow?.arrowId === arrow.id;
-                  const isStartDragged =
-                    draggedArrow?.handle === "start" &&
-                    draggedArrow?.arrowId === arrow.id;
-                  const showLimitFeedback =
-                    isStartDragged && resizeLimitReached;
-
-                  if (isStartHovered || showLimitFeedback) {
-                    ctx.globalAlpha = 0.3;
-                    ctx.fillStyle = showLimitFeedback
-                      ? "#ef4444"
-                      : "#fbbf24";
-                    ctx.beginPath();
-                    ctx.arc(
-                      startX,
-                      arrowY,
-                      handleRadius * 2,
-                      0,
-                      Math.PI * 2,
-                    );
-                    ctx.fill();
-                    ctx.globalAlpha = 1;
-                  }
-
-                  ctx.fillStyle = showLimitFeedback
-                    ? "#ef4444"
-                    : isStartHovered
-                      ? "#fbbf24"
-                      : "#ffffff";
-                  ctx.strokeStyle = showLimitFeedback
-                    ? "#ef4444"
-                    : "#fbbf24";
-                  ctx.lineWidth = handleStrokeWidth;
-                  ctx.beginPath();
-                  ctx.arc(
-                    startX,
-                    arrowY,
-                    handleRadius,
-                    0,
-                    Math.PI * 2,
-                  );
-                  ctx.fill();
-                  ctx.stroke();
-
-                  ctx.fillStyle = "#374151";
-                  ctx.beginPath();
-                  ctx.arc(
-                    startX,
-                    arrowY,
-                    handleRadius / 3,
-                    0,
-                    Math.PI * 2,
-                  );
-                  ctx.fill();
-                }
-
-                const isEndHovered =
-                  hoveredArrow?.handle === "end" &&
-                  hoveredArrow?.arrowId === arrow.id;
-                const isEndDragged =
-                  draggedArrow?.handle === "end" &&
-                  draggedArrow?.arrowId === arrow.id;
-                const showLimitFeedback =
-                  isEndDragged && resizeLimitReached;
-
-                if (isEndHovered || showLimitFeedback) {
+                if (isStartHovered || showLimitFeedback) {
                   ctx.globalAlpha = 0.3;
-                  ctx.fillStyle = showLimitFeedback
-                    ? "#ef4444"
-                    : "#fbbf24";
+                  ctx.fillStyle = showLimitFeedback ? '#ef4444' : '#fbbf24';
                   ctx.beginPath();
-                  ctx.arc(
-                    endX,
-                    arrowY,
-                    handleRadius * 2,
-                    0,
-                    Math.PI * 2,
-                  );
+                  ctx.arc(startX, arrowY, handleRadius * 2, 0, Math.PI * 2);
                   ctx.fill();
                   ctx.globalAlpha = 1;
                 }
 
                 ctx.fillStyle = showLimitFeedback
-                  ? "#ef4444"
-                  : isEndHovered
-                    ? "#fbbf24"
-                    : "#ffffff";
-                ctx.strokeStyle = showLimitFeedback
-                  ? "#ef4444"
-                  : "#fbbf24";
+                  ? '#ef4444'
+                  : isStartHovered
+                    ? '#fbbf24'
+                    : '#ffffff';
+                ctx.strokeStyle = showLimitFeedback ? '#ef4444' : '#fbbf24';
                 ctx.lineWidth = handleStrokeWidth;
                 ctx.beginPath();
-                ctx.arc(
-                  endX,
-                  arrowY,
-                  handleRadius,
-                  0,
-                  Math.PI * 2,
-                );
+                ctx.arc(startX, arrowY, handleRadius, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.stroke();
 
-                ctx.fillStyle = "#374151";
+                ctx.fillStyle = '#374151';
                 ctx.beginPath();
-                ctx.arc(
-                  endX,
-                  arrowY,
-                  handleRadius / 3,
-                  0,
-                  Math.PI * 2,
-                );
+                ctx.arc(startX, arrowY, handleRadius / 3, 0, Math.PI * 2);
                 ctx.fill();
               }
-            },
-          );
+
+              const isEndHovered =
+                hoveredArrow?.handle === 'end' && hoveredArrow?.arrowId === arrow.id;
+              const isEndDragged =
+                draggedArrow?.handle === 'end' && draggedArrow?.arrowId === arrow.id;
+              const showLimitFeedback = isEndDragged && resizeLimitReached;
+
+              if (isEndHovered || showLimitFeedback) {
+                ctx.globalAlpha = 0.3;
+                ctx.fillStyle = showLimitFeedback ? '#ef4444' : '#fbbf24';
+                ctx.beginPath();
+                ctx.arc(endX, arrowY, handleRadius * 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+              }
+
+              ctx.fillStyle = showLimitFeedback ? '#ef4444' : isEndHovered ? '#fbbf24' : '#ffffff';
+              ctx.strokeStyle = showLimitFeedback ? '#ef4444' : '#fbbf24';
+              ctx.lineWidth = handleStrokeWidth;
+              ctx.beginPath();
+              ctx.arc(endX, arrowY, handleRadius, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.stroke();
+
+              ctx.fillStyle = '#374151';
+              ctx.beginPath();
+              ctx.arc(endX, arrowY, handleRadius / 3, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          });
 
           // Layer label
-          ctx.fillStyle = "#374151";
+          ctx.fillStyle = '#374151';
           ctx.font = fontSize(12);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "Режимы ведения",
-            marginLeft + 10,
-            layer4Top - 5,
-          );
+          ctx.textAlign = 'left';
+          ctx.fillText('Режимы ведения', marginLeft + 10, layer4Top - 5);
         }
 
         // Дополнительная шкала км под стрелками (DISABLED - using Layer 2 labels instead)
-        if (
-          false &&
-          chartData?.workflow?.regimeArrows &&
-          chartData.workflow?.locomotive
-        ) {
+        if (false && chartData?.workflow?.regimeArrows && chartData.workflow?.locomotive) {
           const layer4Top = LAYER4_TOP + 10;
           const arrowY = layer4Top + 30;
           const rulerY = arrowY + 40;
 
-          ctx.strokeStyle = "#374151";
+          ctx.strokeStyle = '#374151';
           ctx.lineWidth = lineWidth(2);
           ctx.beginPath();
           ctx.moveTo(kmToX(displayStartCoord), rulerY);
           ctx.lineTo(kmToX(displayEndCoord), rulerY);
           ctx.stroke();
 
-          ctx.fillStyle = "#374151";
+          ctx.fillStyle = '#374151';
           ctx.font = fontSize(13);
-          ctx.textAlign = "center";
+          ctx.textAlign = 'center';
 
           const rulerCoordinates: number[] = [];
           let currentRuler = displayStartCoord;
@@ -1882,22 +1509,16 @@ export default function ChartEditor({
             currentRuler += 1;
           }
 
-          if (
-            rulerCoordinates[rulerCoordinates.length - 1] <
-            displayEndCoord
-          ) {
+          if (rulerCoordinates[rulerCoordinates.length - 1] < displayEndCoord) {
             rulerCoordinates.push(displayEndCoord);
           }
 
           for (const coord of rulerCoordinates) {
             const x = kmToX(coord);
-            const displayValue = isReversed
-              ? displayEndCoord - (coord - displayStartCoord)
-              : coord;
-            const tickHeightRuler =
-              Math.round(displayValue) % 5 === 0 ? 8 : 5;
+            const displayValue = isReversed ? displayEndCoord - (coord - displayStartCoord) : coord;
+            const tickHeightRuler = Math.round(displayValue) % 5 === 0 ? 8 : 5;
 
-            ctx.strokeStyle = "#374151";
+            ctx.strokeStyle = '#374151';
             ctx.lineWidth = lineWidth(1.5);
             ctx.beginPath();
             ctx.moveTo(x, rulerY);
@@ -1909,37 +1530,23 @@ export default function ChartEditor({
               coord === displayStartCoord ||
               coord === displayEndCoord
             ) {
-              ctx.fillText(
-                `${displayValue.toFixed(0)}`,
-                x,
-                rulerY + 24,
-              );
+              ctx.fillText(`${displayValue.toFixed(0)}`, x, rulerY + 24);
             }
           }
 
           ctx.font = fontSize(13);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "км",
-            kmToX(displayEndCoord) + 10,
-            rulerY + 8,
-          );
+          ctx.textAlign = 'left';
+          ctx.fillText('км', kmToX(displayEndCoord) + 10, rulerY + 8);
         }
 
         const drawOperationModeLine = (
           yPosition: number,
           segments: OperationModeSegment[],
-          lineHeight: number,
+          lineHeight: number
         ) => {
           segments.forEach((segment, index) => {
-            const segmentStart = Math.max(
-              displayStartCoord,
-              segment.startKm,
-            );
-            const segmentEnd = Math.min(
-              displayEndCoord,
-              segment.endKm,
-            );
+            const segmentStart = Math.max(displayStartCoord, segment.startKm);
+            const segmentEnd = Math.min(displayEndCoord, segment.endKm);
 
             if (segmentStart >= segmentEnd) return;
 
@@ -1948,40 +1555,35 @@ export default function ChartEditor({
 
             let color: string;
             switch (segment.mode) {
-              case "acceleration":
-                color = "#3b82f6";
+              case 'acceleration':
+                color = '#3b82f6';
                 break;
-              case "stable":
-                color = "#eab308";
+              case 'stable':
+                color = '#eab308';
                 break;
-              case "coasting":
-                color = "#22c55e";
+              case 'coasting':
+                color = '#22c55e';
                 break;
-              case "braking":
-                color = "#ef4444";
+              case 'braking':
+                color = '#ef4444';
                 break;
-              case "limit-traction":
-                color = "#a855f7";
+              case 'limit-traction':
+                color = '#a855f7';
                 break;
-              case "limit-braking":
-                color = "#f97316";
+              case 'limit-braking':
+                color = '#f97316';
                 break;
               default:
-                color = "#9ca3af";
+                color = '#9ca3af';
             }
 
             ctx.fillStyle = color;
-            ctx.fillRect(
-              startX,
-              yPosition,
-              endX - startX,
-              lineHeight,
-            );
+            ctx.fillRect(startX, yPosition, endX - startX, lineHeight);
 
             ctx.lineWidth = lineWidth(1);
 
             if (index === 0) {
-              ctx.strokeStyle = "#1f2937";
+              ctx.strokeStyle = '#1f2937';
               ctx.beginPath();
               ctx.moveTo(startX, yPosition);
               ctx.lineTo(startX, yPosition + lineHeight);
@@ -1990,30 +1592,29 @@ export default function ChartEditor({
               const prevSegment = segments[index - 1];
               let prevColor: string;
               switch (prevSegment.mode) {
-                case "acceleration":
-                  prevColor = "#3b82f6";
+                case 'acceleration':
+                  prevColor = '#3b82f6';
                   break;
-                case "stable":
-                  prevColor = "#eab308";
+                case 'stable':
+                  prevColor = '#eab308';
                   break;
-                case "coasting":
-                  prevColor = "#22c55e";
+                case 'coasting':
+                  prevColor = '#22c55e';
                   break;
-                case "braking":
-                  prevColor = "#ef4444";
+                case 'braking':
+                  prevColor = '#ef4444';
                   break;
-                case "limit-traction":
-                  prevColor = "#a855f7";
+                case 'limit-traction':
+                  prevColor = '#a855f7';
                   break;
-                case "limit-braking":
-                  prevColor = "#f97316";
+                case 'limit-braking':
+                  prevColor = '#f97316';
                   break;
                 default:
-                  prevColor = "#9ca3af";
+                  prevColor = '#9ca3af';
               }
 
-              ctx.strokeStyle =
-                color === prevColor ? color : "#1f2937";
+              ctx.strokeStyle = color === prevColor ? color : '#1f2937';
               ctx.beginPath();
               ctx.moveTo(startX, yPosition);
               ctx.lineTo(startX, yPosition + lineHeight);
@@ -2021,7 +1622,7 @@ export default function ChartEditor({
             }
 
             if (index === segments.length - 1) {
-              ctx.strokeStyle = "#1f2937";
+              ctx.strokeStyle = '#1f2937';
               ctx.beginPath();
               ctx.moveTo(endX, yPosition);
               ctx.lineTo(endX, yPosition + lineHeight);
@@ -2105,18 +1706,12 @@ export default function ChartEditor({
         }*/
 
         // Легенда режимов
-        if (
-          chartData?.workflow?.optimalSpeedCurve ||
-          chartData?.workflow?.actualSpeedCurve
-        ) {
+        if (chartData?.workflow?.optimalSpeedCurve || chartData?.workflow?.actualSpeedCurve) {
           let legendY: number;
           const marginTop = 50;
           const chartHeight = 300;
 
-          if (
-            chartData?.workflow?.actualSpeedCurve &&
-            chartData.workflow.regimeArrows
-          ) {
+          if (chartData?.workflow?.actualSpeedCurve && chartData.workflow.regimeArrows) {
             legendY = marginTop + chartHeight + 355;
           } else if (chartData.workflow.regimeArrows) {
             legendY = marginTop + chartHeight + 305;
@@ -2128,40 +1723,26 @@ export default function ChartEditor({
           let currentX = marginLeft;
 
           const legendItems = [
-            { color: "#3b82f6", label: "разгон" },
-            { color: "#eab308", label: "стабильная скорость" },
-            { color: "#22c55e", label: "выбег" },
-            { color: "#ef4444", label: "торможение" },
-            { color: "#a855f7", label: "огр. скор. (тяга)" },
-            { color: "#f97316", label: "огр. скор. (торм.)" },
+            { color: '#3b82f6', label: 'разгон' },
+            { color: '#eab308', label: 'стабильная скорость' },
+            { color: '#22c55e', label: 'выбег' },
+            { color: '#ef4444', label: 'торможение' },
+            { color: '#a855f7', label: 'огр. скор. (тяга)' },
+            { color: '#f97316', label: 'огр. скор. (торм.)' },
           ];
 
           ctx.font = fontSize(13);
-          ctx.textAlign = "left";
+          ctx.textAlign = 'left';
 
           legendItems.forEach((item) => {
             ctx.fillStyle = item.color;
-            ctx.fillRect(
-              currentX,
-              legendY,
-              swatchSize,
-              swatchSize,
-            );
-            ctx.strokeStyle = "#1f2937";
+            ctx.fillRect(currentX, legendY, swatchSize, swatchSize);
+            ctx.strokeStyle = '#1f2937';
             ctx.lineWidth = lineWidth(1);
-            ctx.strokeRect(
-              currentX,
-              legendY,
-              swatchSize,
-              swatchSize,
-            );
+            ctx.strokeRect(currentX, legendY, swatchSize, swatchSize);
 
-            ctx.fillStyle = "#6b7280";
-            ctx.fillText(
-              item.label,
-              currentX + swatchSize + 5,
-              legendY + swatchSize - 3,
-            );
+            ctx.fillStyle = '#6b7280';
+            ctx.fillText(item.label, currentX + swatchSize + 5, legendY + swatchSize - 3);
 
             const textWidth = ctx.measureText(item.label).width;
             currentX += swatchSize + 5 + textWidth + 20;
@@ -2178,7 +1759,7 @@ export default function ChartEditor({
             ctx.save();
 
             // Определяем цвет и стиль в зависимости от категории объекта
-            let iconColor = "#3b82f6";
+            let iconColor = '#3b82f6';
             let iconSize = 12;
 
             switch (obj.type) {
@@ -2201,51 +1782,35 @@ export default function ChartEditor({
                 iconColor = "#ef4444";
                 break;*/
               default:
-                iconColor = "#3b82f6";
+                iconColor = '#3b82f6';
             }
 
             // Рисуем маркер объекта
             ctx.fillStyle = iconColor;
-            ctx.strokeStyle = "#ffffff";
+            ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = lineWidth(2);
 
             // Круглый маркер
             ctx.beginPath();
-            ctx.arc(
-              obj.x,
-              obj.y,
-              iconSize / zoom,
-              0,
-              Math.PI * 2,
-            );
+            ctx.arc(obj.x, obj.y, iconSize / zoom, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
 
             // Подпись объекта (если есть)
             if (obj.label) {
-              ctx.fillStyle = "#1f2937";
+              ctx.fillStyle = '#1f2937';
               ctx.font = fontSize(11);
-              ctx.textAlign = "center";
-              ctx.textBaseline = "top";
-              ctx.fillText(
-                obj.label,
-                obj.x,
-                obj.y + (iconSize + 4) / zoom,
-              );
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'top';
+              ctx.fillText(obj.label, obj.x, obj.y + (iconSize + 4) / zoom);
             }
 
             // Подсветка при наведении
             if (hoveredObject && hoveredObject.id === obj.id) {
-              ctx.strokeStyle = "#3b82f6";
+              ctx.strokeStyle = '#3b82f6';
               ctx.lineWidth = lineWidth(3);
               ctx.beginPath();
-              ctx.arc(
-                obj.x,
-                obj.y,
-                (iconSize + 4) / zoom,
-                0,
-                Math.PI * 2,
-              );
+              ctx.arc(obj.x, obj.y, (iconSize + 4) / zoom, 0, Math.PI * 2);
               ctx.stroke();
             }
 
@@ -2259,26 +1824,16 @@ export default function ChartEditor({
         if (marqueeStart && marqueeEnd) {
           ctx.save();
           ctx.setTransform(1, 0, 0, 1, 0, 0); // гарантируем отсутствие трансформаций
-          ctx.fillStyle = "rgba(59, 130, 246, 0.1)";
-          ctx.strokeStyle = "#3b82f6";
+          ctx.fillStyle = 'rgba(59, 130, 246, 0.1)';
+          ctx.strokeStyle = '#3b82f6';
           ctx.lineWidth = 2;
           ctx.setLineDash([5, 5]);
           const startX = marqueeStart.x * zoom + panX;
           const startY = marqueeStart.y + panY;
           const endX = marqueeEnd.x * zoom + panX;
           const endY = marqueeEnd.y + panY;
-          ctx.fillRect(
-            startX,
-            startY,
-            endX - startX,
-            endY - startY,
-          );
-          ctx.strokeRect(
-            startX,
-            startY,
-            endX - startX,
-            endY - startY,
-          );
+          ctx.fillRect(startX, startY, endX - startX, endY - startY);
+          ctx.strokeRect(startX, startY, endX - startX, endY - startY);
           ctx.restore();
         }
 
@@ -2355,23 +1910,15 @@ export default function ChartEditor({
       } catch (error) {
         // Clear canvas and show error
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, baseWidth, baseHeight);
-        ctx.fillStyle = "#ef4444";
-        ctx.font = "16px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(
-          "Ошибка при отрисовке графика",
-          baseWidth / 2,
-          baseHeight / 2 - 10,
-        );
-        ctx.fillStyle = "#6b7280";
-        ctx.font = "12px sans-serif";
-        ctx.fillText(
-          String(error),
-          baseWidth / 2,
-          baseHeight / 2 + 15,
-        );
+        ctx.fillStyle = '#ef4444';
+        ctx.font = '16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Ошибка при отрисовке графика', baseWidth / 2, baseHeight / 2 - 10);
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '12px sans-serif';
+        ctx.fillText(String(error), baseWidth / 2, baseHeight / 2 + 15);
       }
     },
     [
@@ -2389,14 +1936,14 @@ export default function ChartEditor({
       draggedArrow,
       resizeLimitReached,
       trainForceData,
-    ],
+    ]
   );
 
   // Анализ режимов движения
   const analyzeOperationModes = (
     speedCurve: { km: number; speed: number }[],
     trackSection: { speedLimits: SpeedLimit[]; length: number },
-    maxKm?: number,
+    maxKm?: number
   ): OperationModeSegment[] => {
     const segments: OperationModeSegment[] = [];
 
@@ -2417,24 +1964,17 @@ export default function ChartEditor({
       // @ts-ignore
       actualEndCoord =
         // @ts-ignore
-        trackSection.stations[trackSection.stations.length - 1]
-          .endCoord;
+        trackSection.stations[trackSection.stations.length - 1].endCoord;
     }
 
     const isReversed = actualStartCoord > actualEndCoord;
-    const displayStartCoord = isReversed
-      ? actualEndCoord
-      : actualStartCoord;
-    const displayEndCoord = isReversed
-      ? actualStartCoord
-      : actualEndCoord;
+    const displayStartCoord = isReversed ? actualEndCoord : actualStartCoord;
+    const displayEndCoord = isReversed ? actualStartCoord : actualEndCoord;
 
     const endKm = maxKm || trackSection.length;
 
     const pointsInRange = speedCurve.filter(
-      (point) =>
-        point.km >= displayStartCoord &&
-        point.km <= Math.min(endKm, displayEndCoord),
+      (point) => point.km >= displayStartCoord && point.km <= Math.min(endKm, displayEndCoord)
     );
 
     if (pointsInRange.length < 2) return segments;
@@ -2443,41 +1983,33 @@ export default function ChartEditor({
       const point1 = pointsInRange[i];
       const point2 = pointsInRange[i + 1];
 
-      const segmentEndKm = Math.min(
-        point2.km,
-        endKm,
-        displayEndCoord,
-      );
+      const segmentEndKm = Math.min(point2.km, endKm, displayEndCoord);
       const speedChange = point2.speed - point1.speed;
       const distanceChange = point2.km - point1.km;
-      const acceleration =
-        distanceChange > 0 ? speedChange / distanceChange : 0;
+      const acceleration = distanceChange > 0 ? speedChange / distanceChange : 0;
 
       const speedLimit = trackSection.speedLimits.find(
-        (sl) =>
-          point1.km >= sl.startCoord && point1.km < sl.endCoord,
+        (sl) => point1.km >= sl.startCoord && point1.km < sl.endCoord
       );
-      const limitValue = speedLimit
-        ? speedLimit.limitValue
-        : 200;
+      const limitValue = speedLimit ? speedLimit.limitValue : 200;
       const atLimit = point1.speed >= limitValue * 0.95;
 
       let mode: OperationMode;
 
       if (atLimit) {
         if (acceleration < -0.5) {
-          mode = "limit-braking";
+          mode = 'limit-braking';
         } else {
-          mode = "limit-traction";
+          mode = 'limit-traction';
         }
       } else if (acceleration > 1) {
-        mode = "acceleration";
+        mode = 'acceleration';
       } else if (acceleration < -2) {
-        mode = "braking";
+        mode = 'braking';
       } else if (acceleration < -0.3) {
-        mode = "coasting";
+        mode = 'coasting';
       } else {
-        mode = "stable";
+        mode = 'stable';
       }
 
       segments.push({
@@ -2486,11 +2018,7 @@ export default function ChartEditor({
         mode,
       });
 
-      if (
-        segmentEndKm >= endKm ||
-        segmentEndKm >= displayEndCoord
-      )
-        break;
+      if (segmentEndKm >= endKm || segmentEndKm >= displayEndCoord) break;
     }
 
     return segments;
@@ -2500,7 +2028,7 @@ export default function ChartEditor({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationFrameId: number;
@@ -2521,19 +2049,19 @@ export default function ChartEditor({
           drawWorkflowCanvas(ctx, baseWidth, baseHeight, zoom);
         } else {
           // Draw placeholder
-          ctx.fillStyle = "#ffffff";
+          ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, baseWidth, baseHeight);
-          ctx.fillStyle = "#6b7280";
-          ctx.font = "20px sans-serif";
-          ctx.textAlign = "center";
+          ctx.fillStyle = '#6b7280';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
           ctx.fillText(
-            "Выберите участок пути в боковой панели для начала работы",
+            'Выберите участок пути в боковой панели для начала работы',
             baseWidth / 2,
-            baseHeight / 2,
+            baseHeight / 2
           );
         }
       } catch (error) {
-        console.error("Ошибка при отрисовке:", error);
+        console.error('Ошибка при отрисовке:', error);
       } finally {
         isDrawing = false;
       }
@@ -2555,14 +2083,14 @@ export default function ChartEditor({
       debouncedDraw();
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     // Cleanup
     return () => {
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, [
     // ТОЛЬКО необходимые зависимости
@@ -2594,14 +2122,8 @@ export default function ChartEditor({
       const viewportHeight = scrollContainer.clientHeight;
 
       // Calculate max scroll positions (content size + padding - viewport)
-      const maxScrollX = Math.max(
-        0,
-        contentWidth - viewportWidth + PADDING,
-      );
-      const maxScrollY = Math.max(
-        0,
-        contentHeight - viewportHeight + PADDING,
-      );
+      const maxScrollX = Math.max(0, contentWidth - viewportWidth + PADDING);
+      const maxScrollY = Math.max(0, contentHeight - viewportHeight + PADDING);
 
       // Get current scroll position
       let scrollLeft = scrollContainer.scrollLeft;
@@ -2635,7 +2157,7 @@ export default function ChartEditor({
       }
     };
 
-    scrollContainer.addEventListener("scroll", handleScroll, {
+    scrollContainer.addEventListener('scroll', handleScroll, {
       passive: true,
     });
 
@@ -2645,24 +2167,20 @@ export default function ChartEditor({
       requestAnimationFrame(handleScroll);
     };
 
-    scrollContainer.addEventListener("wheel", handleWheel, {
+    scrollContainer.addEventListener('wheel', handleWheel, {
       passive: true,
     });
 
     return () => {
-      scrollContainer.removeEventListener(
-        "scroll",
-        handleScroll,
-      );
-      scrollContainer.removeEventListener("wheel", handleWheel);
+      scrollContainer.removeEventListener('scroll', handleScroll);
+      scrollContainer.removeEventListener('wheel', handleWheel);
     };
   }, [baseWidth, baseHeight]);
 
   // Center canvas on initial track section load
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer || !chartData.workflow?.trackSection)
-      return;
+    if (!scrollContainer || !chartData.workflow?.trackSection) return;
 
     // Set initial scroll position to show some padding (50px from edges)
     const initialScrollX = 50;
@@ -2697,8 +2215,7 @@ export default function ChartEditor({
     chartData.pathProfiles.forEach((profile) => {
       allCoords.push(profile.startCoord, profile.endCoord);
     });
-    const maxCoord =
-      allCoords.length > 0 ? Math.max(...allCoords, 200) : 200;
+    const maxCoord = allCoords.length > 0 ? Math.max(...allCoords, 200) : 200;
 
     const coordToX = (coord: number) => {
       const usableWidth = baseWidth - 200;
@@ -2714,19 +2231,13 @@ export default function ChartEditor({
         const deltaY = profile.slopePromille * 2;
         const nextY = currentY + deltaY;
 
-        if (
-          mousePos.x >= startX - 10 &&
-          mousePos.x <= endX + 10
-        ) {
+        if (mousePos.x >= startX - 10 && mousePos.x <= endX + 10) {
           const segmentY =
-            currentY +
-            ((mousePos.x - startX) / (endX - startX)) *
-              (nextY - currentY);
+            currentY + ((mousePos.x - startX) / (endX - startX)) * (nextY - currentY);
           if (Math.abs(mousePos.y - segmentY) < 10) {
             const kmPos =
               profile.startCoord +
-              ((mousePos.x - startX) / (endX - startX)) *
-                (profile.endCoord - profile.startCoord);
+              ((mousePos.x - startX) / (endX - startX)) * (profile.endCoord - profile.startCoord);
             setHoveredDataPoint({
               label: `Профиль пути - км: ${kmPos.toFixed(1)}, уклон: ${profile.slopePromille}‰`,
               x: mousePos.x,
@@ -2748,21 +2259,15 @@ export default function ChartEditor({
         const startX = coordToX(limit.startCoord);
         const endX = coordToX(limit.endCoord);
         const speedRatio = limit.limitValue / maxSpeed;
-        const y =
-          speedLimitBaseY - speedRatio * speedGraphHeight;
+        const y = speedLimitBaseY - speedRatio * speedGraphHeight;
 
-        if (
-          mousePos.x >= startX &&
-          mousePos.x <= endX &&
-          Math.abs(mousePos.y - y) < 15
-        ) {
+        if (mousePos.x >= startX && mousePos.x <= endX && Math.abs(mousePos.y - y) < 15) {
           const kmPos =
             limit.startCoord +
-            ((mousePos.x - startX) / (endX - startX)) *
-              (limit.endCoord - limit.startCoord);
+            ((mousePos.x - startX) / (endX - startX)) * (limit.endCoord - limit.startCoord);
           setHoveredDataPoint({
             label: `Скоростные ограничения - км: ${kmPos.toFixed(
-              1,
+              1
             )}, Скорость: ${limit.limitValue} км/ч`,
             x: mousePos.x,
             y: y,
@@ -2777,10 +2282,7 @@ export default function ChartEditor({
       const endX = coordToX(segment.endCoord);
       const centerX = (startX + endX) / 2;
 
-      if (
-        Math.abs(mousePos.x - centerX) < 30 &&
-        Math.abs(mousePos.y - axisY) < 15
-      ) {
+      if (Math.abs(mousePos.x - centerX) < 30 && Math.abs(mousePos.y - axisY) < 15) {
         setHoveredDataPoint({
           label: `Station: ${segment.stationName}, Km: ${segment.startCoord}-${segment.endCoord}`,
           x: centerX,
@@ -2795,46 +2297,34 @@ export default function ChartEditor({
 
   // Hover по стрелкам (резервный эффект; основное наведение уже в handlePanMove)
   useEffect(() => {
-    if (
-      !chartData.workflow?.regimeArrows ||
-      !chartData.workflow?.trackSection
-    ) {
+    if (!chartData.workflow?.regimeArrows || !chartData.workflow?.trackSection) {
       setHoveredArrow(null);
       return;
     }
 
-    const trackLength = chartData.workflow.trackSection.length;
     const marginLeft = 80;
-    const marginRight = 50;
     const marginTop = 50;
     const marginBottom = 240;
-    const chartWidth = baseWidth - marginLeft - marginRight;
-    const arrowY =
-      marginTop + (baseHeight - marginTop - marginBottom) + 180;
+    const arrowY = marginTop + (baseHeight - marginTop - marginBottom) + 180;
 
     // Use the proper kmToX converter that handles track coordinate system
     const kmToX = createKmToXConverter(chartData, marginLeft);
 
     const handleRadius = 8;
 
-    for (
-      let i = 0;
-      i < chartData.workflow.regimeArrows.length;
-      i++
-    ) {
+    for (let i = 0; i < chartData.workflow.regimeArrows.length; i++) {
       const arrow = chartData.workflow.regimeArrows[i];
       const startX = kmToX(arrow.startKm);
       const endX = kmToX(arrow.endKm);
 
       if (i > 0 && selectedArrow === arrow.id) {
         const distToStart = Math.sqrt(
-          Math.pow(mousePos.x - startX, 2) +
-            Math.pow(mousePos.y - arrowY, 2),
+          Math.pow(mousePos.x - startX, 2) + Math.pow(mousePos.y - arrowY, 2)
         );
         if (distToStart < handleRadius) {
           setHoveredArrow({
             arrowId: arrow.id,
-            handle: "start",
+            handle: 'start',
           });
           return;
         }
@@ -2842,11 +2332,10 @@ export default function ChartEditor({
 
       if (selectedArrow === arrow.id) {
         const distToEnd = Math.sqrt(
-          Math.pow(mousePos.x - endX, 2) +
-            Math.pow(mousePos.y - arrowY, 2),
+          Math.pow(mousePos.x - endX, 2) + Math.pow(mousePos.y - arrowY, 2)
         );
         if (distToEnd < handleRadius) {
-          setHoveredArrow({ arrowId: arrow.id, handle: "end" });
+          setHoveredArrow({ arrowId: arrow.id, handle: 'end' });
           return;
         }
       }
@@ -2885,9 +2374,7 @@ export default function ChartEditor({
 
   const handleObjectDoubleClick = (e: React.MouseEvent) => {
     if (hoveredObject && !placingObject && !isMarqueeZoom) {
-      const updatedObjects = chartData.canvasObjects.filter(
-        (obj) => obj.id !== hoveredObject.id,
-      );
+      const updatedObjects = chartData.canvasObjects.filter((obj) => obj.id !== hoveredObject.id);
       onUpdateChartData({ canvasObjects: updatedObjects });
       setHoveredObject(null);
       e.stopPropagation();
@@ -2943,27 +2430,27 @@ export default function ChartEditor({
     <>
       <div
         className="flex-1 bg-gray-50 overflow-hidden flex flex-row"
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: '100%', height: '100%' }}
       >
         {/* Main canvas area */}
         <div
           className="flex-1 p-6 overflow-hidden flex flex-col"
           ref={containerRef}
-          style={{ transition: "all 0.3s ease" }}
+          style={{ transition: 'all 0.3s ease' }}
         >
           <div
             className="bg-white rounded-lg shadow-sm p-6 flex-1 flex flex-col overflow-hidden"
             style={{
-              overflowY: "scroll",
-              position: "relative",
+              overflowY: 'scroll',
+              position: 'relative',
             }}
           >
             {/* Панель управления */}
             <div
               className="mb-4 flex items-center justify-between flex-shrink-0"
               style={{
-                position: "sticky",
-                top: "0",
+                position: 'sticky',
+                top: '0',
                 paddingLeft: 10,
                 paddingRight: 10,
                 zIndex: 30,
@@ -2972,35 +2459,25 @@ export default function ChartEditor({
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 px-3 py-1 bg-gray-100 rounded">
                   <span className="text-sm">Zoom:</span>
-                  <span className="text-sm font-mono">
-                    {Math.round(zoom * 100)}%
-                  </span>
+                  <span className="text-sm font-mono">{Math.round(zoom * 100)}%</span>
                 </div>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() =>
-                    setZoom((prev) => Math.min(4, prev * 1.2))
-                  }
+                  onClick={() => setZoom((prev) => Math.min(4, prev * 1.2))}
                 >
                   <ZoomIn className="w-4 h-4" />
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() =>
-                    setZoom((prev) =>
-                      Math.max(0.25, prev / 1.2),
-                    )
-                  }
+                  onClick={() => setZoom((prev) => Math.max(0.25, prev / 1.2))}
                 >
                   <ZoomOut className="w-4 h-4" />
                 </Button>
                 <Button
                   size="sm"
-                  variant={
-                    isMarqueeZoom ? "default" : "outline"
-                  }
+                  variant={isMarqueeZoom ? 'default' : 'outline'}
                   onClick={() => {
                     setIsMarqueeZoom(!isMarqueeZoom);
                     setPlacingObject(null);
@@ -3008,11 +2485,7 @@ export default function ChartEditor({
                 >
                   Выбрать область
                 </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleResetZoom}
-                >
+                <Button size="sm" variant="outline" onClick={handleResetZoom}>
                   Начальный масштаб
                 </Button>
               </div>
@@ -3036,14 +2509,14 @@ export default function ChartEditor({
                   className="border border-gray-300 rounded flex-1 overflow-auto canvas-scrollbar relative"
                   style={{
                     minHeight: 0,
-                    scrollbarGutter: "stable both-edges",
+                    scrollbarGutter: 'stable both-edges',
                   }}
                 >
                   <div
                     style={{
                       width: baseWidth + 200,
                       height: baseHeight + 200,
-                      position: "relative",
+                      position: 'relative',
                     }}
                   >
                     <canvas
@@ -3051,10 +2524,10 @@ export default function ChartEditor({
                       width={baseWidth}
                       height={baseHeight}
                       style={{
-                        position: "absolute",
-                        top: "100px",
-                        left: "100px",
-                        display: "block",
+                        position: 'absolute',
+                        top: '100px',
+                        left: '100px',
+                        display: 'block',
                       }}
                       onWheel={handleWheel}
                       onDrop={handleCanvasDrop}
@@ -3094,47 +2567,27 @@ export default function ChartEditor({
                         e.preventDefault();
                         if (placingObject) {
                           setPlacingObject(null);
-                        } else if (
-                          selectedArrow &&
-                          chartData.workflow?.regimeArrows
-                        ) {
-                          const deletedArrowIndex =
-                            chartData.workflow.regimeArrows.findIndex(
-                              (arrow) =>
-                                arrow.id === selectedArrow,
-                            );
+                        } else if (selectedArrow && chartData.workflow?.regimeArrows) {
+                          const deletedArrowIndex = chartData.workflow.regimeArrows.findIndex(
+                            (arrow) => arrow.id === selectedArrow
+                          );
 
                           if (deletedArrowIndex !== -1) {
-                            const deletedArrow =
-                              chartData.workflow.regimeArrows[
-                                deletedArrowIndex
-                              ];
-                            const deletedLength =
-                              deletedArrow.endKm -
-                              deletedArrow.startKm;
+                            const deletedArrow = chartData.workflow.regimeArrows[deletedArrowIndex];
+                            const deletedLength = deletedArrow.endKm - deletedArrow.startKm;
 
-                            const updatedArrows =
-                              chartData.workflow.regimeArrows
-                                .filter(
-                                  (arrow) =>
-                                    arrow.id !== selectedArrow,
-                                )
-                                .map((arrow, index) => {
-                                  if (
-                                    index >= deletedArrowIndex
-                                  ) {
-                                    return {
-                                      ...arrow,
-                                      startKm:
-                                        arrow.startKm -
-                                        deletedLength,
-                                      endKm:
-                                        arrow.endKm -
-                                        deletedLength,
-                                    };
-                                  }
-                                  return arrow;
-                                });
+                            const updatedArrows = chartData.workflow.regimeArrows
+                              .filter((arrow) => arrow.id !== selectedArrow)
+                              .map((arrow, index) => {
+                                if (index >= deletedArrowIndex) {
+                                  return {
+                                    ...arrow,
+                                    startKm: arrow.startKm - deletedLength,
+                                    endKm: arrow.endKm - deletedLength,
+                                  };
+                                }
+                                return arrow;
+                              });
 
                             onUpdateChartData({
                               workflow: {
@@ -3145,11 +2598,9 @@ export default function ChartEditor({
                             setSelectedArrow(null);
                           }
                         } else if (hoveredObject) {
-                          const updatedObjects =
-                            chartData.canvasObjects.filter(
-                              (obj) =>
-                                obj.id !== hoveredObject.id,
-                            );
+                          const updatedObjects = chartData.canvasObjects.filter(
+                            (obj) => obj.id !== hoveredObject.id
+                          );
                           onUpdateChartData({
                             canvasObjects: updatedObjects,
                           });
@@ -3160,32 +2611,30 @@ export default function ChartEditor({
                       style={{
                         cursor: draggedArrow
                           ? resizeLimitReached
-                            ? "not-allowed"
-                            : "ew-resize"
+                            ? 'not-allowed'
+                            : 'ew-resize'
                           : draggedObject
-                            ? "grabbing"
+                            ? 'grabbing'
                             : isPanning
-                              ? "grabbing"
+                              ? 'grabbing'
                               : isMarqueeZoom
-                                ? "crosshair"
+                                ? 'crosshair'
                                 : placingObject
-                                  ? "cell"
+                                  ? 'cell'
                                   : hoveredArrow?.handle
-                                    ? "ew-resize"
+                                    ? 'ew-resize'
                                     : hoveredArrow
-                                      ? "pointer"
+                                      ? 'pointer'
                                       : hoveredObject
-                                        ? "pointer"
-                                        : "grab",
+                                        ? 'pointer'
+                                        : 'grab',
                       }}
                     />
                   </div>
                 </div>
               </ContextMenuTrigger>
               <ContextMenuContent className="w-56">
-                <ContextMenuItem
-                  onClick={handleContextMenuSelect}
-                >
+                <ContextMenuItem onClick={handleContextMenuSelect}>
                   <GitBranch className="w-4 h-4 mr-2" />
                   Open Object Palette
                 </ContextMenuItem>
@@ -3203,18 +2652,11 @@ export default function ChartEditor({
             />
 
             {/* Display Settings Modal */}
-            <Dialog
-              open={showDisplaySettings}
-              onOpenChange={setShowDisplaySettings}
-            >
+            <Dialog open={showDisplaySettings} onOpenChange={setShowDisplaySettings}>
               <DialogContent className="max-w-md">
                 <DialogHeader>
-                  <DialogTitle>
-                    Настройки отображения
-                  </DialogTitle>
-                  <DialogDescription>
-                    Выберите элементы для отображения на холсте
-                  </DialogDescription>
+                  <DialogTitle>Настройки отображения</DialogTitle>
+                  <DialogDescription>Выберите элементы для отображения на холсте</DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4 py-4">
@@ -3230,10 +2672,7 @@ export default function ChartEditor({
                         })
                       }
                     />
-                    <Label
-                      htmlFor="trackProfile"
-                      className="text-sm cursor-pointer"
-                    >
+                    <Label htmlFor="trackProfile" className="text-sm cursor-pointer">
                       Профиль пути
                     </Label>
                   </div>
@@ -3242,9 +2681,7 @@ export default function ChartEditor({
                   <div className="flex items-center space-x-3">
                     <Checkbox
                       id="optimalSpeedCurve"
-                      checked={
-                        displaySettings.optimalSpeedCurve
-                      }
+                      checked={displaySettings.optimalSpeedCurve}
                       onCheckedChange={(checked) =>
                         setDisplaySettings({
                           ...displaySettings,
@@ -3252,10 +2689,7 @@ export default function ChartEditor({
                         })
                       }
                     />
-                    <Label
-                      htmlFor="optimalSpeedCurve"
-                      className="text-sm cursor-pointer"
-                    >
+                    <Label htmlFor="optimalSpeedCurve" className="text-sm cursor-pointer">
                       Оптимальная кривая скорости
                     </Label>
                   </div>
@@ -3272,10 +2706,7 @@ export default function ChartEditor({
                         })
                       }
                     />
-                    <Label
-                      htmlFor="speedLimits"
-                      className="text-sm cursor-pointer"
-                    >
+                    <Label htmlFor="speedLimits" className="text-sm cursor-pointer">
                       Скоростные ограничения
                     </Label>
                   </div>
@@ -3292,10 +2723,7 @@ export default function ChartEditor({
                         })
                       }
                     />
-                    <Label
-                      htmlFor="actualSpeedCurve"
-                      className="text-sm cursor-pointer"
-                    >
+                    <Label htmlFor="actualSpeedCurve" className="text-sm cursor-pointer">
                       Фактическая кривая скорости
                     </Label>
                   </div>
@@ -3312,10 +2740,7 @@ export default function ChartEditor({
                         })
                       }
                     />
-                    <Label
-                      htmlFor="regimeBands"
-                      className="text-sm cursor-pointer"
-                    >
+                    <Label htmlFor="regimeBands" className="text-sm cursor-pointer">
                       Режимные ленты
                     </Label>
                   </div>
@@ -3332,10 +2757,7 @@ export default function ChartEditor({
                         })
                       }
                     />
-                    <Label
-                      htmlFor="objectMarkers"
-                      className="text-sm cursor-pointer"
-                    >
+                    <Label htmlFor="objectMarkers" className="text-sm cursor-pointer">
                       Маркеры объектов
                     </Label>
                   </div>
@@ -3353,8 +2775,7 @@ export default function ChartEditor({
                 }}
               >
                 {hoveredObject.label || hoveredObject.type}
-                {" @ "}({Math.round(hoveredObject.x)},{" "}
-                {Math.round(hoveredObject.y)})
+                {' @ '}({Math.round(hoveredObject.x)}, {Math.round(hoveredObject.y)})
               </div>
             )}
 
@@ -3377,9 +2798,7 @@ export default function ChartEditor({
       {/* Visio-like Object Palette - Right Sidebar (shares workspace) */}
       <VisioObjectPalette
         collapsed={paletteCollapsed}
-        onToggleCollapse={() =>
-          setPaletteCollapsed(!paletteCollapsed)
-        }
+        onToggleCollapse={() => setPaletteCollapsed(!paletteCollapsed)}
       />
     </>
   );

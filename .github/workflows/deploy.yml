@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ master ] # Убедитесь, что ветка называется master
+    branches: [master] # Убедитесь, что ветка называется master
 
 # Разрешаем запись в репозиторий и создание страниц
 permissions:

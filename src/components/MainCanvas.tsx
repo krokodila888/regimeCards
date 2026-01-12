@@ -1,43 +1,41 @@
-import React, { useState } from "react";
-import { Save, FileText } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import ChartEditor from "./ChartEditor";
-import CanvasScreenshot from "./CanvasScreenshot";
-import { useAuth } from "../contexts/AuthContext";
-import emptyField from "./images/dema_no_top_no_profile_no_regimes_no_boards_no_speed.png";
-import demaEmptyProfileImg from "./images/dema_profile_no-others.png";
-import demaImg from "./images/dema_no_top_no_profile_no_regimes.png";
-import demaNoBottomImg from "./images/dema_no_bottom.png";
-import demaNoProfileImg from "./images/dema_no_profile.png";
-import demaNoTopImg from "./images/dema_no_top.png";
-import demaNoRegimesImg from "./images/dema_no_regimes.png";
-import demaSpeedOnlyImg from "./images/dema_no_top_no_profile_no_regimes.png";
-import demaNoTopNoProfileImg from "./images/dema_no_top_no_profile.png";
-import demaNoTopNoRegimesImg from "./images/dema_no_top_no_regimes.png";
+import { Save, FileText } from 'lucide-react';
+import React, { useState } from 'react';
 
-import demaOptImg from "./images/dema_opt.png";
-import demaOptNoBottomImg from "./images/dema_opt_no-bottom.png";
-import demaOptNoProfileImg from "./images/dema_opt_no-profile.png";
-import demaOptNoTopImg from "./images/dema_opt_no-top.png";
-import demaOptNoRegimesImg from "./images/dema_opt_no-regimes.png";
-import demaOptSpeedOnlyImg from "./images/dema_opt_no-top_no-profile_no-regimes.png";
-import demaOptNoTopNoProfileImg from "./images/dema_opt_no-top_no-profile.png";
-import demaOptNoTopNoRegimesImg from "./images/dema_opt_no-top_no-regimes.png";
+import { useAuth } from '../contexts/AuthContext';
+import type { ChartData } from '../types/chart-data';
 
-import demaRealImg from "./images/dema_regimes.png";
-import demaRealNoBottomImg from "./images/dema_regimes_no-bottom.png";
-import demaRealNoProfileImg from "./images/dema_regimes_no-profile.png";
-import demaRealNoTopImg from "./images/dema_regimes_no-top.png";
-import demaRealNoRegimesImg from "./images/dema_regimes_no-regimes.png";
-import demaRealSpeedOnlyImg from "./images/dema_regimes_speed-only.png";
-import demaRealNoTopNoProfileImg from "./images/dema_regimes_no-top_no-profile.png";
-import demaRealNoTopNoRegimesImg from "./images/dema_regimes_no-top_no-regimes.png";
-
-import demaStartWithBoardsNoProfile from "./images/dema_boards_no_top_no_profile_no_regimes.png";
-import demaStartWithBoardsAndProfile from "./images/dema_boards_no_top_no_regimes.png";
-
-import type { ChartData } from "../types/chart-data";
+import CanvasScreenshot from './CanvasScreenshot';
+import ChartEditor from './ChartEditor';
+import demaStartWithBoardsNoProfile from './images/dema_boards_no_top_no_profile_no_regimes.png';
+import demaStartWithBoardsAndProfile from './images/dema_boards_no_top_no_regimes.png';
+import demaNoBottomImg from './images/dema_no_bottom.png';
+import demaNoProfileImg from './images/dema_no_profile.png';
+import demaNoRegimesImg from './images/dema_no_regimes.png';
+import demaNoTopImg from './images/dema_no_top.png';
+import demaNoTopNoProfileImg from './images/dema_no_top_no_profile.png';
+import demaSpeedOnlyImg from './images/dema_no_top_no_profile_no_regimes.png';
+import demaImg from './images/dema_no_top_no_profile_no_regimes.png';
+import emptyField from './images/dema_no_top_no_profile_no_regimes_no_boards_no_speed.png';
+import demaNoTopNoRegimesImg from './images/dema_no_top_no_regimes.png';
+import demaOptImg from './images/dema_opt.png';
+import demaOptNoBottomImg from './images/dema_opt_no-bottom.png';
+import demaOptNoProfileImg from './images/dema_opt_no-profile.png';
+import demaOptNoRegimesImg from './images/dema_opt_no-regimes.png';
+import demaOptNoTopImg from './images/dema_opt_no-top.png';
+import demaOptNoTopNoProfileImg from './images/dema_opt_no-top_no-profile.png';
+import demaOptSpeedOnlyImg from './images/dema_opt_no-top_no-profile_no-regimes.png';
+import demaOptNoTopNoRegimesImg from './images/dema_opt_no-top_no-regimes.png';
+import demaEmptyProfileImg from './images/dema_profile_no-others.png';
+import demaRealImg from './images/dema_regimes.png';
+import demaRealNoBottomImg from './images/dema_regimes_no-bottom.png';
+import demaRealNoProfileImg from './images/dema_regimes_no-profile.png';
+import demaRealNoRegimesImg from './images/dema_regimes_no-regimes.png';
+import demaRealNoTopImg from './images/dema_regimes_no-top.png';
+import demaRealNoTopNoProfileImg from './images/dema_regimes_no-top_no-profile.png';
+import demaRealNoTopNoRegimesImg from './images/dema_regimes_no-top_no-regimes.png';
+import demaRealSpeedOnlyImg from './images/dema_regimes_speed-only.png';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 // Типы для размещенных объектов
 type PaletteObject = {
@@ -94,7 +92,7 @@ export default function MainCanvas({
   availableLayers,
   setAvailableLayers,
 }: MainCanvasProps) {
-  const [chartTitle, setChartTitle] = useState(activeChart?.title || "");
+  const [chartTitle, setChartTitle] = useState(activeChart?.title || '');
   const { user } = useAuth();
 
   React.useEffect(() => {
@@ -109,12 +107,12 @@ export default function MainCanvas({
   };
 
   const handleSave = () => {
-    onShowLoading("Сохранение...");
+    onShowLoading('Сохранение...');
     console.log('Идет сохранение:', placedObjects);
   };
 
   const handleUpdateChartData = (updates: Partial<ChartData>) => {
-    if (updates.workflow && "regimeArrows" in updates.workflow) {
+    if (updates.workflow && 'regimeArrows' in updates.workflow) {
       const updatedWorkflow: any = {
         ...activeChart?.workflow,
         ...updates.workflow,
@@ -130,8 +128,8 @@ export default function MainCanvas({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ marginRight: "4px" }}>
-      {activeChart && chosenAction !== "createNew" ? (
+    <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ marginRight: '4px' }}>
+      {activeChart && chosenAction !== 'createNew' ? (
         <>
           {/* Top Bar */}
           <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
@@ -141,20 +139,11 @@ export default function MainCanvas({
               className="max-w-md border-none shadow-none pl-3 focus-visible:ring-0"
             />
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSave}
-                disabled={!isDataValid}
-              >
+              <Button variant="outline" size="sm" onClick={handleSave} disabled={!isDataValid}>
                 <Save className="w-4 h-4 mr-2" />
                 Сохранить
               </Button>
-              {!isDataValid && (
-                <p className="text-sm text-red-600 max-w-xs">
-                  Исправьте ошибки
-                </p>
-              )}
+              {!isDataValid && <p className="text-sm text-red-600 max-w-xs">Исправьте ошибки</p>}
               <Button variant="outline" size="sm">
                 <FileText className="w-4 h-4 mr-2" />
                 Экспорт в PDF
@@ -163,52 +152,53 @@ export default function MainCanvas({
           </div>
 
           {/* Canvas или Editor */}
-          {user?.role === "admin" ? (
-            <ChartEditor
-              chartData={activeChart}
-              onUpdateChartData={handleUpdateChartData}
-            />
-          ) : (user?.role === "user" && activeChart.workflow?.arrivalStation && activeChart.workflow?.departureStation) && (
-            <CanvasScreenshot
-              imageUrl={demaImg}
-              imageNoTopUrl={demaNoTopImg}
-              imageNoBottomUrl={demaNoBottomImg}
-              imageSpeedOnlyUrl={demaSpeedOnlyImg}
-              imageNoRegimesUrl={demaNoRegimesImg}
-              imageNoProfileUrl={demaNoProfileImg}
-              imageNoTopNoRegimesUrl={demaNoTopNoRegimesImg}
-              imageNoTopNoProfileUrl={demaNoTopNoProfileImg}
-              imageOptUrl={demaOptImg}
-              imageOptNoTopUrl={demaOptNoTopImg}
-              imageOptNoBottomUrl={demaOptNoBottomImg}
-              imageOptSpeedOnlyUrl={demaOptSpeedOnlyImg}
-              imageOptNoRegimesUrl={demaOptNoRegimesImg}
-              imageOptNoProfileUrl={demaOptNoProfileImg}
-              imageOptNoTopNoRegimesUrl={demaOptNoTopNoRegimesImg}
-              imageOptNoTopNoProfileUrl={demaOptNoTopNoProfileImg}
-              imageRealUrl={demaRealImg}
-              imageRealNoTopUrl={demaRealNoTopImg}
-              imageRealNoBottomUrl={demaRealNoBottomImg}
-              imageRealSpeedOnlyUrl={demaRealSpeedOnlyImg}
-              imageRealNoRegimesUrl={demaRealNoRegimesImg}
-              imageRealNoProfileUrl={demaRealNoProfileImg}
-              imageRealNoTopNoRegimesUrl={demaRealNoTopNoRegimesImg}
-              imageRealNoTopNoProfileUrl={demaRealNoTopNoProfileImg}
-              imageDemaEmptyProfile={demaEmptyProfileImg}
-              placedObjects={placedObjects}
-              onPlacedObjectsChange={onPlacedObjectsChange}
-              selectedObjectId={selectedObjectId}
-              onSelectObject={onSelectObject}
-              visibleLayers={visibleLayers} 
-              setVisibleLayers={setVisibleLayers}
-              chosenAction={chosenAction}
-              emptyField={emptyField}
-              demaStartWithBoardsNoProfile={demaStartWithBoardsNoProfile}
-              demaStartWithBoardsAndProfile={demaStartWithBoardsAndProfile}
-              activeChart={activeChart}
-              availableLayers={availableLayers}
-              setAvailableLayers={setAvailableLayers}
-            />
+          {user?.role === 'admin' ? (
+            <ChartEditor chartData={activeChart} onUpdateChartData={handleUpdateChartData} />
+          ) : (
+            user?.role === 'user' &&
+            activeChart.workflow?.arrivalStation &&
+            activeChart.workflow?.departureStation && (
+              <CanvasScreenshot
+                imageUrl={demaImg}
+                imageNoTopUrl={demaNoTopImg}
+                imageNoBottomUrl={demaNoBottomImg}
+                imageSpeedOnlyUrl={demaSpeedOnlyImg}
+                imageNoRegimesUrl={demaNoRegimesImg}
+                imageNoProfileUrl={demaNoProfileImg}
+                imageNoTopNoRegimesUrl={demaNoTopNoRegimesImg}
+                imageNoTopNoProfileUrl={demaNoTopNoProfileImg}
+                imageOptUrl={demaOptImg}
+                imageOptNoTopUrl={demaOptNoTopImg}
+                imageOptNoBottomUrl={demaOptNoBottomImg}
+                imageOptSpeedOnlyUrl={demaOptSpeedOnlyImg}
+                imageOptNoRegimesUrl={demaOptNoRegimesImg}
+                imageOptNoProfileUrl={demaOptNoProfileImg}
+                imageOptNoTopNoRegimesUrl={demaOptNoTopNoRegimesImg}
+                imageOptNoTopNoProfileUrl={demaOptNoTopNoProfileImg}
+                imageRealUrl={demaRealImg}
+                imageRealNoTopUrl={demaRealNoTopImg}
+                imageRealNoBottomUrl={demaRealNoBottomImg}
+                imageRealSpeedOnlyUrl={demaRealSpeedOnlyImg}
+                imageRealNoRegimesUrl={demaRealNoRegimesImg}
+                imageRealNoProfileUrl={demaRealNoProfileImg}
+                imageRealNoTopNoRegimesUrl={demaRealNoTopNoRegimesImg}
+                imageRealNoTopNoProfileUrl={demaRealNoTopNoProfileImg}
+                imageDemaEmptyProfile={demaEmptyProfileImg}
+                placedObjects={placedObjects}
+                onPlacedObjectsChange={onPlacedObjectsChange}
+                selectedObjectId={selectedObjectId}
+                onSelectObject={onSelectObject}
+                visibleLayers={visibleLayers}
+                setVisibleLayers={setVisibleLayers}
+                chosenAction={chosenAction}
+                emptyField={emptyField}
+                demaStartWithBoardsNoProfile={demaStartWithBoardsNoProfile}
+                demaStartWithBoardsAndProfile={demaStartWithBoardsAndProfile}
+                activeChart={activeChart}
+                availableLayers={availableLayers}
+                setAvailableLayers={setAvailableLayers}
+              />
+            )
           )}
         </>
       ) : (
@@ -218,9 +208,7 @@ export default function MainCanvas({
             <div className="bg-gray-200 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
               <FileText className="w-12 h-12 text-gray-400" />
             </div>
-            <h2 className="text-xl text-gray-700 mb-2">
-              Режимная карта не выбрана
-            </h2>
+            <h2 className="text-xl text-gray-700 mb-2">Режимная карта не выбрана</h2>
             <p className="text-gray-500">
               Создайте новую режимную карту или выберите существующую, чтобы начать работу
             </p>

@@ -1,9 +1,11 @@
-import React from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
 import { Trash2 } from 'lucide-react';
+import React from 'react';
+
 import type { CanvasObject } from '../types/chart-data';
+
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 
 interface PlacedObjectsTableProps {
   objects: CanvasObject[];
@@ -11,8 +13,8 @@ interface PlacedObjectsTableProps {
   onDeleteObject: (id: string) => void;
 }
 
-export default function PlacedObjectsTable({ 
-  objects, 
+export default function PlacedObjectsTable({
+  objects,
   onUpdateObject,
   onDeleteObject,
 }: PlacedObjectsTableProps) {

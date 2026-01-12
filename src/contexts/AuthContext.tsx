@@ -25,16 +25,16 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
     user: {
       login: 'user',
       role: 'user',
-      name: 'Тестовый пользователь'
-    }
+      name: 'Тестовый пользователь',
+    },
   },
   admin: {
     password: 'admin',
     user: {
       login: 'admin',
       role: 'admin',
-      name: 'Администратор'
-    }
+      name: 'Администратор',
+    },
   },
   // Для удобства тестирования
   user1: {
@@ -42,9 +42,9 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
     user: {
       login: 'user',
       role: 'user',
-      name: 'Пользователь ТестТест'
-    }
-  }
+      name: 'Пользователь ТестТест',
+    },
+  },
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -52,12 +52,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (username: string, password: string): boolean => {
     const mockUser = MOCK_USERS[username];
-    
+
     if (mockUser && mockUser.password === password) {
       setUser(mockUser.user);
       return true;
     }
-    
+
     return false;
   };
 
@@ -66,12 +66,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider 
-      value={{ 
-        user, 
-        login, 
-        logout, 
-        isAuthenticated: !!user 
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        isAuthenticated: !!user,
       }}
     >
       {children}

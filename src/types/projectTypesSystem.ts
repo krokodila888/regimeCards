@@ -383,19 +383,19 @@ export type CustomSpeedLimit = {
 /**
  * Тип объекта на карте
  */
-export type MapObjectType = 
-  | 'BRAKE_TEST_POINT'      // Точка опробования тормозов
-  | 'PICKET'                // Пикет
+export type MapObjectType =
+  | 'BRAKE_TEST_POINT' // Точка опробования тормозов
+  | 'PICKET' // Пикет
   | 'NEUTRAL_SECTION_START' // Начало нейтральной вставки
-  | 'NEUTRAL_SECTION_END'   // Конец нейтральной вставки
-  | 'WATER_INTAKE'          // Водозаборная колонка
-  | 'SIGNAL'                // Светофор
-  | 'SWITCH'                // Стрелочный перевод
-  | 'CROSSING'              // Переезд
-  | 'TUNNEL_START'          // Начало тоннеля
-  | 'TUNNEL_END'            // Конец тоннеля
-  | 'BRIDGE_START'          // Начало моста
-  | 'BRIDGE_END';           // Конец моста
+  | 'NEUTRAL_SECTION_END' // Конец нейтральной вставки
+  | 'WATER_INTAKE' // Водозаборная колонка
+  | 'SIGNAL' // Светофор
+  | 'SWITCH' // Стрелочный перевод
+  | 'CROSSING' // Переезд
+  | 'TUNNEL_START' // Начало тоннеля
+  | 'TUNNEL_END' // Конец тоннеля
+  | 'BRIDGE_START' // Начало моста
+  | 'BRIDGE_END'; // Конец моста
 
 /**
  * Объект на карте
@@ -419,10 +419,10 @@ export type Direction = 'FORWARD' | 'BACKWARD';
 /**
  * Режим ведения (тяги)
  */
-export type TractionMode = 
-  | 'ACCELERATION'  // Разгон
-  | 'COASTING'      // Выбег
-  | 'BRAKING'       // Торможение
+export type TractionMode =
+  | 'ACCELERATION' // Разгон
+  | 'COASTING' // Выбег
+  | 'BRAKING' // Торможение
   | 'CONSTANT_SPEED'; // Постоянная скорость
 
 /**

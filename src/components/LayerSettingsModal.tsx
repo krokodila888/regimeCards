@@ -1,5 +1,9 @@
 // src/components/modals/LayerSettingsModal.tsx
 import React from 'react';
+
+import { Label } from '../components//ui/label';
+import { Separator } from '../components//ui/separator';
+import { Switch } from '../components//ui/switch';
 import {
   Dialog,
   DialogContent,
@@ -7,9 +11,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from '../components/ui/dialog';
-import { Label } from '../components//ui/label';
-import { Switch } from '../components//ui/switch';
-import { Separator } from '../components//ui/separator';
 
 interface LayerSettings {
   speedCurve: boolean;
@@ -44,23 +45,16 @@ export default function LayerSettingsModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Настройки отображения</DialogTitle>
-          <DialogDescription>
-            Выберите, какие элементы режимной карты отображать
-          </DialogDescription>
+          <DialogDescription>Выберите, какие элементы режимной карты отображать</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Кривые скорости */}
           <div>
-            <h4 className="text-sm font-medium mb-3 text-gray-700">
-              Кривые скорости
-            </h4>
+            <h4 className="text-sm font-medium mb-3 text-gray-700">Кривые скорости</h4>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label 
-                  htmlFor="speed-curve" 
-                  className="flex items-center gap-2 cursor-pointer"
-                >
+                <Label htmlFor="speed-curve" className="flex items-center gap-2 cursor-pointer">
                   <div className="w-4 h-4 bg-green-500 rounded"></div>
                   <span>Кривая скорости (зелёная)</span>
                 </Label>
@@ -72,10 +66,7 @@ export default function LayerSettingsModal({
               </div>
 
               <div className="flex items-center justify-between">
-                <Label 
-                  htmlFor="optimal-curve" 
-                  className="flex items-center gap-2 cursor-pointer"
-                >
+                <Label htmlFor="optimal-curve" className="flex items-center gap-2 cursor-pointer">
                   <div className="w-4 h-4 bg-red-500 rounded"></div>
                   <span>Оптимальная кривая (красная)</span>
                 </Label>
@@ -92,10 +83,7 @@ export default function LayerSettingsModal({
 
           {/* Профиль пути */}
           <div className="flex items-center justify-between">
-            <Label 
-              htmlFor="profile-curve" 
-              className="flex items-center gap-2 cursor-pointer"
-            >
+            <Label htmlFor="profile-curve" className="flex items-center gap-2 cursor-pointer">
               <div className="w-4 h-4 bg-blue-500 rounded"></div>
               <span>Профиль пути (синий)</span>
             </Label>
@@ -110,10 +98,7 @@ export default function LayerSettingsModal({
 
           {/* Режимы тяги */}
           <div className="flex items-center justify-between">
-            <Label 
-              htmlFor="regime-bars" 
-              className="cursor-pointer"
-            >
+            <Label htmlFor="regime-bars" className="cursor-pointer">
               Полосы режимов тяги
             </Label>
             <Switch
@@ -127,10 +112,7 @@ export default function LayerSettingsModal({
 
           {/* Уклоны */}
           <div className="flex items-center justify-between">
-            <Label 
-              htmlFor="gradient-marks" 
-              className="cursor-pointer"
-            >
+            <Label htmlFor="gradient-marks" className="cursor-pointer">
               Обозначения уклонов
             </Label>
             <Switch
@@ -143,7 +125,8 @@ export default function LayerSettingsModal({
 
         {/* Статистика */}
         <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600">
-          Отображается {Object.values(layers).filter(Boolean).length} из {Object.keys(layers).length} элементов
+          Отображается {Object.values(layers).filter(Boolean).length} из{' '}
+          {Object.keys(layers).length} элементов
         </div>
       </DialogContent>
     </Dialog>

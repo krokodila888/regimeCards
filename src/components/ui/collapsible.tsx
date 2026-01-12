@@ -1,29 +1,23 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cn } from "./utils";
+import { Slot } from '@radix-ui/react-slot';
+import * as React from 'react';
+
+import { cn } from './utils';
 
 interface CollapsibleContextValue {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const CollapsibleContext = React.createContext<
-  CollapsibleContextValue | undefined
->(undefined);
+const CollapsibleContext = React.createContext<CollapsibleContextValue | undefined>(undefined);
 
 interface CollapsibleProps extends React.HTMLAttributes<HTMLDivElement> {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
-function Collapsible({
-  open: controlledOpen,
-  onOpenChange,
-  children,
-  ...props
-}: CollapsibleProps) {
+function Collapsible({ open: controlledOpen, onOpenChange, children, ...props }: CollapsibleProps) {
   const [internalOpen, setInternalOpen] = React.useState(false);
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
@@ -35,14 +29,11 @@ function Collapsible({
     onOpenChange?.(newOpen);
   };
 
-  const contextValue = React.useMemo(
-    () => ({ open, onOpenChange: handleOpenChange }),
-    [open]
-  );
+  const contextValue = React.useMemo(() => ({ open, onOpenChange: handleOpenChange }), [open]);
 
   return (
     <CollapsibleContext.Provider value={contextValue}>
-      <div data-slot="collapsible" data-state={open ? "open" : "closed"} {...props}>
+      <div data-slot="collapsible" data-state={open ? 'open' : 'closed'} {...props}>
         {children}
       </div>
     </CollapsibleContext.Provider>
@@ -52,15 +43,12 @@ function Collapsible({
 function useCollapsibleContext() {
   const context = React.useContext(CollapsibleContext);
   if (!context) {
-    throw new Error(
-      "Collapsible components must be used within a Collapsible"
-    );
+    throw new Error('Collapsible components must be used within a Collapsible');
   }
   return context;
 }
 
-interface CollapsibleTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface CollapsibleTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
@@ -78,14 +66,14 @@ function CollapsibleTrigger({
     onOpenChange(!open);
   };
 
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
       type="button"
       data-slot="collapsible-trigger"
-      data-state={open ? "open" : "closed"}
-      className={cn(!asChild && "w-full", className)}
+      data-state={open ? 'open' : 'closed'}
+      className={cn(!asChild && 'w-full', className)}
       onClick={handleClick}
       {...props}
     >
@@ -96,11 +84,7 @@ function CollapsibleTrigger({
 
 interface CollapsibleContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-function CollapsibleContent({
-  children,
-  className,
-  ...props
-}: CollapsibleContentProps) {
+function CollapsibleContent({ children, className, ...props }: CollapsibleContentProps) {
   const { open } = useCollapsibleContext();
 
   if (!open) return null;
@@ -108,7 +92,7 @@ function CollapsibleContent({
   return (
     <div
       data-slot="collapsible-content"
-      data-state={open ? "open" : "closed"}
+      data-state={open ? 'open' : 'closed'}
       className={className}
       {...props}
     >

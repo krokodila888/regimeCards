@@ -111,19 +111,19 @@ export type LongitudinalForcePoint = {
  */
 export type InfrastructureObject = {
   /** Тип объекта */
-  type: 
-    | 'brake_test'           // Точка опробования тормозов
-    | 'picket'               // Пикет
-    | 'neutral_start'        // Начало нейтральной вставки
-    | 'neutral_end'          // Конец нейтральной вставки
-    | 'water_intake'         // Водозаборная колонка
-    | 'signal'               // Светофор
-    | 'switch'               // Стрелочный перевод
-    | 'crossing'             // Переезд
-    | 'tunnel_start'         // Начало тоннеля
-    | 'tunnel_end'           // Конец тоннеля
-    | 'bridge_start'         // Начало моста
-    | 'bridge_end';          // Конец моста
+  type:
+    | 'brake_test' // Точка опробования тормозов
+    | 'picket' // Пикет
+    | 'neutral_start' // Начало нейтральной вставки
+    | 'neutral_end' // Конец нейтральной вставки
+    | 'water_intake' // Водозаборная колонка
+    | 'signal' // Светофор
+    | 'switch' // Стрелочный перевод
+    | 'crossing' // Переезд
+    | 'tunnel_start' // Начало тоннеля
+    | 'tunnel_end' // Конец тоннеля
+    | 'bridge_start' // Начало моста
+    | 'bridge_end'; // Конец моста
   /** Координата, км */
   distance: number;
   /** Подпись для отображения */
@@ -147,7 +147,7 @@ export type CalculationMetadata = {
     name: string;
     series: string;
     weight: number; // тонн
-    power: number;  // кВт
+    power: number; // кВт
   };
   /** Состав */
   train: {
@@ -182,28 +182,28 @@ export type CalculationMetadata = {
 export type RegimeMapRenderData = {
   /** Метаинформация */
   metadata: CalculationMetadata;
-  
+
   /** Границы и масштабирование карты */
   bounds: MapBounds;
-  
+
   /** Профиль пути (уклоны и кривые) */
   profile: ProfileSegment[];
-  
+
   /** Станции для отметок */
   stations: StationMarker[];
-  
+
   /** Ограничения скорости */
   speedLimits: SpeedLimitSegment[];
-  
+
   /** Кривая скорости */
   speedCurve: SpeedCurvePoint[];
-  
+
   /** Ленты режимов управления */
   regimeBands: RegimeBand[];
-  
+
   /** График продольных сил */
   longitudinalForces: LongitudinalForcePoint[];
-  
+
   /** Объекты инфраструктуры */
   infrastructure: InfrastructureObject[];
 };
@@ -217,211 +217,209 @@ export type RegimeMapRenderData = {
  */
 export const exampleRegimeMapData: RegimeMapRenderData = {
   metadata: {
-    configurationId: "cfg_12345",
-    configurationName: "Москва - Санкт-Петербург, ВЛ80 + грузовой состав",
-    calculatedAt: "2024-12-18T10:30:00Z",
-    direction: "forward",
+    configurationId: 'cfg_12345',
+    configurationName: 'Москва - Санкт-Петербург, ВЛ80 + грузовой состав',
+    calculatedAt: '2024-12-18T10:30:00Z',
+    direction: 'forward',
     locomotive: {
-      name: "ВЛ80С-1234",
-      series: "ВЛ80С",
+      name: 'ВЛ80С-1234',
+      series: 'ВЛ80С',
       weight: 184,
-      power: 6520
+      power: 6520,
     },
     train: {
-      name: "Грузовой состав 71 вагон",
+      name: 'Грузовой состав 71 вагон',
       weight: 5100,
       length: 1050,
-      numberOfCars: 71
+      numberOfCars: 71,
     },
     totals: {
       distance: 650.5,
       travelTime: 485,
       energy: 12450,
       averageSpeed: 80.5,
-      maxSpeed: 90
+      maxSpeed: 90,
     },
     safety: {
       passed: true,
-      warnings: [
-        "Приближение к максимальной силе растяжения на км 125.3"
-      ]
-    }
+      warnings: ['Приближение к максимальной силе растяжения на км 125.3'],
+    },
   },
-  
+
   bounds: {
     startDistance: 0,
     endDistance: 650.5,
     minSpeed: 0,
     maxSpeed: 100,
     minGradient: -12,
-    maxGradient: 15
+    maxGradient: 15,
   },
-  
+
   profile: [
     {
       start: 0,
       end: 5.2,
       gradient: 0,
       curveRadius: 0,
-      hasCurve: false
+      hasCurve: false,
     },
     {
       start: 5.2,
       end: 8.7,
       gradient: 8.5,
       curveRadius: 600,
-      hasCurve: true
+      hasCurve: true,
     },
     {
       start: 8.7,
       end: 15.0,
       gradient: -3.2,
       curveRadius: 0,
-      hasCurve: false
-    }
+      hasCurve: false,
+    },
     // ... остальные элементы профиля
   ],
-  
+
   stations: [
     {
-      name: "Москва-Товарная",
+      name: 'Москва-Товарная',
       distance: 0,
       isLoop: false,
-      type: "start"
+      type: 'start',
     },
     {
-      name: "Химки",
+      name: 'Химки',
       distance: 18.5,
       isLoop: false,
-      type: "intermediate"
+      type: 'intermediate',
     },
     {
-      name: "Санкт-Петербург-Товарный",
+      name: 'Санкт-Петербург-Товарный',
       distance: 650.5,
       isLoop: true,
-      type: "end"
-    }
+      type: 'end',
+    },
   ],
-  
+
   speedLimits: [
     {
       start: 0,
       end: 15.0,
       limit: 60,
-      type: "track_category",
-      reason: "Участок 4 категории"
+      type: 'track_category',
+      reason: 'Участок 4 категории',
     },
     {
       start: 15.0,
       end: 35.8,
       limit: 80,
-      type: "track_category"
+      type: 'track_category',
     },
     {
       start: 25.0,
       end: 27.5,
       limit: 40,
-      type: "temporary",
-      reason: "Ремонт пути"
-    }
+      type: 'temporary',
+      reason: 'Ремонт пути',
+    },
     // ... остальные ограничения
   ],
-  
+
   speedCurve: [
     { distance: 0, speed: 0, time: 0 },
     { distance: 0.5, speed: 25.3, time: 0.71 },
     { distance: 1.0, speed: 35.8, time: 1.25 },
     { distance: 1.5, speed: 43.2, time: 1.71 },
-    { distance: 2.0, speed: 49.5, time: 2.12 }
+    { distance: 2.0, speed: 49.5, time: 2.12 },
     // ... сотни или тысячи точек
   ],
-  
+
   regimeBands: [
     {
       start: 0,
       end: 12.5,
-      mode: "acceleration",
-      controllerPosition: "П3"
+      mode: 'acceleration',
+      controllerPosition: 'П3',
     },
     {
       start: 12.5,
       end: 18.3,
-      mode: "constant_speed",
-      controllerPosition: "П2"
+      mode: 'constant_speed',
+      controllerPosition: 'П2',
     },
     {
       start: 18.3,
       end: 22.1,
-      mode: "coasting"
+      mode: 'coasting',
     },
     {
       start: 22.1,
       end: 25.0,
-      mode: "braking"
-    }
+      mode: 'braking',
+    },
     // ... остальные участки
   ],
-  
+
   longitudinalForces: [
     {
       distance: 0,
       tension: 0,
       compression: 0,
-      maxAllowable: 1200
+      maxAllowable: 1200,
     },
     {
       distance: 5.0,
       tension: 850,
       compression: 0,
-      maxAllowable: 1200
+      maxAllowable: 1200,
     },
     {
       distance: 10.0,
       tension: 1050,
       compression: 0,
-      maxAllowable: 1200
+      maxAllowable: 1200,
     },
     {
       distance: 15.0,
       tension: 0,
       compression: 420,
-      maxAllowable: 1200
-    }
+      maxAllowable: 1200,
+    },
     // ... сотни точек
   ],
-  
+
   infrastructure: [
     {
-      type: "brake_test",
+      type: 'brake_test',
       distance: 2.5,
-      label: "Точка опробования тормозов"
+      label: 'Точка опробования тормозов',
     },
     {
-      type: "neutral_start",
+      type: 'neutral_start',
       distance: 45.2,
-      label: "Начало НВ"
+      label: 'Начало НВ',
     },
     {
-      type: "neutral_end",
+      type: 'neutral_end',
       distance: 45.8,
-      label: "Конец НВ"
+      label: 'Конец НВ',
     },
     {
-      type: "picket",
+      type: 'picket',
       distance: 100.0,
-      label: "ПК 100"
+      label: 'ПК 100',
     },
     {
-      type: "tunnel_start",
+      type: 'tunnel_start',
       distance: 123.5,
-      label: "Тоннель"
+      label: 'Тоннель',
     },
     {
-      type: "tunnel_end",
-      distance: 125.8
-    }
+      type: 'tunnel_end',
+      distance: 125.8,
+    },
     // ... остальные объекты
-  ]
+  ],
 };
 
 // ============================================================================
@@ -445,91 +443,91 @@ export function convertToRenderData(
         name: result.configuration.locomotive.name,
         series: result.configuration.locomotive.series,
         weight: result.configuration.locomotive.weight,
-        power: result.configuration.locomotive.power
+        power: result.configuration.locomotive.power,
       },
       train: {
         name: result.configuration.train.name,
         weight: result.configuration.train.totalWeight || 0,
         length: result.configuration.train.totalLength || 0,
-        numberOfCars: result.configuration.train.cars.reduce((sum, c) => sum + c.count, 0)
+        numberOfCars: result.configuration.train.cars.reduce((sum, c) => sum + c.count, 0),
       },
       totals: {
         distance: result.configuration.trackSection.totalLength,
         travelTime: result.schedule.totalTravelTime,
         energy: result.totalEnergy,
         averageSpeed: result.schedule.averageSpeed,
-        maxSpeed: result.maxSpeed
+        maxSpeed: result.maxSpeed,
       },
       safety: {
         passed: result.safetyCheckPassed,
-        warnings: result.warnings || []
-      }
+        warnings: result.warnings || [],
+      },
     },
-    
+
     bounds: calculateBounds(result),
-    
+
     profile: convertProfile(result.configuration.trackSection.tracks[0].profile),
-    
+
     stations: convertStations(
       result.configuration.trackSection.tracks[0].stations,
       result.configuration.startStationId,
       result.configuration.endStationId
     ),
-    
+
     speedLimits: convertSpeedLimits(
       result.configuration.trackSection.tracks[0].categories,
       result.configuration.customSpeedLimits
     ),
-    
+
     speedCurve: result.speedCurve.map((p: any) => ({
       distance: p.distance,
       speed: p.velocity,
-      time: p.time / 60 // конвертируем секунды в минуты
+      time: p.time / 60, // конвертируем секунды в минуты
     })),
-    
+
     regimeBands: result.regimeSegments.map((s: any) => ({
       start: s.startDistance,
       end: s.endDistance,
       mode: s.mode.toLowerCase(),
-      controllerPosition: s.controllerPosition
+      controllerPosition: s.controllerPosition,
     })),
-    
+
     longitudinalForces: result.longitudinalForces.map((f: any) => ({
       distance: f.distance,
       tension: f.tensionForce,
       compression: f.compressionForce,
-      maxAllowable: f.maxAllowableForce
+      maxAllowable: f.maxAllowableForce,
     })),
-    
+
     infrastructure: result.configuration.mapObjects.map((obj: any) => ({
       type: convertObjectType(obj.type),
       distance: obj.coordinate,
-      label: obj.label
-    }))
+      label: obj.label,
+    })),
   };
 }
 
 function calculateBounds(result: any): MapBounds {
   const speedPoints = result.speedCurve;
   const profile = result.configuration.trackSection.tracks[0].profile;
-  
+
   return {
     startDistance: 0,
     endDistance: result.configuration.trackSection.totalLength,
     minSpeed: 0,
     maxSpeed: Math.ceil(Math.max(...speedPoints.map((p: any) => p.velocity)) / 10) * 10,
     minGradient: Math.min(...profile.map((p: any) => p.gradient)),
-    maxGradient: Math.max(...profile.map((p: any) => p.gradient))
+    maxGradient: Math.max(...profile.map((p: any) => p.gradient)),
   };
 }
 
 function convertProfile(profile: any[]): ProfileSegment[] {
-  return profile.map(p => ({
+  return profile.map((p) => ({
     start: p.startCoordinate,
     end: p.startCoordinate + p.length,
     gradient: p.gradient,
     curveRadius: p.curveRadius,
-    hasCurve: p.curveRadius > 0
+    hasCurve: p.curveRadius > 0,
   }));
 }
 
@@ -538,62 +536,59 @@ function convertStations(
   startId: string | number,
   endId: string | number
 ): StationMarker[] {
-  return stations.map(s => ({
+  return stations.map((s) => ({
     name: s.name,
     distance: s.coordinate,
     isLoop: s.loopStation,
-    type: s.id === startId ? 'start' : s.id === endId ? 'end' : 'intermediate'
+    type: s.id === startId ? 'start' : s.id === endId ? 'end' : 'intermediate',
   }));
 }
 
-function convertSpeedLimits(
-  categories: any[],
-  customLimits: any[]
-): SpeedLimitSegment[] {
+function convertSpeedLimits(categories: any[], customLimits: any[]): SpeedLimitSegment[] {
   const result: SpeedLimitSegment[] = [];
-  
+
   // Добавляем ограничения из категорий
-  categories.forEach(cat => {
+  categories.forEach((cat) => {
     cat.speedLimits.forward.forEach((limit: any) => {
       result.push({
         start: limit.startCoordinate,
         end: limit.endCoordinate || Infinity,
         limit: limit.limit,
         type: limit.temporary ? 'temporary' : 'track_category',
-        reason: limit.reason
+        reason: limit.reason,
       });
     });
   });
-  
+
   // Добавляем пользовательские ограничения
-  customLimits.forEach(limit => {
+  customLimits.forEach((limit) => {
     result.push({
       start: limit.startCoordinate,
       end: limit.endCoordinate,
       limit: limit.limit,
       type: 'custom',
-      reason: limit.comment
+      reason: limit.comment,
     });
   });
-  
+
   return result;
 }
 
 function convertObjectType(type: string): InfrastructureObject['type'] {
   const mapping: Record<string, InfrastructureObject['type']> = {
-    'BRAKE_TEST_POINT': 'brake_test',
-    'PICKET': 'picket',
-    'NEUTRAL_SECTION_START': 'neutral_start',
-    'NEUTRAL_SECTION_END': 'neutral_end',
-    'WATER_INTAKE': 'water_intake',
-    'SIGNAL': 'signal',
-    'SWITCH': 'switch',
-    'CROSSING': 'crossing',
-    'TUNNEL_START': 'tunnel_start',
-    'TUNNEL_END': 'tunnel_end',
-    'BRIDGE_START': 'bridge_start',
-    'BRIDGE_END': 'bridge_end'
+    BRAKE_TEST_POINT: 'brake_test',
+    PICKET: 'picket',
+    NEUTRAL_SECTION_START: 'neutral_start',
+    NEUTRAL_SECTION_END: 'neutral_end',
+    WATER_INTAKE: 'water_intake',
+    SIGNAL: 'signal',
+    SWITCH: 'switch',
+    CROSSING: 'crossing',
+    TUNNEL_START: 'tunnel_start',
+    TUNNEL_END: 'tunnel_end',
+    BRIDGE_START: 'bridge_start',
+    BRIDGE_END: 'bridge_end',
   };
-  
+
   return mapping[type] || 'picket';
 }

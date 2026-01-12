@@ -1,5 +1,6 @@
 // src/App.tsx
 import React from 'react';
+
 import LoginPage from './components/LoginPage';
 import Workspace from './components/Workspace';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -10,11 +11,7 @@ function AppContent() {
 
   return (
     <div className="h-screen w-screen overflow-hidden">
-      {!isAuthenticated ? (
-        <LoginPage />
-      ) : (
-        <Workspace onLogout={logout} />
-      )}
+      {!isAuthenticated ? <LoginPage /> : <Workspace onLogout={logout} />}
     </div>
   );
 }

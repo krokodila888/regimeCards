@@ -1,29 +1,14 @@
-import React, { useRef, useState, useEffect } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  User,
-  Plus,
-  LogOut,
-} from "lucide-react";
-import { Button } from "./ui/button";
-import { ScrollArea } from "./ui/scroll-area";
-import { Separator } from "./ui/separator";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-} from "./ui/collapsible";
-import Stage1CalculationParams from "./Stage1CalculationParams";
-import type {
-  ChartData,
-} from "../types/chart-data";
+import { ChevronLeft, ChevronRight, ChevronDown, User, Plus, LogOut } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+
+import type { ChartData } from '../types/chart-data';
+
+import Stage1CalculationParams from './Stage1CalculationParams';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
+import { Button } from './ui/button';
+import { Collapsible, CollapsibleTrigger } from './ui/collapsible';
+import { ScrollArea } from './ui/scroll-area';
+import { Separator } from './ui/separator';
 
 interface WorkspaceSidebarProps {
   collapsed: boolean;
@@ -70,31 +55,27 @@ export default function WorkspaceSidebar({
 }: WorkspaceSidebarProps) {
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const [segmentErrors, setSegmentErrors] = useState<
-    Set<string>
-  >(new Set());
+  const [segmentErrors, setSegmentErrors] = useState<Set<string>>(new Set());
   const [chartsExpanded, setChartsExpanded] = useState(true);
 
   // Замените состояние accordionValue
-  const [accordionValue, setAccordionValue] = useState<
-    string[]
-  >(["stage1"]);
+  const [accordionValue, setAccordionValue] = useState<string[]>(['stage1']);
 
   // Обновите useEffect для автоматического раскрытия этапов
   useEffect(() => {
     if (!activeChart?.workflow) {
-      setAccordionValue(["stage1"]);
+      setAccordionValue(['stage1']);
       return;
     }
 
     const newValue: string[] = [];
 
     // Всегда показываем stage1 если есть workflow
-    newValue.push("stage1");
+    newValue.push('stage1');
 
     // Когда optimal curve рассчитан, добавляем stage2 (was stage3)
     if (activeChart.workflow.optimalSpeedCurve) {
-      newValue.push("stage2");
+      newValue.push('stage2');
     }
 
     setAccordionValue(newValue);
@@ -113,9 +94,7 @@ export default function WorkspaceSidebar({
       return;
     }
 
-    const segments = [...activeChart.trackSegments].sort(
-      (a, b) => a.startCoord - b.startCoord,
-    );
+    const segments = [...activeChart.trackSegments].sort((a, b) => a.startCoord - b.startCoord);
     const errors = new Set<string>();
 
     for (let i = 0; i < segments.length - 1; i++) {
@@ -127,11 +106,7 @@ export default function WorkspaceSidebar({
 
     setSegmentErrors(errors);
     onValidationChange(errors.size === 0);
-  }, [
-    activeChart?.trackSegments,
-    onValidationChange,
-    activeChart,
-  ]);
+  }, [activeChart?.trackSegments, onValidationChange, activeChart]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -147,20 +122,17 @@ export default function WorkspaceSidebar({
     };
 
     if (isResizing) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      document.body.style.cursor = "col-resize";
-      document.body.style.userSelect = "none";
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
     }
 
     return () => {
-      document.removeEventListener(
-        "mousemove",
-        handleMouseMove,
-      );
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.body.style.cursor = "";
-      document.body.style.userSelect = "";
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
     };
   }, [isResizing, onWidthChange]);
 
@@ -187,8 +159,8 @@ export default function WorkspaceSidebar({
       className="flex flex-col transition-all duration-300 relative h-full flex-shrink-0"
       style={{
         width: `${width}px`,
-        zIndex: "3",
-        paddingRight: "12px",
+        zIndex: '3',
+        paddingRight: '12px',
         //overflow: "hidden",
       }}
     >
@@ -202,9 +174,7 @@ export default function WorkspaceSidebar({
       <div className="p-4 pr-0 flex items-center justify-between border-b border-gray-700 flex-shrink-0">
         <div className="flex items-center gap-2">
           <User className="w-5 h-5" />
-          <span style={{ fontSize: "15px" }}>
-            Пользователь ТестТест
-          </span>
+          <span style={{ fontSize: '15px' }}>Пользователь ТестТест</span>
         </div>
         <div className="flex items-center gap-1">
           <Button
@@ -236,28 +206,26 @@ export default function WorkspaceSidebar({
         <div className="p-4 space-y-4 pb-6">
           {/* Action Buttons */}
           <div
-            style={{ alignItems: "baseline" }}
-            className={`space-y-2 ${chosenAction === "start" ? "" : "flex items-center gap-2"}`}
+            style={{ alignItems: 'baseline' }}
+            className={`space-y-2 ${chosenAction === 'start' ? '' : 'flex items-center gap-2'}`}
           >
             <Button
               onClick={() => {
                 setChartsExpanded(false);
-                setСhosenAction("createNew");
+                setСhosenAction('createNew');
                 onCreateNew();
               }}
-              className={`${chosenAction === "start" ? "w-full" : chosenAction === "createNew" || chosenAction === "" ? "flex-1" : "w-auto"} bg-blue-600 hover:bg-blue-700 justify-start`}
+              className={`${chosenAction === 'start' ? 'w-full' : chosenAction === 'createNew' || chosenAction === '' ? 'flex-1' : 'w-auto'} bg-blue-600 hover:bg-blue-700 justify-start`}
               title="Создать новую режимную карту"
             >
               <Plus
-                className={`w-4 h-4 ${chosenAction === "createNew" || chosenAction === "" || chosenAction === "choseOne" ? "m-0" : "mr-2"}`}
+                className={`w-4 h-4 ${chosenAction === 'createNew' || chosenAction === '' || chosenAction === 'choseOne' ? 'm-0' : 'mr-2'}`}
               />
-              {chosenAction !== "createNew" &&
-              chosenAction !== "" &&
-              chosenAction !== "start"
-                ? ""
-                : "Создать новую карту"}
+              {chosenAction !== 'createNew' && chosenAction !== '' && chosenAction !== 'start'
+                ? ''
+                : 'Создать новую карту'}
             </Button>
-            {chosenAction === "createNew" /*
+            {chosenAction === 'createNew' /*
               <>
                 <Button
                   onClick={onImportVisio}
@@ -271,7 +239,7 @@ export default function WorkspaceSidebar({
                 </Button>*/ ? (
               <Button
                 onClick={() => {
-                  setСhosenAction("");
+                  setСhosenAction('');
                   setChartsExpanded(true);
                 }}
                 variant="outline"
@@ -298,17 +266,17 @@ export default function WorkspaceSidebar({
               </Button>
             )*/ <></>
             )}
-            {chosenAction === "choseOne" ? (
+            {chosenAction === 'choseOne' ? (
               <Button
                 style={{
-                  alignItems: "baseline",
-                  marginBottom: "8px",
-                  paddingRight: "12px",
-                  paddingLeft: "12px",
-                  alignSelf: "center",
+                  alignItems: 'baseline',
+                  marginBottom: '8px',
+                  paddingRight: '12px',
+                  paddingLeft: '12px',
+                  alignSelf: 'center',
                 }}
                 onClick={() => {
-                  setСhosenAction("");
+                  setСhosenAction('');
                   setChartsExpanded(true);
                 }}
                 variant="outline"
@@ -322,35 +290,22 @@ export default function WorkspaceSidebar({
             )}
           </div>
 
-          {chosenAction === "createNew" ? (
-            <></>
-          ) : (
-            <Separator className="bg-gray-700" />
-          )}
+          {chosenAction === 'createNew' ? <></> : <Separator className="bg-gray-700" />}
 
           {/* Existing Charts - Collapsible */}
-          {chosenAction !== "createNew" && (
-            <Collapsible
-              open={chartsExpanded}
-              onOpenChange={setChartsExpanded}
-            >
+          {chosenAction !== 'createNew' && (
+            <Collapsible open={chartsExpanded} onOpenChange={setChartsExpanded}>
               {chartsExpanded ? (
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  <h3 className="text-gray-700 flex-1">
-                    Мои режимные карты
-                  </h3>
+                  <h3 className="text-gray-700 flex-1">Мои режимные карты</h3>
                   <CollapsibleTrigger asChild>
                     <button
                       className="p-1 h-auto hover:bg-gray-700 transition-colors flex-shrink-0 rounded-md text-gray-400 hover:text-white w-auto"
-                      title={
-                        chartsExpanded
-                          ? "Свернуть список"
-                          : "Развернуть список"
-                      }
+                      title={chartsExpanded ? 'Свернуть список' : 'Развернуть список'}
                     >
                       <ChevronDown
                         className={`w-4 h-4 transition-transform duration-200 ${
-                          chartsExpanded ? "" : "-rotate-90"
+                          chartsExpanded ? '' : '-rotate-90'
                         }`}
                       />
                     </button>
@@ -360,22 +315,21 @@ export default function WorkspaceSidebar({
                 <></>
               )}
               {chartsExpanded ? (
-                <ScrollArea className="h-[150px] rounded border border-gray-400" style={{height: 'fit-content'}}>
+                <ScrollArea
+                  className="h-[150px] rounded border border-gray-400"
+                  style={{ height: 'fit-content' }}
+                >
                   {charts.map((chart) => (
                     <button
                       key={chart.id}
-                      style={{ fontSize: "14px" }}
+                      style={{ fontSize: '14px' }}
                       onClick={() => {
                         setChartsExpanded(false);
-                        setСhosenAction("choseOne");
+                        setСhosenAction('choseOne');
                         onSelectChart(charts[0]);
                       }}
                       className={`w-full text-left px-3 py-2 rounded transition-colors hover:bg-gray-300 text-gray-600 text-sm
-             ${
-               activeChart?.id === chart.id
-                 ? "bg-gray-600 text-white"
-                 : ""
-             }`}
+             ${activeChart?.id === chart.id ? 'bg-gray-600 text-white' : ''}`}
                     >
                       {chart.title}
                     </button>
@@ -386,11 +340,9 @@ export default function WorkspaceSidebar({
               )}
             </Collapsible>
           )}
-          {!chartsExpanded &&
-          activeChart &&
-          chosenAction !== "createNew" ? (
+          {!chartsExpanded && activeChart && chosenAction !== 'createNew' ? (
             <button
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: '14px' }}
               className={`w-full text-left px-3 py-2 rounded background-color: var(--input-background); text-gray-800 text-sm border
              `}
             >
@@ -403,64 +355,56 @@ export default function WorkspaceSidebar({
           {/* NEW WORKFLOW - Staged approach */}
           {activeChart && (
             <>
-              <Separator
-                className="bg-gray-700"
-                style={{ marginBottom: "0" }}
-              />
-                <Accordion
-                  type="multiple"
-                  value={accordionValue}
-                  onValueChange={setAccordionValue}
-                  className="w-full"
-                >
-                  {/* STAGE 1: Track Section Selection */}
-                  <AccordionItem
-                    value="stage1"
-                    className="border-gray-700"
-                  >
-                    <AccordionTrigger className="text-gray-700 hover:text-gray-500 hover:no-underline">
-                      <div className="flex items-center gap-2">
-                        <span className="min-w-0">
-                          Параметры задания на расчет
-                        </span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="px-1">
-                      <Stage1CalculationParams
-                        workflow={
-                          activeChart.workflow || {
-                            currentStage: 1,
-                          }
+              <Separator className="bg-gray-700" style={{ marginBottom: '0' }} />
+              <Accordion
+                type="multiple"
+                value={accordionValue}
+                onValueChange={setAccordionValue}
+                className="w-full"
+              >
+                {/* STAGE 1: Track Section Selection */}
+                <AccordionItem value="stage1" className="border-gray-700">
+                  <AccordionTrigger className="text-gray-700 hover:text-gray-500 hover:no-underline">
+                    <div className="flex items-center gap-2">
+                      <span className="min-w-0">Параметры задания на расчет</span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-1">
+                    <Stage1CalculationParams
+                      workflow={
+                        activeChart.workflow || {
+                          currentStage: 1,
                         }
-                        onUpdateWorkflow={(updates) => {
-                          //console.log(activeChart);
-                          //console.log(activeChart.workflow);
-                          console.log(updates);
-                          onUpdateChartData({
-                            workflow: {
-                              ...(activeChart.workflow || {
-                                currentStage: 1,
-                                ...updates,
-                              }),
+                      }
+                      onUpdateWorkflow={(updates) => {
+                        //console.log(activeChart);
+                        //console.log(activeChart.workflow);
+                        //console.log(updates);
+                        onUpdateChartData({
+                          workflow: {
+                            ...(activeChart.workflow || {
                               currentStage: 1,
                               ...updates,
-                            },
-                          });
-                          console.log(activeChart);
-                          console.log(activeChart.workflow);
-                        }}
-                        isOld={activeChart?.age === "old"}
-                        onShowLoading={onShowLoading}
-                        visibleLayers={visibleLayers} 
-                        setVisibleLayers={setVisibleLayers}
-                        chosenAction={chosenAction}
-                        setСhosenAction={setСhosenAction}
-                        availableLayers={availableLayers}
-                        setAvailableLayers={setAvailableLayers}
-                      />
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
+                            }),
+                            currentStage: 1,
+                            ...updates,
+                          },
+                        });
+                        /**console.log(activeChart);
+                        console.log(activeChart.workflow);*/
+                      }}
+                      isOld={activeChart?.age === 'old'}
+                      onShowLoading={onShowLoading}
+                      visibleLayers={visibleLayers}
+                      setVisibleLayers={setVisibleLayers}
+                      chosenAction={chosenAction}
+                      setСhosenAction={setСhosenAction}
+                      availableLayers={availableLayers}
+                      setAvailableLayers={setAvailableLayers}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </>
           )}
         </div>
