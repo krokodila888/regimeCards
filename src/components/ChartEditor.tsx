@@ -262,77 +262,48 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
 
-    // ZOOM DISABLED - только панорамирование
-    // if (e.ctrlKey) {
-    //   const delta = e.deltaY > 0 ? 0.9 : 1.1;
-    //   const currentZoom = zoom;
-    //   const newZoom = Math.max(
-    //     0.25,
-    //     Math.min(4, currentZoom * delta),
-    //   );
-
-    //   const rect = canvasRef.current?.getBoundingClientRect();
-    //   if (rect) {
-    //     const mouseX = e.clientX - rect.left;
-    //     const currentMouseWorldX =
-    //       (mouseX - panX) / currentZoom;
-    //     const newPanX = mouseX - currentMouseWorldX * newZoom;
-    //     setZoom(newZoom);
-    //     setPanX(newPanX);
-    //     // panY НЕ изменяем - вертикальный масштаб всегда 1
-    //   }
-    // } else
     if (e.shiftKey) {
       // Shift + колесо — горизонтальная панорама
       setPanX((prev) => prev - e.deltaY);
+    } else if (e.ctrlKey || e.metaKey) {
+      // Ctrl/Cmd + колесо — ТОЖЕ горизонтальная панорама (более быстрая)
+      setPanX((prev) => prev - e.deltaY * 2);
     }
-    // Обычное колесо — НИЧЕГО (вертикальная панорама отключена)
+    // Обычное колесо — игнорируем
   };
 
   // ZOOM DISABLED - Рамка масштабирования (marquee) закомментирована
   const handleMarqueeZoomStart = (e: React.MouseEvent) => {
-    // if (!isMarqueeZoom) return;
-    // const rect = canvasRef.current?.getBoundingClientRect();
-    // if (!rect) return;
-    // const x = (e.clientX - rect.left - panX) / zoom;
-    // // For vertical, capture the entire visible canvas height
-    // const containerHeight =
-    //   containerRef.current?.clientHeight || 600;
-    // setMarqueeStart({ x, y: 0 });
-    // setMarqueeEnd({ x, y: containerHeight });
   };
 
   const handleMarqueeZoomMove = (e: React.MouseEvent) => {
-    // if (!isMarqueeZoom || !marqueeStart) return;
-    // const rect = canvasRef.current?.getBoundingClientRect();
-    // if (!rect) return;
-    // const x = (e.clientX - rect.left - panX) / zoom;
-    // // Keep vertical extent to full canvas height
-    // const containerHeight =
-    //   containerRef.current?.clientHeight || 600;
-    // setMarqueeEnd({ x, y: containerHeight });
   };
 
   const handleMarqueeZoomEnd = () => {
-    // if (!marqueeStart || !marqueeEnd) return;
-    // const width = Math.abs(marqueeEnd.x - marqueeStart.x);
-    // // Only require horizontal movement (removed vertical check)
-    // if (width > 20) {
-    //   const canvasWidth =
-    //     containerRef.current?.clientWidth || 800;
-    //   // Масштабируем ТОЛЬКО по X (горизонтально)
-    //   const zoomX = canvasWidth / width;
-    //   const newZoom = Math.min(zoomX, 4);
-    //   setZoom(newZoom);
-    //   setPanX(
-    //     -Math.min(marqueeStart.x, marqueeEnd.x) * newZoom,
-    //   );
-    //   // Don't change vertical pan for marquee zoom
-    //   // User can still pan vertically if needed
-    // }
-    // setMarqueeStart(null);
-    // setMarqueeEnd(null);
-    // setIsMarqueeZoom(false);
+    if (!marqueeStart || !marqueeEnd) return;
+
+    const width = Math.abs(marqueeEnd.x - marqueeStart.x);
+
+    // Минимальная ширина выделения
+    if (width > 20) {
+      const canvasWidth = containerRef.current?.clientWidth || 800;
+
+      // Вычисляем новый зум
+      const zoomX = canvasWidth / width;
+      const newZoom = Math.max(0.25, Math.min(4, zoomX)); // Ограничиваем 0.25x–4x
+
+      // Вычисляем новую позицию panX
+      const leftEdge = Math.min(marqueeStart.x, marqueeEnd.x);
+      const newPanX = -leftEdge * newZoom;
+
+      setZoom(newZoom);
+      setPanX(newPanX);
+    }
+
+    // Сбрасываем marquee
+    setMarqueeStart(null);
+    setMarqueeEnd(null);
+    setIsMarqueeZoom(false);
   };
 
   // Панорамирование — только по X (вертикальная панорама заблокирована)
@@ -712,8 +683,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         const LAYER2_TOP = 180; // Speed Curves Layer
         const LAYER2_HEIGHT = 300;
         const LAYER3_TOP = 480; // Track Profile Layer
-        const LAYER3_HEIGHT = 160;
-        const LAYER4_TOP = 640; // Regime Bands Layer
+        const LAYER3_HEIGHT = 140;
+        const LAYER4_TOP = 650; // Regime Bands Layer
         const LAYER4_HEIGHT = 160;
 
         const marginLeft = 80;
@@ -741,14 +712,11 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         };
 
         const kmToX2 = (km: number) => {
-          // ОБРАТНОЕ преобразование: меньшие км → правее, большие км → левее
-          // 1610 км → marginLeft (крайняя правая точка на canvas)
-          // 1782 км → marginLeft + chartWidth (крайняя левая точка на canvas)
+          // Нормализуем координату в диапазон [0, 1]
+          const normalized = (displayStartCoord - km) / (displayStartCoord - displayEndCoord);
 
-          const distanceFromRight = displayStartCoord - km;
-
-          // Преобразуем в пиксели (40px на км)
-          const x = marginLeft + distanceFromRight * PIXELS_PER_KM;
+          // Преобразуем в пиксели
+          const x = marginLeft + normalized * chartWidth;
 
           return x;
         };
@@ -758,197 +726,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         // ====================================
         // LAYER 1: TENSION/COMPRESSION FORCE DYNAMICS (0-160px)
         // ====================================
-        /*if (displaySettings.trackProfile) {
-          // Using trackProfile setting to show/hide force layer
-          const layer1Top = LAYER1_TOP + 10;
-          const layer1Bottom = LAYER1_TOP + LAYER1_HEIGHT - 10;
-          const layer1Center = (layer1Top + layer1Bottom) / 2;
-          const layer1Height = layer1Bottom - layer1Top;
-
-          // ЛОГИРОВАНИЕ данных
-          console.log('[LAYER 1] Рисование слоя усилий:', {
-            layer1Top,
-            layer1Bottom,
-            layer1Center,
-            layer1Height,
-            displayStartCoord,
-            displayEndCoord,
-            trackSectionStart: trackSection?.stations?.[0]?.startCoord,
-            trackSectionEnd: trackSection?.stations?.[trackSection?.stations?.length - 1]?.endCoord,
-            isReversed,
-            trainForceDataLength: trainForceData?.length || 0,
-          });
-
-          // Draw layer border
-          ctx.strokeStyle = '#d1d5db';
-          ctx.lineWidth = lineWidth(1);
-          ctx.strokeRect(marginLeft, LAYER1_TOP, chartWidth, LAYER1_HEIGHT);
-
-          // Draw baseline (blue)
-          ctx.strokeStyle = '#3b82f6';
-          ctx.lineWidth = lineWidth(2);
-          ctx.beginPath();
-          ctx.moveTo(marginLeft, layer1Center);
-          ctx.lineTo(marginLeft + chartWidth, layer1Center);
-          ctx.stroke();
-
-          // Y-СКАЛА от -100 до 100 кН
-          ctx.save();
-          ctx.strokeStyle = '#9ca3af';
-          ctx.lineWidth = lineWidth(1);
-          ctx.fillStyle = '#6b7280';
-          ctx.font = fontSize(11);
-          ctx.textAlign = 'right';
-
-          // Горизонтальные пунктирные линии для каждой десятки
-          for (let force = -125; force <= 115; force += 25) {
-            // Преобразование силы в координату Y
-            const y = layer1Center - force * (layer1Height / 2 / 100);
-
-            // Пунктирная линия через весь слой
-            ctx.setLineDash([2, 5]); // Пунктирный стиль
-            ctx.beginPath();
-            ctx.moveTo(marginLeft, y);
-            ctx.lineTo(marginLeft + chartWidth, y);
-            ctx.stroke();
-
-            // Подписи слева (только для круглых значений -100, -50, 0, 50, 100)
-            if (force % 25 === 0 || force === 0 || force === 110) {
-              ctx.setLineDash([]); // Сброс пунктира
-              ctx.fillText(`${force}`, marginLeft - 5, y + 4);
-
-              // Толще линия для основных значений
-              ctx.lineWidth = lineWidth(0.5);
-              ctx.beginPath();
-              ctx.moveTo(marginLeft, y);
-              ctx.lineTo(marginLeft + chartWidth, y);
-              ctx.stroke();
-              ctx.lineWidth = lineWidth(0.5);
-            }
-          }
-
-          ctx.setLineDash([]); // Сброс пунктира
-          ctx.restore();
-
-          // Draw force curve from trainForceData
-          if (trainForceData && trainForceData.length > 0) {
-            // Вычисляем смещение: данные начинаются с 0 км, а участок - с displayStartCoord
-            // Поэтому добавляем displayStartCoord к локальным координатам данных
-            const dataOffset = displayStartCoord; // 1781 км
-
-            console.log('[LAYER 1] Смещение данных:', {
-              dataOffset,
-              displayStartCoord,
-              displayEndCoord,
-              firstDataPointMeters: trainForceData[0]?.distance,
-              lastDataPointMeters: trainForceData[trainForceData.length - 1]?.distance,
-            });
-
-            // Find max absolute force for scaling
-            const maxForce = Math.max(
-              ...trainForceData.map((d) => Math.abs(d.force)),
-              1 // Добавляем минимальное значение для избежания деления на ноль
-            );
-
-            const forceScale = layer1Height / 2 / maxForce;
-
-            console.log('[LAYER 1] Параметры масштабирования:', {
-              maxForce,
-              forceScale,
-              layer1Height,
-            });
-
-            // Draw force curve (RED for positive, BLUE for negative)
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = lineWidth(2);
-            ctx.beginPath();
-            let started = false;
-            let pointsDrawn = 0;
-
-            trainForceData.forEach((point, index) => {
-              // КОНВЕРТИРУЕМ МЕТРЫ В КИЛОМЕТРЫ и добавляем смещение участка
-              const distanceKm = point.distance / 1000 + dataOffset;
-
-              // Проверяем, попадает ли точка в отображаемый диапазон
-              if (distanceKm >= displayStartCoord && distanceKm <= displayEndCoord) {
-                const x = kmToX(distanceKm); // Используем абсолютные километры
-                const y = layer1Center - point.force * forceScale;
-
-                // Логирование первых и последних точек
-                if (pointsDrawn < 3 || pointsDrawn === trainForceData.length - 1) {
-                  console.log('[LAYER 1] Точка данных:', {
-                    index,
-                    distanceMeters: point.distance,
-                    distanceKm,
-                    force: point.force,
-                    x,
-                    y,
-                    inRange: true,
-                  });
-                }
-
-                if (!started) {
-                  ctx.moveTo(x, y);
-                  started = true;
-                  pointsDrawn++;
-                } else {
-                  ctx.lineTo(x, y);
-                  pointsDrawn++;
-                }
-              }
-            });
-
-            ctx.stroke();
-
-            console.log('[LAYER 1] Статистика отрисовки:', {
-              totalPoints: trainForceData.length,
-              pointsDrawn,
-              dataOffset,
-            });
-
-            // Если данных нет в видимом диапазоне (для отладки)
-            if (pointsDrawn === 0) {
-              console.warn('[LAYER 1] Нет данных в видимом диапазоне! Подробности:', {
-                displayStartCoord,
-                displayEndCoord,
-                displayLength: displayEndCoord - displayStartCoord,
-                dataRangeStart: trainForceData[0]?.distance / 1000 + dataOffset,
-                dataRangeEnd:
-                  trainForceData[trainForceData.length - 1]?.distance / 1000 + dataOffset,
-                dataOffset,
-                isReversed,
-              });
-
-              // Для отладки: рисуем тестовую линию
-              ctx.strokeStyle = '#ef4444';
-              ctx.lineWidth = lineWidth(2);
-              ctx.beginPath();
-              const testX1 = kmToX(displayStartCoord + 0.1);
-              const testX2 = kmToX(displayStartCoord + 0.5);
-              ctx.moveTo(testX1, layer1Center - 50);
-              ctx.lineTo(testX2, layer1Center + 50);
-              ctx.stroke();
-            }
-
-            // ВЕРТИКАЛЬНАЯ ПОДПИСЬ (слева от слоя, повернутая на 90 градусов)
-            ctx.save();
-            ctx.translate(marginLeft - 25, layer1Top + layer1Height / 2);
-            ctx.rotate(-Math.PI / 2);
-            ctx.fillStyle = '#374151';
-            ctx.font = fontSize(12);
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('Динамика реализованная', 0, 0);
-            ctx.restore();
-
-            // Подпись оси X (километры)
-            ctx.fillStyle = '#6b7280';
-            ctx.font = fontSize(11);
-            ctx.textAlign = 'center';
-          } else {
-            console.warn('[LAYER 1] trainForceData пуст или не определен');
-          }
-        }*/
         if (displaySettings.trackProfile) {
           // Using trackProfile setting to show/hide force layer
           const layer1Top = LAYER1_TOP + 25;
@@ -1522,44 +1299,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
         ctx.restore();
 
-        // =============================================================================
-        // АЛЬТЕРНАТИВНЫЙ ВАРИАНТ: ЕСЛИ НУЖНЫ БОЛЕЕ ЧАСТЫЕ ДЕЛЕНИЯ
-        // =============================================================================
-
-        // Если нужны промежуточные деления (например, каждые 0.5 км),
-        // раскомментируйте этот блок:
-
-        /*
-// Промежуточные деления (короткие штрихи)
-const subInterval = kmInterval / 2; // Половина основного интервала
-
-for (let km = Math.ceil(displayEndCoord * 2) / 2; 
-     km <= Math.floor(displayStartCoord * 2) / 2; 
-     km += subInterval) {
-  
-  // Пропускаем, если это основная отметка
-  if (rulerMarks.includes(km)) continue;
-
-  const x = kmToX1(km);
-
-  // Короткий штрих (половина высоты)
-  ctx.strokeStyle = '#9ca3af'; // Более светлый
-  ctx.lineWidth = lineWidth(1);
-  ctx.beginPath();
-  ctx.moveTo(x, layer2Bottom);
-  ctx.lineTo(x, layer2Bottom + rulerTickHeight / 2);
-  ctx.stroke();
-  
-  // Тонкая пунктирная линия вверх (опционально)
-  ctx.strokeStyle = '#f3f4f6'; // Очень бледный
-  ctx.setLineDash([1, 5]);
-  ctx.beginPath();
-  ctx.moveTo(x, layer2Top);
-  ctx.lineTo(x, layer2Bottom);
-  ctx.stroke();
-  ctx.setLineDash([]);
-}*/
-
         if (displaySettings.optimalSpeedCurve && speedCurves && speedCurves.length > 0) {
           ctx.strokeStyle = '#3b82f6';
           ctx.lineWidth = lineWidth(2);
@@ -1623,12 +1362,6 @@ for (let km = Math.ceil(displayEndCoord * 2) / 2;
         // =============================================================================
         // 3. ОТРИСОВКА ФАКТИЧЕСКОЙ КРИВОЙ (ЗЕЛЁНАЯ ЛИНИЯ)
         // =============================================================================
-
-        // НАЙТИ В КОДЕ (около строки ~1330):
-        // // Фактическая кривая скорости
-        // if (displaySettings.actualSpeedCurve && chartData?.workflow?.actualSpeedCurve) {
-
-        // ЗАМЕНИТЬ НА:
 
         // Фактическая кривая скорости (ЗЕЛЁНАЯ ЛИНИЯ)
         if (displaySettings.actualSpeedCurve && speedCurves && speedCurves.length > 0) {
@@ -1757,45 +1490,21 @@ for (let km = Math.ceil(displayEndCoord * 2) / 2;
 
           // ИСПРАВЛЕННАЯ ФИЛЬТРАЦИЯ (учитываем обратный порядок координат)
           const relevantProfiles = trackSection.pathProfiles.filter((profile) => {
-            // Профиль ПЕРЕСЕКАЕТСЯ с диапазоном, если:
-            // 1. Его конец находится правее левой границы (endCoord >= 1610)
-            // 2. Его начало находится левее правой границы (startCoord <= 1782)
+            const minProfileCoord = Math.min(profile.startCoord, profile.endCoord);
+            const maxProfileCoord = Math.max(profile.startCoord, profile.endCoord);
 
+            const minDisplayCoord = Math.min(displayStartCoord, displayEndCoord); // 1610
+            const maxDisplayCoord = Math.max(displayStartCoord, displayEndCoord); // 1782
+
+            // Профиль пересекается, если его диапазоны перекрываются
             const intersects =
-              profile.endCoord >= displayEndCoord && // Конец профиля >= 1610
-              profile.startCoord <= displayStartCoord; // Начало профиля <= 1782
+              maxProfileCoord >= minDisplayCoord && // 1789 >= 1610 ✅
+              minProfileCoord <= maxDisplayCoord; // 1781 <= 1782 ✅
 
             return intersects;
           });
 
-          console.log('[LAYER 3] Профиль пути:', {
-            всегоПрофилей: trackSection.pathProfiles.length,
-            вДиапазоне: relevantProfiles.length,
-            диапазонОтображения: `${displayStartCoord} → ${displayEndCoord}`,
-            первыйВсехПрофилей: trackSection.pathProfiles[0],
-            первыйВДиапазоне: relevantProfiles[0],
-            примерПроверки: {
-              профиль: trackSection.pathProfiles[0],
-              'endCoord >= displayEndCoord':
-                trackSection.pathProfiles[0]?.endCoord >= displayEndCoord,
-              'startCoord <= displayStartCoord':
-                trackSection.pathProfiles[0]?.startCoord <= displayStartCoord,
-              пересекается:
-                trackSection.pathProfiles[0]?.endCoord >= displayEndCoord &&
-                trackSection.pathProfiles[0]?.startCoord <= displayStartCoord,
-            },
-          });
-
           relevantProfiles.forEach((profile, index) => {
-            // Обрезаем сегмент по границам видимого диапазона
-            /*const segmentStart = profile.startCoord;
-            const segmentEnd = profile.endCoord;*/
-
-            // ВАЖНО: Теперь используем правильное преобразование координат
-            // Данные профиля в прямом порядке (1781 → 1789)
-            // Но отображение справа налево (1782 → 1610)
-            // Поэтому используем формулу: x = marginLeft + (displayStartCoord - km) * scale
-
             // 1. ОБРЕЗКА ПО ВИДИМОМУ ДИАПАЗОНУ
             const segmentStart = Math.max(profile.startCoord, displayEndCoord);
             const segmentEnd = Math.min(profile.endCoord, displayStartCoord);
@@ -1847,24 +1556,53 @@ for (let km = Math.ceil(displayEndCoord * 2) / 2;
             }
 
             // Подпись уклона
-            if (profile.slopePromille !== 0 && Math.abs(endX - startX) > 40) {
-              ctx.fillStyle = '#475569';
+            if (Math.abs(endX - startX) > 40) {
+              const centerX = (startX + endX) / 2;
+              const centerY = (profileStripTop + profileStripBottom) / 2;
+
+              const lengthKm = Math.abs(profile.endCoord - profile.startCoord);
+              const slopeText = profile.slopePromille !== 0 ? `${profile.slopePromille}‰` : '0‰';
+              const lengthText =
+                lengthKm >= 1 ? `${lengthKm.toFixed(1)}` : `${(lengthKm * 1000).toFixed(0)}м`;
+
               ctx.font = fontSize(10);
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.fillText(
-                `${profile.slopePromille}‰`,
-                (startX + endX) / 2,
-                (profileStripTop + profileStripBottom) / 2
+              const slopeTextWidth = ctx.measureText(slopeText).width;
+              const lengthTextWidth = ctx.measureText(lengthText).width;
+              const maxTextWidth = Math.max(slopeTextWidth, lengthTextWidth);
+
+              const padding = 4; // Отступ вокруг текста
+              const lineHeight = 12; // Высота одной строки
+              const totalHeight = lineHeight * 2; // Две строки
+
+              // Белая тень для читаемости
+              ctx.fillStyle = 'rgba(255, 255, 255)'; // Почти непрозрачный белый
+              ctx.fillRect(
+                centerX - maxTextWidth / 2 - padding,
+                centerY - totalHeight / 2 - padding,
+                maxTextWidth + padding * 2,
+                totalHeight + padding * 2
               );
+
+              // Уклон
+              ctx.fillStyle = '#475569';
+              ctx.fillText(slopeText, centerX, centerY - 6);
+
+              // Протяженность
+              ctx.fillStyle = '#64748b';
+              ctx.font = fontSize(9);
+              ctx.fillText(lengthText, centerX, centerY + 6);
             }
           });
 
           // Label
+          ctx.translate(marginLeft - 50, layer3Top + 70);
           ctx.fillStyle = '#374151';
           ctx.font = fontSize(12);
-          ctx.textAlign = 'left';
-          ctx.fillText('Профиль пути', marginLeft + 10, layer3Top + 15);
+          ctx.rotate(-Math.PI / 2);
+          ctx.fillText('Профиль пути', 0, 0);
+          ctx.restore();
         }
 
         // =============================================================================
@@ -2404,76 +2142,6 @@ for (let km = Math.ceil(displayEndCoord * 2) / 2;
           ctx.restore();
         }
 
-        /*if (stationScreenPositions && stationScreenPositions?.length > 0) {
-          ctx.save();
-          ctx.setTransform(1, 0, 0, 1, 0, 0); // гарантируем отсутствие остаточных трансформаций
-          ctx.textAlign = "center";
-          ctx.font = "13px sans-serif";
-
-          const marginTop = 50;
-          const chartHeight = 300;
-
-          const baseAxisY = marginTop + chartHeight; // мировая ось X графика
-          const iconRadius = 6; // фиксированный пиксельный радиус
-          const iconOffsetY = 15; // вверх от оси
-          const labelOffsetY = 42; // вниз от оси
-
-          stationScreenPositions.forEach(({ xWorld, name }) => {
-            // Перевод мировой X в экранную:
-            const xScreen = xWorld * zoom + panX;
-            const axisYScreen = baseAxisY + panY;
-
-            // Иконка
-            const iconYScreen = axisYScreen - iconOffsetY;
-
-            ctx.beginPath();
-            ctx.arc(
-              xScreen,
-              iconYScreen,
-              iconRadius,
-              0,
-              Math.PI * 2,
-            );
-            ctx.fillStyle = "#ffffff";
-            ctx.fill();
-            ctx.strokeStyle = "#374151";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.arc(
-              xScreen,
-              iconYScreen,
-              iconRadius,
-              -Math.PI / 2,
-              Math.PI / 2,
-            );
-            ctx.fillStyle = "#374151";
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(
-              xScreen,
-              iconYScreen,
-              iconRadius,
-              0,
-              Math.PI * 2,
-            );
-            ctx.strokeStyle = "#374151";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            // Подпись
-            ctx.fillStyle = "#3b82f6";
-            ctx.fillText(
-              name,
-              xScreen,
-              axisYScreen + labelOffsetY,
-            );
-          });
-
-          ctx.restore();
-        }*/
       } catch (error) {
         // Clear canvas and show error
         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -3031,14 +2699,51 @@ for (let km = Math.ceil(displayEndCoord * 2) / 2;
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => setZoom((prev) => Math.min(4, prev * 1.2))}
+                  onClick={() => {
+                    const delta = 1.2; // Шаг зума
+                    const currentZoom = zoom;
+                    const newZoom = Math.min(4, currentZoom * delta);
+
+                    // Центрируем зум по центру видимой области
+                    const rect = canvasRef.current?.getBoundingClientRect();
+                    if (rect) {
+                      const centerX = rect.width / 2;
+                      const currentCenterWorldX = (centerX - panX) / currentZoom;
+                      const newPanX = centerX - currentCenterWorldX * newZoom;
+
+                      setZoom(newZoom);
+                      setPanX(newPanX);
+                    } else {
+                      setZoom(newZoom);
+                    }
+                  }}
+                  title="Увеличить масштаб (Zoom In)"
                 >
                   <ZoomIn className="w-4 h-4" />
                 </Button>
+
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => setZoom((prev) => Math.max(0.25, prev / 1.2))}
+                  onClick={() => {
+                    const delta = 1.2; // Шаг зума
+                    const currentZoom = zoom;
+                    const newZoom = Math.max(0.25, currentZoom / delta);
+
+                    // Центрируем зум по центру видимой области
+                    const rect = canvasRef.current?.getBoundingClientRect();
+                    if (rect) {
+                      const centerX = rect.width / 2;
+                      const currentCenterWorldX = (centerX - panX) / currentZoom;
+                      const newPanX = centerX - currentCenterWorldX * newZoom;
+
+                      setZoom(newZoom);
+                      setPanX(newPanX);
+                    } else {
+                      setZoom(newZoom);
+                    }
+                  }}
+                  title="Уменьшить масштаб (Zoom Out)"
                 >
                   <ZoomOut className="w-4 h-4" />
                 </Button>
@@ -3070,135 +2775,134 @@ for (let km = Math.ceil(displayEndCoord * 2) / 2;
 
             {/* Canvas с контекстным меню */}
             <ContextMenu>
-
+              <div
+                ref={scrollContainerRef}
+                className="border border-gray-300 rounded flex-1 overflow-auto canvas-scrollbar relative"
+                style={{
+                  minHeight: 0,
+                  scrollbarGutter: 'stable both-edges',
+                }}
+              >
                 <div
-                  ref={scrollContainerRef}
-                  className="border border-gray-300 rounded flex-1 overflow-auto canvas-scrollbar relative"
                   style={{
-                    minHeight: 0,
-                    scrollbarGutter: 'stable both-edges',
+                    width: baseWidth + 200,
+                    height: baseHeight + 200,
+                    position: 'relative',
                   }}
                 >
-                  <div
+                  <canvas
+                    ref={canvasRef}
+                    width={baseWidth}
+                    height={baseHeight}
                     style={{
-                      width: baseWidth + 200,
-                      height: baseHeight + 200,
-                      position: 'relative',
+                      position: 'absolute',
+                      top: '100px',
+                      left: '100px',
+                      display: 'block',
                     }}
-                  >
-                    <canvas
-                      ref={canvasRef}
-                      width={baseWidth}
-                      height={baseHeight}
-                      style={{
-                        position: 'absolute',
-                        top: '100px',
-                        left: '100px',
-                        display: 'block',
-                      }}
-                      onWheel={handleWheel}
-                      onDrop={handleCanvasDrop}
-                      onDragOver={handleDragOver}
-                      onMouseDown={(e) => {
-                        if (isMarqueeZoom) {
-                          handleMarqueeZoomStart(e);
-                        } else if (placingObject) {
-                          handleCanvasClick(e);
-                        } else {
-                          if (hoveredArrow) {
-                            handleArrowMouseDown(e);
-                          } else if (hoveredObject) {
-                            handleObjectMouseDown(e);
-                          } else {
-                            handlePanStart(e);
-                          }
-                        }
-                      }}
-                      onMouseMove={(e) => {
-                        if (isMarqueeZoom) {
-                          handleMarqueeZoomMove(e);
-                        } else {
-                          handlePanMove(e);
-                        }
-                      }}
-                      onMouseUp={() => {
-                        if (isMarqueeZoom) {
-                          handleMarqueeZoomEnd();
-                        } else {
-                          handlePanEnd();
-                        }
-                      }}
-                      onMouseLeave={handlePanEnd}
-                      onDoubleClick={handleObjectDoubleClick}
-                      onContextMenu={(e) => {
-                        e.preventDefault();
-                        if (placingObject) {
-                          setPlacingObject(null);
-                        } else if (selectedArrow && chartData.workflow?.regimeArrows) {
-                          const deletedArrowIndex = chartData.workflow.regimeArrows.findIndex(
-                            (arrow) => arrow.id === selectedArrow
-                          );
-
-                          if (deletedArrowIndex !== -1) {
-                            const deletedArrow = chartData.workflow.regimeArrows[deletedArrowIndex];
-                            const deletedLength = deletedArrow.endKm - deletedArrow.startKm;
-
-                            const updatedArrows = chartData.workflow.regimeArrows
-                              .filter((arrow) => arrow.id !== selectedArrow)
-                              .map((arrow, index) => {
-                                if (index >= deletedArrowIndex) {
-                                  return {
-                                    ...arrow,
-                                    startKm: arrow.startKm - deletedLength,
-                                    endKm: arrow.endKm - deletedLength,
-                                  };
-                                }
-                                return arrow;
-                              });
-
-                            onUpdateChartData({
-                              workflow: {
-                                ...chartData.workflow,
-                                regimeArrows: updatedArrows,
-                              },
-                            });
-                            setSelectedArrow(null);
-                          }
+                    onWheel={handleWheel}
+                    onDrop={handleCanvasDrop}
+                    onDragOver={handleDragOver}
+                    onMouseDown={(e) => {
+                      if (isMarqueeZoom) {
+                        handleMarqueeZoomStart(e);
+                      } else if (placingObject) {
+                        handleCanvasClick(e);
+                      } else {
+                        if (hoveredArrow) {
+                          handleArrowMouseDown(e);
                         } else if (hoveredObject) {
-                          const updatedObjects = chartData.canvasObjects.filter(
-                            (obj) => obj.id !== hoveredObject.id
-                          );
-                          onUpdateChartData({
-                            canvasObjects: updatedObjects,
-                          });
-                          setHoveredObject(null);
+                          handleObjectMouseDown(e);
+                        } else {
+                          handlePanStart(e);
                         }
-                      }}
-                      className="cursor-crosshair"
-                      style={{
-                        cursor: draggedArrow
-                          ? resizeLimitReached
-                            ? 'not-allowed'
-                            : 'ew-resize'
-                          : draggedObject
+                      }
+                    }}
+                    onMouseMove={(e) => {
+                      if (isMarqueeZoom) {
+                        handleMarqueeZoomMove(e);
+                      } else {
+                        handlePanMove(e);
+                      }
+                    }}
+                    onMouseUp={() => {
+                      if (isMarqueeZoom) {
+                        handleMarqueeZoomEnd();
+                      } else {
+                        handlePanEnd();
+                      }
+                    }}
+                    onMouseLeave={handlePanEnd}
+                    onDoubleClick={handleObjectDoubleClick}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      if (placingObject) {
+                        setPlacingObject(null);
+                      } else if (selectedArrow && chartData.workflow?.regimeArrows) {
+                        const deletedArrowIndex = chartData.workflow.regimeArrows.findIndex(
+                          (arrow) => arrow.id === selectedArrow
+                        );
+
+                        if (deletedArrowIndex !== -1) {
+                          const deletedArrow = chartData.workflow.regimeArrows[deletedArrowIndex];
+                          const deletedLength = deletedArrow.endKm - deletedArrow.startKm;
+
+                          const updatedArrows = chartData.workflow.regimeArrows
+                            .filter((arrow) => arrow.id !== selectedArrow)
+                            .map((arrow, index) => {
+                              if (index >= deletedArrowIndex) {
+                                return {
+                                  ...arrow,
+                                  startKm: arrow.startKm - deletedLength,
+                                  endKm: arrow.endKm - deletedLength,
+                                };
+                              }
+                              return arrow;
+                            });
+
+                          onUpdateChartData({
+                            workflow: {
+                              ...chartData.workflow,
+                              regimeArrows: updatedArrows,
+                            },
+                          });
+                          setSelectedArrow(null);
+                        }
+                      } else if (hoveredObject) {
+                        const updatedObjects = chartData.canvasObjects.filter(
+                          (obj) => obj.id !== hoveredObject.id
+                        );
+                        onUpdateChartData({
+                          canvasObjects: updatedObjects,
+                        });
+                        setHoveredObject(null);
+                      }
+                    }}
+                    className="cursor-crosshair"
+                    style={{
+                      cursor: draggedArrow
+                        ? resizeLimitReached
+                          ? 'not-allowed'
+                          : 'ew-resize'
+                        : draggedObject
+                          ? 'grabbing'
+                          : isPanning
                             ? 'grabbing'
-                            : isPanning
-                              ? 'grabbing'
-                              : isMarqueeZoom
-                                ? 'crosshair'
-                                : placingObject
-                                  ? 'cell'
-                                  : hoveredArrow?.handle
-                                    ? 'ew-resize'
-                                    : hoveredArrow
+                            : isMarqueeZoom
+                              ? 'crosshair'
+                              : placingObject
+                                ? 'cell'
+                                : hoveredArrow?.handle
+                                  ? 'ew-resize'
+                                  : hoveredArrow
+                                    ? 'pointer'
+                                    : hoveredObject
                                       ? 'pointer'
-                                      : hoveredObject
-                                        ? 'pointer'
-                                        : 'grab',
-                      }}
-                    />
-                  </div>
+                                      : 'grab',
+                    }}
+                  />
                 </div>
+              </div>
 
               <ContextMenuContent className="w-56">
                 <ContextMenuItem onClick={handleContextMenuSelect}>

@@ -106,7 +106,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
       ...chartDataByID1,
     };
 
-    const fullChart = chartDataByID[chart.id] || chartDataByID['1'];
+    const fullChart = /*chartDataByID[chart.id] ||*/ chartDataByID['1'];
     setActiveChart(fullChart);
 
     // Очищаем размещенные объекты при переключении карты
