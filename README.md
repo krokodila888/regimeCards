@@ -1,94 +1,266 @@
-# 🚂 Архитектура данных режимной карты
+# 🚂 Архитектура данных режимной карты (Mermaid-диаграмма)
+
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {
-  'fontSize': '28px',
+  'fontSize': '16px',
   'primaryTextColor': '#000000',
   'primaryBorderColor': '#000000',
   'lineColor': '#000000',
   'tertiaryColor': '#ffffff'
 }}}%%
 
-    graph TB
+graph TB
     %% Основной объект
-    ROOT["<b>RegimeMapRenderData</b><br/>Полные данные для отрисовки режимной карты"]
-    
-    %% Ветвь 1: Метаданные и состав
-    ROOT --> META["<b>metadata</b> (объект)<br/>Метаинформация об участке/расчете"]
-    META --> META_PROPS1["id: string<br/>ID конфигурации расчета"]
-    META --> META_PROPS2["name: string<br/>Название конфигурации"]
-    META --> META_PROPS3["createdAt: string (ISO)<br/>Дата создания"]
-    META --> META_PROPS4["updatedAt: string (ISO)<br/>Дата изменения"]
-    META --> META_PROPS5["direction: 'forward' | 'backward'<br/>Направление движения"]
-    META --> TC["<b>trainConfiguration</b> (объект)<br/>Конфигурация подвижного состава"]
-    
-    TC --> UNITS["<b>units[]</b> (массив)<br/>Единицы подвижного состава<br/>в порядке от головы к хвосту"]
-    UNITS --> LOCO["<b>Тип: locomotive</b> (объект)<br/>Локомотив"]
-    UNITS --> CAR["<b>Тип: car</b> (объект)<br/>Вагон"]
-    
-    LOCO --> L_PROPS["<u>Обязательные поля:</u><br/>• type: 'locomotive'<br/>• id: string<br/>• position: number<br/>• series: string"]
-    LOCO --> L_OPT["<u>Опциональные:</u><br/>• model: string<br/>• weight: number (т)<br/>• power: number (кВт)<br/>• tractiveForce: number (кН)<br/>• brakingForce: number (кН)<br/>• length: number (м)<br/>• operatingMode: 'master' | 'slave' | 'independent'"]
-    
-    CAR --> C_PROPS["<u>Обязательные поля:</u><br/>• type: 'car'<br/>• id: string<br/>• position: number<br/>• carType: string"]
-    CAR --> C_OPT["<u>Опциональные:</u><br/>• model: string<br/>• weight: object<br/>• length: number (м)<br/>• loadType: 'empty' | 'loaded' | 'partially_loaded'<br/>• axleLoad: number (тс)<br/>• brakeType: 'air' | 'electropneumatic' | 'hand'"]
-    
-    TC --> SUMMARY["<b>trainSummary</b> (объект)<br/>Сводные параметры поезда"]
-    SUMMARY --> S_PROPS["<u>Обязательные:</u><br/>• name: string<br/>• totalWeight: number (т)<br/>• totalLength: number (м)"]
-    SUMMARY --> S_OPT["<u>Опциональные:</u><br/>• locomotivesCount: number<br/>• carsCount: number<br/>• totalPower: number (кВт)<br/>• totalTractiveForce: number (кН)<br/>• arrangement: 'single' | 'double_headed' | 'distributed' | 'push_pull'<br/>• controlType: 'single' | 'multiple_unit' | 'radio'"]
-    
-    %% Ветвь 2: Границы
-    ROOT --> BOUNDS["<b>bounds</b> (объект)<br/>Границы и масштабирование карты"]
-    BOUNDS --> B_PROPS["<u>Обязательные поля:</u><br/>• startDistance: number (км)<br/>• endDistance: number (км)<br/>• minSpeed: number (км/ч)<br/>• maxSpeed: number (км/ч)<br/>• minGradient: number (‰)<br/>• maxGradient: number (‰)"]
-    
-    %% Ветвь 3: Профиль пути
-    ROOT --> PROFILE["<b>profile[]</b> (массив)<br/>Профиль пути (уклоны и кривые)"]
-    PROFILE --> P_ITEM["<b>Элемент массива</b> (объект)"]
-    P_ITEM --> PI_PROPS["<u>Обязательные:</u><br/>• start: number (м)<br/>• end: number (м)<br/>• angle: number (‰)<br/>• length: number (м)"]
-    
-    %% Ветвь 4: Станции
-    ROOT --> STATIONS["<b>stations[]</b> (массив)<br/>Станции для отметок"]
-    STATIONS --> S_ITEM["<b>Элемент массива</b> (объект)"]
-    S_ITEM --> SI_PROPS["<u>Обязательные:</u><br/>• name: string<br/>• coordinate: number (км)"]
-    
-    %% Ветвь 5: Ограничения скорости
-    ROOT --> SPEED_LIMITS["<b>speedLimits[]</b> (массив)<br/>Ограничения скорости"]
-    SPEED_LIMITS --> SL_ITEM["<b>Элемент массива</b> (объект)"]
-    SL_ITEM --> SLI_PROPS["<u>Обязательные:</u><br/>• start: number (км)<br/>• end: number (км)<br/>• limit: number (км/ч)<br/>• type: 'track_category' | 'custom' | 'temporary'"]
-    
-    %% Ветвь 6: Кривые скорости
-    ROOT --> OPTIMAL_CURVE["<b>optimalSpeedCurve[]</b> (массив)<br/>Оптимальная кривая скорости"]
-    OPTIMAL_CURVE --> OC_ITEM["<b>Элемент массива</b> (объект)"]
-    OC_ITEM --> OCI_PROPS["<u>Обязательные:</u><br/>• distance: number (км)<br/>• speed: number (км/ч)<br/>• time: number (мин)"]
-    
-    ROOT --> ACTUAL_CURVE["<b>speedCurve[]</b> (массив)<br/>Кривая скорости"]
-    ACTUAL_CURVE --> AC_ITEM["<b>Элемент массива</b> (объект)"]
-    AC_ITEM --> ACI_PROPS["<u>Обязательные:</u><br/>• distance: number (км)<br/>• speed: number (км/ч)<br/>• time: number (мин)"]
-    
-    %% Ветвь 7: Ленты режимов
-    ROOT --> REGIME_BANDS["<b>regimeBands[]</b> (массив)<br/>Ленты режимов управления"]
-    REGIME_BANDS --> RB_ITEM["<b>Элемент массива</b> (объект)"]
-    RB_ITEM --> RBI_PROPS["<u>Обязательные:</u><br/>• start: number (км)<br/>• end: number (км)<br/>• mode: 'acceleration' | 'coasting' | 'braking' | 'constant_speed'"]
-    RB_ITEM --> RBI_OPT["<u>Опциональные:</u><br/>• controllerPosition: string"]
-    
-    %% Ветвь 8: Продольные силы
-    ROOT --> LONG_FORCES["<b>longitudinalForces[]</b> (массив)<br/>График продольных сил"]
-    LONG_FORCES --> LF_ITEM["<b>Элемент массива</b> (объект)"]
-    LF_ITEM --> LFI_PROPS["<u>Обязательные:</u><br/>• coordinate: number (м)<br/>• tension: number (кН) ≥ 0<br/>• compression: number (кН) ≥ 0"]
-    LF_ITEM --> LFI_OPT["<u>Опциональные:</u><br/>• maxAllowable: number (кН)<br/>• time: number (мин)"]
-    
-    %% Ветвь 9: Значки
-    ROOT --> MARKS["<b>marks[]</b> (массив)<br/>Значки на карте"]
-    MARKS --> M_ITEM["<b>Элемент массива</b> (объект)"]
-    M_ITEM --> MI_PROPS["<u>Обязательные:</u><br/>• type: string<br/>• distance: number (м)"]
-    M_ITEM --> MI_OPT["<u>Опциональные:</u><br/>• label: string"]
-    M_ITEM --> MI_TYPES["<u>Допустимые типы:</u><br/>• brake_test • picket<br/>• neutral_start • neutral_end<br/>• water_intake • signal<br/>• switch • crossing<br/>• tunnel_start • tunnel_end<br/>• bridge_start • bridge_end"]
-    
+    ROOT["RegimeMapRenderDataПолные данные для отрисовки режимной карты"]
+
+    %% Ветвь 1: Метаданные
+    ROOT --> META["metadata (объект)Метаинформация о расчете"]
+    META --> META_PROPS["Обязательные поля:• id: string• name: string• createdAt: string (ISO)• updatedAt: string (ISO)"]
+
+    %% Ветвь 2: Локомотивы
+    ROOT --> LOCOS["locomotives[] (массив)Локомотивы в составе"]
+    LOCOS --> LOCO_ITEM["Элемент массива (объект)"]
+    LOCO_ITEM --> LOCO_PROPS["Обязательные поля:• id: string• series: string• position: number"]
+
+    %% Ветвь 3: Вагоны
+    ROOT --> CARS["cars[] (массив)Вагоны в составе"]
+    CARS --> CAR_ITEM["Элемент массива (объект)"]
+    CAR_ITEM --> CAR_PROPS["Обязательные поля:• id: string• series: string• weight: number (тонны)"]
+
+    %% Ветвь 4: Координатная шкала
+    ROOT --> RULER["coordinateRuler (объект)Система координат участка"]
+    RULER --> RULER_PROPS["Обязательные поля:• startCoordinate: number (км)• endCoordinate: number (км)• adjustments: array"]
+    RULER --> ADJUSTMENTS["adjustments[] (массив)Укороченные/удлинённые километры"]
+    ADJUSTMENTS --> ADJ_ITEM["Элемент массива (объект)"]
+    ADJ_ITEM --> ADJ_PROPS["Обязательные:• kilometer: number• actualLength: number (м)Опциональные:• reason: string"]
+
+    %% Ветвь 5: Слои холста
+    ROOT --> LAYERS["canvasLayers[] (массив)Вертикальное разбиение холста"]
+    LAYERS --> LAYER_ITEM["Элемент массива (объект)"]
+    LAYER_ITEM --> LAYER_PROPS["Обязательные:• position: number• heightPercent: number• hidden: booleanОпциональные:• name: string"]
+
+    %% Ветвь 6: Профиль пути
+    ROOT --> PROFILE["profile[] (массив)Профиль пути (уклоны)"]
+    PROFILE --> PROF_ITEM["Элемент массива (объект)"]
+    PROF_ITEM --> PROF_PROPS["Обязательные:• start: number (м)• end: number (м)• angle: number (‰)"]
+
+    %% Ветвь 7: Станции
+    ROOT --> STATIONS["stations[] (массив)Станции на участке"]
+    STATIONS --> STAT_ITEM["Элемент массива (объект)"]
+    STAT_ITEM --> STAT_PROPS["Обязательные:• name: string• coordinate: number (км)• graphical: GraphicalProperties"]
+    STAT_ITEM --> STAT_GRAPH["graphical (объект)Графические свойства"]
+
+    %% Ветвь 8: Ограничения скорости
+    ROOT --> LIMITS["speedLimits[] (массив)Ограничения скорости"]
+    LIMITS --> LIMIT_ITEM["Элемент массива (объект)"]
+    LIMIT_ITEM --> LIMIT_PROPS["Обязательные:• start: number (км)• end: number (км)• limit: number (км/ч)• type: 'track_category' | 'custom' | 'temporary'"]
+
+    %% Ветвь 9: Оптимальная кривая скорости
+    ROOT --> OPT_CURVE["optimalSpeedCurve[] (массив)Оптимальная кривая скорости"]
+    OPT_CURVE --> OPT_ITEM["Элемент массива (объект)"]
+    OPT_ITEM --> OPT_PROPS["Обязательные:• distance: number (км)• speed: number (км/ч)• time: number (мин)"]
+
+    %% Ветвь 10: Фактическая кривая скорости
+    ROOT --> SPEED_CURVE["speedCurve[] (массив)Фактическая кривая скорости"]
+    SPEED_CURVE --> SPEED_ITEM["Элемент массива (объект)"]
+    SPEED_ITEM --> SPEED_PROPS["Обязательные:• distance: number (км)• speed: number (км/ч)• time: number (мин)"]
+
+    %% Ветвь 11: Оптимальные режимы
+    ROOT --> OPT_REGIME["optimalRegimeBands[] (массив)Режимы для оптимальной кривой"]
+    OPT_REGIME --> OPT_REG_ITEM["Элемент массива (объект)"]
+    OPT_REG_ITEM --> OPT_REG_PROPS["Обязательные:• start: number (км)• end: number (км)• mode: string"]
+
+    %% Ветвь 12: Режимы локомотивов
+    ROOT --> LOCO_REGIME["locomotiveRegimeBands[] (массив)Режимы для каждого локомотива"]
+    LOCO_REGIME --> LOCO_REG_ITEM["Элемент массива (объект)"]
+    LOCO_REG_ITEM --> LOCO_REG_PROPS["Обязательные:• locomotiveId: string• bands: RegimeBand[]"]
+    LOCO_REG_ITEM --> LOCO_BANDS["bands[] (массив)Режимы данного локомотива"]
+    LOCO_BANDS --> LOCO_BAND_ITEM["Элемент массива (объект)"]
+    LOCO_BAND_ITEM --> LOCO_BAND_PROPS["Обязательные:• start: number (км)• end: number (км)• mode: string"]
+
+    %% Ветвь 13: Продольные силы
+    ROOT --> FORCES["longitudinalForces[] (массив)График продольных сил"]
+    FORCES --> FORCE_ITEM["Элемент массива (объект)"]
+    FORCE_ITEM --> FORCE_PROPS["Обязательные:• coordinate: number (м)• tension: number (кН) ≥ 0• compression: number (кН) ≥ 0"]
+
+    %% Ветвь 14: Значки
+    ROOT --> MARKS["marks[] (массив)Значки на карте"]
+    MARKS --> MARK_ITEM["Элемент массива (объект)"]
+    MARK_ITEM --> MARK_PROPS["Обязательные:• type: string• distance: number (м)• graphical: GraphicalPropertiesОпциональные:• label: string"]
+    MARK_ITEM --> MARK_GRAPH["graphical (объект)Графические свойства"]
+
+    %% Графические свойства (общие для станций и marks)
+    STAT_GRAPH --> GRAPH_PROPS["GraphicalPropertiesОбязательные поля:• layerPosition: number• verticalPosition: number (px)• horizontalPosition: number (px)• fontSize: number (px)• fontColor: string (hex)• lineHeight: number (px)• rotation: number (°)• objectColor: string (hex)"]
+    MARK_GRAPH --> GRAPH_PROPS
+
     %% Стилизация
     classDef required fill:#e1f5e1,stroke:#2e7d32,stroke-width:2px
     classDef optional fill:#e3f2fd,stroke:#1565c0,stroke-width:1px
-    classDef array fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1px
-    classDef object fill:#fff3e0,stroke:#ef6c00,stroke-width:1px
-    
-    class META_PROPS1,META_PROPS2,META_PROPS5,L_PROPS,C_PROPS,S_PROPS,B_PROPS,PI_PROPS,SI_PROPS,SLI_PROPS,OCI_PROPS,ACI_PROPS,RBI_PROPS,LFI_PROPS,MI_PROPS required
-    class L_OPT,C_OPT,S_OPT,RBI_OPT,LFI_OPT,MI_OPT optional
-    class UNITS,PROFILE,STATIONS,SPEED_LIMITS,OPTIMAL_CURVE,ACTUAL_CURVE,REGIME_BANDS,LONG_FORCES,MARKS array
-    class ROOT,META,TC,LOCO,CAR,SUMMARY,BOUNDS,P_ITEM,S_ITEM,SL_ITEM,OC_ITEM,AC_ITEM,RB_ITEM,LF_ITEM,M_ITEM object
+    classDef array fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef object fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    classDef shared fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+
+    class META_PROPS,LOCO_PROPS,CAR_PROPS,RULER_PROPS,LAYER_PROPS,PROF_PROPS,STAT_PROPS,LIMIT_PROPS,OPT_PROPS,SPEED_PROPS,OPT_REG_PROPS,LOCO_REG_PROPS,LOCO_BAND_PROPS,FORCE_PROPS,MARK_PROPS,ADJ_PROPS,GRAPH_PROPS required
+    class LOCOS,CARS,ADJUSTMENTS,LAYERS,PROFILE,STATIONS,LIMITS,OPT_CURVE,SPEED_CURVE,OPT_REGIME,LOCO_REGIME,LOCO_BANDS,FORCES,MARKS array
+    class ROOT,META,LOCO_ITEM,CAR_ITEM,RULER,ADJ_ITEM,LAYER_ITEM,PROF_ITEM,STAT_ITEM,LIMIT_ITEM,OPT_ITEM,SPEED_ITEM,OPT_REG_ITEM,LOCO_REG_ITEM,LOCO_BAND_ITEM,FORCE_ITEM,MARK_ITEM object
+    class STAT_GRAPH,MARK_GRAPH,GRAPH_PROPS shared
+```
+
+## 📊 Условные обозначения
+
+| Цвет              | Значение                         |
+| ----------------- | -------------------------------- |
+| 🟢 **Зелёный**    | Обязательные поля                |
+| 🔵 **Синий**      | Опциональные поля                |
+| 🟣 **Фиолетовый** | Массивы                          |
+| 🟠 **Оранжевый**  | Объекты                          |
+| 🔴 **Розовый**    | Общие/переиспользуемые структуры |
+
+## 🎯 Ключевые особенности структуры
+
+### 1. Разделение подвижного состава
+
+- **Локомотивы** (`locomotives[]`) и **вагоны** (`cars[]`) хранятся отдельно
+- Минимальный набор полей для каждого типа
+
+### 2. Координатная шкала (`coordinateRuler`)
+
+- Начальная и конечная координаты
+- Массив исключений для нестандартных километров
+- Эффективное хранение: пустой массив = все километры по 1000м
+
+### 3. Слои холста (`canvasLayers[]`)
+
+- Гибкое вертикальное разбиение
+- Процентное распределение высоты
+- Поддержка скрытия слоёв
+
+### 4. Графические свойства (`GraphicalProperties`)
+
+- Общая структура для станций и значков
+- Полный контроль над позиционированием
+- Привязка к слоям холста
+
+### 5. Разделение режимов
+
+- **Оптимальные режимы** (`optimalRegimeBands[]`) — для оптимальной кривой
+- **Режимы локомотивов** (`locomotiveRegimeBands[]`) — индивидуальные для каждого локомотива
+
+## 📏 Единицы измерения
+
+| Параметр                            | Единица измерения    |
+| ----------------------------------- | -------------------- |
+| Координаты (distance, coordinate)   | **километры** (км)   |
+| Длины (start, end в profile/forces) | **метры** (м)        |
+| Скорость                            | **км/ч**             |
+| Время                               | **минуты**           |
+| Уклон                               | **промилле** (‰)     |
+| Силы                                | **килоньютоны** (кН) |
+| Вес                                 | **тонны** (т)        |
+| Размеры на холсте                   | **пиксели** (px)     |
+| Угол поворота                       | **градусы** (°)      |
+
+## 🔗 Связи между сущностями
+
+```
+RegimeMapRenderData
+├─ locomotives[].id ──→ locomotiveRegimeBands[].locomotiveId
+│                       (связь локомотивов с их режимами)
+│
+├─ canvasLayers[].position ──→ GraphicalProperties.layerPosition
+│                              (привязка объектов к слоям)
+│
+└─ coordinateRuler ──→ stations[].coordinate
+                       speedLimits[].start/end
+                       profile[].start/end
+                       (единая система координат)
+```
+
+## 💡 Примеры использования
+
+### Пример 1: Координатная шкала без аномалий
+
+```json
+{
+  "coordinateRuler": {
+    "startCoordinate": 1782.0,
+    "endCoordinate": 1610.0,
+    "adjustments": []
+  }
+}
+```
+
+**Интерпретация:** Все 172 километра имеют стандартную длину 1000м каждый.
+
+### Пример 2: Координатная шкала с укороченными километрами
+
+```json
+{
+  "coordinateRuler": {
+    "startCoordinate": 1782.0,
+    "endCoordinate": 1610.0,
+    "adjustments": [
+      {
+        "kilometer": 1750,
+        "actualLength": 950
+      },
+      {
+        "kilometer": 1680,
+        "actualLength": 1050
+      }
+    ]
+  }
+}
+```
+
+**Интерпретация:**
+
+- 1750-й км укорочен на 50м (950м вместо 1000м)
+- 1680-й км удлинён на 50м (1050м вместо 1000м)
+- Остальные километры стандартные
+
+### Пример 3: Слои холста
+
+```json
+{
+  "canvasLayers": [
+    { "position": 1, "heightPercent": 22.5, "hidden": false, "name": "Продольные силы" },
+    { "position": 2, "heightPercent": 37.5, "hidden": false, "name": "Кривые скорости" },
+    { "position": 3, "heightPercent": 20, "hidden": false, "name": "Профиль пути" },
+    { "position": 4, "heightPercent": 20, "hidden": false, "name": "Режимы упрвления" }
+  ]
+}
+```
+
+**Интерпретация:**
+
+- Холст разбит на 4 слоя
+- Слой 2 (скорости) занимает наибольшую долю (37.5%)
+- Все слои видимы
+
+### Пример 4: Режимы локомотивов
+
+```json
+{
+  "locomotiveRegimeBands": [
+    {
+      "locomotiveId": "loco-1",
+      "bands": [
+        { "start": 1782.0, "end": 1780.0, "mode": "T1" },
+        { "start": 1780.0, "end": 1775.0, "mode": "Выбег" }
+      ]
+    },
+    {
+      "locomotiveId": "loco-2",
+      "bands": [
+        { "start": 1782.0, "end": 1779.0, "mode": "T2" },
+        { "start": 1779.0, "end": 1774.0, "mode": "T1" }
+      ]
+    }
+  ]
+}
+```
+
+**Интерпретация:**
+
+- У каждого локомотива свой набор режимов

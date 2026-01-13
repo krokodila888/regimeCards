@@ -212,14 +212,7 @@
     "metadata": {
       "type": "object",
       "description": "Метаинформация об участке/расчете",
-      "required": [
-        "id",
-        "name",
-        "calculatedAt",
-        "direction",
-        "locomotive",
-        "train"
-      ],
+      "required": ["id", "name", "calculatedAt", "direction", "locomotive", "train"],
       "properties": {
         "configurationId": {
           "type": "string",
