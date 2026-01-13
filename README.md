@@ -1,5 +1,13 @@
 # 🚂 Архитектура данных режимной карты
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {
+  'fontSize': '20px',
+  'primaryTextColor': '#000000',
+  'primaryBorderColor': '#000000',
+  'lineColor': '#000000',
+  'tertiaryColor': '#ffffff'
+}}}%%
+```
     graph TB
     %% Основной объект
     ROOT["<b>RegimeMapRenderData</b><br/>Полные данные для отрисовки режимной карты"]
