@@ -15,19 +15,210 @@
     "longitudinalForces",
     "infrastructure"
   ],
+  "profile": {
+    "type": "array",
+    "description": "Профиль пути (уклоны и кривые)",
+    "items": {
+      "type": "object",
+      "required": ["start", "end", "angle", "length"],
+      "properties": {
+        "start": {
+          "type": "number",
+          "description": "Начальная координата, м"
+        },
+        "end": {
+          "type": "number",
+          "description": "Конечная координата, м"
+        },
+        "angle": {
+          "type": "number",
+          "description": "Уклон, ‰ (положительный = подъем, отрицательный = спуск)"
+        },
+        "length": {
+          "type": "number",
+          "description": "Длина участка с уклоном, м"
+        }
+      }
+    }
+  },
+  "stations": {
+    "type": "array",
+    "description": "Станции для отметок",
+    "items": {
+      "type": "object",
+      "required": ["name", "distance", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Название станции"
+        },
+        "distance": {
+          "type": "number",
+          "description": "Координата станции, км"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["start", "end", "intermediate"],
+          "description": "Тип станции для визуализации"
+        }
+      }
+    }
+  },
+  "speedLimits": {
+    "type": "array",
+    "description": "Ограничения скорости",
+    "items": {
+      "type": "object",
+      "required": ["start", "end", "limit", "type"],
+      "properties": {
+        "start": {
+          "type": "number",
+          "description": "Начальная координата, км"
+        },
+        "end": {
+          "type": "number",
+          "description": "Конечная координата, км"
+        },
+        "limit": {
+          "type": "number",
+          "description": "Ограничение скорости, км/ч"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["track_category", "custom", "temporary"],
+          "description": "Тип ограничения для визуализации"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Причина ограничения (для tooltip)"
+        }
+      }
+    }
+  },
+  "speedCurve": {
+    "type": "array",
+    "description": "Кривая скорости",
+    "items": {
+      "type": "object",
+      "required": ["distance", "speed", "time"],
+      "properties": {
+        "distance": {
+          "type": "number",
+          "description": "Координата, км"
+        },
+        "speed": {
+          "type": "number",
+          "description": "Скорость, км/ч"
+        },
+        "time": {
+          "type": "number",
+          "description": "Время от начала движения, мин"
+        }
+      }
+    }
+  },
+  "regimeBands": {
+    "type": "array",
+    "description": "Ленты режимов управления",
+    "items": {
+      "type": "object",
+      "required": ["start", "end", "mode"],
+      "properties": {
+        "start": {
+          "type": "number",
+          "description": "Начальная координата, км"
+        },
+        "end": {
+          "type": "number",
+          "description": "Конечная координата, км"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["acceleration", "coasting", "braking", "constant_speed"],
+          "description": "Режим ведения"
+        },
+        "controllerPosition": {
+          "type": "string",
+          "description": "Позиция контроллера (для режима тяги)"
+        }
+      }
+    }
+  },
+  "longitudinalForces": {
+    "type": "array",
+    "description": "График продольных сил",
+    "items": {
+      "type": "object",
+      "required": ["distance", "tension", "compression"],
+      "properties": {
+        "distance": {
+          "type": "number",
+          "description": "Координата, км"
+        },
+        "tension": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Сила растяжения, кН (всегда >= 0)"
+        },
+        "compression": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Сила сжатия, кН (всегда >= 0)"
+        },
+        "maxAllowable": {
+          "type": "number",
+          "description": "Максимально допустимая сила, кН"
+        }
+      }
+    }
+  },
+  "infrastructure": {
+    "type": "array",
+    "description": "Объекты инфраструктуры на карте",
+    "items": {
+      "type": "object",
+      "required": ["type", "distance"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "brake_test",
+            "picket",
+            "neutral_start",
+            "neutral_end",
+            "water_intake",
+            "signal",
+            "switch",
+            "crossing",
+            "tunnel_start",
+            "tunnel_end",
+            "bridge_start",
+            "bridge_end"
+          ],
+          "description": "Тип объекта инфраструктуры"
+        },
+        "distance": {
+          "type": "number",
+          "description": "Координата, км"
+        },
+        "label": {
+          "type": "string",
+          "description": "Подпись для отображения"
+        }
+      }
+    }
+  },
   "properties": {
     "metadata": {
       "type": "object",
-      "description": "Метаинформация о расчете",
+      "description": "Метаинформация об участке/расчете",
       "required": [
-        "configurationId",
-        "configurationName",
+        "id",
+        "name",
         "calculatedAt",
         "direction",
         "locomotive",
-        "train",
-        "totals",
-        "safety"
+        "train"
       ],
       "properties": {
         "configurationId": {
@@ -91,49 +282,6 @@
               "description": "Количество вагонов"
             }
           }
-        },
-        "totals": {
-          "type": "object",
-          "required": ["distance", "travelTime", "energy", "averageSpeed", "maxSpeed"],
-          "properties": {
-            "distance": {
-              "type": "number",
-              "description": "Общее расстояние, км"
-            },
-            "travelTime": {
-              "type": "number",
-              "description": "Общее время в пути, мин"
-            },
-            "energy": {
-              "type": "number",
-              "description": "Затраченная энергия, кВт·ч"
-            },
-            "averageSpeed": {
-              "type": "number",
-              "description": "Средняя скорость, км/ч"
-            },
-            "maxSpeed": {
-              "type": "number",
-              "description": "Максимальная скорость, км/ч"
-            }
-          }
-        },
-        "safety": {
-          "type": "object",
-          "required": ["passed", "warnings"],
-          "properties": {
-            "passed": {
-              "type": "boolean",
-              "description": "Прошла ли проверка безопасности"
-            },
-            "warnings": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Предупреждения о безопасности"
-            }
-          }
         }
       }
     },
@@ -172,207 +320,6 @@
         "maxGradient": {
           "type": "number",
           "description": "Максимальный уклон, ‰"
-        }
-      }
-    },
-    "profile": {
-      "type": "array",
-      "description": "Профиль пути (уклоны и кривые)",
-      "items": {
-        "type": "object",
-        "required": ["start", "end", "gradient", "curveRadius", "hasCurve"],
-        "properties": {
-          "start": {
-            "type": "number",
-            "description": "Начальная координата, км"
-          },
-          "end": {
-            "type": "number",
-            "description": "Конечная координата, км"
-          },
-          "gradient": {
-            "type": "number",
-            "description": "Уклон, ‰ (положительный = подъем, отрицательный = спуск)"
-          },
-          "curveRadius": {
-            "type": "number",
-            "description": "Радиус кривой, м (0 = прямая)"
-          },
-          "hasCurve": {
-            "type": "boolean",
-            "description": "Есть ли кривая на этом участке"
-          }
-        }
-      }
-    },
-    "stations": {
-      "type": "array",
-      "description": "Станции для отметок",
-      "items": {
-        "type": "object",
-        "required": ["name", "distance", "isLoop", "type"],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Название станции"
-          },
-          "distance": {
-            "type": "number",
-            "description": "Координата станции, км"
-          },
-          "isLoop": {
-            "type": "boolean",
-            "description": "Станция с петлей (для визуального обозначения)"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["start", "end", "intermediate"],
-            "description": "Тип станции для визуализации"
-          }
-        }
-      }
-    },
-    "speedLimits": {
-      "type": "array",
-      "description": "Ограничения скорости",
-      "items": {
-        "type": "object",
-        "required": ["start", "end", "limit", "type"],
-        "properties": {
-          "start": {
-            "type": "number",
-            "description": "Начальная координата, км"
-          },
-          "end": {
-            "type": "number",
-            "description": "Конечная координата, км"
-          },
-          "limit": {
-            "type": "number",
-            "description": "Ограничение скорости, км/ч"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["track_category", "custom", "temporary"],
-            "description": "Тип ограничения для визуализации"
-          },
-          "reason": {
-            "type": "string",
-            "description": "Причина ограничения (для tooltip)"
-          }
-        }
-      }
-    },
-    "speedCurve": {
-      "type": "array",
-      "description": "Кривая скорости",
-      "items": {
-        "type": "object",
-        "required": ["distance", "speed", "time"],
-        "properties": {
-          "distance": {
-            "type": "number",
-            "description": "Координата, км"
-          },
-          "speed": {
-            "type": "number",
-            "description": "Скорость, км/ч"
-          },
-          "time": {
-            "type": "number",
-            "description": "Время от начала движения, мин"
-          }
-        }
-      }
-    },
-    "regimeBands": {
-      "type": "array",
-      "description": "Ленты режимов управления",
-      "items": {
-        "type": "object",
-        "required": ["start", "end", "mode"],
-        "properties": {
-          "start": {
-            "type": "number",
-            "description": "Начальная координата, км"
-          },
-          "end": {
-            "type": "number",
-            "description": "Конечная координата, км"
-          },
-          "mode": {
-            "type": "string",
-            "enum": ["acceleration", "coasting", "braking", "constant_speed"],
-            "description": "Режим ведения"
-          },
-          "controllerPosition": {
-            "type": "string",
-            "description": "Позиция контроллера (для режима тяги)"
-          }
-        }
-      }
-    },
-    "longitudinalForces": {
-      "type": "array",
-      "description": "График продольных сил",
-      "items": {
-        "type": "object",
-        "required": ["distance", "tension", "compression"],
-        "properties": {
-          "distance": {
-            "type": "number",
-            "description": "Координата, км"
-          },
-          "tension": {
-            "type": "number",
-            "minimum": 0,
-            "description": "Сила растяжения, кН (всегда >= 0)"
-          },
-          "compression": {
-            "type": "number",
-            "minimum": 0,
-            "description": "Сила сжатия, кН (всегда >= 0)"
-          },
-          "maxAllowable": {
-            "type": "number",
-            "description": "Максимально допустимая сила, кН"
-          }
-        }
-      }
-    },
-    "infrastructure": {
-      "type": "array",
-      "description": "Объекты инфраструктуры на карте",
-      "items": {
-        "type": "object",
-        "required": ["type", "distance"],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "brake_test",
-              "picket",
-              "neutral_start",
-              "neutral_end",
-              "water_intake",
-              "signal",
-              "switch",
-              "crossing",
-              "tunnel_start",
-              "tunnel_end",
-              "bridge_start",
-              "bridge_end"
-            ],
-            "description": "Тип объекта инфраструктуры"
-          },
-          "distance": {
-            "type": "number",
-            "description": "Координата, км"
-          },
-          "label": {
-            "type": "string",
-            "description": "Подпись для отображения"
-          }
         }
       }
     }
