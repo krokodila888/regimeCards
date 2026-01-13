@@ -7,7 +7,7 @@
   'lineColor': '#000000',
   'tertiaryColor': '#ffffff'
 }}}%%
-```
+
     graph TB
     %% Основной объект
     ROOT["<b>RegimeMapRenderData</b><br/>Полные данные для отрисовки режимной карты"]
