@@ -1327,6 +1327,11 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         ctx.restore();
         ctx.setLineDash([]);
 
+        ctx.translate(marginLeft - 50, layer2Top - 110);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText('Динамика оптимальная', 0, 0);
+        ctx.restore();
+
         // Кривая скоростных ограничений
         // Кривая скоростных ограничений (КРАСНАЯ ЛИНИЯ)
 
@@ -3065,7 +3070,7 @@ for (let km = Math.ceil(displayEndCoord * 2) / 2;
 
             {/* Canvas с контекстным меню */}
             <ContextMenu>
-              <ContextMenuTrigger>
+
                 <div
                   ref={scrollContainerRef}
                   className="border border-gray-300 rounded flex-1 overflow-auto canvas-scrollbar relative"
@@ -3194,7 +3199,7 @@ for (let km = Math.ceil(displayEndCoord * 2) / 2;
                     />
                   </div>
                 </div>
-              </ContextMenuTrigger>
+
               <ContextMenuContent className="w-56">
                 <ContextMenuItem onClick={handleContextMenuSelect}>
                   <GitBranch className="w-4 h-4 mr-2" />
