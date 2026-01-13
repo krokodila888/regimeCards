@@ -1,7 +1,7 @@
 # 🚂 Архитектура данных режимной карты
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {
-  'fontSize': '20px',
+  'fontSize': '28px',
   'primaryTextColor': '#000000',
   'primaryBorderColor': '#000000',
   'lineColor': '#000000',
