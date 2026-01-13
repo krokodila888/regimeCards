@@ -273,11 +273,9 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   };
 
   // ZOOM DISABLED - Рамка масштабирования (marquee) закомментирована
-  const handleMarqueeZoomStart = (e: React.MouseEvent) => {
-  };
+  const handleMarqueeZoomStart = (e: React.MouseEvent) => {};
 
-  const handleMarqueeZoomMove = (e: React.MouseEvent) => {
-  };
+  const handleMarqueeZoomMove = (e: React.MouseEvent) => {};
 
   const handleMarqueeZoomEnd = () => {
     if (!marqueeStart || !marqueeEnd) return;
@@ -1424,33 +1422,137 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         }
 
         // Station markers (vertical lines in Layer 2)
+        // ОТОБРАЖЕНИЕ СТАНЦИЙ (вертикальные линии, иконки, подписи)
         if (trackSection && trackSection.stations && trackSection.stations.length > 0) {
+          console.log('[STATIONS] Отрисовка станций:', {
+            количество: trackSection.stations.length,
+            первая: trackSection.stations[0],
+          });
+
           trackSection.stations.forEach((station, index) => {
-            const isLastStation = index === trackSection.stations.length - 1;
-            const stationKm = isLastStation ? station.endCoord : station.startCoord;
-            const xWorld = kmToX(stationKm);
+            // Используем startCoord как основную координату станции
+            let stationKm = station.startCoord;
+            if (station?.coord) stationKm = station?.coord;
 
-            // Vertical dashed line
-            ctx.strokeStyle = '#6b7280';
-            ctx.lineWidth = lineWidth(1.5);
-            ctx.setLineDash([4, 4]);
-            ctx.beginPath();
-            ctx.moveTo(xWorld, layer2Top);
-            ctx.lineTo(xWorld, layer2Bottom);
-            ctx.stroke();
-            ctx.setLineDash([]);
+            // Проверяем, попадает ли станция в видимый диапазон
+            if (stationKm < displayEndCoord || stationKm > displayStartCoord) {
+              return; // Станция за пределами видимости
+            }
 
-            // Station name
+            const xWorld = kmToX1(stationKm);
+
+            // ================================================================
+            // 1. ВЕРТИКАЛЬНАЯ ПУНКТИРНАЯ ЛИНИЯ через ВСЕ 4 СЛОЯ
+            // ================================================================
             ctx.save();
-            ctx.translate(xWorld, layer2Top - 5);
-            ctx.rotate(-Math.PI / 4);
-            ctx.fillStyle = '#374151';
-            ctx.font = fontSize(10);
-            ctx.textAlign = 'right';
-            ctx.fillText(station.stationName, 0, 0);
+            ctx.strokeStyle = '#9ca3af'; // Светло-серый
+            ctx.lineWidth = lineWidth(1.5);
+            ctx.setLineDash([4, 4]); // Пунктир
+
+            ctx.beginPath();
+            ctx.moveTo(xWorld, LAYER2_TOP); // От верха Layer 1
+            ctx.lineTo(xWorld, LAYER2_TOP + LAYER2_HEIGHT); // До низа Layer 4
+            ctx.stroke();
+
+            ctx.setLineDash([]); // Сброс пунктира
             ctx.restore();
+
+            // ================================================================
+            // 2. ИКОНКА СТАНЦИИ (canvas-версия SVG)
+            // ================================================================
+            // Размещаем иконку НИЖЕ Layer 2 (между Layer 2 и Layer 3)
+            const rulerY = layer2Bottom + 18; // Координатная шкала
+            const iconY = rulerY - 40; // 10px ВЫШЕ шкалы
+            const iconRadius = 10;
+
+            ctx.save();
+
+            // Белая половина (левая)
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(xWorld, iconY, iconRadius, Math.PI / 2, -Math.PI / 2, false);
+            ctx.closePath();
+            ctx.fill();
+
+            // Чёрная половина (правая)
+            ctx.fillStyle = '#111111';
+            ctx.beginPath();
+            ctx.arc(xWorld, iconY, iconRadius, -Math.PI / 2, Math.PI / 2, false);
+            ctx.closePath();
+            ctx.fill();
+
+            // Обводка всей иконки
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = lineWidth(2);
+            ctx.beginPath();
+            ctx.arc(xWorld, iconY, iconRadius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Вертикальная линия вниз от иконки (ножка)
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = lineWidth(2);
+            ctx.beginPath();
+            ctx.moveTo(xWorld, iconY + iconRadius);
+            ctx.lineTo(xWorld, iconY + iconRadius + 10);
+            ctx.stroke();
+
+            ctx.restore();
+
+            // ================================================================
+            // 3. ПОДПИСЬ СТАНЦИИ (название)
+            // ================================================================
+            // Размещаем название НАД иконкой
+            ctx.save();
+            ctx.fillStyle = '#1f2937';
+            ctx.font = fontSize(11);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+
+            // Белый фон под текстом для читаемости
+            const textMetrics = ctx.measureText(station.stationName);
+            const textWidth = textMetrics.width;
+            const textHeight = 14;
+            const padding = 4;
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillRect(
+              xWorld - textWidth / 2 - padding,
+              iconY - iconRadius - textHeight - padding - 4,
+              textWidth + padding * 2,
+              textHeight + padding * 2
+            );
+
+            // Текст названия
+            ctx.fillStyle = '#1f2937';
+            ctx.fillText(station.stationName, xWorld, iconY - iconRadius - 4);
+
+            ctx.restore();
+
+            // ================================================================
+            // 4. КООРДИНАТА СТАНЦИИ (опционально)
+            // ================================================================
+            // Показываем координату ПОД иконкой (мелким шрифтом)
+            ctx.save();
+            ctx.fillStyle = '#6b7280';
+            ctx.font = fontSize(9);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillText(`${stationKm.toFixed(1)} км`, xWorld, iconY + iconRadius - 44);
+            ctx.restore();
+
+            // Отладка первых станций
+            if (index < 3) {
+              console.log(`[STATIONS] Станция ${index}:`, {
+                name: station.stationName,
+                coord: stationKm,
+                x: xWorld,
+                iconY,
+              });
+            }
           });
         }
+
+        // =========
 
         ctx.restore();
 
@@ -2141,7 +2243,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.strokeRect(startX, startY, endX - startX, endY - startY);
           ctx.restore();
         }
-
       } catch (error) {
         // Clear canvas and show error
         ctx.setTransform(1, 0, 0, 1, 0, 0);

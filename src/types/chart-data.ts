@@ -4,6 +4,7 @@ export interface TrackSegment {
   id: string;
   startCoord: number;
   endCoord: number;
+  coord?: number;
   stationName: string;
   road?: string;
 }
