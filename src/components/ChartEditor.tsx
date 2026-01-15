@@ -26,7 +26,6 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuTrigger,
 } from './ui/context-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Label } from './ui/label';
@@ -2895,12 +2894,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                     ref={canvasRef}
                     width={baseWidth}
                     height={baseHeight}
-                    style={{
-                      position: 'absolute',
-                      top: '100px',
-                      left: '100px',
-                      display: 'block',
-                    }}
                     onWheel={handleWheel}
                     onDrop={handleCanvasDrop}
                     onDragOver={handleDragOver}
@@ -2981,6 +2974,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                     }}
                     className="cursor-crosshair"
                     style={{
+                      position: 'absolute',
+                      top: '100px',
+                      left: '100px',
+                      display: 'block',
                       cursor: draggedArrow
                         ? resizeLimitReached
                           ? 'not-allowed'

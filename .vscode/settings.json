@@ -5,5 +5,11 @@
   "editor.experimental.preferTreeSitter.css": true,
   "editor.experimental.preferTreeSitter.ini": true,
   "editor.experimental.preferTreeSitter.regex": true,
-  "editor.experimental.preferTreeSitter.typescript": true
+  "editor.experimental.preferTreeSitter.typescript": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.quickSuggestions": {
+    "comments": "on",
+    "strings": "on"
+  },
+  "editor.tabCompletion": "on"
 }
