@@ -97,6 +97,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   const [isInitialized, setIsInitialized] = useState(false);
 
   const [isMarqueeZoom, setIsMarqueeZoom] = useState(false);
+  const [scrollX, setScrollX] = useState(0);
   const [marqueeStart, setMarqueeStart] = useState<{
     x: number;
     y: number;
@@ -269,29 +270,96 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   };
 
   // ZOOM DISABLED - Рамка масштабирования (marquee) закомментирована
-  const handleMarqueeZoomStart = (e: React.MouseEvent) => {};
+  const handleMarqueeZoomStart = (e: React.MouseEvent) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
 
-  const handleMarqueeZoomMove = (e: React.MouseEvent) => {};
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setMarqueeStart({ x, y });
+    setMarqueeEnd({ x, y });
+  };
+
+  const handleMarqueeZoomMove = (e: React.MouseEvent) => {
+    if (!marqueeStart) return;
+
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = e.clientX - rect.left;
+    const y = marqueeStart.y; // ФИКСИРУЕМ Y (только горизонтальное выделение)
+
+    setMarqueeEnd({ x, y });
+  };
 
   const handleMarqueeZoomEnd = () => {
-    if (!marqueeStart || !marqueeEnd) return;
+    if (!marqueeStart || !marqueeEnd) {
+      setMarqueeStart(null);
+      setMarqueeEnd(null);
+      setIsMarqueeZoom(false);
+      return;
+    }
 
     const width = Math.abs(marqueeEnd.x - marqueeStart.x);
 
     // Минимальная ширина выделения
     if (width > 20) {
-      const canvasWidth = containerRef.current?.clientWidth || 800;
+      const trackSection = chartData.workflow?.trackSection;
+      if (!trackSection) return;
 
-      // Вычисляем новый зум
-      const zoomX = canvasWidth / width;
-      const newZoom = Math.max(0.25, Math.min(4, zoomX)); // Ограничиваем 0.25x–4x
+      // Параметры карты
+      const marginLeft = 80;
+      const marginRight = 50;
+      const chartWidth = baseWidth - marginLeft - marginRight;
 
-      // Вычисляем новую позицию panX
+      // Координаты выделения В ЭКРАННЫХ ПИКСЕЛЯХ (без учёта panX)
       const leftEdge = Math.min(marqueeStart.x, marqueeEnd.x);
-      const newPanX = -leftEdge * newZoom;
+      const rightEdge = Math.max(marqueeStart.x, marqueeEnd.x);
 
-      setZoom(newZoom);
-      setPanX(newPanX);
+      // Преобразуем в МИРОВЫЕ координаты (учитываем panX)
+      const leftWorldX = leftEdge - panX - marginLeft;
+      const rightWorldX = rightEdge - panX - marginLeft;
+
+      // Вычисляем километры (используем текущий масштаб)
+      const displayStartCoord = 1782;
+      const displayEndCoord = 1610;
+      const totalKm = Math.abs(displayEndCoord - displayStartCoord);
+
+      // Нормализуем позиции [0..1]
+      const leftNormalized = leftWorldX / chartWidth;
+      const rightNormalized = rightWorldX / chartWidth;
+
+      // Вычисляем выбранный диапазон в км
+      const selectedKmRange = Math.abs(rightNormalized - leftNormalized) * totalKm;
+
+      console.log('[MARQUEE ZOOM]', {
+        leftEdge,
+        rightEdge,
+        leftWorldX,
+        rightWorldX,
+        leftNormalized,
+        rightNormalized,
+        selectedKmRange,
+        currentPixelsPerKm: pixelsPerKm,
+      });
+
+      // Вычисляем новый масштаб
+      const containerWidth = containerRef.current?.clientWidth || 800;
+      const availableWidth = containerWidth - 160; // margins
+      const newPixelsPerKm = availableWidth / selectedKmRange;
+
+      // Ограничиваем диапазон (10-160 px/км)
+      const clampedPixelsPerKm = Math.max(10, Math.min(160, newPixelsPerKm));
+
+      console.log('[MARQUEE ZOOM] New scale:', {
+        availableWidth,
+        newPixelsPerKm,
+        clampedPixelsPerKm,
+      });
+
+      setPixelsPerKm(clampedPixelsPerKm);
+      setPanX(0); // Сброс панорамы
     }
 
     // Сбрасываем marquee
@@ -500,22 +568,18 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       );
       onUpdateChartData({ canvasObjects: newObjects });
     } else if (isPanning && !draggedObject && !draggedArrow) {
-      // Панорама — только по горизонтали (вертикальная панорама заблокирована)
-      setPanX(e.clientX - panStart.x);
-      // setPanY(e.clientY - panStart.y); // вертикальная панорама отключена
-    } else if (isPanning && !draggedObject && !draggedArrow) {
       // Панорама с ограничениями
       const newPanX = e.clientX - panStart.x;
-      const newPanY = e.clientY - panStart.y;
+      //const newPanY = e.clientY - panStart.y;
 
       // ОГРАНИЧЕНИЯ: не более 100px вправо/влево, 60px вверх/вниз
       const maxPanX = 100;
       const minPanX = -baseWidth + (containerRef.current?.clientWidth || 800) - 100;
-      const maxPanY = 60;
-      const minPanY = -baseHeight + (containerRef.current?.clientHeight || 600) - 60;
+      //const maxPanY = 60;
+      //const minPanY = -baseHeight + (containerRef.current?.clientHeight || 600) - 60;
 
       setPanX(Math.max(minPanX, Math.min(maxPanX, newPanX)));
-      setPanY(Math.max(minPanY, Math.min(maxPanY, newPanY)));
+      //setPanY(Math.max(minPanY, Math.min(maxPanY, newPanY)));
     }
   };
 
@@ -2099,6 +2163,13 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
           ctx.restore();
         }
+        ctx.save();
+        ctx.strokeStyle = '#374151';
+        ctx.lineWidth = lineWidth(2);
+        ctx.beginPath();
+        ctx.moveTo(marginLeft, LAYER4_TOP + LAYER4_HEIGHT);
+        ctx.lineTo(marginLeft + chartWidth, LAYER4_TOP + LAYER4_HEIGHT);
+        ctx.stroke();
         ctx.restore();
 
         // Дополнительная шкала км под стрелками (DISABLED - using Layer 2 labels instead)
@@ -2365,17 +2436,42 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         // Рисуем рамку выделения (marquee) в экранных координатах
         if (marqueeStart && marqueeEnd) {
           ctx.save();
-          ctx.setTransform(1, 0, 0, 1, 0, 0); // гарантируем отсутствие трансформаций
-          ctx.fillStyle = 'rgba(59, 130, 246, 0.1)';
+          ctx.setTransform(1, 0, 0, 1, 0, 0); // Сброс трансформаций
+
+          const startX = Math.min(marqueeStart.x, marqueeEnd.x);
+          const endX = Math.max(marqueeStart.x, marqueeEnd.x);
+          const startY = 0; // От самого верха canvas
+          const endY = baseHeight; // До самого низа
+
+          // Полупрозрачная заливка
+          ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+          ctx.fillRect(startX, startY, endX - startX, endY);
+
+          // Левая граница (толстая линия)
           ctx.strokeStyle = '#3b82f6';
-          ctx.lineWidth = 2;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(startX, endY);
+          ctx.stroke();
+
+          // Правая граница (толстая линия)
+          ctx.beginPath();
+          ctx.moveTo(endX, startY);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+
+          // Верхняя и нижняя пунктирные линии
           ctx.setLineDash([5, 5]);
-          const startX = marqueeStart.x * zoom + panX;
-          const startY = marqueeStart.y + panY;
-          const endX = marqueeEnd.x * zoom + panX;
-          const endY = marqueeEnd.y + panY;
-          ctx.fillRect(startX, startY, endX - startX, endY - startY);
-          ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(endX, startY);
+          ctx.moveTo(startX, endY);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
           ctx.restore();
         }
       } catch (error) {
@@ -2576,6 +2672,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     baseWidth,
     baseHeight,
     drawWorkflowCanvas, // Эта функция должна быть мемоизирована с useCallback
+    pixelsPerKm,
   ]);
 
   // Scroll boundary management with 100px padding
@@ -2660,6 +2757,38 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     scrollContainer.scrollLeft = initialScrollX;
     scrollContainer.scrollTop = initialScrollY;
   }, [chartData.workflow?.trackSection]);
+
+  // Синхронизация panX и горизонтального скролла
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // При изменении panX обновляем скролл
+    const newScrollX = -panX;
+
+    // Избегаем циклической синхронизации
+    if (Math.abs(container.scrollLeft - newScrollX) > 1) {
+      container.scrollLeft = newScrollX;
+    }
+  }, [panX]);
+
+  // Обратная синхронизация: скролл → panX
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const newPanX = -container.scrollLeft;
+
+      // Обновляем panX только если разница значительная
+      if (Math.abs(panX - newPanX) > 1) {
+        setPanX(newPanX);
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [panX]);
 
   // Hover по объектам
   useEffect(() => {
