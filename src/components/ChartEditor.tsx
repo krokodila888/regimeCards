@@ -503,6 +503,19 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       // Панорама — только по горизонтали (вертикальная панорама заблокирована)
       setPanX(e.clientX - panStart.x);
       // setPanY(e.clientY - panStart.y); // вертикальная панорама отключена
+    } else if (isPanning && !draggedObject && !draggedArrow) {
+      // Панорама с ограничениями
+      const newPanX = e.clientX - panStart.x;
+      const newPanY = e.clientY - panStart.y;
+
+      // ОГРАНИЧЕНИЯ: не более 100px вправо/влево, 60px вверх/вниз
+      const maxPanX = 100;
+      const minPanX = -baseWidth + (containerRef.current?.clientWidth || 800) - 100;
+      const maxPanY = 60;
+      const minPanY = -baseHeight + (containerRef.current?.clientHeight || 600) - 60;
+
+      setPanX(Math.max(minPanX, Math.min(maxPanX, newPanX)));
+      setPanY(Math.max(minPanY, Math.min(maxPanY, newPanY)));
     }
   };
 
