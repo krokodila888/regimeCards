@@ -2,13 +2,13 @@ import { GitBranch, ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 
 // Ограничения скорости (119 сегментов, 1782→1610 км)
-import { speedLimits } from './../types/speed-limits';
+import { speedLimits } from '../data/speed-limits';
 
 // Продольные силы (3434 точки, 1781.8→1610.1 км, 20 точек/км)
-import { longitudinalForces } from './../types/longitudinal_forces';
+import { longitudinalForces } from '../data/longitudinal_forces';
 
 // Кривые скорости (1718 точек, 1781.8→1610.1 км, 10 точек/км)
-import { speedCurves } from './../types/speedCurves';
+import { speedCurves } from '../data/speedCurves';
 
 import type {
   ChartData,
@@ -17,7 +17,7 @@ import type {
   OperationMode,
   SpeedLimit,
 } from '../types/chart-data';
-import { trainForceData } from '../types/trainForceData';
+import { trainForceData } from '../data/trainForceData';
 
 import ObjectPalette from './ObjectPalette';
 import { Button } from './ui/button';

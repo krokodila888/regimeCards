@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import type { ChartData } from '../types/chart-data';
-import { chartDataByID1 } from '../types/consts';
+import { chartDataByID1 } from '../data/consts';
 
 import ImportVisioModal from './ImportVisioModal';
 import LoadingOverlay from './LoadingOverlay';

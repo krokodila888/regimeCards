@@ -17,8 +17,8 @@ import {
 import React, { useState, useEffect } from 'react';
 
 import type { WorkflowState } from '../types/chart-data';
-import { LOCOMOTIVES, WAGON_TYPES, ROADS } from '../types/consts';
-import { tracks } from '../types/tracks';
+import { LOCOMOTIVES, WAGON_TYPES, ROADS } from '../data/consts';
+import { tracks } from '../data/tracks';
 
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';

@@ -14,7 +14,7 @@ import {
 import React, { useState, useEffect } from 'react';
 
 import { Locomotive } from '../types/chart-data';
-import { LOCOMOTIVES } from '../types/consts';
+import { LOCOMOTIVES } from '../data/consts';
 import { ObjectCategory, PaletteObject, PlacedObject } from '../types/types';
 
 import { Button } from './ui/button';

@@ -1,212 +1,561 @@
 {
   "metadata": {
-    "configurationId": "cfg_12345",
-    "configurationName": "Москва - Санкт-Петербург, ВЛ80 + грузовой состав",
-    "calculatedAt": "2024-12-18T10:30:00Z",
-    "direction": "forward",
-    "locomotive": {
-      "name": "ВЛ80С-1234",
-      "series": "ВЛ80С",
-      "weight": 184,
-      "power": 6520
+    "id": "calc-002",
+    "name": "Участок Кропачево - Ерал (двойная тяга)",
+    "createdAt": "2025-01-15T12:00:00Z",
+    "updatedAt": "2025-01-15T15:30:00Z"
+  },
+  "locomotives": [
+    {
+      "id": "loco-1",
+      "type": "ВЛ80С",
+      "position": 1,
+      "section": 1
     },
-    "train": {
-      "name": "Грузовой состав 71 вагон",
-      "weight": 5100,
-      "length": 1050,
-      "numberOfCars": 71
-    },
-    "totals": {
-      "distance": 650.5,
-      "travelTime": 485,
-      "energy": 12450,
-      "averageSpeed": 80.5,
-      "maxSpeed": 90
-    },
-    "safety": {
-      "passed": true,
-      "warnings": ["Приближение к максимальной силе растяжения на км 125.3"]
+    {
+      "id": "loco-2",
+      "type": "ВЛ80С",
+      "position": 1,
+      "section": 2
     }
+  ],
+  "cars": [
+    {
+      "id": "car-1",
+      "type": "полувагон 12-532",
+      "position": 2,
+      "weight": 94
+    },
+    {
+      "id": "car-2",
+      "type": "полувагон 12-532",
+      "position": 3,
+      "weight": 94
+    },
+    {
+      "id": "car-3",
+      "type": "цистерна 15-1443",
+      "position": 4,
+      "weight": 88
+    },
+    {
+      "id": "car-4",
+      "type": "полувагон 12-532",
+      "position": 5,
+      "weight": 94
+    },
+    {
+      "id": "car-5",
+      "type": "полувагон 12-532",
+      "position": 6,
+      "weight": 94
+    }
+  ],
+  "coordinateRuler": {
+    "startCoordinate": 1782.0,
+    "endCoordinate": 1610.0,
+    "adjustments": [
+      {
+        "kilometer": 1750,
+        "actualLength": 950
+      },
+      {
+        "kilometer": 1680,
+        "actualLength": 1050
+      }
+    ]
   },
-  "bounds": {
-    "startDistance": 0,
-    "endDistance": 650.5,
-    "minSpeed": 0,
-    "maxSpeed": 100,
-    "minGradient": -12,
-    "maxGradient": 15
-  },
+  "canvasLayers": [
+    {
+      "position": 1,
+      "heightPercent": 22.5,
+      "hidden": false,
+      "name": "Продольные силы"
+    },
+    {
+      "position": 2,
+      "heightPercent": 37.5,
+      "hidden": false,
+      "name": "Кривые скорости"
+    },
+    {
+      "position": 3,
+      "heightPercent": 20,
+      "hidden": false,
+      "name": "Профиль пути"
+    },
+    {
+      "position": 4,
+      "heightPercent": 20,
+      "hidden": false,
+      "name": "Режимы ведения"
+    }
+  ],
+  "trackPlan": [
+    {
+      "start": 0,
+      "end": 15000
+    },
+    {
+      "start": 15000,
+      "end": 15100,
+      "radius": 1200,
+      "direction": "right"
+    },
+    {
+      "start": 15100,
+      "end": 25000,
+      "radius": 1200,
+      "direction": "right"
+    },
+    {
+      "start": 25000,
+      "end": 25100,
+      "radius": 1200,
+      "direction": "right"
+    },
+    {
+      "start": 25100,
+      "end": 40000
+    },
+    {
+      "start": 40000,
+      "end": 40150,
+      "radius": 800,
+      "direction": "left"
+    },
+    {
+      "start": 40150,
+      "end": 55000,
+      "radius": 800,
+      "direction": "left"
+    },
+    {
+      "start": 55000,
+      "end": 55150,
+      "radius": 800,
+      "direction": "left"
+    },
+    {
+      "start": 55150,
+      "end": 172000
+    }
+  ],
   "profile": [
     {
       "start": 0,
-      "end": 5.2,
-      "gradient": 0,
-      "curveRadius": 0,
-      "hasCurve": false
+      "end": 5000,
+      "angle": 0
     },
     {
-      "start": 5.2,
-      "end": 8.7,
-      "gradient": 8.5,
-      "curveRadius": 600,
-      "hasCurve": true
+      "start": 5000,
+      "end": 10000,
+      "angle": -5
     },
     {
-      "start": 8.7,
-      "end": 15.0,
-      "gradient": -3.2,
-      "curveRadius": 0,
-      "hasCurve": false
+      "start": 10000,
+      "end": 15000,
+      "angle": 3
+    },
+    {
+      "start": 15000,
+      "end": 25000,
+      "angle": -2
+    },
+    {
+      "start": 25000,
+      "end": 40000,
+      "angle": 0
+    },
+    {
+      "start": 40000,
+      "end": 50000,
+      "angle": 4
+    },
+    {
+      "start": 50000,
+      "end": 60000,
+      "angle": -3
     }
   ],
   "stations": [
     {
-      "name": "Москва-Товарная",
-      "distance": 0,
-      "isLoop": false,
-      "type": "start"
+      "name": "Кропачево",
+      "coordinate": 1781800,
+      "graphical": {
+        "layerPosition": 2,
+        "coordinate": 1781800,
+        "horizontalOffset": 0,
+        "verticalPositionPercent": 10,
+        "fontSize": 14,
+        "fontColor": "#000000",
+        "lineHeight": 18,
+        "rotation": 0,
+        "objectColor": "#0000ff"
+      }
     },
     {
-      "name": "Химки",
-      "distance": 18.5,
-      "isLoop": false,
-      "type": "intermediate"
+      "name": "Промежуточная",
+      "coordinate": 1700000,
+      "graphical": {
+        "layerPosition": 2,
+        "coordinate": 1700000,
+        "horizontalOffset": 0,
+        "verticalPositionPercent": 10,
+        "fontSize": 12,
+        "fontColor": "#333333",
+        "lineHeight": 16,
+        "rotation": 0,
+        "objectColor": "#0066cc"
+      }
     },
     {
-      "name": "Санкт-Петербург-Товарный",
-      "distance": 650.5,
-      "isLoop": true,
-      "type": "end"
+      "name": "Ерал",
+      "coordinate": 1610000,
+      "graphical": {
+        "layerPosition": 2,
+        "coordinate": 1610000,
+        "horizontalOffset": 0,
+        "verticalPositionPercent": 10,
+        "fontSize": 14,
+        "fontColor": "#000000",
+        "lineHeight": 18,
+        "rotation": 0,
+        "objectColor": "#0000ff"
+      }
     }
   ],
   "speedLimits": [
     {
-      "start": 0,
-      "end": 15.0,
-      "limit": 60,
-      "type": "track_category",
-      "reason": "Участок 4 категории"
+      "start": 1782000,
+      "end": 1750000,
+      "limit": 90,
+      "type": "track_category"
     },
     {
-      "start": 15.0,
-      "end": 35.8,
+      "start": 1750000,
+      "end": 1700000,
       "limit": 80,
       "type": "track_category"
     },
     {
-      "start": 25.0,
-      "end": 27.5,
-      "limit": 40,
-      "type": "temporary",
-      "reason": "Ремонт пути"
+      "start": 1700000,
+      "end": 1695000,
+      "limit": 60,
+      "type": "temporary"
+    },
+    {
+      "start": 1695000,
+      "end": 1610000,
+      "limit": 80,
+      "type": "track_category"
     }
   ],
-  "speedCurve": [
+  "optimalSpeedCurve": [
     {
-      "distance": 0,
+      "distance": 1782000,
       "speed": 0,
       "time": 0
     },
     {
-      "distance": 0.5,
-      "speed": 25.3,
-      "time": 0.71
+      "distance": 1781500,
+      "speed": 45,
+      "time": 0.5
     },
     {
-      "distance": 1.0,
-      "speed": 35.8,
-      "time": 1.25
+      "distance": 1780000,
+      "speed": 80,
+      "time": 1.2
     },
     {
-      "distance": 1.5,
-      "speed": 43.2,
-      "time": 1.71
+      "distance": 1770000,
+      "speed": 85,
+      "time": 8.5
     },
     {
-      "distance": 2.0,
-      "speed": 49.5,
-      "time": 2.12
+      "distance": 1750000,
+      "speed": 90,
+      "time": 22.0
+    },
+    {
+      "distance": 1700000,
+      "speed": 80,
+      "time": 60.0
+    },
+    {
+      "distance": 1610000,
+      "speed": 0,
+      "time": 120.0
     }
   ],
-  "regimeBands": [
+  "speedCurve": [
     {
-      "start": 0,
-      "end": 12.5,
-      "mode": "acceleration",
-      "controllerPosition": "П3"
+      "distance": 1782000,
+      "speed": 0,
+      "time": 0
     },
     {
-      "start": 12.5,
-      "end": 18.3,
-      "mode": "constant_speed",
-      "controllerPosition": "П2"
+      "distance": 1781500,
+      "speed": 40,
+      "time": 0.6
     },
     {
-      "start": 18.3,
-      "end": 22.1,
-      "mode": "coasting"
+      "distance": 1780000,
+      "speed": 75,
+      "time": 1.3
     },
     {
-      "start": 22.1,
-      "end": 25.0,
-      "mode": "braking"
+      "distance": 1770000,
+      "speed": 80,
+      "time": 9.0
+    },
+    {
+      "distance": 1750000,
+      "speed": 85,
+      "time": 23.5
+    },
+    {
+      "distance": 1700000,
+      "speed": 75,
+      "time": 62.0
+    },
+    {
+      "distance": 1610000,
+      "speed": 0,
+      "time": 125.0
+    }
+  ],
+  "optimalRegimeBands": [
+    {
+      "start": 1782000,
+      "end": 1780000,
+      "mode": "T1"
+    },
+    {
+      "start": 1780000,
+      "end": 1775000,
+      "mode": "Выбег"
+    },
+    {
+      "start": 1775000,
+      "end": 1770000,
+      "mode": "T2"
+    },
+    {
+      "start": 1770000,
+      "end": 1750000,
+      "mode": "Выбег"
+    },
+    {
+      "start": 1750000,
+      "end": 1700000,
+      "mode": "T1"
+    },
+    {
+      "start": 1700000,
+      "end": 1610000,
+      "mode": "РТ"
+    }
+  ],
+  "locomotiveRegimeBands": [
+    {
+      "locomotiveId": "loco-1",
+      "bands": [
+        {
+          "start": 1782000,
+          "end": 1780000,
+          "mode": "T1"
+        },
+        {
+          "start": 1780000,
+          "end": 1775000,
+          "mode": "Выбег"
+        },
+        {
+          "start": 1775000,
+          "end": 1770000,
+          "mode": "T2"
+        },
+        {
+          "start": 1770000,
+          "end": 1750000,
+          "mode": "Выбег"
+        },
+        {
+          "start": 1750000,
+          "end": 1700000,
+          "mode": "T1"
+        },
+        {
+          "start": 1700000,
+          "end": 1610000,
+          "mode": "РТ"
+        }
+      ]
+    },
+    {
+      "locomotiveId": "loco-2",
+      "bands": [
+        {
+          "start": 1782000,
+          "end": 1779000,
+          "mode": "T2"
+        },
+        {
+          "start": 1779000,
+          "end": 1774000,
+          "mode": "T1"
+        },
+        {
+          "start": 1774000,
+          "end": 1770000,
+          "mode": "Выбег"
+        },
+        {
+          "start": 1770000,
+          "end": 1750000,
+          "mode": "T1"
+        },
+        {
+          "start": 1750000,
+          "end": 1700000,
+          "mode": "T2"
+        },
+        {
+          "start": 1700000,
+          "end": 1610000,
+          "mode": "РТ"
+        }
+      ]
     }
   ],
   "longitudinalForces": [
     {
-      "distance": 0,
+      "coordinate": 0,
       "tension": 0,
-      "compression": 0,
-      "maxAllowable": 1200
+      "compression": 0
     },
     {
-      "distance": 5.0,
-      "tension": 850,
-      "compression": 0,
-      "maxAllowable": 1200
+      "coordinate": 5000,
+      "tension": 150,
+      "compression": 0
     },
     {
-      "distance": 10.0,
-      "tension": 1050,
-      "compression": 0,
-      "maxAllowable": 1200
+      "coordinate": 10000,
+      "tension": 280,
+      "compression": 0
     },
     {
-      "distance": 15.0,
+      "coordinate": 15000,
       "tension": 0,
-      "compression": 420,
-      "maxAllowable": 1200
+      "compression": 80
+    },
+    {
+      "coordinate": 20000,
+      "tension": 0,
+      "compression": 120
+    },
+    {
+      "coordinate": 25000,
+      "tension": 50,
+      "compression": 0
     }
   ],
-  "infrastructure": [
+  "marks": [
     {
       "type": "brake_test",
-      "distance": 2.5,
-      "label": "Точка опробования тормозов"
+      "distance": 1000,
+      "label": "Проба тормозов",
+      "graphical": {
+        "layerPosition": 3,
+        "coordinate": 1000,
+        "horizontalOffset": 0,
+        "verticalPositionPercent": 80,
+        "fontSize": 10,
+        "fontColor": "#ff0000",
+        "lineHeight": 14,
+        "rotation": 0,
+        "objectColor": "#ff0000"
+      }
     },
     {
       "type": "neutral_start",
-      "distance": 45.2,
-      "label": "Начало НВ"
+      "distance": 15000,
+      "label": "Начало НВ",
+      "graphical": {
+        "layerPosition": 3,
+        "coordinate": 15000,
+        "horizontalOffset": 0,
+        "verticalPositionPercent": 85,
+        "fontSize": 9,
+        "fontColor": "#ff8800",
+        "lineHeight": 13,
+        "rotation": -30,
+        "objectColor": "#ff8800"
+      }
     },
     {
       "type": "neutral_end",
-      "distance": 45.8,
-      "label": "Конец НВ"
+      "distance": 15600,
+      "label": "Конец НВ",
+      "graphical": {
+        "layerPosition": 3,
+        "coordinate": 15600,
+        "horizontalOffset": 0,
+        "verticalPositionPercent": 85,
+        "fontSize": 9,
+        "fontColor": "#ff8800",
+        "lineHeight": 13,
+        "rotation": -30,
+        "objectColor": "#ff8800"
+      }
     },
     {
-      "type": "picket",
-      "distance": 100.0,
-      "label": "ПК 100"
+      "type": "signal",
+      "distance": 25000,
+      "label": "Входной светофор",
+      "graphical": {
+        "layerPosition": 3,
+        "coordinate": 25000,
+        "horizontalOffset": -10,
+        "verticalPositionPercent": 90,
+        "fontSize": 10,
+        "fontColor": "#00ff00",
+        "lineHeight": 14,
+        "rotation": 0,
+        "objectColor": "#00ff00"
+      }
     },
     {
       "type": "tunnel_start",
-      "distance": 123.5,
-      "label": "Тоннель"
+      "distance": 40000,
+      "label": "Тоннель",
+      "graphical": {
+        "layerPosition": 3,
+        "coordinate": 40000,
+        "horizontalOffset": 0,
+        "verticalPositionPercent": 75,
+        "fontSize": 11,
+        "fontColor": "#666666",
+        "lineHeight": 15,
+        "rotation": 0,
+        "objectColor": "#666666"
+      }
     },
     {
       "type": "tunnel_end",
-      "distance": 125.8
+      "distance": 42300,
+      "graphical": {
+        "layerPosition": 3,
+        "coordinate": 42300,
+        "horizontalOffset": 0,
+        "verticalPositionPercent": 75,
+        "fontSize": 11,
+        "fontColor": "#666666",
+        "lineHeight": 15,
+        "rotation": 0,
+        "objectColor": "#666666"
+      }
     }
   ]
 }
