@@ -462,7 +462,7 @@ export interface OptimalRegimeSegment {
   color: RegimeColor1;
 }
 
-export const optimalRegimesV2: OptimalRegimeSegment[] = [
+export const regimesV2: OptimalRegimeSegment[] = [
   { id: 'seg1', startKm: 1781.8, endKm: 1781.8, type: 'traction', color: 'blue' },
   { id: 'seg2', startKm: 1781.8, endKm: 1781.7, type: 'traction', color: 'blue' },
   { id: 'seg3', startKm: 1780.6, endKm: 1780.5, type: 'traction', color: 'blue' },

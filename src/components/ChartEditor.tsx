@@ -2,14 +2,16 @@ import { GitBranch, ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 
 // Ограничения скорости (119 сегментов, 1782→1610 км)
-import { speedLimits } from '../data/speed-limits';
 
 // Продольные силы (3434 точки, 1781.8→1610.1 км, 20 точек/км)
 import { longitudinalForces } from '../data/longitudinal_forces';
+import { optimalRegimes, regimesV2, type OptimalRegimeSegment } from '../data/regimes';
+
+import { speedLimits } from '../data/speed-limits';
 
 // Кривые скорости (1718 точек, 1781.8→1610.1 км, 10 точек/км)
 import { speedCurves } from '../data/speedCurves';
-
+import { trainForceData } from '../data/trainForceData';
 import type {
   ChartData,
   CanvasObject,
@@ -17,20 +19,13 @@ import type {
   OperationMode,
   SpeedLimit,
 } from '../types/chart-data';
-import { trainForceData } from '../data/trainForceData';
 
 import ObjectPalette from './ObjectPalette';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-} from './ui/context-menu';
+import { ContextMenu, ContextMenuContent, ContextMenuItem } from './ui/context-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Label } from './ui/label';
-
-const PIXELS_PER_KM = 40;
 
 interface ChartEditorProps {
   chartData: ChartData;
@@ -39,7 +34,11 @@ interface ChartEditorProps {
 
 // Helper function to calculate kmToX conversion
 // This is extracted so it can be used by both drawing and interaction handlers
-const createKmToXConverter = (chartData: ChartData, marginLeft: number = 80) => {
+const createKmToXConverter = (
+  chartData: ChartData,
+  marginLeft: number = 80,
+  pixelsPerKm: number
+) => {
   if (!chartData.workflow?.trackSection) {
     return (km: number) => marginLeft;
   }
@@ -65,7 +64,7 @@ const createKmToXConverter = (chartData: ChartData, marginLeft: number = 80) => 
     }
 
     const normalizedKm = isReversed ? displayEndCoord - km : km;
-    const x = marginLeft + (normalizedKm - displayStartCoord) * PIXELS_PER_KM;
+    const x = marginLeft + (normalizedKm - displayStartCoord) * pixelsPerKm;
 
     if (!isFinite(x)) {
       return marginLeft;
@@ -79,6 +78,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [pixelsPerKm, setPixelsPerKm] = useState(40);
 
   const [zoom, setZoom] = useState(1);
   const [panX, setPanX] = useState(0);
@@ -202,7 +202,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   useEffect(() => {
     const trackLength = chartData.workflow?.trackSection?.length || 200;
 
-    // VALIDATION: Check for unreasonable values
     if (!isFinite(trackLength) || trackLength <= 0 || trackLength > 10000) {
       if (baseWidth !== 2400) {
         setBaseWidth(2400);
@@ -210,16 +209,14 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       return;
     }
 
-    const pixelsPerKm = 40;
     const marginLeft = 100;
     const marginRight = 100;
     const calculatedWidth = Math.max(2400, marginLeft + trackLength * pixelsPerKm + marginRight);
 
-    // Обновляем только если значение изменилось
     if (calculatedWidth !== baseWidth) {
       setBaseWidth(calculatedWidth);
     }
-  }, [chartData.workflow?.trackSection?.length, baseWidth]);
+  }, [chartData.workflow?.trackSection?.length, baseWidth, pixelsPerKm]); // Добавить pixelsPerKm в зависимости
 
   // ==========================
   // ФУНКЦИЯ ОПРЕДЕЛЕНИЯ ОБЛАСТИ ХОЛСТА ПО ОСИ Y
@@ -344,13 +341,13 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       chartData.workflow?.trackSection
     ) {
       const marginLeft = 80;
-      const marginRight = 50;
+      //const marginRight = 50;
       const marginBottom = 240;
       const arrowY = baseHeight - marginBottom + 180;
-      const trackLength = chartData.workflow.trackSection.length;
+      /*const trackLength = chartData.workflow.trackSection.length;
       const chartWidth = baseWidth - marginLeft - marginRight;
 
-      let gridInterval;
+      let gridInterval;*/
 
       let foundHover: {
         arrowId: string;
@@ -358,7 +355,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       } | null = null;
 
       // Create kmToX converter for this interaction
-      const kmToX = createKmToXConverter(chartData, marginLeft);
+      const kmToX = createKmToXConverter(chartData, marginLeft, pixelsPerKm);
 
       for (let i = 0; i < chartData.workflow.regimeArrows.length; i++) {
         const arrow = chartData.workflow.regimeArrows[i];
@@ -417,7 +414,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         0,
         Math.min(
           trackLength,
-          (newMousePosX - marginLeft) / PIXELS_PER_KM // Фиксированный масштаб
+          (newMousePosX - marginLeft) / pixelsPerKm // Фиксированный масштаб
         )
       );
 
@@ -681,8 +678,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         const LAYER2_HEIGHT = 300;
         const LAYER3_TOP = 480; // Track Profile Layer
         const LAYER3_HEIGHT = 140;
-        const LAYER4_TOP = 650; // Regime Bands Layer
-        const LAYER4_HEIGHT = 160;
+        const LAYER4_TOP = 630; // Regime Bands Layer
+        const LAYER4_HEIGHT = 260;
 
         const marginLeft = 80;
         const marginRight = 50;
@@ -697,7 +694,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           const normalizedKm = isReversed ? displayEndCoord - km : km;
 
           // ФИКСИРОВАННЫЙ МАСШТАБ: 40px на 1 км
-          const x = marginLeft + (normalizedKm + displayStartCoord) * PIXELS_PER_KM;
+          const x = marginLeft + (normalizedKm + displayStartCoord) * pixelsPerKm;
 
           return x;
         };
@@ -1553,8 +1550,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
         // =========
 
-        ctx.restore();
-
         // ====================================
         // LAYER 3: TRACK PROFILE (480-640px)
         // ====================================
@@ -1722,9 +1717,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           displayEndCoord,
         });
 
-        // ====================================
-        // LAYER 4: REGIME BANDS (640-800px)
-        // ====================================
+        // LAYER 4: REGIME BANDS AND ARROWS (640-800px)
+
         if (
           displaySettings.regimeBands &&
           chartData?.workflow?.regimeArrows &&
@@ -1738,14 +1732,14 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.lineWidth = lineWidth(1);
           ctx.strokeRect(marginLeft, LAYER4_TOP, chartWidth, LAYER4_HEIGHT);
 
-          chartData.workflow.regimeArrows.forEach((arrow, index) => {
+          /*chartData.workflow.regimeArrows.forEach((arrow, index) => {
             const mode = chartData.workflow?.locomotive?.tractionModes.find(
               (m) => m.id === arrow.modeId
             );
             if (!mode) return;
 
-            const startX = kmToX(arrow.startKm);
-            const endX = kmToX(arrow.endKm);
+            const startX = kmToX1(arrow.startKm);
+            const endX = kmToX1(arrow.endKm);
             const isSelected = selectedArrow === arrow.id;
             const isHovered = hoveredArrow?.arrowId === arrow.id;
 
@@ -1801,14 +1795,14 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               const textMetrics = ctx.measureText(labelText);
               const labelX = (startX + endX) / 2;
               const labelY = arrowY - 10;
-              const padding = 4 / zoom;
+              const padding = 4;
 
               ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
               ctx.fillRect(
                 labelX - textMetrics.width / 2 - padding,
-                labelY - 12 / zoom,
+                labelY - 12,
                 textMetrics.width + padding * 2,
-                16 / zoom
+                16
               );
               ctx.fillStyle = mode.color;
             }
@@ -1816,8 +1810,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             ctx.fillText(mode.label, (startX + endX) / 2, arrowY - 12);
 
             if (isSelected) {
-              const handleRadius = 7 / zoom;
-              const handleStrokeWidth = 2.5 / zoom;
+              const handleRadius = 7;
+              const handleStrokeWidth = 2.5;
 
               if (index > 0) {
                 const isStartHovered =
@@ -1881,14 +1875,218 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               ctx.arc(endX, arrowY, handleRadius / 3, 0, Math.PI * 2);
               ctx.fill();
             }
-          });
+          });*/
+          ctx.strokeStyle = '#d1d5db';
+          ctx.lineWidth = lineWidth(1);
+          ctx.strokeRect(marginLeft, LAYER4_TOP, chartWidth, LAYER4_HEIGHT);
 
-          // Layer label
+          // 3. ВТОРАЯ ЛЕНТА РЕЖИМОВ (regimesV2)
+          // ========================================
+          if (displaySettings.regimeBands && regimesV2 && regimesV2.length > 0) {
+            const regimeBandsY2 = LAYER4_TOP + 90;
+            const regimeBandsY3 = LAYER4_TOP + 140;
+            const bandHeight = 30;
+
+            // Маппинг цветов (тот же)
+            const colorMap: Record<string, string> = {
+              blue: '#0000c0',
+              cyan: '#788cff',
+              yellow: '#ffff00',
+              green: '#49d913',
+              orange: '#ffaa00',
+              red: '#ff0000',
+            };
+
+            // Фильтруем видимые сегменты
+            const visibleSegments2 = regimesV2.filter(
+              (segment) => segment.endKm >= displayEndCoord && segment.startKm <= displayStartCoord
+            );
+
+            // Фильтруем видимые сегменты
+            const visibleSegments3 = regimesV2.filter(
+              (segment) => segment.endKm >= displayEndCoord && segment.startKm <= displayStartCoord
+            );
+
+            // Рисуем цветные сегменты
+            visibleSegments2.forEach((segment) => {
+              const segmentStart = Math.max(segment.startKm, displayEndCoord);
+              const segmentEnd = Math.min(segment.endKm, displayStartCoord);
+
+              const startX = kmToX1(segmentStart);
+              const endX = kmToX1(segmentEnd);
+              const width = Math.abs(endX - startX);
+
+              const fillColor = colorMap[segment.color] || '#9ca3af';
+
+              ctx.fillStyle = fillColor;
+              ctx.fillRect(Math.min(startX, endX), regimeBandsY2, width, bandHeight);
+
+              // Подпись НАД лентой
+              if (width > 30 && segment.label) {
+                ctx.save();
+                ctx.fillStyle = '#000000';
+                ctx.font = fontSize(9);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText(segment.label, (startX + endX) / 2, regimeBandsY2 - 2);
+                ctx.restore();
+              }
+            });
+
+            // Рисуем цветные сегменты
+            visibleSegments3.forEach((segment) => {
+              const segmentStart = Math.max(segment.startKm, displayEndCoord);
+              const segmentEnd = Math.min(segment.endKm, displayStartCoord);
+
+              const startX = kmToX1(segmentStart);
+              const endX = kmToX1(segmentEnd);
+              const width = Math.abs(endX - startX);
+
+              const fillColor = colorMap[segment.color] || '#9ca3af';
+
+              ctx.fillStyle = fillColor;
+              ctx.fillRect(Math.min(startX, endX), regimeBandsY3, width, bandHeight);
+
+              // Подпись НАД лентой
+              if (width > 30 && segment.label) {
+                ctx.save();
+                ctx.fillStyle = '#000000';
+                ctx.font = fontSize(9);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText(segment.label, (startX + endX) / 2, regimeBandsY3 - 2);
+                ctx.restore();
+              }
+            });
+
+            // ОБЩАЯ РАМКА
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = lineWidth(1.5);
+            ctx.strokeRect(marginLeft, regimeBandsY2, chartWidth, bandHeight);
+            ctx.strokeRect(marginLeft, regimeBandsY3, chartWidth, bandHeight);
+
+            // Заголовок
+            ctx.save();
+            ctx.fillStyle = '#374151';
+            ctx.font = fontSize(11);
+            ctx.textAlign = 'left';
+            ctx.fillText('Фактические режимы:', marginLeft + 10, regimeBandsY2 - 10);
+            ctx.restore();
+
+            // Легенда НЕ нужна (уже есть у первой ленты)
+          }
+
+          // Label
+          ctx.save();
+          ctx.translate(marginLeft - 50, layer4Top + 95);
           ctx.fillStyle = '#374151';
           ctx.font = fontSize(12);
-          ctx.textAlign = 'left';
-          ctx.fillText('Режимы ведения', marginLeft + 10, layer4Top - 5);
+          ctx.rotate(-Math.PI / 2);
+          ctx.fillText('Режимы', 0, 0);
+          ctx.restore();
         }
+
+        // ========================================
+        // 2. ЛЕНТЫ ОПТИМАЛЬНЫХ РЕЖИМОВ (новый блок)
+        // ========================================
+        if (displaySettings.regimeBands && optimalRegimes && optimalRegimes.length > 0) {
+          const regimeBandsY = LAYER4_TOP + 30;
+          const bandHeight = 30;
+
+          // Маппинг цветов
+          const colorMap: Record<string, string> = {
+            blue: '#0000c0',
+            cyan: '#788cff',
+            yellow: '#ffff00',
+            green: '#49d913',
+            orange: '#ffaa00',
+            red: '#ff0000',
+          };
+
+          // Фильтруем видимые сегменты
+          const visibleSegments = optimalRegimes.filter(
+            (segment) => segment.endKm >= displayEndCoord && segment.startKm <= displayStartCoord
+          );
+
+          // Рисуем цветные сегменты (БЕЗ границ)
+          visibleSegments.forEach((segment) => {
+            const segmentStart = Math.max(segment.startKm, displayEndCoord);
+            const segmentEnd = Math.min(segment.endKm, displayStartCoord);
+
+            const startX = kmToX1(segmentStart);
+            const endX = kmToX1(segmentEnd);
+            const width = Math.abs(endX - startX);
+
+            const fillColor = colorMap[segment.color] || '#9ca3af';
+
+            // Прямоугольник режима (БЕЗ strokeRect)
+            ctx.fillStyle = fillColor;
+            ctx.fillRect(Math.min(startX, endX), regimeBandsY, width, bandHeight);
+
+            // Подпись НАД лентой (если есть место)
+            if (width > 30 && segment.label) {
+              ctx.save();
+              ctx.fillStyle = '#000000'; // Черный цвет
+              ctx.font = fontSize(9); // Маленький шрифт
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+
+              // Текст НАД лентой (без обводок)
+              ctx.fillText(segment.label, (startX + endX) / 2, regimeBandsY - 2);
+              ctx.restore();
+            }
+          });
+
+          // ОБЩАЯ РАМКА вокруг всех лент
+          ctx.strokeStyle = '#374151';
+          ctx.lineWidth = lineWidth(1.5);
+          ctx.strokeRect(marginLeft, regimeBandsY, chartWidth, bandHeight);
+
+          // Заголовок секции (над лентой)
+          ctx.save();
+          ctx.fillStyle = '#374151';
+          ctx.font = fontSize(11);
+          ctx.textAlign = 'left';
+          ctx.fillText('Оптимальные режимы:', marginLeft + 10, regimeBandsY - 10);
+          ctx.restore();
+
+          // ЛЕГЕНДА РЕЖИМОВ (под лентой)
+          const legendX = marginLeft + chartWidth - 500;
+          const legendY = regimeBandsY + bandHeight + 15;
+          const swatchSize = 12;
+          let currentX = legendX;
+
+          const legendItems = [
+            { color: colorMap.blue, label: 'Тяга' },
+            { color: colorMap.cyan, label: 'Тяга под огр.' },
+            { color: colorMap.yellow, label: 'Поддержание' },
+            { color: colorMap.green, label: 'Выбег' },
+            { color: colorMap.orange, label: 'Т под огр.' },
+            { color: colorMap.red, label: 'РТ/Т0.8' },
+          ];
+
+          ctx.save();
+          ctx.font = fontSize(10);
+          ctx.textAlign = 'left';
+
+          legendItems.forEach((item) => {
+            ctx.fillStyle = item.color;
+            ctx.fillRect(currentX, legendY, swatchSize, swatchSize);
+
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = lineWidth(0.5);
+            ctx.strokeRect(currentX, legendY, swatchSize, swatchSize);
+
+            ctx.fillStyle = '#374151';
+            ctx.fillText(item.label, currentX + swatchSize + 4, legendY + swatchSize - 2);
+
+            const textWidth = ctx.measureText(item.label).width;
+            currentX += swatchSize + 4 + textWidth + 15;
+          });
+
+          ctx.restore();
+        }
+        ctx.restore();
 
         // Дополнительная шкала км под стрелками (DISABLED - using Layer 2 labels instead)
         if (false && chartData?.workflow?.regimeArrows && chartData.workflow?.locomotive) {
@@ -2036,81 +2234,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             }
           });
         };
-
-        // Идеальные режимы (DISABLED - using 4-layer structure instead)
-        /*if (
-          false &&
-          chartData?.workflow?.optimalSpeedCurve &&
-          chartData.workflow.trackSection
-        ) {
-          const idealModeY = chartData.workflow.regimeArrows
-            ? marginTop + chartHeight + 250
-            : marginTop + chartHeight + 170;
-          const lineHeight = 20;
-
-          const idealModeSegments = analyzeOperationModes(
-            chartData?.workflow?.optimalSpeedCurve,
-            chartData.workflow.trackSection,
-          );
-
-          ctx.fillStyle = "#9ca3af";
-          ctx.font = fontSize(13);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "Идеальные режимы:",
-            marginLeft,
-            idealModeY - 5,
-          );
-
-          drawOperationModeLine(
-            idealModeY,
-            idealModeSegments,
-            lineHeight,
-          );
-        }*/
-
-        // Фактические режимы (DISABLED - using 4-layer structure instead)
-        /*if (
-          false && chartData && chartData?.workflow &&
-          chartData?.workflow?.actualSpeedCurve &&
-          chartData?.workflow?.trackSection &&
-          chartData.workflow?.regimeArrows
-        ) {
-          const  marginTop = 50;
-          const chartHeight = 300;
-          const actualModeY = marginTop + chartHeight + 310;
-          const lineHeight = 20;
-
-          const lastArrow =
-            chartData?.workflow?.regimeArrows[
-              chartData?.workflow?.regimeArrows?.length - 1
-            ];
-          const endKm = lastArrow
-            ? lastArrow.endKm
-            : chartData.workflow.trackSection.length;
-
-          const actualModeSegments = analyzeOperationModes(
-            chartData.workflow.actualSpeedCurve,
-            chartData.workflow.trackSection,
-            endKm,
-          );
-
-          ctx.fillStyle = "#9ca3af";
-          ctx.font = fontSize(13);
-          ctx.textAlign = "left";
-          ctx.fillText(
-            "Фактические режимы:",
-            marginLeft,
-            actualModeY - 5,
-          );
-
-          drawOperationModeLine(
-            actualModeY,
-            actualModeSegments,
-            lineHeight,
-          );
-        }*/
-
         // Легенда режимов
         if (chartData?.workflow?.optimalSpeedCurve || chartData?.workflow?.actualSpeedCurve) {
           let legendY: number;
@@ -2128,7 +2251,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           const swatchSize = 15;
           let currentX = marginLeft;
 
-          const legendItems = [
+          /*const legendItems = [
             { color: '#3b82f6', label: 'разгон' },
             { color: '#eab308', label: 'стабильная скорость' },
             { color: '#22c55e', label: 'выбег' },
@@ -2152,7 +2275,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
             const textWidth = ctx.measureText(item.label).width;
             currentX += swatchSize + 5 + textWidth + 20;
-          });
+          });*/
         }
 
         // Рисуем размещенные объекты из палитры
@@ -2536,7 +2659,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   }, [mousePos, chartData.canvasObjects]);
 
   // Hover по данным (старая логика, использует базовые оси)
-  useEffect(() => {
+  /*useEffect(() => {
     const dividerY = baseHeight * 0.4;
     const axisY = dividerY + 250;
 
@@ -2628,10 +2751,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     }
 
     setHoveredDataPoint(null);
-  }, [mousePos, chartData, baseWidth, baseHeight]);
+  }, [mousePos, chartData, baseWidth, baseHeight]);*/
 
   // Hover по стрелкам (резервный эффект; основное наведение уже в handlePanMove)
-  useEffect(() => {
+  /*useEffect(() => {
     if (!chartData.workflow?.regimeArrows || !chartData.workflow?.trackSection) {
       setHoveredArrow(null);
       return;
@@ -2643,7 +2766,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     const arrowY = marginTop + (baseHeight - marginTop - marginBottom) + 180;
 
     // Use the proper kmToX converter that handles track coordinate system
-    const kmToX = createKmToXConverter(chartData, marginLeft);
+    const kmToX = createKmToXConverter(chartData, marginLeft, pixelsPerKm);
 
     const handleRadius = 8;
 
@@ -2697,7 +2820,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     selectedArrow,
     baseWidth,
     baseHeight,
-  ]);
+  ]);*/
 
   const handleObjectMouseDown = (e: React.MouseEvent) => {
     if (hoveredObject && !placingObject && !isMarqueeZoom) {
@@ -2716,7 +2839,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     }
   };
 
-  const handleArrowMouseDown = (e: React.MouseEvent) => {
+  /*const handleArrowMouseDown = (e: React.MouseEvent) => {
     if (hoveredArrow && !placingObject && !isMarqueeZoom) {
       setSelectedArrow(hoveredArrow.arrowId);
 
@@ -2730,7 +2853,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       setIsPanning(false);
       e.stopPropagation();
     }
-  };
+  };*/
 
   React.useEffect(() => {
     const { topY, bottomY } = getCanvasContentYBounds();
@@ -2739,26 +2862,9 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   // Кнопка "Начальный масштаб" — сброс зума и повторное вертикальное центрирование всей области
   const handleResetZoom = () => {
-    // Сброс горизонтального масштаба
-    setZoom(1);
+    setPixelsPerKm(40); // Возврат к начальному значению
     setPanX(0);
-
-    // Вертикальное позиционирование (без масштабирования)
-    if (containerRef.current) {
-      const containerHeight = containerRef.current.clientHeight;
-      const { topY, bottomY } = getCanvasContentYBounds();
-      const contentHeight = bottomY - topY;
-
-      if (contentHeight > containerHeight) {
-        // Если контент не помещается, показываем верхнюю часть
-        setPanY(containerHeight - bottomY + 50);
-      } else {
-        // Иначе центрируем
-        const contentCenter = topY + contentHeight / 2;
-        const visibleCenter = containerHeight / 2;
-        setPanY(visibleCenter - contentCenter);
-      }
-    }
+    setPanY(0);
   };
 
   return (
@@ -2794,28 +2900,15 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 px-3 py-1 bg-gray-100 rounded">
                   <span className="text-sm">Zoom:</span>
-                  <span className="text-sm font-mono">{Math.round(zoom * 100)}%</span>
+                  <span className="text-sm font-mono">{Math.round((pixelsPerKm / 40) * 100)}%</span>
                 </div>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    const delta = 1.2; // Шаг зума
-                    const currentZoom = zoom;
-                    const newZoom = Math.min(4, currentZoom * delta);
-
-                    // Центрируем зум по центру видимой области
-                    const rect = canvasRef.current?.getBoundingClientRect();
-                    if (rect) {
-                      const centerX = rect.width / 2;
-                      const currentCenterWorldX = (centerX - panX) / currentZoom;
-                      const newPanX = centerX - currentCenterWorldX * newZoom;
-
-                      setZoom(newZoom);
-                      setPanX(newPanX);
-                    } else {
-                      setZoom(newZoom);
-                    }
+                    const delta = 1.2;
+                    const newPixelsPerKm = Math.min(160, pixelsPerKm * delta); // Макс 160px/км
+                    setPixelsPerKm(newPixelsPerKm);
                   }}
                   title="Увеличить масштаб (Zoom In)"
                 >
@@ -2826,22 +2919,9 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    const delta = 1.2; // Шаг зума
-                    const currentZoom = zoom;
-                    const newZoom = Math.max(0.25, currentZoom / delta);
-
-                    // Центрируем зум по центру видимой области
-                    const rect = canvasRef.current?.getBoundingClientRect();
-                    if (rect) {
-                      const centerX = rect.width / 2;
-                      const currentCenterWorldX = (centerX - panX) / currentZoom;
-                      const newPanX = centerX - currentCenterWorldX * newZoom;
-
-                      setZoom(newZoom);
-                      setPanX(newPanX);
-                    } else {
-                      setZoom(newZoom);
-                    }
+                    const delta = 1.2;
+                    const newPixelsPerKm = Math.max(10, pixelsPerKm / delta); // Мин 10px/км
+                    setPixelsPerKm(newPixelsPerKm);
                   }}
                   title="Уменьшить масштаб (Zoom Out)"
                 >
@@ -2904,7 +2984,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                         handleCanvasClick(e);
                       } else {
                         if (hoveredArrow) {
-                          handleArrowMouseDown(e);
+                          //handleArrowMouseDown(e);
                         } else if (hoveredObject) {
                           handleObjectMouseDown(e);
                         } else {

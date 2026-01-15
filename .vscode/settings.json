@@ -7,9 +7,7 @@
   "editor.experimental.preferTreeSitter.regex": true,
   "editor.experimental.preferTreeSitter.typescript": true,
   "editor.suggest.snippetsPreventQuickSuggestions": false,
-  "editor.quickSuggestions": {
-    "comments": "on",
-    "strings": "on"
-  },
-  "editor.tabCompletion": "on"
+  "editor.tabCompletion": "on",
+  "emmet.useInlineCompletions": false,
+  "editor.suggestOnTriggerCharacters": true
 }
