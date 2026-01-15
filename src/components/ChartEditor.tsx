@@ -679,7 +679,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         const LAYER3_TOP = 480; // Track Profile Layer
         const LAYER3_HEIGHT = 140;
         const LAYER4_TOP = 630; // Regime Bands Layer
-        const LAYER4_HEIGHT = 260;
+        const LAYER4_HEIGHT = 210;
 
         const marginLeft = 80;
         const marginRight = 50;
@@ -1876,16 +1876,16 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               ctx.fill();
             }
           });*/
-          ctx.strokeStyle = '#d1d5db';
-          ctx.lineWidth = lineWidth(1);
-          ctx.strokeRect(marginLeft, LAYER4_TOP, chartWidth, LAYER4_HEIGHT);
+          //ctx.strokeStyle = '#d1d5db';
+          //ctx.lineWidth = lineWidth(1);
+          //ctx.strokeRect(marginLeft, LAYER4_TOP, chartWidth, LAYER4_HEIGHT - 30);
 
           // 3. ВТОРАЯ ЛЕНТА РЕЖИМОВ (regimesV2)
           // ========================================
           if (displaySettings.regimeBands && regimesV2 && regimesV2.length > 0) {
-            const regimeBandsY2 = LAYER4_TOP + 90;
-            const regimeBandsY3 = LAYER4_TOP + 140;
-            const bandHeight = 30;
+            const regimeBandsY2 = LAYER4_TOP + 86;
+            const regimeBandsY3 = LAYER4_TOP + 124;
+            const bandHeight = 16;
 
             // Маппинг цветов (тот же)
             const colorMap: Record<string, string> = {
@@ -1970,7 +1970,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             ctx.fillStyle = '#374151';
             ctx.font = fontSize(11);
             ctx.textAlign = 'left';
-            ctx.fillText('Фактические режимы:', marginLeft + 10, regimeBandsY2 - 10);
+            ctx.fillText('Фактические режимы:', marginLeft + 10, regimeBandsY2 - 20);
             ctx.restore();
 
             // Легенда НЕ нужна (уже есть у первой ленты)
@@ -1991,7 +1991,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         // ========================================
         if (displaySettings.regimeBands && optimalRegimes && optimalRegimes.length > 0) {
           const regimeBandsY = LAYER4_TOP + 30;
-          const bandHeight = 30;
+          const bandHeight = 16;
 
           // Маппинг цветов
           const colorMap: Record<string, string> = {
@@ -2047,7 +2047,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.fillStyle = '#374151';
           ctx.font = fontSize(11);
           ctx.textAlign = 'left';
-          ctx.fillText('Оптимальные режимы:', marginLeft + 10, regimeBandsY - 10);
+          ctx.fillText('Оптимальные режимы:', marginLeft + 10, regimeBandsY - 20);
           ctx.restore();
 
           // ЛЕГЕНДА РЕЖИМОВ (под лентой)
