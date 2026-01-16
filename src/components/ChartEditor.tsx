@@ -1,6 +1,92 @@
 import { jsPDF } from 'jspdf';
 import { GitBranch, ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { getPaletteObjectById } from './VisioObjectPalette';
+
+// Color conversion helpers: convert CSS oklch(...) to sRGB rgb(...) to avoid parsing errors in embedded SVGs
+function clamp01(v: number) {
+  return Math.min(1, Math.max(0, v));
+}
+
+function oklabToLinearSRGB(L: number, a: number, b: number) {
+  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+
+  const l = l_ * l_ * l_;
+  const m = m_ * m_ * m_;
+  const s = s_ * s_ * s_;
+
+  const r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+  const g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+  const bl = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+
+  return [r, g, bl];
+}
+
+function linearToSRGBChannel(c: number) {
+  if (c <= 0.0031308) return 12.92 * c;
+  return 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+}
+
+function oklchCssToRgb(css: string): string | null {
+  try {
+    const inside = css.substring(css.indexOf('(') + 1, css.lastIndexOf(')'));
+    const parts = inside.split('/')[0].trim().split(/\s+/);
+    if (parts.length < 3) return null;
+    let Lstr = parts[0];
+    let Cstr = parts[1];
+    let Hstr = parts[2];
+
+    const L = Lstr.includes('%') ? parseFloat(Lstr) / 100 : parseFloat(Lstr);
+    const C = parseFloat(Cstr);
+    const H = Hstr.endsWith('deg') ? parseFloat(Hstr) : parseFloat(Hstr);
+
+    const hr = (H * Math.PI) / 180;
+    const a = C * Math.cos(hr);
+    const b = C * Math.sin(hr);
+
+    const [rLin, gLin, bLin] = oklabToLinearSRGB(L, a, b);
+    const r = clamp01(linearToSRGBChannel(rLin));
+    const g = clamp01(linearToSRGBChannel(gLin));
+    const bl = clamp01(linearToSRGBChannel(bLin));
+
+    const R = Math.round(r * 255);
+    const G = Math.round(g * 255);
+    const B = Math.round(bl * 255);
+    return `rgb(${R}, ${G}, ${B})`;
+  } catch (e) {
+    return null;
+  }
+}
+
+function replaceOklchInString(v: string): string {
+  const regex = /(oklch\([^)]*\))|(oklab\([^)]*\))/g;
+  return v.replace(regex, (match) => {
+    const conv = oklchCssToRgb(match);
+    return conv || match;
+  });
+}
+
+function replaceVarsInSvg(svg: string): string {
+  try {
+    const rootComputed = getComputedStyle(document.documentElement);
+    return svg.replace(/var\((--[a-zA-Z0-9-_]+)(?:,[^)]+)?\)/g, (full, varName) => {
+      const fallbackName = `${varName}-fallback`;
+      let resolved = '';
+      const rc = rootComputed.getPropertyValue(fallbackName).trim();
+      if (rc) resolved = rc;
+      if (!resolved) {
+        const rc2 = rootComputed.getPropertyValue(varName).trim();
+        if (rc2) resolved = rc2;
+      }
+      return resolved || full;
+    });
+  } catch {
+    return svg;
+  }
+}
 
 // Ограничения скорости (119 сегментов, 1782→1610 км)
 
@@ -74,6 +160,7 @@ const createKmToXConverter = (chart: ChartData, marginLeft: number = 80, pixelsP
 
 export default function ChartEditor({ chartData, onUpdateChartData }: ChartEditorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const svgIconCache = useRef<Map<string, HTMLImageElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [pixelsPerKm, setPixelsPerKm] = useState(40);
@@ -85,7 +172,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   const [panY, setPanY] = useState(0);
 
   // Redraw trigger for interactive elements (increments to force redraw without data changes)
-  const [, setRedrawTrigger] = useState(0);
+  const [redrawTrigger, setRedrawTrigger] = useState(0);
   const triggerRedraw = React.useCallback(() => {
     setRedrawTrigger((prev) => prev + 1);
   }, []);
@@ -172,7 +259,14 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           const drawHWithHeader = canvasWithHeader.height * scale;
           const xWithHeader = margin + (availableWidth - drawWWithHeader) / 2;
           const yWithHeader = margin;
-          pdf.addImage(imgDataWithHeader, 'PNG', xWithHeader, yWithHeader, drawWWithHeader, drawHWithHeader);
+          pdf.addImage(
+            imgDataWithHeader,
+            'PNG',
+            xWithHeader,
+            yWithHeader,
+            drawWWithHeader,
+            drawHWithHeader
+          );
           pdf.setFontSize(10);
           pdf.text(`Page 1 of 1`, pageWidth / 2, pageHeight - margin / 2, { align: 'center' });
           pdf.save(filename);
@@ -820,7 +914,15 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     e.preventDefault();
 
     try {
-      const objectData = JSON.parse(e.dataTransfer.getData('application/json'));
+      // Support different drag data formats: application/json (existing) and palette-specific keys
+      let objectDataJson = e.dataTransfer.getData('application/json');
+      if (!objectDataJson) {
+        objectDataJson = e.dataTransfer.getData('application/x-palette-object-data');
+      }
+
+      if (!objectDataJson) return;
+
+      const objectData = JSON.parse(objectDataJson);
       const rect = canvasRef.current?.getBoundingClientRect();
       if (!rect) return;
 
@@ -835,9 +937,9 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
       const newObject: CanvasObject = {
         id: Date.now().toString(),
-        type: objectData.category as any,
+        type: (objectData.category || objectData.type) as any,
         subtype: objectData.id,
-        label: objectData.nameRu,
+        label: objectData.nameRu || objectData.name,
         x,
         y,
       };
@@ -845,7 +947,9 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       updateChartData({
         canvasObjects: [...chart.canvasObjects, newObject],
       });
-    } catch (error) {}
+    } catch (error) {
+      // ignore malformed data
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -2515,7 +2619,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           });*/
         }
 
-        // Рисуем размещенные объекты из палитры
+        // Рисуем размещенные объекты из палитры — предпочитаем canvasIcon (SVG) рендерить в raster и отрисовать на canvas
         if (
           displaySettings.objectMarkers &&
           chartData.canvasObjects &&
@@ -2524,60 +2628,97 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           chartData.canvasObjects.forEach((obj) => {
             ctx.save();
 
-            // Определяем цвет и стиль в зависимости от категории объекта
-            let iconColor = '#3b82f6';
-            let iconSize = 12;
+            // Determine desired icon pixel size (basic fallback)
+            const baseIconSize = 24; // px — default raster icon size
+            const iconSize = baseIconSize / (zoom || 1);
+            const iconW = iconSize;
+            const iconH = iconSize;
 
-            switch (obj.type) {
-              /*case "speed":
-                iconColor = "#3b82f6";
-                break;
-              case "control-modes":
-                iconColor = "#10b981";
-                break;
-              case "profile":
-                iconColor = "#f59e0b";
-                break;
-              case "notations":
-                iconColor = "#6b7280";
-                break;
-              case "technical":
-                iconColor = "#8b5cf6";
-                break;
-              case "regime-arrows":
-                iconColor = "#ef4444";
-                break;*/
-              default:
-                iconColor = '#3b82f6';
+            // Try to get full object definition from palette
+            const fullObj = getPaletteObjectById(obj.subtype || obj.type);
+
+            let drewSvg = false;
+            if (fullObj && fullObj.canvasIcon) {
+              try {
+                const key = `${obj.subtype || obj.type}_${Math.round(iconW)}x${Math.round(
+                  iconH
+                )}`;
+                const cache = svgIconCache.current;
+                const cached = cache.get(key);
+                if (cached && cached.complete) {
+                  // draw centered
+                  ctx.drawImage(
+                    cached,
+                    obj.x - iconW / 2,
+                    obj.y - iconH / 2,
+                    iconW,
+                    iconH
+                  );
+                  drewSvg = true;
+                } else if (!cached) {
+                  // create raster image from SVG markup and cache it
+                  const svgString = renderToStaticMarkup(fullObj.canvasIcon as any);
+                  // ensure width/height and xmlns attributes exist so rendered image scales predictably
+                  const svgWithSize = svgString.replace(/<svg(.*?)>/, (m, g1) => {
+                    let attrs = g1 || '';
+                    if (!/xmlns=/.test(attrs)) attrs += ' xmlns="http://www.w3.org/2000/svg"';
+                    return `<svg${attrs} width="${Math.round(iconW)}" height="${Math.round(
+                      iconH
+                    )}">`;
+                  });
+
+                  // Resolve CSS variables to fallbacks and replace oklch/oklab with rgb so the SVG is self-contained
+                  let svgSanitized = replaceVarsInSvg(svgWithSize);
+                  svgSanitized = replaceOklchInString(svgSanitized);
+
+                  const data = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSanitized);
+                  const img = new Image();
+                  img.crossOrigin = 'anonymous';
+                  img.onload = () => {
+                    try {
+                      triggerRedraw();
+                    } catch (e) {
+                      // ignore
+                    }
+                  };
+                  img.onerror = () => {
+                    // ignore
+                  };
+                  cache.set(key, img);
+                  img.src = data;
+                }
+              } catch (e) {
+                // fall back to simple marker
+              }
             }
 
-            // Рисуем маркер объекта
-            ctx.fillStyle = iconColor;
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = lineWidth(2);
-
-            // Круглый маркер
-            ctx.beginPath();
-            ctx.arc(obj.x, obj.y, iconSize / zoom, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-
-            // Подпись объекта (если есть)
-            if (obj.label) {
-              ctx.fillStyle = '#1f2937';
-              ctx.font = fontSize(11);
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'top';
-              ctx.fillText(obj.label, obj.x, obj.y + (iconSize + 4) / zoom);
-            }
-
-            // Подсветка при наведении
-            if (hoveredObject && hoveredObject.id === obj.id) {
-              ctx.strokeStyle = '#3b82f6';
-              ctx.lineWidth = lineWidth(3);
+            if (!drewSvg) {
+              // Fallback: simple circle marker (previous behavior)
+              let iconColor = '#3b82f6';
+              let dotSize = 12;
+              ctx.fillStyle = iconColor;
+              ctx.strokeStyle = '#ffffff';
+              ctx.lineWidth = lineWidth(2);
               ctx.beginPath();
-              ctx.arc(obj.x, obj.y, (iconSize + 4) / zoom, 0, Math.PI * 2);
+              ctx.arc(obj.x, obj.y, dotSize / zoom, 0, Math.PI * 2);
+              ctx.fill();
               ctx.stroke();
+
+              if (obj.label) {
+                ctx.fillStyle = '#1f2937';
+                ctx.font = fontSize(11);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillText(obj.label, obj.x, obj.y + (dotSize + 4) / zoom);
+              }
+
+              if (hoveredObject && hoveredObject.id === obj.id) {
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = lineWidth(3);
+                ctx.beginPath();
+                ctx.arc(obj.x, obj.y, (dotSize + 4) / zoom, 0, Math.PI * 2);
+                ctx.stroke();
+              }
             }
 
             ctx.restore();
@@ -2780,6 +2921,46 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             baseHeight / 2
           );
         }
+
+          // Draw marquee overlay on top so it's always visible
+          if (marqueeStart && marqueeEnd) {
+            try {
+              ctx.save();
+              ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+              const startX = Math.min(marqueeStart.x, marqueeEnd.x);
+              const endX = Math.max(marqueeStart.x, marqueeEnd.x);
+              const startY = 0;
+              const endY = canvas.height;
+
+              ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+              ctx.fillRect(startX, startY, endX - startX, endY);
+
+              ctx.strokeStyle = '#3b82f6';
+              ctx.lineWidth = 3;
+              ctx.beginPath();
+              ctx.moveTo(startX, startY);
+              ctx.lineTo(startX, endY);
+              ctx.stroke();
+
+              ctx.beginPath();
+              ctx.moveTo(endX, startY);
+              ctx.lineTo(endX, endY);
+              ctx.stroke();
+
+              ctx.setLineDash([5, 5]);
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(startX, startY);
+              ctx.lineTo(endX, startY);
+              ctx.moveTo(startX, endY);
+              ctx.lineTo(endX, endY);
+              ctx.stroke();
+              ctx.setLineDash([]);
+
+              ctx.restore();
+            } catch {}
+          }
       } catch (error) {
         console.error('Ошибка при отрисовке:', error);
       } finally {
@@ -2825,6 +3006,9 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     baseWidth,
     baseHeight,
     drawWorkflowCanvas, // Эта функция должна быть мемоизирована с useCallback
+    redrawTrigger,
+    marqueeStart,
+    marqueeEnd,
     pixelsPerKm,
   ]);
 

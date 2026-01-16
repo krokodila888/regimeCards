@@ -49,6 +49,30 @@
   --sidebar-ring: #030213; /* Цвет обводки */
 }
 
+/* Fallback hex values for export (keep oklch for runtime) */
+:root {
+  --foreground-fallback: #030213;
+  --card-foreground-fallback: #030213;
+  --popover-fallback: #ffffff;
+  --popover-foreground-fallback: #030213;
+  --primary-foreground-fallback: #ffffff;
+  --secondary-fallback: #eef2ff;
+  --ring-fallback: #94a3b8;
+  --chart-1-fallback: #f97316;
+  --chart-2-fallback: #06b6d4;
+  --chart-3-fallback: #6366f1;
+  --chart-4-fallback: #34d399;
+  --chart-5-fallback: #f59e0b;
+  --sidebar-fallback: #ffffff;
+  --sidebar-foreground-fallback: #030213;
+  --sidebar-primary-fallback: #030213;
+  --sidebar-primary-foreground-fallback: #ffffff;
+  --sidebar-accent-fallback: #f8fafc;
+  --sidebar-accent-foreground-fallback: #030213;
+  --sidebar-border-fallback: #e2e8f0;
+  --sidebar-ring-fallback: #030213;
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);

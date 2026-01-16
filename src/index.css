@@ -100,7 +100,6 @@
 
     /* Серые (Tailwind-совместимые) */
     --color-gray-50: #f9fafb;
-    --color-gray-50: oklch(0.985 0.002 247.839);
     --color-gray-100: #f3f4f6;
     --color-gray-100: oklch(0.967 0.003 264.542);
     --color-gray-200: #e5e7eb;

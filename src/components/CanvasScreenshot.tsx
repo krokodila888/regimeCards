@@ -1,6 +1,99 @@
+import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
+// Color conversion helpers: convert CSS oklch(...) to sRGB rgb(...) to prevent html2canvas parsing errors
+function clamp01(v: number) {
+  return Math.min(1, Math.max(0, v));
+}
+
+function oklabToLinearSRGB(L: number, a: number, b: number) {
+  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+
+  const l = l_ * l_ * l_;
+  const m = m_ * m_ * m_;
+  const s = s_ * s_ * s_;
+
+  const r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+  const g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+  const bl = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+
+  return [r, g, bl];
+}
+
+function linearToSRGBChannel(c: number) {
+  if (c <= 0.0031308) return 12.92 * c;
+  return 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+}
+
+function oklchCssToRgb(css: string): string | null {
+  try {
+    const inside = css.substring(css.indexOf('(') + 1, css.lastIndexOf(')'));
+    const parts = inside.split('/')[0].trim().split(/\s+/);
+    if (parts.length < 3) return null;
+    let Lstr = parts[0];
+    let Cstr = parts[1];
+    let Hstr = parts[2];
+
+    const L = Lstr.includes('%') ? parseFloat(Lstr) / 100 : parseFloat(Lstr);
+    const C = parseFloat(Cstr);
+    const H = Hstr.endsWith('deg') ? parseFloat(Hstr) : parseFloat(Hstr);
+
+    const hr = (H * Math.PI) / 180;
+    const a = C * Math.cos(hr);
+    const b = C * Math.sin(hr);
+
+    const [rLin, gLin, bLin] = oklabToLinearSRGB(L, a, b);
+    const r = clamp01(linearToSRGBChannel(rLin));
+    const g = clamp01(linearToSRGBChannel(gLin));
+    const bl = clamp01(linearToSRGBChannel(bLin));
+
+    const R = Math.round(r * 255);
+    const G = Math.round(g * 255);
+    const B = Math.round(bl * 255);
+    return `rgb(${R}, ${G}, ${B})`;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Collect custom properties declared in same-origin stylesheets into a map
+function collectCustomProperties(): Record<string, string> {
+  const map: Record<string, string> = {};
+  for (const sheet of Array.from(document.styleSheets)) {
+    try {
+      const rules = sheet.cssRules || [];
+      for (const rule of Array.from(rules)) {
+        // Only CSSStyleRule and CSSStyleDeclaration-like rules have .style
+        // @ts-ignore
+        const style = rule.style;
+        if (!style) continue;
+        for (let i = 0; i < style.length; i++) {
+          const name = style.item(i);
+          if (name && name.startsWith('--')) {
+            const val = style.getPropertyValue(name).trim();
+            if (val) map[name] = val;
+          }
+        }
+      }
+    } catch (e) {
+      // skip cross-origin stylesheets
+      continue;
+    }
+  }
+  return map;
+}
+
+// Replace any oklch/oklab(...) occurrences in a CSS value string with rgb(...) via converter
+function replaceOklchInString(v: string): string {
+  const regex = /(oklch\([^)]*\))|(oklab\([^)]*\))/g;
+  return v.replace(regex, (match) => {
+    const conv = oklchCssToRgb(match);
+    return conv || match;
+  });
+}
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setCurrentChartData } from '../store/workflowSlice';
@@ -145,210 +238,333 @@ export default function CanvasScreenshot({
   imageRealNoProfileUrl,
   imageRealNoTopNoRegimesUrl,
   imageRealNoTopNoProfileUrl,
+  imageDemaEmptyProfile,
   placedObjects,
   onPlacedObjectsChange,
   selectedObjectId,
   onSelectObject,
   visibleLayers,
   setVisibleLayers,
-  availableLayers: _availableLayers,
-  setAvailableLayers: _setAvailableLayers,
   chosenAction,
   emptyField,
-  activeChart,
-  imageDemaEmptyProfile,
   demaStartWithBoardsNoProfile,
   demaStartWithBoardsAndProfile,
-}: CanvasScreenshotProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  activeChart,
+  availableLayers,
+  setAvailableLayers,
+}: CanvasScreenshotProps): JSX.Element {
   const imageRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useAppDispatch();
   const storeChart = useAppSelector((s) => s.workflow.currentChartData);
-
-  useEffect(() => {
-    if (activeChart) {
-      dispatch(setCurrentChartData(activeChart));
-    }
-  }, [activeChart, dispatch]);
-
   const chart = activeChart ?? storeChart;
 
-  // Expose export function for CanvasScreenshot
   useEffect(() => {
-    const win = window as unknown as {
-      __exportCanvasScreenshotToPdf?: (filename?: string) => Promise<void> | undefined;
-    };
+  const win = window as unknown as {
+    __exportCanvasScreenshotToPdf?: (filename?: string) => Promise<void> | undefined;
+  };
 
-    win.__exportCanvasScreenshotToPdf = async (filename = 'screenshot.pdf') => {
+  win.__exportCanvasScreenshotToPdf = async (filename = 'screenshot.pdf') => {
+    try {
+      const img = imageRef.current;
+      const container = containerRef.current;
+      if (!img || !container) throw new Error('Image or container not available');
+
+      // Capture scale
+      const renderScale = Math.max(1, (img.naturalWidth || img.width) / (img.clientWidth || 1));
+
+      // ================================================================
+      // ИЗОЛИРОВАННАЯ ПОДГОТОВКА БЕЗ ВЛИЯНИЯ НА ОСНОВНОЕ ПРИЛОЖЕНИЕ
+      // ================================================================
+      
+      // Создаём изолированный контейнер ВНЕ видимой области
+      const captureWrapper = document.createElement('div');
+      captureWrapper.style.position = 'fixed';
+      captureWrapper.style.left = '-99999px';
+      captureWrapper.style.top = '-99999px';
+      captureWrapper.style.width = `${container.offsetWidth}px`;
+      captureWrapper.style.height = `${container.offsetHeight}px`;
+      captureWrapper.style.overflow = 'hidden';
+      captureWrapper.style.zIndex = '-9999';
+      
+      // Клонируем контейнер
+      const cloned = container.cloneNode(true) as HTMLElement;
+      captureWrapper.appendChild(cloned);
+      document.body.appendChild(captureWrapper);
+
+      let capturedCanvas: HTMLCanvasElement | null = null;
+
       try {
-        const img = imageRef.current;
-        if (!img) throw new Error('Image not loaded');
+        // Собираем кастомные CSS-переменные
+        const customProps = collectCustomProperties();
+        const rootComputed = getComputedStyle(document.documentElement);
 
-        // Prefer the natural image (highest resolution)
-        const imgWidth = img.naturalWidth || img.width;
-        const imgHeight = img.naturalHeight || img.height;
+        // Получаем все элементы для обработки
+        const origEls = Array.from(container.querySelectorAll<HTMLElement>('*'));
+        const cloneEls = Array.from(cloned.querySelectorAll<HTMLElement>('*'));
 
-        // PDF setup
-        const pdf = new jsPDF({ unit: 'px', format: 'a4', orientation: 'landscape' });
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const margin = 20; // px margins on all sides
-        const availableHeight = pageHeight - margin * 2;
-        const availableWidth = pageWidth - margin * 2;
+        const propsToCopy = [
+          'color',
+          'background-color',
+          'background',
+          'border-color',
+          'border-top-color',
+          'border-right-color',
+          'border-bottom-color',
+          'border-left-color',
+          'box-shadow',
+          'outline-color',
+          'fill',
+          'stroke',
+        ];
 
-        // Scale to fit page HEIGHT (preserve aspect ratio)
-        const scale = availableHeight / imgHeight; // scale applied to image to match PDF height
-        const scaledWidth = imgWidth * scale;
+        // Инлайним стили с конвертацией oklch → rgb
+        for (let i = 0; i < Math.min(origEls.length, cloneEls.length); i++) {
+          const o = origEls[i];
+          const c = cloneEls[i];
+          if (!o || !c) continue;
 
-        // If fits on single page width-wise -> single page
-        const overlapPercent = 0.2; // 20% overlap between pages
+          const cs = getComputedStyle(o);
 
-        if (scaledWidth <= availableWidth) {
-          // Single page - center horizontally
-          const canvas = document.createElement('canvas');
-          canvas.width = imgWidth;
-          canvas.height = imgHeight;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) throw new Error('Failed to get canvas context');
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const drawW = imgWidth * scale;
-          const drawH = imgHeight * scale; // == availableHeight
-          const x = margin + (availableWidth - drawW) / 2;
-          const y = margin;
+          propsToCopy.forEach((prop) => {
+            try {
+              let val = cs.getPropertyValue(prop);
+              if (!val) return;
 
-          // Track section name on first page only
-          const trackSectionName =
-            chart?.workflow?.trackSection?.name ??
-            (typeof chart?.workflow?.trackSection === 'string' ||
-            typeof chart?.workflow?.trackSection === 'number'
-              ? String(chart?.workflow?.trackSection)
-              : undefined);
+              // Разрешаем CSS-переменные (var(--name))
+              val = val.replace(/var\((--[a-zA-Z0-9-_]+)(?:,[^)]+)?\)/g, (full, varName) => {
+                const fallbackName = `${varName}-fallback`;
+                let resolved = '';
 
-          // If trackSectionName contains non-latin (Cyrillic), rendering it via pdf.text may fail.
-          // Draw the header onto a canvas so browser font rendering (with Cyrillic) is preserved.
+                // Пробуем -fallback версию
+                if (customProps[fallbackName]) {
+                  resolved = customProps[fallbackName];
+                } else {
+                  const rc = rootComputed.getPropertyValue(fallbackName).trim();
+                  if (rc) resolved = rc;
+                }
+
+                // Если нет fallback, берём оригинал
+                if (!resolved) {
+                  if (customProps[varName]) {
+                    resolved = customProps[varName];
+                  } else {
+                    const rc2 = rootComputed.getPropertyValue(varName).trim();
+                    if (rc2) resolved = rc2;
+                  }
+                }
+
+                if (!resolved) return full;
+
+                // Конвертируем oklch → rgb
+                return replaceOklchInString(resolved);
+              });
+
+              // Конвертируем встроенные oklch/oklab
+              if (val.includes('oklch(') || val.includes('oklab(')) {
+                val = replaceOklchInString(val);
+              }
+
+              // Применяем инлайновый стиль к клонированному элементу
+              c.style.setProperty(prop, val, 'important');
+            } catch (err) {
+              console.warn(`Failed to copy property ${prop}:`, err);
+            }
+          });
+        }
+
+        // ================================================================
+        // ЗАХВАТ CANVAS БЕЗ ОТКЛЮЧЕНИЯ СТИЛЕЙ
+        // ================================================================
+        capturedCanvas = await html2canvas(cloned, {
+          scale: renderScale,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false, // Отключаем логи для чистоты
+          windowWidth: cloned.scrollWidth,
+          windowHeight: cloned.scrollHeight,
+        });
+
+      } finally {
+        // Удаляем временный контейнер
+        if (captureWrapper.parentNode) {
+          captureWrapper.parentNode.removeChild(captureWrapper);
+        }
+      }
+
+      if (!capturedCanvas) throw new Error('Failed to capture screenshot canvas');
+
+      // ================================================================
+      // ГЕНЕРАЦИЯ МНОГОСТРАНИЧНОГО PDF
+      // ================================================================
+      const sourceCanvas = capturedCanvas;
+      const imgWidth = sourceCanvas.width;
+      const imgHeight = sourceCanvas.height;
+
+      const pdf = new jsPDF({ 
+        unit: 'px', 
+        format: 'a4', 
+        orientation: 'landscape' 
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 20;
+      const availableHeight = pageHeight - margin * 2;
+      const availableWidth = pageWidth - margin * 2;
+
+      // Масштабируем по высоте
+      const scale = availableHeight / imgHeight;
+      const scaledWidth = imgWidth * scale;
+
+      // Название участка
+      const trackSectionName =
+        chart?.workflow?.trackSection?.name ??
+        (typeof chart?.workflow?.trackSection === 'string' ||
+        typeof chart?.workflow?.trackSection === 'number'
+          ? String(chart?.workflow?.trackSection)
+          : undefined);
+
+      // ================================================================
+      // ОДНОСТРАНИЧНЫЙ PDF (если помещается)
+      // ================================================================
+      if (scaledWidth <= availableWidth) {
+        const headerPx = trackSectionName ? 24 : 0;
+        const canvasWithHeader = document.createElement('canvas');
+        canvasWithHeader.width = sourceCanvas.width;
+        canvasWithHeader.height = sourceCanvas.height + headerPx;
+        
+        const ctxHeader = canvasWithHeader.getContext('2d');
+        if (!ctxHeader) throw new Error('Failed to get canvas context');
+        
+        ctxHeader.fillStyle = '#ffffff';
+        ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
+        
+        // Заголовок
+        if (trackSectionName) {
+          ctxHeader.fillStyle = '#000000';
+          ctxHeader.font = '16px sans-serif';
+          ctxHeader.fillText(trackSectionName, 8, 16);
+        }
+        
+        ctxHeader.drawImage(sourceCanvas, 0, headerPx);
+
+        const imgData = canvasWithHeader.toDataURL('image/png', 1.0);
+        const drawW = canvasWithHeader.width * scale;
+        const drawH = canvasWithHeader.height * scale;
+        const x = margin + (availableWidth - drawW) / 2;
+        const y = margin;
+
+        pdf.addImage(imgData, 'PNG', x, y, drawW, drawH);
+        pdf.setFontSize(10);
+        pdf.text('Page 1 of 1', pageWidth / 2, pageHeight - margin / 2, { align: 'center' });
+
+        pdf.save(filename);
+        console.log('[PDF Export] ✅ Single page exported');
+        return;
+      }
+
+      // ================================================================
+      // МНОГОСТРАНИЧНЫЙ PDF (с перекрытием 20%)
+      // ================================================================
+      const overlapPercent = 0.2;
+      const cropWidthOriginal = availableWidth / scale;
+      const overlapOriginal = cropWidthOriginal * overlapPercent;
+      const step = cropWidthOriginal - overlapOriginal;
+      const pages = Math.ceil((imgWidth - cropWidthOriginal) / step) + 1;
+
+      console.log('[PDF Export] Multi-page:', {
+        pages,
+        imgWidth,
+        cropWidthOriginal: Math.round(cropWidthOriginal),
+        overlap: Math.round(overlapOriginal),
+      });
+
+      for (let i = 0; i < pages; i++) {
+        const sx = Math.round(i * step);
+        let sw = Math.round(cropWidthOriginal);
+        
+        // Последняя страница - до конца
+        if (sx + sw > imgWidth) {
+          sw = imgWidth - sx;
+        }
+
+        // Создаём canvas для фрагмента
+        const canvas = document.createElement('canvas');
+        canvas.width = sw;
+        canvas.height = imgHeight;
+        
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Failed to get canvas context');
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(sourceCanvas, sx, 0, sw, imgHeight, 0, 0, sw, imgHeight);
+
+        if (i > 0) pdf.addPage();
+
+        // Первая страница - с заголовком
+        if (i === 0 && trackSectionName) {
           const headerPx = 24;
           const canvasWithHeader = document.createElement('canvas');
           canvasWithHeader.width = canvas.width;
           canvasWithHeader.height = canvas.height + headerPx;
+          
           const ctxHeader = canvasWithHeader.getContext('2d');
           if (!ctxHeader) throw new Error('Failed to get canvas context');
+          
           ctxHeader.fillStyle = '#ffffff';
           ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
-          // header text
-          if (trackSectionName) {
-            ctxHeader.fillStyle = '#000000';
-            ctxHeader.font = '16px sans-serif';
-            ctxHeader.fillText(trackSectionName, 8, 16);
-          }
+          ctxHeader.fillStyle = '#000000';
+          ctxHeader.font = '16px sans-serif';
+          ctxHeader.fillText(trackSectionName, 8, 16);
           ctxHeader.drawImage(canvas, 0, headerPx);
 
-          const imgDataWithHeader = canvasWithHeader.toDataURL('image/png');
-          const drawWWithHeader = canvasWithHeader.width * scale;
-          const drawHWithHeader = canvasWithHeader.height * scale;
-          const xWithHeader = margin + (availableWidth - drawWWithHeader) / 2;
-          const yWithHeader = margin;
-
-          pdf.addImage(imgDataWithHeader, 'PNG', xWithHeader, yWithHeader, drawWWithHeader, drawHWithHeader);
-
-          // Page number
-          pdf.setFontSize(10);
-          pdf.text(`Page 1 of 1`, pageWidth / 2, pageHeight - margin / 2, { align: 'center' });
-
-          pdf.save(filename);
-          return;
-        }
-
-        // Multi-page: split horizontally
-        // Determine crop width in original image pixels that corresponds to availableWidth in PDF
-        const cropWidthOriginal = availableWidth / scale;
-        const overlapOriginal = cropWidthOriginal * overlapPercent;
-        const step = cropWidthOriginal - overlapOriginal;
-
-        const pages = Math.ceil((imgWidth - cropWidthOriginal) / step) + 1;
-
-        // Track section name (may be shown on first page)
-        const trackSectionName =
-          chart?.workflow?.trackSection?.name ??
-          (typeof chart?.workflow?.trackSection === 'string' ||
-          typeof chart?.workflow?.trackSection === 'number'
-            ? String(chart?.workflow?.trackSection)
-            : undefined);
-
-        for (let i = 0; i < pages; i++) {
-          const sx = Math.round(i * step);
-          let sw = Math.round(cropWidthOriginal);
-          // Adjust last page slice to include image end
-          if (sx + sw > imgWidth) {
-            sw = imgWidth - sx;
-          }
-
-          // Draw cropped portion to temporary canvas
-          const canvas = document.createElement('canvas');
-          canvas.width = sw;
-          canvas.height = imgHeight;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) throw new Error('Failed to get canvas context');
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, sx, 0, sw, imgHeight, 0, 0, sw, imgHeight);
-
-          const imgData = canvas.toDataURL('image/png');
-
-          // On each page, place the image scaled to availableHeight and width proportional
-          const drawW = sw * scale;
-          const drawH = imgHeight * scale; // == availableHeight
+          const imgData = canvasWithHeader.toDataURL('image/png', 1.0);
+          const drawW = canvasWithHeader.width * scale;
+          const drawH = canvasWithHeader.height * scale;
           const x = margin + (availableWidth - drawW) / 2;
-          const y = margin;
 
-          if (i > 0) pdf.addPage();
+          pdf.addImage(imgData, 'PNG', x, margin, drawW, drawH);
+        } else {
+          const imgData = canvas.toDataURL('image/png', 1.0);
+          const drawW = sw * scale;
+          const drawH = imgHeight * scale;
+          const x = margin + (availableWidth - drawW) / 2;
 
-          // First page: render header onto the image canvas to ensure Cyrillic correctness
-          if (i === 0 && trackSectionName) {
-            const headerPx = 24;
-            const canvasWithHeader = document.createElement('canvas');
-            canvasWithHeader.width = canvas.width;
-            canvasWithHeader.height = canvas.height + headerPx;
-            const ctxHeader = canvasWithHeader.getContext('2d');
-            if (!ctxHeader) throw new Error('Failed to get canvas context');
-            ctxHeader.fillStyle = '#ffffff';
-            ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
-            ctxHeader.fillStyle = '#000000';
-            ctxHeader.font = '16px sans-serif';
-            ctxHeader.fillText(trackSectionName, 8, 16);
-            ctxHeader.drawImage(canvas, 0, headerPx);
-            const imgDataWithHeader = canvasWithHeader.toDataURL('image/png');
-            const drawWWithHeader = canvasWithHeader.width * scale;
-            const drawHWithHeader = canvasWithHeader.height * scale;
-            pdf.addImage(imgDataWithHeader, 'PNG', x, y, drawWWithHeader, drawHWithHeader);
-          } else {
-            pdf.addImage(imgData, 'PNG', x, y, drawW, drawH);
-          }
-
-          // Page number
-          pdf.setFontSize(10);
-          pdf.text(`Page ${i + 1} of ${pages}`, pageWidth / 2, pageHeight - margin / 2, {
-            align: 'center',
-          });
+          pdf.addImage(imgData, 'PNG', x, margin, drawW, drawH);
         }
 
-        pdf.save(filename);
-      } catch (err) {
-        console.error('Export screenshot to PDF failed', err);
-        throw err;
+        // Номер страницы
+        pdf.setFontSize(10);
+        pdf.text(
+          `Page ${i + 1} of ${pages}`,
+          pageWidth / 2,
+          pageHeight - margin / 2,
+          { align: 'center' }
+        );
       }
-    };
 
-    return () => {
-      try {
-        win.__exportCanvasScreenshotToPdf = undefined;
-      } catch {
-        /* ignore */
-      }
-    };
-  }, [imageRef, chart]);
+      pdf.save(filename);
+      console.log(`[PDF Export] ✅ Exported ${pages} pages: ${filename}`);
+
+    } catch (err) {
+      console.error('[PDF Export] ❌ Export failed:', err);
+      alert('Не удалось экспортировать PDF. Проверьте консоль для деталей.');
+      throw err;
+    }
+  };
+
+  return () => {
+    try {
+      win.__exportCanvasScreenshotToPdf = undefined;
+    } catch {
+      /* ignore */
+    }
+  };
+}, [imageRef, containerRef, chart]);
 
   const [zoom, setZoom] = useState(1);
   const [isDraggingCanvas, setIsDraggingCanvas] = useState(false);
