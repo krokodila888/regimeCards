@@ -1,6 +1,10 @@
 import { ChevronLeft, ChevronRight, ChevronDown, User, Plus, LogOut } from 'lucide-react';
 import React, { useRef, useState, useEffect } from 'react';
 
+import { layers } from '@/types/types';
+
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setCurrentChartData } from '../store/workflowSlice';
 import type { ChartData } from '../types/chart-data';
 
 import Stage1CalculationParams from './Stage1CalculationParams';
@@ -9,7 +13,6 @@ import { Button } from './ui/button';
 import { Collapsible, CollapsibleTrigger } from './ui/collapsible';
 import { ScrollArea } from './ui/scroll-area';
 import { Separator } from './ui/separator';
-import { layers } from '@/types/types';
 
 interface WorkspaceSidebarProps {
   collapsed: boolean;
@@ -59,12 +62,21 @@ export default function WorkspaceSidebar({
   const [segmentErrors, setSegmentErrors] = useState<Set<string>>(new Set());
   const [chartsExpanded, setChartsExpanded] = useState(true);
 
+  const dispatch = useAppDispatch();
+  const storeChart = useAppSelector((s) => s.workflow.currentChartData);
+
+  useEffect(() => {
+    if (activeChart) dispatch(setCurrentChartData(activeChart));
+  }, [activeChart, dispatch]);
+
+  const chart = activeChart ?? storeChart;
+
   // Замените состояние accordionValue
   const [accordionValue, setAccordionValue] = useState<string[]>(['stage1']);
 
   // Обновите useEffect для автоматического раскрытия этапов
   useEffect(() => {
-    if (!activeChart?.workflow) {
+    if (!chart?.workflow) {
       setAccordionValue(['stage1']);
       return;
     }
@@ -75,27 +87,27 @@ export default function WorkspaceSidebar({
     newValue.push('stage1');
 
     // Когда optimal curve рассчитан, добавляем stage2 (was stage3)
-    if (activeChart.workflow.optimalSpeedCurve) {
+    if (chart.workflow.optimalSpeedCurve) {
       newValue.push('stage2');
     }
 
     setAccordionValue(newValue);
   }, [
-    activeChart?.id, // Add id to re-run when chart changes
-    activeChart?.workflow?.trackSection,
-    activeChart?.workflow?.locomotive,
-    activeChart?.workflow?.optimalSpeedCurve,
-    activeChart?.workflow?.actualSpeedCurve,
+    chart?.id,
+    chart?.workflow?.trackSection,
+    chart?.workflow?.locomotive,
+    chart?.workflow?.optimalSpeedCurve,
+    chart?.workflow?.actualSpeedCurve,
   ]);
 
   // Validate track segments continuity
   useEffect(() => {
-    if (!activeChart) {
+    if (!chart) {
       onValidationChange(true);
       return;
     }
 
-    const segments = [...activeChart.trackSegments].sort((a, b) => a.startCoord - b.startCoord);
+    const segments = [...chart.trackSegments].sort((a, b) => a.startCoord - b.startCoord);
     const errors = new Set<string>();
 
     for (let i = 0; i < segments.length - 1; i++) {
@@ -107,7 +119,7 @@ export default function WorkspaceSidebar({
 
     setSegmentErrors(errors);
     onValidationChange(errors.size === 0);
-  }, [activeChart?.trackSegments, onValidationChange, activeChart]);
+  }, [chart?.trackSegments, onValidationChange, chart]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -321,9 +333,9 @@ export default function WorkspaceSidebar({
                   className="h-[150px] rounded border border-gray-400"
                   style={{ height: 'fit-content' }}
                 >
-                  {charts.map((chart) => (
+                  {charts.map((chartItem) => (
                     <button
-                      key={chart.id}
+                      key={chartItem.id}
                       style={{ fontSize: '14px' }}
                       onClick={() => {
                         setChartsExpanded(false);
@@ -331,9 +343,9 @@ export default function WorkspaceSidebar({
                         onSelectChart(charts[0]);
                       }}
                       className={`w-full text-left px-3 py-2 rounded transition-colors hover:bg-gray-300 text-gray-600 text-sm
-             ${activeChart?.id === chart.id ? 'bg-gray-600 text-white' : ''}`}
+             ${chart?.id === chartItem.id ? 'bg-gray-600 text-white' : ''}`}
                     >
-                      {chart.title}
+                      {chartItem.title}
                     </button>
                   ))}
                 </ScrollArea>
@@ -342,20 +354,20 @@ export default function WorkspaceSidebar({
               )}
             </Collapsible>
           )}
-          {!chartsExpanded && activeChart && chosenAction !== 'createNew' ? (
+          {!chartsExpanded && chart && chosenAction !== 'createNew' ? (
             <button
               style={{ fontSize: '14px' }}
               className={`w-full text-left px-3 py-2 rounded background-color: var(--input-background); text-gray-800 text-sm border
              `}
             >
-              {activeChart?.title}
+              {chart?.title}
             </button>
           ) : (
             <></>
           )}
 
           {/* NEW WORKFLOW - Staged approach */}
-          {activeChart && (
+          {chart && (
             <>
               <Separator className="bg-gray-700" style={{ marginBottom: '0' }} />
               <Accordion
@@ -374,17 +386,14 @@ export default function WorkspaceSidebar({
                   <AccordionContent className="px-1">
                     <Stage1CalculationParams
                       workflow={
-                        activeChart.workflow || {
+                        chart?.workflow || {
                           currentStage: 1,
                         }
                       }
                       onUpdateWorkflow={(updates) => {
-                        //console.log(activeChart);
-                        //console.log(activeChart.workflow);
-                        //console.log(updates);
                         onUpdateChartData({
                           workflow: {
-                            ...(activeChart.workflow || {
+                            ...(chart?.workflow || {
                               currentStage: 1,
                               ...updates,
                             }),
@@ -392,10 +401,8 @@ export default function WorkspaceSidebar({
                             ...updates,
                           },
                         });
-                        /**console.log(activeChart);
-                        console.log(activeChart.workflow);*/
                       }}
-                      isOld={activeChart?.age === 'old'}
+                      isOld={chart?.age === 'old'}
                       onShowLoading={onShowLoading}
                       visibleLayers={visibleLayers}
                       setVisibleLayers={setVisibleLayers}

@@ -1,6 +1,9 @@
+import { jsPDF } from 'jspdf';
 import { ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setCurrentChartData } from '../store/workflowSlice';
 import { ChartData } from '../types/chart-data';
 import type { TrackBounds, PlacedObject, layers } from '../types/types';
 
@@ -148,8 +151,8 @@ export default function CanvasScreenshot({
   onSelectObject,
   visibleLayers,
   setVisibleLayers,
-  availableLayers,
-  setAvailableLayers,
+  availableLayers: _availableLayers,
+  setAvailableLayers: _setAvailableLayers,
   chosenAction,
   emptyField,
   activeChart,
@@ -159,6 +162,193 @@ export default function CanvasScreenshot({
 }: CanvasScreenshotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+
+  const dispatch = useAppDispatch();
+  const storeChart = useAppSelector((s) => s.workflow.currentChartData);
+
+  useEffect(() => {
+    if (activeChart) {
+      dispatch(setCurrentChartData(activeChart));
+    }
+  }, [activeChart, dispatch]);
+
+  const chart = activeChart ?? storeChart;
+
+  // Expose export function for CanvasScreenshot
+  useEffect(() => {
+    const win = window as unknown as {
+      __exportCanvasScreenshotToPdf?: (filename?: string) => Promise<void> | undefined;
+    };
+
+    win.__exportCanvasScreenshotToPdf = async (filename = 'screenshot.pdf') => {
+      try {
+        const img = imageRef.current;
+        if (!img) throw new Error('Image not loaded');
+
+        // Prefer the natural image (highest resolution)
+        const imgWidth = img.naturalWidth || img.width;
+        const imgHeight = img.naturalHeight || img.height;
+
+        // PDF setup
+        const pdf = new jsPDF({ unit: 'px', format: 'a4', orientation: 'landscape' });
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 20; // px margins on all sides
+        const availableHeight = pageHeight - margin * 2;
+        const availableWidth = pageWidth - margin * 2;
+
+        // Scale to fit page HEIGHT (preserve aspect ratio)
+        const scale = availableHeight / imgHeight; // scale applied to image to match PDF height
+        const scaledWidth = imgWidth * scale;
+
+        // If fits on single page width-wise -> single page
+        const overlapPercent = 0.2; // 20% overlap between pages
+
+        if (scaledWidth <= availableWidth) {
+          // Single page - center horizontally
+          const canvas = document.createElement('canvas');
+          canvas.width = imgWidth;
+          canvas.height = imgHeight;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) throw new Error('Failed to get canvas context');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const drawW = imgWidth * scale;
+          const drawH = imgHeight * scale; // == availableHeight
+          const x = margin + (availableWidth - drawW) / 2;
+          const y = margin;
+
+          // Track section name on first page only
+          const trackSectionName =
+            chart?.workflow?.trackSection?.name ??
+            (typeof chart?.workflow?.trackSection === 'string' ||
+            typeof chart?.workflow?.trackSection === 'number'
+              ? String(chart?.workflow?.trackSection)
+              : undefined);
+
+          // If trackSectionName contains non-latin (Cyrillic), rendering it via pdf.text may fail.
+          // Draw the header onto a canvas so browser font rendering (with Cyrillic) is preserved.
+          const headerPx = 24;
+          const canvasWithHeader = document.createElement('canvas');
+          canvasWithHeader.width = canvas.width;
+          canvasWithHeader.height = canvas.height + headerPx;
+          const ctxHeader = canvasWithHeader.getContext('2d');
+          if (!ctxHeader) throw new Error('Failed to get canvas context');
+          ctxHeader.fillStyle = '#ffffff';
+          ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
+          // header text
+          if (trackSectionName) {
+            ctxHeader.fillStyle = '#000000';
+            ctxHeader.font = '16px sans-serif';
+            ctxHeader.fillText(trackSectionName, 8, 16);
+          }
+          ctxHeader.drawImage(canvas, 0, headerPx);
+
+          const imgDataWithHeader = canvasWithHeader.toDataURL('image/png');
+          const drawWWithHeader = canvasWithHeader.width * scale;
+          const drawHWithHeader = canvasWithHeader.height * scale;
+          const xWithHeader = margin + (availableWidth - drawWWithHeader) / 2;
+          const yWithHeader = margin;
+
+          pdf.addImage(imgDataWithHeader, 'PNG', xWithHeader, yWithHeader, drawWWithHeader, drawHWithHeader);
+
+          // Page number
+          pdf.setFontSize(10);
+          pdf.text(`Page 1 of 1`, pageWidth / 2, pageHeight - margin / 2, { align: 'center' });
+
+          pdf.save(filename);
+          return;
+        }
+
+        // Multi-page: split horizontally
+        // Determine crop width in original image pixels that corresponds to availableWidth in PDF
+        const cropWidthOriginal = availableWidth / scale;
+        const overlapOriginal = cropWidthOriginal * overlapPercent;
+        const step = cropWidthOriginal - overlapOriginal;
+
+        const pages = Math.ceil((imgWidth - cropWidthOriginal) / step) + 1;
+
+        // Track section name (may be shown on first page)
+        const trackSectionName =
+          chart?.workflow?.trackSection?.name ??
+          (typeof chart?.workflow?.trackSection === 'string' ||
+          typeof chart?.workflow?.trackSection === 'number'
+            ? String(chart?.workflow?.trackSection)
+            : undefined);
+
+        for (let i = 0; i < pages; i++) {
+          const sx = Math.round(i * step);
+          let sw = Math.round(cropWidthOriginal);
+          // Adjust last page slice to include image end
+          if (sx + sw > imgWidth) {
+            sw = imgWidth - sx;
+          }
+
+          // Draw cropped portion to temporary canvas
+          const canvas = document.createElement('canvas');
+          canvas.width = sw;
+          canvas.height = imgHeight;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) throw new Error('Failed to get canvas context');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, sx, 0, sw, imgHeight, 0, 0, sw, imgHeight);
+
+          const imgData = canvas.toDataURL('image/png');
+
+          // On each page, place the image scaled to availableHeight and width proportional
+          const drawW = sw * scale;
+          const drawH = imgHeight * scale; // == availableHeight
+          const x = margin + (availableWidth - drawW) / 2;
+          const y = margin;
+
+          if (i > 0) pdf.addPage();
+
+          // First page: render header onto the image canvas to ensure Cyrillic correctness
+          if (i === 0 && trackSectionName) {
+            const headerPx = 24;
+            const canvasWithHeader = document.createElement('canvas');
+            canvasWithHeader.width = canvas.width;
+            canvasWithHeader.height = canvas.height + headerPx;
+            const ctxHeader = canvasWithHeader.getContext('2d');
+            if (!ctxHeader) throw new Error('Failed to get canvas context');
+            ctxHeader.fillStyle = '#ffffff';
+            ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
+            ctxHeader.fillStyle = '#000000';
+            ctxHeader.font = '16px sans-serif';
+            ctxHeader.fillText(trackSectionName, 8, 16);
+            ctxHeader.drawImage(canvas, 0, headerPx);
+            const imgDataWithHeader = canvasWithHeader.toDataURL('image/png');
+            const drawWWithHeader = canvasWithHeader.width * scale;
+            const drawHWithHeader = canvasWithHeader.height * scale;
+            pdf.addImage(imgDataWithHeader, 'PNG', x, y, drawWWithHeader, drawHWithHeader);
+          } else {
+            pdf.addImage(imgData, 'PNG', x, y, drawW, drawH);
+          }
+
+          // Page number
+          pdf.setFontSize(10);
+          pdf.text(`Page ${i + 1} of ${pages}`, pageWidth / 2, pageHeight - margin / 2, {
+            align: 'center',
+          });
+        }
+
+        pdf.save(filename);
+      } catch (err) {
+        console.error('Export screenshot to PDF failed', err);
+        throw err;
+      }
+    };
+
+    return () => {
+      try {
+        win.__exportCanvasScreenshotToPdf = undefined;
+      } catch {
+        /* ignore */
+      }
+    };
+  }, [imageRef, chart]);
 
   const [zoom, setZoom] = useState(1);
   const [isDraggingCanvas, setIsDraggingCanvas] = useState(false);
@@ -552,37 +742,22 @@ export default function CanvasScreenshot({
     e.preventDefault();
     containerRef.current.scrollLeft += e.deltaY;
   };
-
-  /**useEffect(() => {
-    console.log(activeChart.workflow);
-    console.log({ arrivalStation: activeChart.workflow?.arrivalStation });
-    console.log({ departureStation: activeChart.workflow?.departureStation });
-  }, [activeChart]);
-
-  useEffect(() => {
-    console.log(activeChart.workflow);
-  }, []);
-
-  useEffect(() => {
-    console.log(activeChart);
-  }, [activeChart]);*/
-
   // Получение текущего изображения на основе видимых слоёв
   const getCurrentImage = useCallback(() => {
     const { gradientCurve, regimeMarkers, profileCurve, optSpeedCurve, regimes2, borders } =
       visibleLayers;
     if (
       chosenAction === 'createNew_profile' &&
-      activeChart.workflow?.arrivalStation &&
-      activeChart.workflow?.departureStation &&
+      chart?.workflow?.arrivalStation &&
+      chart?.workflow?.departureStation &&
       profileCurve
     )
       return imageDemaEmptyProfile;
 
     if (
       chosenAction === 'createNew_profile' &&
-      activeChart.workflow?.arrivalStation &&
-      activeChart.workflow?.departureStation &&
+      chart?.workflow?.arrivalStation &&
+      chart?.workflow?.departureStation &&
       !regimes2 &&
       !gradientCurve &&
       !regimeMarkers &&
@@ -593,8 +768,8 @@ export default function CanvasScreenshot({
 
     if (
       chosenAction === 'createNew_boards' &&
-      activeChart.workflow?.arrivalStation &&
-      activeChart.workflow?.departureStation &&
+      chart?.workflow?.arrivalStation &&
+      chart?.workflow?.departureStation &&
       !regimes2 &&
       !gradientCurve &&
       !regimeMarkers &&
@@ -605,8 +780,8 @@ export default function CanvasScreenshot({
 
     if (
       chosenAction === 'createNew_boards' &&
-      activeChart.workflow?.arrivalStation &&
-      activeChart.workflow?.departureStation &&
+      chart?.workflow?.arrivalStation &&
+      chart?.workflow?.departureStation &&
       !regimes2 &&
       !gradientCurve &&
       !regimeMarkers &&

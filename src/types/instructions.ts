@@ -37,12 +37,19 @@ export interface SpeedCurvePoint {
 // ============================================================================
 
 // Ограничения скорости (119 сегментов, 1782→1610 км)
-import { speedLimits as rawSpeedLimits } from './speed-limits-precise';
 
 // Продольные силы (3434 точки, 1781.8→1610.1 км, 20 точек/км)
 import { longitudinalForces as rawLongitudinalForces } from './longitudinal-forces-correct';
 
 // Кривые скорости (1718 точек, 1781.8→1610.1 км, 10 точек/км)
+import {
+  longitudinalForces,
+  speedCurvePoints,
+  speedLimits,
+  regimeMapMetadata,
+  getForceAtDistance,
+  getSpeedAtDistance,
+} from './regime-map-data';
 import { speedCurves as rawSpeedCurves } from './speed-curves';
 
 // ============================================================================
@@ -179,14 +186,7 @@ export function filterDataByRange(startKm: number, endKm: number) {
 // ============================================================================
 
 // После существующих импортов добавить:
-import {
-  longitudinalForces,
-  speedCurvePoints,
-  speedLimits,
-  regimeMapMetadata,
-  getForceAtDistance,
-  getSpeedAtDistance,
-} from './regime-map-data';
+import { speedLimits as rawSpeedLimits } from './speed-limits-precise';
 
 // ============================================================================
 // 2. LAYER 1: ОТРИСОВКА ПРОДОЛЬНЫХ СИЛ (заменить существующий код)

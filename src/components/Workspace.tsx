@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 
-import type { ChartData } from '../types/chart-data';
+import { layers } from '@/types/types';
+
 import { chartDataByID1 } from '../data/consts';
+import { useAppDispatch } from '../store/hooks';
+import { setCurrentChartData } from '../store/workflowSlice';
+import type { ChartData } from '../types/chart-data';
 
 import ImportVisioModal from './ImportVisioModal';
 import LoadingOverlay from './LoadingOverlay';
@@ -9,7 +13,6 @@ import MainCanvas from './MainCanvas';
 import ScheduleSidebar from './ScheduleSidebar';
 import VisioObjectPalette from './VisioObjectPalette';
 import WorkspaceSidebar from './WorkspaceSidebar';
-import { layers } from '@/types/types';
 
 // Типы для размещенных объектов
 type PaletteObject = {
@@ -45,6 +48,8 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
 
   // Выбраная опция
   const [chosenAction, setСhosenAction] = useState<string>('start');
+
+  const dispatch = useAppDispatch();
 
   // Состояние для размещенных объектов
   const [placedObjects, setPlacedObjects] = useState<PlacedObject[]>([]);
@@ -94,6 +99,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
       },
     };
     setActiveChart(newChart);
+    dispatch(setCurrentChartData(newChart));
     // Очищаем размещенные объекты при создании новой карты
     setPlacedObjects([]);
     setSelectedObjectId(null);
@@ -108,6 +114,7 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
 
     const fullChart = /*chartDataByID[chart.id] ||*/ chartDataByID['1'];
     setActiveChart(fullChart);
+    dispatch(setCurrentChartData(fullChart));
 
     // Очищаем размещенные объекты при переключении карты
     // В будущем здесь будет загрузка сохраненных объектов из fullChart
@@ -118,7 +125,9 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
   const handleUpdateChartData = (updates: Partial<ChartData>) => {
     if (activeChart) {
       console.log(1);
-      setActiveChart({ ...activeChart, ...updates });
+      const updated = { ...activeChart, ...updates };
+      setActiveChart(updated);
+      dispatch(setCurrentChartData(updated));
     }
   };
 

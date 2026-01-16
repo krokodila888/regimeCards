@@ -1,6 +1,8 @@
 import { Save, FileText } from 'lucide-react';
 import React, { useState } from 'react';
 
+import { layers } from '@/types/types';
+
 import { useAuth } from '../contexts/AuthContext';
 import type { ChartData } from '../types/chart-data';
 
@@ -36,7 +38,6 @@ import demaRealNoTopNoRegimesImg from './images/dema_regimes_no-top_no-regimes.p
 import demaRealSpeedOnlyImg from './images/dema_regimes_speed-only.png';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { layers } from '@/types/types';
 
 // Типы для размещенных объектов
 type PaletteObject = {
@@ -145,7 +146,30 @@ export default function MainCanvas({
                 Сохранить
               </Button>
               {!isDataValid && <p className="text-sm text-red-600 max-w-xs">Исправьте ошибки</p>}
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  try {
+                    // If admin: ChartEditor (canvas) else CanvasScreenshot
+                    if (user?.role === 'admin') {
+                      if ((window as any).__exportChartEditorToPdf) {
+                        await (window as any).__exportChartEditorToPdf();
+                      } else {
+                        console.warn('Export function not available');
+                      }
+                    } else {
+                      if ((window as any).__exportCanvasScreenshotToPdf) {
+                        await (window as any).__exportCanvasScreenshotToPdf();
+                      } else {
+                        console.warn('Export function not available');
+                      }
+                    }
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }}
+              >
                 <FileText className="w-4 h-4 mr-2" />
                 Экспорт в PDF
               </Button>

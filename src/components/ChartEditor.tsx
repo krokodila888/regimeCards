@@ -1,3 +1,4 @@
+import { jsPDF } from 'jspdf';
 import { GitBranch, ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 
@@ -5,13 +6,14 @@ import React, { useState, useRef, useEffect } from 'react';
 
 // Продольные силы (3434 точки, 1781.8→1610.1 км, 20 точек/км)
 import { longitudinalForces } from '../data/longitudinal_forces';
-import { optimalRegimes, regimesV2, type OptimalRegimeSegment } from '../data/regimes';
-
+import { optimalRegimes, regimesV2 } from '../data/regimes';
 import { speedLimits } from '../data/speed-limits';
 
 // Кривые скорости (1718 точек, 1781.8→1610.1 км, 10 точек/км)
 import { speedCurves } from '../data/speedCurves';
 import { trainForceData } from '../data/trainForceData';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setCurrentChartData } from '../store/workflowSlice';
 import type {
   ChartData,
   CanvasObject,
@@ -34,16 +36,12 @@ interface ChartEditorProps {
 
 // Helper function to calculate kmToX conversion
 // This is extracted so it can be used by both drawing and interaction handlers
-const createKmToXConverter = (
-  chartData: ChartData,
-  marginLeft: number = 80,
-  pixelsPerKm: number
-) => {
-  if (!chartData.workflow?.trackSection) {
+const createKmToXConverter = (chart: ChartData, marginLeft: number = 80, pixelsPerKm: number) => {
+  if (!chart.workflow?.trackSection) {
     return (km: number) => marginLeft;
   }
 
-  const trackSection = chartData.workflow.trackSection;
+  const trackSection = chart.workflow.trackSection;
   const trackLength = trackSection.length;
 
   let actualStartCoord = 0;
@@ -95,6 +93,163 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [isInitialized, setIsInitialized] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const storeChart = useAppSelector((s) => s.workflow.currentChartData);
+
+  // Keep store in sync with prop if provided
+  useEffect(() => {
+    if (chartData) dispatch(setCurrentChartData(chartData));
+  }, [chartData, dispatch]);
+
+  const updateChartData = (updates: Partial<ChartData>) => {
+    if (onUpdateChartData) onUpdateChartData(updates);
+    const current = chartData ?? storeChart;
+    if (current) dispatch(setCurrentChartData({ ...current, ...updates }));
+  };
+
+  const chart = chartData ?? storeChart;
+
+  // Expose a simple export function on window to allow external callers (MainCanvas) to trigger PDF export
+  useEffect(() => {
+    const win = window as unknown as {
+      __exportChartEditorToPdf?: (filename?: string) => Promise<void> | undefined;
+    };
+
+    win.__exportChartEditorToPdf = async (filename = 'chart.pdf') => {
+      try {
+        const srcCanvas = canvasRef.current;
+        if (!srcCanvas) throw new Error('Canvas not found');
+
+        const srcW = srcCanvas.width;
+        const srcH = srcCanvas.height;
+
+        const pdf = new jsPDF({ unit: 'px', format: 'a4', orientation: 'landscape' });
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 20;
+        const availableHeight = pageHeight - margin * 2;
+        const availableWidth = pageWidth - margin * 2;
+
+        // Scale to fit page height
+        const scale = availableHeight / srcH;
+        const scaledWidth = srcW * scale;
+        const overlapPercent = 0.2;
+
+        // Helper to obtain track section name
+        const trackSectionName =
+          chart?.workflow?.trackSection?.name ??
+          (typeof chart?.workflow?.trackSection === 'string' ||
+          typeof chart?.workflow?.trackSection === 'number'
+            ? String(chart?.workflow?.trackSection)
+            : undefined);
+
+        if (scaledWidth <= availableWidth) {
+          // single page
+          const imgData = srcCanvas.toDataURL('image/png');
+          const drawW = srcW * scale;
+          const drawH = srcH * scale;
+          const x = margin + (availableWidth - drawW) / 2;
+          const y = margin;
+
+          // Render trackSectionName into the image canvas to preserve Cyrillic rendering
+          const headerPx = 24;
+          const canvasWithHeader = document.createElement('canvas');
+          canvasWithHeader.width = srcW;
+          canvasWithHeader.height = srcH + headerPx;
+          const ctxHeader = canvasWithHeader.getContext('2d');
+          if (!ctxHeader) throw new Error('Failed to get canvas context');
+          ctxHeader.fillStyle = '#ffffff';
+          ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
+          if (trackSectionName) {
+            ctxHeader.fillStyle = '#000000';
+            ctxHeader.font = '16px sans-serif';
+            ctxHeader.fillText(trackSectionName, 8, 16);
+          }
+          ctxHeader.drawImage(srcCanvas, 0, headerPx);
+          const imgDataWithHeader = canvasWithHeader.toDataURL('image/png');
+          const drawWWithHeader = canvasWithHeader.width * scale;
+          const drawHWithHeader = canvasWithHeader.height * scale;
+          const xWithHeader = margin + (availableWidth - drawWWithHeader) / 2;
+          const yWithHeader = margin;
+          pdf.addImage(imgDataWithHeader, 'PNG', xWithHeader, yWithHeader, drawWWithHeader, drawHWithHeader);
+          pdf.setFontSize(10);
+          pdf.text(`Page 1 of 1`, pageWidth / 2, pageHeight - margin / 2, { align: 'center' });
+          pdf.save(filename);
+          return;
+        }
+
+        // Multi-page: split horizontally
+        const cropWidthOriginal = availableWidth / scale;
+        const overlapOriginal = cropWidthOriginal * overlapPercent;
+        const step = cropWidthOriginal - overlapOriginal;
+        const pages = Math.ceil((srcW - cropWidthOriginal) / step) + 1;
+
+        for (let i = 0; i < pages; i++) {
+          const sx = Math.round(i * step);
+          let sw = Math.round(cropWidthOriginal);
+          if (sx + sw > srcW) sw = srcW - sx;
+
+          // Draw slice from source canvas into temporary canvas
+          const canvas = document.createElement('canvas');
+          canvas.width = sw;
+          canvas.height = srcH;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) throw new Error('Failed to get canvas context');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(srcCanvas, sx, 0, sw, srcH, 0, 0, sw, srcH);
+
+          const imgData = canvas.toDataURL('image/png');
+          const drawW = sw * scale;
+          const drawH = srcH * scale;
+          const x = margin + (availableWidth - drawW) / 2;
+          const y = margin;
+
+          if (i > 0) pdf.addPage();
+
+          if (i === 0 && trackSectionName) {
+            const headerPx = 24;
+            const canvasWithHeader = document.createElement('canvas');
+            canvasWithHeader.width = canvas.width;
+            canvasWithHeader.height = canvas.height + headerPx;
+            const ctxHeader = canvasWithHeader.getContext('2d');
+            if (!ctxHeader) throw new Error('Failed to get canvas context');
+            ctxHeader.fillStyle = '#ffffff';
+            ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
+            ctxHeader.fillStyle = '#000000';
+            ctxHeader.font = '16px sans-serif';
+            ctxHeader.fillText(trackSectionName, 8, 16);
+            ctxHeader.drawImage(canvas, 0, headerPx);
+            const imgDataWithHeader = canvasWithHeader.toDataURL('image/png');
+            const drawWWithHeader = canvasWithHeader.width * scale;
+            const drawHWithHeader = canvasWithHeader.height * scale;
+            pdf.addImage(imgDataWithHeader, 'PNG', x, y, drawWWithHeader, drawHWithHeader);
+          } else {
+            pdf.addImage(imgData, 'PNG', x, y, drawW, drawH);
+          }
+
+          pdf.setFontSize(10);
+          pdf.text(`Page ${i + 1} of ${pages}`, pageWidth / 2, pageHeight - margin / 2, {
+            align: 'center',
+          });
+        }
+
+        pdf.save(filename);
+      } catch (err) {
+        console.error('Export to PDF failed', err);
+        throw err;
+      }
+    };
+
+    return () => {
+      try {
+        win.__exportChartEditorToPdf = undefined;
+      } catch {
+        /* ignore */
+      }
+    };
+  }, [canvasRef, chart]);
 
   const [isMarqueeZoom, setIsMarqueeZoom] = useState(false);
   const [scrollX, setScrollX] = useState(0);
@@ -150,15 +305,13 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   const throttledLog = (message: string, interval: number = 1000) => {
     const now = Date.now();
-    if (!(window as any).lastLogTime) {
-      (window as any).lastLogTime = {};
+    const win = window as unknown as { lastLogTime?: Record<string, number> };
+    if (!win.lastLogTime) {
+      win.lastLogTime = {};
     }
-    if (
-      !(window as any).lastLogTime[message] ||
-      now - (window as any).lastLogTime[message] > interval
-    ) {
+    if (!win.lastLogTime[message] || now - win.lastLogTime[message] > interval) {
       console.log(message);
-      (window as any).lastLogTime[message] = now;
+      win.lastLogTime[message] = now;
     }
   };
 
@@ -173,7 +326,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   useEffect(() => {
     setSelectedArrow(null);
     setDraggedArrow(null);
-  }, [chartData.workflow?.trackSection?.id, chartData.workflow?.locomotive?.id]);
+  }, [chart.workflow?.trackSection?.id, chart.workflow?.locomotive?.id]);
 
   // Расчёт базовой высоты (using fixed 4-layer structure)
   const calculateBaseHeight = () => {
@@ -201,7 +354,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   // Обновление ширины холста по длине участка
   useEffect(() => {
-    const trackLength = chartData.workflow?.trackSection?.length || 200;
+    const trackLength = chart.workflow?.trackSection?.length || 200;
 
     if (!isFinite(trackLength) || trackLength <= 0 || trackLength > 10000) {
       if (baseWidth !== 2400) {
@@ -217,7 +370,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     if (calculatedWidth !== baseWidth) {
       setBaseWidth(calculatedWidth);
     }
-  }, [chartData.workflow?.trackSection?.length, baseWidth, pixelsPerKm]); // Добавить pixelsPerKm в зависимости
+  }, [chart.workflow?.trackSection?.length, baseWidth, pixelsPerKm]); // Добавить pixelsPerKm в зависимости
 
   // ==========================
   // ФУНКЦИЯ ОПРЕДЕЛЕНИЯ ОБЛАСТИ ХОЛСТА ПО ОСИ Y
@@ -305,7 +458,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
     // Минимальная ширина выделения
     if (width > 20) {
-      const trackSection = chartData.workflow?.trackSection;
+      const trackSection = chart.workflow?.trackSection;
       if (!trackSection) return;
 
       // Параметры карты
@@ -405,14 +558,14 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     if (
       !draggedArrow &&
       !draggedObject &&
-      chartData.workflow?.regimeArrows &&
-      chartData.workflow?.trackSection
+      chart.workflow?.regimeArrows &&
+      chart.workflow?.trackSection
     ) {
       const marginLeft = 80;
       //const marginRight = 50;
       const marginBottom = 240;
       const arrowY = baseHeight - marginBottom + 180;
-      /*const trackLength = chartData.workflow.trackSection.length;
+      /*const trackLength = chart.workflow.trackSection.length;
       const chartWidth = baseWidth - marginLeft - marginRight;
 
       let gridInterval;*/
@@ -425,8 +578,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       // Create kmToX converter for this interaction
       const kmToX = createKmToXConverter(chartData, marginLeft, pixelsPerKm);
 
-      for (let i = 0; i < chartData.workflow.regimeArrows.length; i++) {
-        const arrow = chartData.workflow.regimeArrows[i];
+      for (let i = 0; i < chart.workflow.regimeArrows.length; i++) {
+        const arrow = chart.workflow.regimeArrows[i];
         const startX = kmToX(arrow.startKm);
         const endX = kmToX(arrow.endKm);
         const handleRadius = 8;
@@ -472,8 +625,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     }
 
     // Перетаскивание концов стрелок — тоже в мировой системе координат
-    if (draggedArrow && chartData.workflow?.regimeArrows && chartData.workflow?.trackSection) {
-      const trackLength = chartData.workflow.trackSection.length;
+    if (draggedArrow && chart.workflow?.regimeArrows && chart.workflow?.trackSection) {
+      const trackLength = chart.workflow.trackSection.length;
       const marginLeft = 80;
       const marginRight = 50;
       const chartWidth = baseWidth - marginLeft - marginRight;
@@ -487,7 +640,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       );
 
       const minArrowLength = 1;
-      const updatedArrows = [...chartData.workflow.regimeArrows];
+      const updatedArrows = [...chart.workflow.regimeArrows];
       const currentIndex = updatedArrows.findIndex((a) => a.id === draggedArrow.arrowId);
 
       let limitReached = false;
@@ -555,18 +708,18 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
       setResizeLimitReached(limitReached);
 
-      onUpdateChartData({
+      updateChartData({
         workflow: {
-          ...chartData.workflow,
+          ...chart.workflow,
           regimeArrows: updatedArrows,
         },
       });
     } else if (draggedObject && !isPanning) {
       // Перетаскивание объектов — в общей мировой системе координат
-      const newObjects = chartData.canvasObjects.map((obj) =>
+      const newObjects = chart.canvasObjects.map((obj) =>
         obj.id === draggedObject.id ? { ...obj, x: newMousePosX, y: newMousePosY } : obj
       );
-      onUpdateChartData({ canvasObjects: newObjects });
+      updateChartData({ canvasObjects: newObjects });
     } else if (isPanning && !draggedObject && !draggedArrow) {
       // Панорама с ограничениями
       const newPanX = e.clientX - panStart.x;
@@ -590,10 +743,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
       const stackedPosition = getStackedPosition(finalX, finalY);
 
-      const newObjects = chartData.canvasObjects.map((obj) =>
+      const newObjects = chart.canvasObjects.map((obj) =>
         obj.id === draggedObject.id ? { ...obj, x: finalX, y: stackedPosition } : obj
       );
-      onUpdateChartData({ canvasObjects: newObjects });
+      updateChartData({ canvasObjects: newObjects });
     }
     setIsPanning(false);
     setDraggedObject(null);
@@ -605,7 +758,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     const tolerance = 20;
     const stackSpacing = 30;
 
-    const objectsAtSameX = chartData.canvasObjects.filter((obj) => {
+    const objectsAtSameX = chart.canvasObjects.filter((obj) => {
       return Math.abs(obj.x - x) < tolerance;
     });
 
@@ -653,8 +806,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         y,
       };
 
-      onUpdateChartData({
-        canvasObjects: [...chartData.canvasObjects, newObject],
+      updateChartData({
+        canvasObjects: [...chart.canvasObjects, newObject],
       });
 
       setPlacingObject(null);
@@ -689,8 +842,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         y,
       };
 
-      onUpdateChartData({
-        canvasObjects: [...chartData.canvasObjects, newObject],
+      updateChartData({
+        canvasObjects: [...chart.canvasObjects, newObject],
       });
     } catch (error) {}
   };
@@ -2975,7 +3128,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   const handleObjectDoubleClick = (e: React.MouseEvent) => {
     if (hoveredObject && !placingObject && !isMarqueeZoom) {
       const updatedObjects = chartData.canvasObjects.filter((obj) => obj.id !== hoveredObject.id);
-      onUpdateChartData({ canvasObjects: updatedObjects });
+      updateChartData({ canvasObjects: updatedObjects });
       setHoveredObject(null);
       e.stopPropagation();
     }
@@ -3176,7 +3329,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                               return arrow;
                             });
 
-                          onUpdateChartData({
+                          updateChartData({
                             workflow: {
                               ...chartData.workflow,
                               regimeArrows: updatedArrows,
@@ -3188,7 +3341,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                         const updatedObjects = chartData.canvasObjects.filter(
                           (obj) => obj.id !== hoveredObject.id
                         );
-                        onUpdateChartData({
+                        updateChartData({
                           canvasObjects: updatedObjects,
                         });
                         setHoveredObject(null);

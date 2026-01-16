@@ -16,16 +16,19 @@ import {
 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 
-import type { WorkflowState } from '../types/chart-data';
+import { layers } from '@/types/types';
+
 import { LOCOMOTIVES, WAGON_TYPES, ROADS } from '../data/consts';
 import { tracks } from '../data/tracks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setCurrentChartData } from '../store/workflowSlice';
+import type { WorkflowState } from '../types/chart-data';
 
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { layers } from '@/types/types';
 
 interface Stage1CalculationParamsProps {
   workflow: WorkflowState;
@@ -41,7 +44,7 @@ interface Stage1CalculationParamsProps {
 }
 
 export default function Stage1CalculationParams({
-  workflow,
+  workflow: workflowProp,
   onUpdateWorkflow,
   isOld = false,
   onShowLoading,
@@ -52,6 +55,20 @@ export default function Stage1CalculationParams({
   availableLayers,
   setAvailableLayers,
 }: Stage1CalculationParamsProps) {
+  const dispatch = useAppDispatch();
+  const storeChart = useAppSelector((s) => s.workflow.currentChartData);
+
+  const workflow = workflowProp ?? storeChart?.workflow ?? ({} as any);
+
+  const updateWorkflow = (updates: Partial<any>) => {
+    if (onUpdateWorkflow) onUpdateWorkflow(updates);
+    const chart = storeChart;
+    if (chart) {
+      dispatch(
+        setCurrentChartData({ ...chart, workflow: { ...(chart.workflow || {}), ...updates } })
+      );
+    }
+  };
   const [wagonGroupsModalOpen, setWagonGroupsModalOpen] = useState(false);
   const [speedLimitsModalOpen, setSpeedLimitsModalOpen] = useState(false);
 
@@ -94,7 +111,7 @@ export default function Stage1CalculationParams({
         const departureRoadObj = ROADS.find((r) => r.name === firstStation.road) || ROADS[0];
         const arrivalRoadObj = ROADS.find((r) => r.name === lastStation.road) || ROADS[0];
 
-        onUpdateWorkflow({
+        updateWorkflow({
           departureRoad: departureRoadObj,
           departureStation: firstStation.stationName,
           arrivalRoad: arrivalRoadObj,
@@ -193,7 +210,7 @@ export default function Stage1CalculationParams({
       mass: newWagonMass,
     };
 
-    onUpdateWorkflow({
+    updateWorkflow({
       wagonGroups: [...wagonGroups, newGroup],
     });
 
@@ -203,7 +220,7 @@ export default function Stage1CalculationParams({
   };
 
   const handleRemoveWagonGroup = (id: string) => {
-    onUpdateWorkflow({
+    updateWorkflow({
       wagonGroups: wagonGroups.filter((g) => g.id !== id),
     });
   };
@@ -216,7 +233,7 @@ export default function Stage1CalculationParams({
       allowedSpeed: newSpeedLimit,
     };
 
-    onUpdateWorkflow({
+    updateWorkflow({
       customSpeedLimits: [...customSpeedLimits, newLimit],
     });
 
@@ -226,7 +243,7 @@ export default function Stage1CalculationParams({
   };
 
   const handleRemoveSpeedLimit = (id: string) => {
-    onUpdateWorkflow({
+    updateWorkflow({
       customSpeedLimits: customSpeedLimits.filter((l) => l.id !== id),
     });
   };
@@ -341,7 +358,7 @@ export default function Stage1CalculationParams({
           }
         }
 
-        onUpdateWorkflow({
+        updateWorkflow({
           trackSection: matchingTrack,
           optimalSpeedCurve: speedCurve,
           regimeArrows,
@@ -361,7 +378,7 @@ export default function Stage1CalculationParams({
         </div>
         <Select
           value={movementType}
-          onValueChange={(value: any) => onUpdateWorkflow({ movementType: value })}
+          onValueChange={(value: any) => updateWorkflow({ movementType: value })}
         >
           <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
             <SelectValue placeholder="Тип движения" />
@@ -380,7 +397,7 @@ export default function Stage1CalculationParams({
         </div>
         <Select
           value={tractionType}
-          onValueChange={(value: any) => onUpdateWorkflow({ tractionType: value })}
+          onValueChange={(value: any) => updateWorkflow({ tractionType: value })}
         >
           <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
             <SelectValue placeholder="Тип тяги" />
@@ -401,7 +418,7 @@ export default function Stage1CalculationParams({
           value={locomotive.id}
           onValueChange={(value) => {
             const loc = LOCOMOTIVES.find((l) => l.id === value);
-            if (loc) onUpdateWorkflow({ locomotive: loc });
+            if (loc) updateWorkflow({ locomotive: loc });
           }}
         >
           <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
@@ -428,7 +445,7 @@ export default function Stage1CalculationParams({
             min="1"
             value={numberOfUnits}
             onChange={(e) =>
-              onUpdateWorkflow({
+              updateWorkflow({
                 numberOfUnits: parseInt(e.target.value) || 1,
               })
             }
@@ -446,7 +463,7 @@ export default function Stage1CalculationParams({
             handleLoad(); // Показывает лоадер
             // Ждем 1800ms (время таймера) + небольшой запас
             setTimeout(() => {
-              onUpdateWorkflow({
+              updateWorkflow({
                 grossTrainMass: parseFloat('7100'),
               });
             }, 1850); // 1800 + небольшой запас
@@ -468,7 +485,7 @@ export default function Stage1CalculationParams({
               min="0"
               value={grossTrainMass}
               onChange={(e) =>
-                onUpdateWorkflow({
+                updateWorkflow({
                   grossTrainMass: parseFloat(e.target.value) || 0,
                 })
               }
@@ -508,7 +525,7 @@ export default function Stage1CalculationParams({
           </div>
           <Select
             value={calculationType}
-            onValueChange={(value: any) => onUpdateWorkflow({ calculationType: value })}
+            onValueChange={(value: any) => updateWorkflow({ calculationType: value })}
           >
             <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
               <SelectValue placeholder="Тип расчета" />
@@ -529,7 +546,7 @@ export default function Stage1CalculationParams({
             value={(departureRoad?.value ?? ROADS[0].value).toString()}
             onValueChange={(value) => {
               const road = ROADS.find((r) => r.value.toString() === value);
-              if (road) onUpdateWorkflow({ departureRoad: road });
+              if (road) updateWorkflow({ departureRoad: road });
             }}
           >
             <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
@@ -553,7 +570,7 @@ export default function Stage1CalculationParams({
           <Select
             value={departureStation}
             onValueChange={(value) => {
-              onUpdateWorkflow({ departureStation: value });
+              updateWorkflow({ departureStation: value });
               console.log(workflow);
             }}
           >
@@ -579,7 +596,7 @@ export default function Stage1CalculationParams({
             value={(arrivalRoad?.value ?? ROADS[0].value).toString()}
             onValueChange={(value) => {
               const road = ROADS.find((r) => r.value.toString() === value);
-              if (road) onUpdateWorkflow({ arrivalRoad: road });
+              if (road) updateWorkflow({ arrivalRoad: road });
             }}
           >
             <SelectTrigger className="bg-white border-gray-400 text-gray-600 pl-10">
@@ -603,7 +620,7 @@ export default function Stage1CalculationParams({
           <Select
             value={arrivalStation}
             onValueChange={(value) => {
-              onUpdateWorkflow({ arrivalStation: value });
+              updateWorkflow({ arrivalStation: value });
               console.log(workflow);
             }}
           >
@@ -650,11 +667,11 @@ export default function Stage1CalculationParams({
                 chosenAction === 'createNew_profile' ||
                 chosenAction === 'createNew_boards'
               ) {
-                onUpdateWorkflow({
+                updateWorkflow({
                   travelTime: parseFloat('183'),
                 });
               }
-              onUpdateWorkflow({
+              updateWorkflow({
                 travelTime: parseFloat('183'),
               });
             }, 1850); // 1800 + небольшой запас
@@ -677,7 +694,7 @@ export default function Stage1CalculationParams({
               min="0"
               value={travelTime}
               onChange={(e) =>
-                onUpdateWorkflow({
+                updateWorkflow({
                   travelTime: parseInt(e.target.value) || 0,
                 })
               }

@@ -12,7 +12,16 @@ import prettierPlugin from 'eslint-plugin-prettier';
 export default [
   // Игнорируемые файлы
   {
-    ignores: ['dist/**', 'node_modules/**', '*.config.js'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      '*.config.js',
+      'check-imports.js',
+      'cleanup-project.js',
+      'delete-unused.js',
+      'fix-imports.js',
+      'docs/**',
+    ],
   },
   
   // Основные настройки
@@ -87,6 +96,50 @@ export default [
           project: './tsconfig.json',
         },
       },
+    },
+  },
+
+  // JavaScript files - do not use type-aware parserOptions.project (avoids TSConfig inclusion errors)
+  {
+    files: ['**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+      },
+      // use default JS parser; do not set parserOptions.project
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: {
+      'react': react,
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+      'import': importPlugin,
+      'prettier': prettierPlugin,
+    },
+    rules: {
+      'import/order': [
+        'warn',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+          ],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
+      ],
+      'prettier/prettier': 'warn',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
   
