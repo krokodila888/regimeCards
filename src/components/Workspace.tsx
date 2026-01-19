@@ -124,7 +124,11 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
 
   const handleUpdateChartData = (updates: Partial<ChartData>) => {
     if (activeChart) {
-      console.log(1);
+      console.debug('[Workspace] handleUpdateChartData called', {
+        keys: Object.keys(updates),
+        canvasObjects: (updates as any).canvasObjects ? (updates as any).canvasObjects.length : undefined,
+        timestamp: Date.now(),
+      });
       const updated = { ...activeChart, ...updates };
       setActiveChart(updated);
       dispatch(setCurrentChartData(updated));

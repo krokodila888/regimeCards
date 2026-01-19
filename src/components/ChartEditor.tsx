@@ -1,10 +1,9 @@
 import { jsPDF } from 'jspdf';
 import { GitBranch, ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { getPaletteObjectById } from './VisioObjectPalette';
 
-// Color conversion helpers: convert CSS oklch(...) to sRGB rgb(...) to avoid parsing errors in embedded SVGs
+// Color conversion helpers
 function clamp01(v: number) {
   return Math.min(1, Math.max(0, v));
 }
@@ -12,7 +11,7 @@ function clamp01(v: number) {
 function oklabToLinearSRGB(L: number, a: number, b: number) {
   const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
   const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
-  const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+  const s_ = L - 0.0894841775 * a - 1.291485548 * b;
 
   const l = l_ * l_ * l_;
   const m = m_ * m_ * m_;
@@ -20,7 +19,7 @@ function oklabToLinearSRGB(L: number, a: number, b: number) {
 
   const r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
   const g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
-  const bl = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+  const bl = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s;
 
   return [r, g, bl];
 }
@@ -88,14 +87,10 @@ function replaceVarsInSvg(svg: string): string {
   }
 }
 
-// Ограничения скорости (119 сегментов, 1782→1610 км)
-
-// Продольные силы (3434 точки, 1781.8→1610.1 км, 20 точек/км)
+// Data imports
 import { longitudinalForces } from '../data/longitudinal_forces';
 import { optimalRegimes, regimesV2 } from '../data/regimes';
 import { speedLimits } from '../data/speed-limits';
-
-// Кривые скорости (1718 точек, 1781.8→1610.1 км, 10 точек/км)
 import { speedCurves } from '../data/speedCurves';
 import { trainForceData } from '../data/trainForceData';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -120,8 +115,167 @@ interface ChartEditorProps {
   onUpdateChartData: (updates: Partial<ChartData>) => void;
 }
 
+// ИСПРАВЛЕНИЕ: Вынесли функции ДО использования в компоненте
+// Функция для отрисовки fallback иконки (синий кружок)
+const drawFallbackIcon = (
+  ctx: CanvasRenderingContext2D,
+  obj: any,
+  iconSize: number,
+  zoom: number
+) => {
+  const dotSize = 12;
+  ctx.fillStyle = '#3b82f6';
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(obj.x, obj.y, dotSize / zoom, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  if (obj.label) {
+    ctx.fillStyle = '#1f2937';
+    ctx.font = `${11 / zoom}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(obj.label, obj.x, obj.y + (dotSize + 4) / zoom);
+  }
+};
+
+// Функция для отрисовки canvas объектов с SVG иконками
+const drawCanvasObjects = async (
+  ctx: CanvasRenderingContext2D,
+  canvasObjects: any[],
+  zoom: number,
+  getPaletteObjectById: (id: string) => any
+) => {
+  if (!canvasObjects || canvasObjects.length === 0) return;
+
+  for (const obj of canvasObjects) {
+    ctx.save();
+
+    const baseIconSize = 24;
+    const iconSize = baseIconSize / (zoom || 1);
+
+    // Получаем полный объект из палитры
+    const fullObj = getPaletteObjectById(obj.subtype || obj.type);
+
+    if (fullObj && fullObj.canvasIcon) {
+      try {
+        // Создаем временный div для рендеринга SVG
+        const tempDiv = document.createElement('div');
+        tempDiv.style.position = 'absolute';
+        tempDiv.style.left = '-99999px';
+        tempDiv.style.width = `${iconSize}px`;
+        tempDiv.style.height = `${iconSize}px`;
+        document.body.appendChild(tempDiv);
+
+        // Рендерим React-элемент
+        const { createRoot } = await import('react-dom/client');
+        const root = createRoot(tempDiv);
+        const iconElement = React.cloneElement(fullObj.canvasIcon as React.ReactElement, {
+          style: { width: '100%', height: '100%' },
+        });
+
+        await new Promise<void>((resolve) => {
+          root.render(iconElement);
+          setTimeout(resolve, 50);
+        });
+
+        // Получаем SVG элемент
+        const svgElement = tempDiv.querySelector('svg');
+
+        if (svgElement) {
+          // Получаем размеры из viewBox
+          const viewBox = svgElement.getAttribute('viewBox');
+          let svgAspectRatio = 1;
+
+          if (viewBox) {
+            const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
+            svgAspectRatio = vbWidth / vbHeight;
+          } else {
+            const svgWidth = parseFloat(svgElement.getAttribute('width') || '1');
+            const svgHeight = parseFloat(svgElement.getAttribute('height') || '1');
+            svgAspectRatio = svgWidth / svgHeight;
+          }
+
+          // Вычисляем финальные размеры с сохранением пропорций
+          let finalIconWidth = iconSize;
+          let finalIconHeight = iconSize;
+
+          if (svgAspectRatio > 1) {
+            finalIconHeight = iconSize / svgAspectRatio;
+          } else if (svgAspectRatio < 1) {
+            finalIconWidth = iconSize * svgAspectRatio;
+          }
+
+          // Клонируем SVG для модификации
+          const svgClone = svgElement.cloneNode(true) as SVGElement;
+
+          // Получаем computed color из className
+          const computedColor = window.getComputedStyle(svgElement).color;
+
+          // Заменяем currentColor на конкретный цвет
+          const replaceCurrentColor = (element: Element) => {
+            ['stroke', 'fill'].forEach((attr) => {
+              if (element.getAttribute(attr) === 'currentColor') {
+                element.setAttribute(attr, computedColor);
+              }
+            });
+            Array.from(element.children).forEach((child) => replaceCurrentColor(child));
+          };
+
+          replaceCurrentColor(svgClone);
+
+          // Конвертируем в изображение
+          const svgData = new XMLSerializer().serializeToString(svgClone);
+          const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+          const url = URL.createObjectURL(svgBlob);
+
+          const iconImg = new Image();
+          await new Promise<void>((resolve, reject) => {
+            iconImg.onload = () => resolve();
+            iconImg.onerror = reject;
+            iconImg.src = url;
+          });
+
+          // Рисуем иконку с правильными пропорциями
+          ctx.drawImage(
+            iconImg,
+            obj.x - finalIconWidth / 2,
+            obj.y - finalIconHeight / 2,
+            finalIconWidth,
+            finalIconHeight
+          );
+
+          URL.revokeObjectURL(url);
+        }
+
+        root.unmount();
+        document.body.removeChild(tempDiv);
+
+        // Рисуем label если есть
+        if (obj.label) {
+          ctx.fillStyle = '#1f2937';
+          ctx.font = `${11 / zoom}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(obj.label, obj.x, obj.y + iconSize / 2 + 4);
+        }
+      } catch (error) {
+        console.error('[ChartEditor] Ошибка отрисовки иконки:', error);
+        // Fallback к синему кружку
+        drawFallbackIcon(ctx, obj, iconSize, zoom);
+      }
+    } else {
+      // Fallback к синему кружку
+      drawFallbackIcon(ctx, obj, iconSize, zoom);
+    }
+
+    ctx.restore();
+  }
+};
+
 // Helper function to calculate kmToX conversion
-// This is extracted so it can be used by both drawing and interaction handlers
 const createKmToXConverter = (chart: ChartData, marginLeft: number = 80, pixelsPerKm: number) => {
   if (!chart.workflow?.trackSection) {
     return (km: number) => marginLeft;
@@ -138,9 +292,9 @@ const createKmToXConverter = (chart: ChartData, marginLeft: number = 80, pixelsP
     actualEndCoord = trackSection.stations[trackSection.stations.length - 1].endCoord;
   }
 
-  const isReversed = /*actualStartCoord > actualEndCoord*/ true;
-  const displayStartCoord = /*isReversed ? actualEndCoord : actualStartCoord*/ 1782;
-  const displayEndCoord = /*isReversed ? actualStartCoord : actualEndCoord*/ 1610;
+  const isReversed = true;
+  const displayStartCoord = 1782;
+  const displayEndCoord = 1610;
 
   return (km: number) => {
     if (!isFinite(km)) {
@@ -167,11 +321,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   const [zoom, setZoom] = useState(1);
   const [panX, setPanX] = useState(0);
-
-  // ВЕРТИКАЛЬНАЯ ПАНОРАМА (масштаб по Y заблокирован, но panY общий для всех элементов)
   const [panY, setPanY] = useState(0);
 
-  // Redraw trigger for interactive elements (increments to force redraw without data changes)
   const [redrawTrigger, setRedrawTrigger] = useState(0);
   const triggerRedraw = React.useCallback(() => {
     setRedrawTrigger((prev) => prev + 1);
@@ -179,30 +330,66 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
-  const [isInitialized, setIsInitialized] = useState(false);
 
   const dispatch = useAppDispatch();
   const storeChart = useAppSelector((s) => s.workflow.currentChartData);
 
-  // Keep store in sync with prop if provided
   useEffect(() => {
     if (chartData) dispatch(setCurrentChartData(chartData));
   }, [chartData, dispatch]);
 
   const updateChartData = (updates: Partial<ChartData>) => {
-    if (onUpdateChartData) onUpdateChartData(updates);
+    // Prefer informing parent (single source of truth). During interactive
+    // operations (dragging/panning) debounce rapid updates to avoid
+    // duplicate creations caused by multiple update paths.
+    if (onUpdateChartData) {
+      const interactive = !!(draggedObject || draggedArrow || isPanning);
+      console.debug('[ChartEditor] updateChartData called', {
+        interactive,
+        updates,
+        pending: !!pendingUpdatesRef.current,
+        timestamp: Date.now(),
+      });
+      if (interactive) {
+        pendingUpdatesRef.current = { ...(pendingUpdatesRef.current || {}), ...updates };
+        if (updateTimerRef.current) clearTimeout(updateTimerRef.current as number);
+        updateTimerRef.current = window.setTimeout(() => {
+          if (pendingUpdatesRef.current) {
+            console.debug('[ChartEditor] flushing pending updates', {
+              pending: pendingUpdatesRef.current,
+              timestamp: Date.now(),
+            });
+            onUpdateChartData(pendingUpdatesRef.current as Partial<ChartData>);
+            pendingUpdatesRef.current = null;
+          }
+          updateTimerRef.current = null;
+        }, 50) as unknown as number;
+        return;
+      }
+
+      console.debug('[ChartEditor] calling onUpdateChartData immediate', { updates });
+      onUpdateChartData(updates);
+      return;
+    }
+
     const current = chartData ?? storeChart;
-    if (current) dispatch(setCurrentChartData({ ...current, ...updates }));
+    if (current) {
+      const merged = { ...current, ...updates };
+      console.debug('[ChartEditor] no parent handler - dispatching to store', {
+        updatesSummary: Object.keys(updates),
+        canvasObjects_before: current.canvasObjects ? current.canvasObjects.length : 0,
+        canvasObjects_after: (updates as any).canvasObjects ? (updates as any).canvasObjects.length : undefined,
+        timestamp: Date.now(),
+      });
+      dispatch(setCurrentChartData(merged));
+    }
   };
 
   const chart = chartData ?? storeChart;
 
-  // Expose a simple export function on window to allow external callers (MainCanvas) to trigger PDF export
+  // PDF Export function
   useEffect(() => {
-    const win = window as unknown as {
-      __exportChartEditorToPdf?: (filename?: string) => Promise<void> | undefined;
-    };
-
+    const win = window as any;
     win.__exportChartEditorToPdf = async (filename = 'chart.pdf') => {
       try {
         const srcCanvas = canvasRef.current;
@@ -337,44 +524,45 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     };
 
     return () => {
-      try {
-        win.__exportChartEditorToPdf = undefined;
-      } catch {
-        /* ignore */
-      }
+      win.__exportChartEditorToPdf = undefined;
     };
   }, [canvasRef, chart]);
 
   const [isMarqueeZoom, setIsMarqueeZoom] = useState(false);
-  const [scrollX, setScrollX] = useState(0);
-  const [marqueeStart, setMarqueeStart] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
-  const [marqueeEnd, setMarqueeEnd] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+  const [marqueeStart, setMarqueeStart] = useState<{ x: number; y: number } | null>(null);
+  const [marqueeEnd, setMarqueeEnd] = useState<{ x: number; y: number } | null>(null);
 
   const [hoveredObject, setHoveredObject] = useState<CanvasObject | null>(null);
-  const [draggedObject, setDraggedObject] = useState<CanvasObject | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const mousePosRef = useRef({ x: 0, y: 0 });
-  const [screenMousePos, setScreenMousePos] = useState({
-    x: 0,
-    y: 0,
-  });
-
-  const [showPalette, setShowPalette] = useState(false);
-  const [placingObject, setPlacingObject] = useState<string | null>(null);
-
   const [hoveredDataPoint, setHoveredDataPoint] = useState<{
     label: string;
     x: number;
     y: number;
   } | null>(null);
+  const [draggedObject, setDraggedObject] = useState<CanvasObject | null>(null);
+  const [draggingObjectPosition, setDraggingObjectPosition] = useState<
+    { x: number; y: number } | null
+  >(null);
+  const placementCooldownRef = useRef<number>(0);
+  // Pending update debounce refs for interactive updates
+  const pendingUpdatesRef = useRef<Partial<ChartData> | null>(null);
+  const updateTimerRef = useRef<number | null>(null);
 
-  // Arrow interaction state
+  const flushPendingUpdates = () => {
+    if (updateTimerRef.current) {
+      clearTimeout(updateTimerRef.current as number);
+      updateTimerRef.current = null;
+    }
+    if (pendingUpdatesRef.current && onUpdateChartData) {
+      onUpdateChartData(pendingUpdatesRef.current);
+      pendingUpdatesRef.current = null;
+    }
+  };
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [screenMousePos, setScreenMousePos] = useState({ x: 0, y: 0 });
+
+  const [showPalette, setShowPalette] = useState(false);
+  const [placingObject, setPlacingObject] = useState<string | null>(null);
+
   const [selectedArrow, setSelectedArrow] = useState<string | null>(null);
   const [draggedArrow, setDraggedArrow] = useState<{
     arrowId: string;
@@ -386,7 +574,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   } | null>(null);
   const [resizeLimitReached, setResizeLimitReached] = useState<boolean>(false);
 
-  // Display Settings state
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
   const [displaySettings, setDisplaySettings] = useState({
     trackProfile: true,
@@ -396,6 +583,114 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     regimeBands: true,
     objectMarkers: true,
   });
+
+  const [baseWidth, setBaseWidth] = useState(2400);
+  const [baseHeight] = useState(800);
+
+  const dividerY = baseHeight * 0.4;
+  const xAxisY = dividerY + 250;
+  const slopeAreaTop = 450;
+  const slopeAreaBottom = 550;
+
+  useEffect(() => {
+    const trackLength = chart.workflow?.trackSection?.length || 200;
+
+    if (!isFinite(trackLength) || trackLength <= 0 || trackLength > 10000) {
+      if (baseWidth !== 2400) {
+        setBaseWidth(2400);
+      }
+      return;
+    }
+
+    const marginLeft = 100;
+    const marginRight = 100;
+    const calculatedWidth = Math.max(2400, marginLeft + trackLength * pixelsPerKm + marginRight);
+
+    if (calculatedWidth !== baseWidth) {
+      setBaseWidth(calculatedWidth);
+    }
+  }, [chart.workflow?.trackSection?.length, baseWidth, pixelsPerKm]);
+
+  const lineWidth = (base: number) => base;
+  const fontSize = (base: number) => `${base}px sans-serif`;
+
+  // ИСПРАВЛЕНИЕ: Сделали draw async
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let isDrawing = false;
+
+    const draw = async () => {
+      // ИСПРАВЛЕНИЕ: async
+      if (isDrawing) return;
+
+      isDrawing = true;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      try {
+        if (chartData.workflow?.trackSection) {
+          await drawWorkflowCanvas(ctx, baseWidth, baseHeight, zoom); // ИСПРАВЛЕНИЕ: await
+        } else {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, baseWidth, baseHeight);
+          ctx.fillStyle = '#6b7280';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(
+            'Выберите участок пути в боковой панели для начала работы',
+            baseWidth / 2,
+            baseHeight / 2
+          );
+        }
+      } catch (error) {
+        console.error('Ошибка при отрисовке:', error);
+      } finally {
+        isDrawing = false;
+      }
+    };
+
+    const debouncedDraw = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    debouncedDraw();
+
+    const handleResize = () => {
+      debouncedDraw();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [
+    chartData.workflow?.trackSection?.id,
+    chartData.canvasObjects,
+    displaySettings,
+    panX,
+    panY,
+    zoom,
+    baseWidth,
+    baseHeight,
+    redrawTrigger,
+    marqueeStart,
+    marqueeEnd,
+    pixelsPerKm,
+  ]);
 
   const throttledLog = (message: string, interval: number = 1000) => {
     const now = Date.now();
@@ -432,19 +727,9 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     return 800;
   };
 
-  const [baseWidth, setBaseWidth] = useState(2400);
-  const [baseHeight] = useState(800); // Fixed height for 4-layer structure
-
   // Re-render tracking for debugging
   const renderCountRef = useRef(0);
   const lastRenderTimeRef = useRef(Date.now());
-
-  // ВНИМАНИЕ: старый dividerY/xAxisY/slopeArea* здесь далее не используются для отрисовки
-  // оставлены только для некоторых логик (например, getStackedPosition/hover), но без влияния на систему координат
-  const dividerY = baseHeight * 0.4;
-  const xAxisY = dividerY + 250;
-  const slopeAreaTop = 450;
-  const slopeAreaBottom = 550;
 
   // Обновление ширины холста по длине участка
   useEffect(() => {
@@ -630,12 +915,12 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     });
   };
 
-  const handlePanMove = (e: React.MouseEvent) => {
+   const handlePanMove = (e: React.MouseEvent) => {
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
 
     // Расчёт мировой позиции мыши в ЕДИНОЙ системе координат
-    const newMousePosX = (e.clientX - rect.left - panX) / zoom;
+    const newMousePosX = e.clientX - rect.left - panX;
     const newMousePosY = e.clientY - rect.top - panY;
 
     setMousePos({
@@ -647,6 +932,24 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       x: e.clientX,
       y: e.clientY,
     });
+
+
+    //const rect = canvasRef.current?.getBoundingClientRect();
+    //if (!rect) return;
+
+    // Расчёт мировой позиции мыши в ЕДИНОЙ системе координат
+    //const newMousePosX = (e.clientX - rect.left - panX) / zoom;
+    //const newMousePosY = e.clientY - rect.top - panY;
+
+    /*setMousePos({
+      x: newMousePosX,
+      y: newMousePosY,
+    });
+
+    setScreenMousePos({
+      x: e.clientX,
+      y: e.clientY,
+    });*/
 
     // Hover по стрелкам и др. элементы — ВСЕ используют одни и те же мировые координаты (без альтернативных transform)
     if (
@@ -802,6 +1105,11 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
       setResizeLimitReached(limitReached);
 
+      console.debug('[ChartEditor] updating regimeArrows', {
+        arrowId: draggedArrow?.arrowId,
+        updatedCount: updatedArrows.length,
+        sample: updatedArrows.slice(0, 3),
+      });
       updateChartData({
         workflow: {
           ...chart.workflow,
@@ -809,11 +1117,23 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         },
       });
     } else if (draggedObject && !isPanning) {
-      // Перетаскивание объектов — в общей мировой системе координат
-      const newObjects = chart.canvasObjects.map((obj) =>
-        obj.id === draggedObject.id ? { ...obj, x: newMousePosX, y: newMousePosY } : obj
-      );
-      updateChartData({ canvasObjects: newObjects });
+      // Перетаскивание объектов — обновляем только локальное состояние позиции.
+      // Это предотвращает множественные быстрые вызовы updateChartData и появление дубликатов.
+      const currentObj = chart.canvasObjects.find((o) => o.id === draggedObject.id);
+      if (currentObj) {
+        const dx = Math.abs(currentObj.x - newMousePosX);
+        const dy = Math.abs(currentObj.y - newMousePosY);
+        if (dx < 0.5 && dy < 0.5) {
+          return;
+        }
+      }
+
+      setDraggingObjectPosition({ x: newMousePosX, y: newMousePosY });
+      console.debug('[ChartEditor] interactive drag (local) - setDraggingObjectPosition', {
+        draggedId: draggedObject.id,
+        x: newMousePosX,
+        y: newMousePosY,
+      });
     } else if (isPanning && !draggedObject && !draggedArrow) {
       // Панорама с ограничениями
       const newPanX = e.clientX - panStart.x;
@@ -832,15 +1152,26 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   const handlePanEnd = () => {
     if (draggedObject) {
-      const finalY = mousePos.y >= xAxisY ? xAxisY - 30 : mousePos.y;
-      const finalX = mousePos.x;
+      // Use the local dragging position if available, otherwise fallback to mousePos
+      const finalX = draggingObjectPosition ? draggingObjectPosition.x : mousePos.x;
+      let finalY = draggingObjectPosition ? draggingObjectPosition.y : mousePos.y;
+      finalY = finalY >= xAxisY ? xAxisY - 30 : finalY;
 
       const stackedPosition = getStackedPosition(finalX, finalY);
 
       const newObjects = chart.canvasObjects.map((obj) =>
         obj.id === draggedObject.id ? { ...obj, x: finalX, y: stackedPosition } : obj
       );
+      console.debug('[ChartEditor] finalizing drag - update canvasObjects', {
+        length: chart.canvasObjects.length,
+        draggedId: draggedObject.id,
+      });
       updateChartData({ canvasObjects: newObjects });
+      // Ensure any debounced interactive updates are flushed immediately
+      flushPendingUpdates();
+
+      // clear local dragging position
+      setDraggingObjectPosition(null);
     }
     setIsPanning(false);
     setDraggedObject(null);
@@ -900,9 +1231,16 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         y,
       };
 
-      updateChartData({
-        canvasObjects: [...chart.canvasObjects, newObject],
-      });
+      const now = Date.now();
+      if (now - placementCooldownRef.current < 250) {
+        console.debug('[ChartEditor] placement cooldown - ignoring duplicate placement');
+      } else {
+        placementCooldownRef.current = now;
+        console.debug('[ChartEditor] placing new object', { id: newObject.id, x, y });
+        updateChartData({
+          canvasObjects: [...chart.canvasObjects, newObject],
+        });
+      }
 
       setPlacingObject(null);
       (window as any).__placingObjectLabel = undefined;
@@ -944,6 +1282,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         y,
       };
 
+      console.debug('[ChartEditor] drop -> placing new object', { id: newObject.id, x, y });
       updateChartData({
         canvasObjects: [...chart.canvasObjects, newObject],
       });
@@ -964,12 +1303,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   // ==========
   // Helper‑функции для толщины линий и шрифта (чтобы всё выглядело единообразно при зуме по X)
   // ==========
-  const lineWidth = (base: number) => base; // Без деления на zoom
-  const fontSize = (base: number) => `${base}px sans-serif`; // Без деления на zoom
 
   // ОСНОВНАЯ ОТРИСОВКА WORKFLOW-ГРАФИКА
   const drawWorkflowCanvas = React.useCallback(
-    (ctx: CanvasRenderingContext2D, baseWidth: number, baseHeight: number, zoom: number) => {
+    async (ctx: CanvasRenderingContext2D, baseWidth: number, baseHeight: number, zoom: number) => {
       try {
         const trackSection = chartData.workflow?.trackSection;
         const trackLength = trackSection?.length ?? 0;
@@ -1061,19 +1398,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           const layer1Center = (layer1Top + layer1Bottom) / 2;
           const layer1Height = layer1Bottom - layer1Top;
 
-          // ЛОГИРОВАНИЕ данных
-          console.log('[LAYER 1] Рисование слоя усилий:', {
-            layer1Top,
-            layer1Bottom,
-            layer1Center,
-            layer1Height,
-            displayStartCoord,
-            displayEndCoord,
-            trackSectionStart: trackSection?.stations?.[0]?.startCoord,
-            trackSectionEnd: trackSection?.stations?.[trackSection?.stations?.length - 1]?.endCoord,
-            isReversed,
-            trainForceDataLength: trainForceData?.length || 0,
-          });
 
           // Draw layer border
           ctx.strokeStyle = '#d1d5db';
@@ -1128,14 +1452,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
           // Draw force curves from longitudinalForces
           if (longitudinalForces && longitudinalForces.length > 0) {
-            console.log('[LAYER 1] Данные:', {
-              точек: longitudinalForces.length,
-              displayStartCoord: displayStartCoord,
-              displayEndCoord: displayEndCoord,
-              диапазонДанных: `${longitudinalForces[0].distance} - ${longitudinalForces[longitudinalForces.length - 1].distance} км`,
-              диапазонОтображения: `${displayStartCoord} - ${displayEndCoord} км`,
-              разница: `${Math.abs(longitudinalForces[0].distance - displayStartCoord)} км`,
-            });
 
             // Проверяем, попадают ли данные в диапазон отображения
             const firstDataKm = longitudinalForces[0].distance;
@@ -1145,11 +1461,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               (point) => point.distance <= displayStartCoord && point.distance >= displayEndCoord
             );
 
-            console.log('[LAYER 1] Данные в диапазоне:', {
-              всего: longitudinalForces.length,
-              вДиапазоне: dataInRange.length,
-              процент: Math.round((dataInRange.length / longitudinalForces.length) * 100) + '%',
-            });
 
             // Если данных в диапазоне нет — возможно проблема с координатами
             if (dataInRange.length === 0) {
@@ -1169,14 +1480,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
             const forceScale = LAYER1_HEIGHT / 2 / maxForce;
 
-            /*console.log('[LAYER 1] Параметры масштабирования:', {
-              maxTension,
-              maxCompression,
-              maxForce,
-              forceScale,
-              LAYER1_HEIGHT,
-            });*/
-
             // 1. Рисуем КРАСНУЮ кривую (растяжение/tension)
             ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = lineWidth(2);
@@ -1189,22 +1492,16 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               const distanceKm = point.distance;
 
               if (distanceKm <= displayStartCoord && distanceKm >= displayEndCoord) {
-                //console.log(distanceKm)
-                //console.log(displayStartCoord)
-                //console.log(111)
                 const x = kmToX1(distanceKm);
                 const y = LAYER1_CENTER - point.tension * forceScale; // Положительное значение - выше базовой линии
                 ctx.lineTo(x, y);
                 ctx.moveTo(x, y);
-                //console.log({x: x, y: y})
 
                 /*if (!tensionStarted) {
                   ctx.moveTo(x, y);
                   tensionStarted = true;
-                  console.log(222)
                 } else {
                   ctx.lineTo(x, y);
-                  console.log(333)
                 }*/
                 tensionPointsDrawn++;
 
@@ -1451,14 +1748,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             (limit) => limit.start >= displayEndCoord && limit.end <= displayStartCoord
           );
 
-          console.log('[LAYER 2] Ограничения скорости:', {
-            всегоОграничений: speedLimits.length,
-            вДиапазоне: relevantLimits.length,
-            диапазонОтображения: `${displayStartCoord} → ${displayEndCoord}`,
-            первоеОграничение: relevantLimits[0],
-            последнееОграничение: relevantLimits[relevantLimits.length - 1],
-          });
-
           if (relevantLimits.length > 0) {
             let started = false;
             let lastSpeed = relevantLimits[0].limit;
@@ -1495,17 +1784,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               ctx.lineTo(endX, y);
               lastSpeed = limit.limit;
 
-              // Отладка первых нескольких сегментов
-              if (index < 5) {
-                console.log(`[LAYER 2] Сегмент ${index}:`, {
-                  start: limit.start,
-                  end: limit.end,
-                  limit: limit.limit,
-                  startX,
-                  endX,
-                  y,
-                });
-              }
             });
 
             ctx.stroke();
@@ -1557,14 +1835,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           kmInterval = 1;
         }
 
-        console.log('[RULER] Параметры шкалы:', {
-          totalKm,
-          kmInterval,
-          displayStartCoord,
-          displayEndCoord,
-          rulerY,
-        });
-
         // Генерируем отметки для шкалы
         // ВАЖНО: координаты идут справа налево (1782 → 1610)
         const rulerMarks: number[] = [];
@@ -1575,13 +1845,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         ) {
           rulerMarks.push(km);
         }
-
-        console.log('[RULER] Отметки шкалы:', {
-          количество: rulerMarks.length,
-          первая: rulerMarks[0],
-          последняя: rulerMarks[rulerMarks.length - 1],
-          всеОтметки: rulerMarks.slice(0, 10), // Первые 10 для отладки
-        });
 
         // Рисуем вертикальные штрихи и пунктирные линии вверх
         ctx.save();
@@ -1614,15 +1877,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.textBaseline = 'middle';
           ctx.fillText(`${km}`, x + 3, rulerY - 8); // +3px вправо, +9px вниз
 
-          // Отладка первых штрихов
-          if (index < 5) {
-            console.log(`[RULER] Отметка ${km} км:`, {
-              x,
-              layer2Top,
-              layer2Bottom,
-              rulerY,
-            });
-          }
         });
 
         ctx.restore();
@@ -1641,11 +1895,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               point.optimalSpeed !== null
           );
 
-          console.log('[LAYER 2] Оптимальная кривая:', {
-            всегоТочек: speedCurves.length,
-            вДиапазоне: visiblePoints.length,
-          });
-
           if (visiblePoints.length > 0) {
             let started = false;
 
@@ -1658,16 +1907,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                 started = true;
               } else {
                 ctx.lineTo(x, y);
-              }
-
-              // Отладка первых точек
-              if (index < 3) {
-                console.log(`[LAYER 2] Оптимальная точка ${index}:`, {
-                  distance: point.distance,
-                  speed: point.optimalSpeed,
-                  x,
-                  y,
-                });
               }
             });
 
@@ -1705,11 +1944,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               point.actualSpeed !== null
           );
 
-          console.log('[LAYER 2] Фактическая кривая:', {
-            всегоТочек: speedCurves.length,
-            вДиапазоне: visiblePoints.length,
-          });
-
           if (visiblePoints.length > 0) {
             let started = false;
 
@@ -1722,16 +1956,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                 started = true;
               } else {
                 ctx.lineTo(x, y);
-              }
-
-              // Отладка первых точек
-              if (index < 3) {
-                console.log(`[LAYER 2] Фактическая точка ${index}:`, {
-                  distance: point.distance,
-                  speed: point.actualSpeed,
-                  x,
-                  y,
-                });
               }
             });
 
@@ -1754,10 +1978,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         // Station markers (vertical lines in Layer 2)
         // ОТОБРАЖЕНИЕ СТАНЦИЙ (вертикальные линии, иконки, подписи)
         if (trackSection && trackSection.stations && trackSection.stations.length > 0) {
-          console.log('[STATIONS] Отрисовка станций:', {
-            количество: trackSection.stations.length,
-            первая: trackSection.stations[0],
-          });
 
           trackSection.stations.forEach((station, index) => {
             // Используем startCoord как основную координату станции
@@ -1869,16 +2089,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             ctx.textBaseline = 'top';
             ctx.fillText(`${stationKm.toFixed(1)} км`, xWorld, iconY + iconRadius - 44);
             ctx.restore();
-
-            // Отладка первых станций
-            if (index < 3) {
-              console.log(`[STATIONS] Станция ${index}:`, {
-                name: station.stationName,
-                coord: stationKm,
-                x: xWorld,
-                iconY,
-              });
-            }
           });
         }
 
@@ -1942,16 +2152,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             // 2. ПРЕОБРАЗОВАНИЕ В ПИКСЕЛИ
             const startX = kmToX2(segmentStart);
             const endX = kmToX2(segmentEnd);
-
-            console.log(`[LAYER 3] Профиль ${index}:`, {
-              id: profile.id,
-              originalRange: `${profile.startCoord} → ${profile.endCoord}`,
-              clippedRange: `${segmentStart} → ${segmentEnd}`,
-              slope: profile.slopePromille,
-              startX,
-              endX,
-              width: Math.abs(endX - startX),
-            });
 
             // Вертикальные линии-разделители
             // Рисуем разделитель в начале каждого сегмента (кроме первого)
@@ -2034,22 +2234,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.fillText('Профиль пути', 0, 0);
           ctx.restore();
         }
-
-        // =============================================================================
-        // ДИАГНОСТИКА ДЛЯ LAYER 3
-        // =============================================================================
-
-        // Если профиль всё ещё не отображается, добавьте этот код ПЕРЕД блоком Layer 3:
-
-        console.log('[LAYER 3 ДИАГНОСТИКА]', {
-          displaySettings_trackProfile: displaySettings.trackProfile,
-          trackSection_exists: !!trackSection,
-          pathProfiles_exists: !!trackSection?.pathProfiles,
-          pathProfiles_length: trackSection?.pathProfiles?.length || 0,
-          pathProfiles_sample: trackSection?.pathProfiles?.[0],
-          displayStartCoord,
-          displayEndCoord,
-        });
 
         // LAYER 4: REGIME BANDS AND ARROWS (640-800px)
 
@@ -2620,7 +2804,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         }
 
         // Рисуем размещенные объекты из палитры — предпочитаем canvasIcon (SVG) рендерить в raster и отрисовать на canvas
-        if (
+        /*if (
           displaySettings.objectMarkers &&
           chartData.canvasObjects &&
           chartData.canvasObjects.length > 0
@@ -2640,20 +2824,12 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             let drewSvg = false;
             if (fullObj && fullObj.canvasIcon) {
               try {
-                const key = `${obj.subtype || obj.type}_${Math.round(iconW)}x${Math.round(
-                  iconH
-                )}`;
+                const key = `${obj.subtype || obj.type}_${Math.round(iconW)}x${Math.round(iconH)}`;
                 const cache = svgIconCache.current;
                 const cached = cache.get(key);
                 if (cached && cached.complete) {
                   // draw centered
-                  ctx.drawImage(
-                    cached,
-                    obj.x - iconW / 2,
-                    obj.y - iconH / 2,
-                    iconW,
-                    iconH
-                  );
+                  ctx.drawImage(cached, obj.x - iconW / 2, obj.y - iconH / 2, iconW, iconH);
                   drewSvg = true;
                 } else if (!cached) {
                   // create raster image from SVG markup and cache it
@@ -2671,7 +2847,8 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                   let svgSanitized = replaceVarsInSvg(svgWithSize);
                   svgSanitized = replaceOklchInString(svgSanitized);
 
-                  const data = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSanitized);
+                  const data =
+                    'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSanitized);
                   const img = new Image();
                   img.crossOrigin = 'anonymous';
                   img.onload = () => {
@@ -2723,6 +2900,174 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
             ctx.restore();
           });
+        }*/
+
+        const drawCanvasObjects = async (
+          ctx: CanvasRenderingContext2D,
+          canvasObjects: any[],
+          zoom: number,
+          getPaletteObjectById: (id: string) => any
+        ) => {
+          if (!canvasObjects || canvasObjects.length === 0) return;
+
+          for (const obj of canvasObjects) {
+            ctx.save();
+
+            const baseIconSize = 24;
+            const iconSize = baseIconSize / (zoom || 1);
+
+            // Получаем полный объект из палитры
+            const fullObj = getPaletteObjectById(obj.subtype || obj.type);
+
+            if (fullObj && fullObj.canvasIcon) {
+              try {
+                // Создаем временный div для рендеринга SVG
+                const tempDiv = document.createElement('div');
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.left = '-99999px';
+                tempDiv.style.width = `${iconSize}px`;
+                tempDiv.style.height = `${iconSize}px`;
+                document.body.appendChild(tempDiv);
+
+                // Рендерим React-элемент
+                const root = (await import('react-dom/client')).createRoot(tempDiv);
+                const iconElement = React.cloneElement(fullObj.canvasIcon as React.ReactElement, {
+                  style: { width: '100%', height: '100%' },
+                });
+
+                await new Promise<void>((resolve) => {
+                  root.render(iconElement);
+                  setTimeout(resolve, 50);
+                });
+
+                // Получаем SVG элемент
+                const svgElement = tempDiv.querySelector('svg');
+
+                if (svgElement) {
+                  // Получаем размеры из viewBox
+                  const viewBox = svgElement.getAttribute('viewBox');
+                  let svgAspectRatio = 1;
+
+                  if (viewBox) {
+                    const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
+                    svgAspectRatio = vbWidth / vbHeight;
+                  } else {
+                    const svgWidth = parseFloat(svgElement.getAttribute('width') || '1');
+                    const svgHeight = parseFloat(svgElement.getAttribute('height') || '1');
+                    svgAspectRatio = svgWidth / svgHeight;
+                  }
+
+                  // Вычисляем финальные размеры с сохранением пропорций
+                  let finalIconWidth = iconSize;
+                  let finalIconHeight = iconSize;
+
+                  if (svgAspectRatio > 1) {
+                    finalIconHeight = iconSize / svgAspectRatio;
+                  } else if (svgAspectRatio < 1) {
+                    finalIconWidth = iconSize * svgAspectRatio;
+                  }
+
+                  // Клонируем SVG для модификации
+                  const svgClone = svgElement.cloneNode(true) as SVGElement;
+
+                  // Получаем computed color из className
+                  const computedColor = window.getComputedStyle(svgElement).color;
+
+                  // Заменяем currentColor на конкретный цвет
+                  const replaceCurrentColor = (element: Element) => {
+                    ['stroke', 'fill'].forEach((attr) => {
+                      if (element.getAttribute(attr) === 'currentColor') {
+                        element.setAttribute(attr, computedColor);
+                      }
+                    });
+                    Array.from(element.children).forEach((child) => replaceCurrentColor(child));
+                  };
+
+                  replaceCurrentColor(svgClone);
+
+                  // Конвертируем в изображение
+                  const svgData = new XMLSerializer().serializeToString(svgClone);
+                  const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                  const url = URL.createObjectURL(svgBlob);
+
+                  const iconImg = new Image();
+                  await new Promise<void>((resolve, reject) => {
+                    iconImg.onload = () => resolve();
+                    iconImg.onerror = reject;
+                    iconImg.src = url;
+                  });
+
+                  // Рисуем иконку с правильными пропорциями
+                  ctx.drawImage(
+                    iconImg,
+                    obj.x - finalIconWidth / 2,
+                    obj.y - finalIconHeight / 2,
+                    finalIconWidth,
+                    finalIconHeight
+                  );
+
+                  URL.revokeObjectURL(url);
+                }
+
+                root.unmount();
+                document.body.removeChild(tempDiv);
+
+                // Рисуем label если есть
+                if (obj.label) {
+                  ctx.fillStyle = '#1f2937';
+                  ctx.font = `${11 / zoom}px sans-serif`;
+                  ctx.textAlign = 'center';
+                  ctx.textBaseline = 'top';
+                  ctx.fillText(obj.label, obj.x, obj.y + iconSize / 2 + 4);
+                }
+              } catch (error) {
+                console.error('[ChartEditor] Ошибка отрисовки иконки:', error);
+                // Fallback к синему кружку
+                drawFallbackIcon(ctx, obj, iconSize, zoom);
+              }
+            } else {
+              // Fallback к синему кружку
+              drawFallbackIcon(ctx, obj, iconSize, zoom);
+            }
+
+            ctx.restore();
+          }
+        };
+
+        // Функция для отрисовки fallback иконки (синий кружок)
+        const drawFallbackIcon = (
+          ctx: CanvasRenderingContext2D,
+          obj: any,
+          iconSize: number,
+          zoom: number
+        ) => {
+          const dotSize = 12;
+          ctx.fillStyle = '#3b82f6';
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(obj.x, obj.y, dotSize / zoom, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          if (obj.label) {
+            ctx.fillStyle = '#1f2937';
+            ctx.font = `${11 / zoom}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillText(obj.label, obj.x, obj.y + (dotSize + 4) / zoom);
+          }
+        };
+        if (displaySettings.objectMarkers && chartData.canvasObjects) {
+          // Merge local dragging position for rendering so the dragged object
+          // follows the cursor smoothly without mutating chartData until drop.
+          let objectsToRender = chartData.canvasObjects;
+          if (draggedObject && draggingObjectPosition) {
+            objectsToRender = chartData.canvasObjects.map((obj) =>
+              obj.id === draggedObject.id ? { ...obj, x: draggingObjectPosition.x, y: draggingObjectPosition.y } : obj
+            );
+          }
+          await drawCanvasObjects(ctx, objectsToRender, zoom, getPaletteObjectById);
         }
 
         ctx.restore(); // ВОЗВРАТ К ИСХОДНОЙ (НЕМАСШТАБИРОВАННОЙ) СИСТЕМЕ
@@ -2885,133 +3230,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     return segments;
   };
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let isDrawing = false;
-
-    const draw = () => {
-      if (isDrawing) return;
-
-      isDrawing = true;
-
-      // Очистка канваса
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      try {
-        // Draw workflow chart if available
-        if (chartData.workflow?.trackSection) {
-          drawWorkflowCanvas(ctx, baseWidth, baseHeight, zoom);
-        } else {
-          // Draw placeholder
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, baseWidth, baseHeight);
-          ctx.fillStyle = '#6b7280';
-          ctx.font = '20px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(
-            'Выберите участок пути в боковой панели для начала работы',
-            baseWidth / 2,
-            baseHeight / 2
-          );
-        }
-
-          // Draw marquee overlay on top so it's always visible
-          if (marqueeStart && marqueeEnd) {
-            try {
-              ctx.save();
-              ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-              const startX = Math.min(marqueeStart.x, marqueeEnd.x);
-              const endX = Math.max(marqueeStart.x, marqueeEnd.x);
-              const startY = 0;
-              const endY = canvas.height;
-
-              ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
-              ctx.fillRect(startX, startY, endX - startX, endY);
-
-              ctx.strokeStyle = '#3b82f6';
-              ctx.lineWidth = 3;
-              ctx.beginPath();
-              ctx.moveTo(startX, startY);
-              ctx.lineTo(startX, endY);
-              ctx.stroke();
-
-              ctx.beginPath();
-              ctx.moveTo(endX, startY);
-              ctx.lineTo(endX, endY);
-              ctx.stroke();
-
-              ctx.setLineDash([5, 5]);
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(startX, startY);
-              ctx.lineTo(endX, startY);
-              ctx.moveTo(startX, endY);
-              ctx.lineTo(endX, endY);
-              ctx.stroke();
-              ctx.setLineDash([]);
-
-              ctx.restore();
-            } catch {}
-          }
-      } catch (error) {
-        console.error('Ошибка при отрисовке:', error);
-      } finally {
-        isDrawing = false;
-      }
-    };
-
-    // Дебаунс перерисовки
-    const debouncedDraw = () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      animationFrameId = requestAnimationFrame(draw);
-    };
-
-    // Запускаем отрисовку
-    debouncedDraw();
-
-    // Добавляем обработчики для перерисовки при изменениях
-    const handleResize = () => {
-      debouncedDraw();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [
-    // ТОЛЬКО необходимые зависимости
-    chartData.workflow?.trackSection?.id,
-    chartData.workflow?.locomotive?.id,
-    chartData.workflow?.regimeArrows,
-    chartData.canvasObjects,
-    displaySettings,
-    panX,
-    panY,
-    zoom,
-    baseWidth,
-    baseHeight,
-    drawWorkflowCanvas, // Эта функция должна быть мемоизирована с useCallback
-    redrawTrigger,
-    marqueeStart,
-    marqueeEnd,
-    pixelsPerKm,
-  ]);
-
   // Scroll boundary management with 100px padding
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
@@ -3129,13 +3347,19 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   // Hover по объектам
   useEffect(() => {
+    // Disable hover while actively dragging an object to avoid conflicts
+    if (draggedObject) {
+      setHoveredObject(null);
+      return;
+    }
+
     const hovered = chartData.canvasObjects.find((obj) => {
       const dx = obj.x - mousePos.x;
       const dy = obj.y - mousePos.y;
       return Math.sqrt(dx * dx + dy * dy) < 15;
     });
     setHoveredObject(hovered || null);
-  }, [mousePos, chartData.canvasObjects]);
+  }, [mousePos, chartData.canvasObjects, draggedObject]);
 
   // Hover по данным (старая логика, использует базовые оси)
   /*useEffect(() => {
@@ -3303,6 +3527,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   const handleObjectMouseDown = (e: React.MouseEvent) => {
     if (hoveredObject && !placingObject && !isMarqueeZoom) {
+      console.debug('[ChartEditor] handleObjectMouseDown, start dragging', { id: hoveredObject.id });
       setDraggedObject(hoveredObject);
       setIsPanning(false);
       e.stopPropagation();
@@ -3312,6 +3537,11 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   const handleObjectDoubleClick = (e: React.MouseEvent) => {
     if (hoveredObject && !placingObject && !isMarqueeZoom) {
       const updatedObjects = chartData.canvasObjects.filter((obj) => obj.id !== hoveredObject.id);
+      console.debug('[ChartEditor] double-click delete object', {
+        deletedId: hoveredObject.id,
+        before: chartData.canvasObjects.length,
+        after: updatedObjects.length,
+      });
       updateChartData({ canvasObjects: updatedObjects });
       setHoveredObject(null);
       e.stopPropagation();
@@ -3513,6 +3743,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                               return arrow;
                             });
 
+                          console.debug('[ChartEditor] context menu: delete arrow', {
+                            deletedArrowId: selectedArrow,
+                            updatedCount: updatedArrows.length,
+                          });
                           updateChartData({
                             workflow: {
                               ...chartData.workflow,
@@ -3525,6 +3759,11 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                         const updatedObjects = chartData.canvasObjects.filter(
                           (obj) => obj.id !== hoveredObject.id
                         );
+                        console.debug('[ChartEditor] context menu: delete object', {
+                          deletedId: hoveredObject.id,
+                          before: chartData.canvasObjects.length,
+                          after: updatedObjects.length,
+                        });
                         updateChartData({
                           canvasObjects: updatedObjects,
                         });

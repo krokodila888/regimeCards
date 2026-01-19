@@ -10,7 +10,7 @@ function clamp01(v: number) {
 function oklabToLinearSRGB(L: number, a: number, b: number) {
   const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
   const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
-  const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+  const s_ = L - 0.0894841775 * a - 1.291485548 * b;
 
   const l = l_ * l_ * l_;
   const m = m_ * m_ * m_;
@@ -18,7 +18,7 @@ function oklabToLinearSRGB(L: number, a: number, b: number) {
 
   const r = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
   const g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
-  const bl = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+  const bl = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s;
 
   return [r, g, bl];
 }
@@ -147,7 +147,7 @@ function pixelsToKilometers(
 /**
  * Преобразование километровой отметки в позицию X в пикселях
  */
-function kilometersToPixels(
+export function kilometersToPixels(
   km: number,
   bounds: TrackBounds,
   marginLeft: number,
@@ -262,265 +262,223 @@ export default function CanvasScreenshot({
   const chart = activeChart ?? storeChart;
 
   useEffect(() => {
-  const win = window as unknown as {
-    __exportCanvasScreenshotToPdf?: (filename?: string) => Promise<void> | undefined;
-  };
+    const win = window as unknown as {
+      __exportCanvasScreenshotToPdf?: (filename?: string) => Promise<void> | undefined;
+    };
 
-  win.__exportCanvasScreenshotToPdf = async (filename = 'screenshot.pdf') => {
-    try {
-      const img = imageRef.current;
-      const container = containerRef.current;
-      if (!img || !container) throw new Error('Image or container not available');
-
-      // Capture scale
-      const renderScale = Math.max(1, (img.naturalWidth || img.width) / (img.clientWidth || 1));
-
-      // ================================================================
-      // ИЗОЛИРОВАННАЯ ПОДГОТОВКА БЕЗ ВЛИЯНИЯ НА ОСНОВНОЕ ПРИЛОЖЕНИЕ
-      // ================================================================
-      
-      // Создаём изолированный контейнер ВНЕ видимой области
-      const captureWrapper = document.createElement('div');
-      captureWrapper.style.position = 'fixed';
-      captureWrapper.style.left = '-99999px';
-      captureWrapper.style.top = '-99999px';
-      captureWrapper.style.width = `${container.offsetWidth}px`;
-      captureWrapper.style.height = `${container.offsetHeight}px`;
-      captureWrapper.style.overflow = 'hidden';
-      captureWrapper.style.zIndex = '-9999';
-      
-      // Клонируем контейнер
-      const cloned = container.cloneNode(true) as HTMLElement;
-      captureWrapper.appendChild(cloned);
-      document.body.appendChild(captureWrapper);
-
-      let capturedCanvas: HTMLCanvasElement | null = null;
-
+    win.__exportCanvasScreenshotToPdf = async (filename = 'screenshot.pdf') => {
       try {
-        // Собираем кастомные CSS-переменные
-        const customProps = collectCustomProperties();
-        const rootComputed = getComputedStyle(document.documentElement);
+        const img = imageRef.current;
+        const container = containerRef.current;
+        if (!img || !container) throw new Error('Image or container not available');
 
-        // Получаем все элементы для обработки
-        const origEls = Array.from(container.querySelectorAll<HTMLElement>('*'));
-        const cloneEls = Array.from(cloned.querySelectorAll<HTMLElement>('*'));
+        console.log('[PDF Export] 🚀 Начало экспорта PDF...');
 
-        const propsToCopy = [
-          'color',
-          'background-color',
-          'background',
-          'border-color',
-          'border-top-color',
-          'border-right-color',
-          'border-bottom-color',
-          'border-left-color',
-          'box-shadow',
-          'outline-color',
-          'fill',
-          'stroke',
-        ];
+        // Используем естественные размеры изображения
+        const imgNaturalWidth = img.naturalWidth;
+        const imgNaturalHeight = img.naturalHeight;
 
-        // Инлайним стили с конвертацией oklch → rgb
-        for (let i = 0; i < Math.min(origEls.length, cloneEls.length); i++) {
-          const o = origEls[i];
-          const c = cloneEls[i];
-          if (!o || !c) continue;
-
-          const cs = getComputedStyle(o);
-
-          propsToCopy.forEach((prop) => {
-            try {
-              let val = cs.getPropertyValue(prop);
-              if (!val) return;
-
-              // Разрешаем CSS-переменные (var(--name))
-              val = val.replace(/var\((--[a-zA-Z0-9-_]+)(?:,[^)]+)?\)/g, (full, varName) => {
-                const fallbackName = `${varName}-fallback`;
-                let resolved = '';
-
-                // Пробуем -fallback версию
-                if (customProps[fallbackName]) {
-                  resolved = customProps[fallbackName];
-                } else {
-                  const rc = rootComputed.getPropertyValue(fallbackName).trim();
-                  if (rc) resolved = rc;
-                }
-
-                // Если нет fallback, берём оригинал
-                if (!resolved) {
-                  if (customProps[varName]) {
-                    resolved = customProps[varName];
-                  } else {
-                    const rc2 = rootComputed.getPropertyValue(varName).trim();
-                    if (rc2) resolved = rc2;
-                  }
-                }
-
-                if (!resolved) return full;
-
-                // Конвертируем oklch → rgb
-                return replaceOklchInString(resolved);
-              });
-
-              // Конвертируем встроенные oklch/oklab
-              if (val.includes('oklch(') || val.includes('oklab(')) {
-                val = replaceOklchInString(val);
-              }
-
-              // Применяем инлайновый стиль к клонированному элементу
-              c.style.setProperty(prop, val, 'important');
-            } catch (err) {
-              console.warn(`Failed to copy property ${prop}:`, err);
-            }
-          });
-        }
-
-        // ================================================================
-        // ЗАХВАТ CANVAS БЕЗ ОТКЛЮЧЕНИЯ СТИЛЕЙ
-        // ================================================================
-        capturedCanvas = await html2canvas(cloned, {
-          scale: renderScale,
-          useCORS: true,
-          backgroundColor: '#ffffff',
-          logging: false, // Отключаем логи для чистоты
-          windowWidth: cloned.scrollWidth,
-          windowHeight: cloned.scrollHeight,
+        console.log('[PDF Export] 📐 Размеры:', {
+          natural: `${imgNaturalWidth}x${imgNaturalHeight}`,
+          client: `${img.clientWidth}x${img.clientHeight}`,
+          placedObjects: placedObjects.length,
         });
 
-      } finally {
-        // Удаляем временный контейнер
-        if (captureWrapper.parentNode) {
-          captureWrapper.parentNode.removeChild(captureWrapper);
-        }
-      }
+        // ================================================================
+        // СОЗДАНИЕ CANVAS С ИЗОБРАЖЕНИЕМ И ИКОНКАМИ
+        // ================================================================
+        const fullCanvas = document.createElement('canvas');
+        fullCanvas.width = imgNaturalWidth;
+        fullCanvas.height = imgNaturalHeight;
 
-      if (!capturedCanvas) throw new Error('Failed to capture screenshot canvas');
-
-      // ================================================================
-      // ГЕНЕРАЦИЯ МНОГОСТРАНИЧНОГО PDF
-      // ================================================================
-      const sourceCanvas = capturedCanvas;
-      const imgWidth = sourceCanvas.width;
-      const imgHeight = sourceCanvas.height;
-
-      const pdf = new jsPDF({ 
-        unit: 'px', 
-        format: 'a4', 
-        orientation: 'landscape' 
-      });
-
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const margin = 20;
-      const availableHeight = pageHeight - margin * 2;
-      const availableWidth = pageWidth - margin * 2;
-
-      // Масштабируем по высоте
-      const scale = availableHeight / imgHeight;
-      const scaledWidth = imgWidth * scale;
-
-      // Название участка
-      const trackSectionName =
-        chart?.workflow?.trackSection?.name ??
-        (typeof chart?.workflow?.trackSection === 'string' ||
-        typeof chart?.workflow?.trackSection === 'number'
-          ? String(chart?.workflow?.trackSection)
-          : undefined);
-
-      // ================================================================
-      // ОДНОСТРАНИЧНЫЙ PDF (если помещается)
-      // ================================================================
-      if (scaledWidth <= availableWidth) {
-        const headerPx = trackSectionName ? 24 : 0;
-        const canvasWithHeader = document.createElement('canvas');
-        canvasWithHeader.width = sourceCanvas.width;
-        canvasWithHeader.height = sourceCanvas.height + headerPx;
-        
-        const ctxHeader = canvasWithHeader.getContext('2d');
-        if (!ctxHeader) throw new Error('Failed to get canvas context');
-        
-        ctxHeader.fillStyle = '#ffffff';
-        ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
-        
-        // Заголовок
-        if (trackSectionName) {
-          ctxHeader.fillStyle = '#000000';
-          ctxHeader.font = '16px sans-serif';
-          ctxHeader.fillText(trackSectionName, 8, 16);
-        }
-        
-        ctxHeader.drawImage(sourceCanvas, 0, headerPx);
-
-        const imgData = canvasWithHeader.toDataURL('image/png', 1.0);
-        const drawW = canvasWithHeader.width * scale;
-        const drawH = canvasWithHeader.height * scale;
-        const x = margin + (availableWidth - drawW) / 2;
-        const y = margin;
-
-        pdf.addImage(imgData, 'PNG', x, y, drawW, drawH);
-        pdf.setFontSize(10);
-        pdf.text('Page 1 of 1', pageWidth / 2, pageHeight - margin / 2, { align: 'center' });
-
-        pdf.save(filename);
-        console.log('[PDF Export] ✅ Single page exported');
-        return;
-      }
-
-      // ================================================================
-      // МНОГОСТРАНИЧНЫЙ PDF (с перекрытием 20%)
-      // ================================================================
-      const overlapPercent = 0.2;
-      const cropWidthOriginal = availableWidth / scale;
-      const overlapOriginal = cropWidthOriginal * overlapPercent;
-      const step = cropWidthOriginal - overlapOriginal;
-      const pages = Math.ceil((imgWidth - cropWidthOriginal) / step) + 1;
-
-      console.log('[PDF Export] Multi-page:', {
-        pages,
-        imgWidth,
-        cropWidthOriginal: Math.round(cropWidthOriginal),
-        overlap: Math.round(overlapOriginal),
-      });
-
-      for (let i = 0; i < pages; i++) {
-        const sx = Math.round(i * step);
-        let sw = Math.round(cropWidthOriginal);
-        
-        // Последняя страница - до конца
-        if (sx + sw > imgWidth) {
-          sw = imgWidth - sx;
-        }
-
-        // Создаём canvas для фрагмента
-        const canvas = document.createElement('canvas');
-        canvas.width = sw;
-        canvas.height = imgHeight;
-        
-        const ctx = canvas.getContext('2d');
+        const ctx = fullCanvas.getContext('2d');
         if (!ctx) throw new Error('Failed to get canvas context');
-        
+
+        // Рисуем базовое изображение
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(sourceCanvas, sx, 0, sw, imgHeight, 0, 0, sw, imgHeight);
+        ctx.fillRect(0, 0, fullCanvas.width, fullCanvas.height);
+        ctx.drawImage(img, 0, 0, imgNaturalWidth, imgNaturalHeight);
 
-        if (i > 0) pdf.addPage();
+        console.log('[PDF Export] 🎨 Отрисовка иконок...');
 
-        // Первая страница - с заголовком
-        if (i === 0 && trackSectionName) {
-          const headerPx = 24;
+        // Рисуем размещенные иконки
+        const scaleX = imgNaturalWidth / img.clientWidth;
+        const scaleY = imgNaturalHeight / img.clientHeight;
+
+        for (const obj of placedObjects) {
+          try {
+            // Масштабируем позицию и размер иконки
+            const x = obj.position.x * scaleX;
+            const y = obj.position.y * scaleY;
+            
+            const fullObject = getPaletteObjectById(obj.objectType.id);
+            const canvasIcon = fullObject?.canvasIcon || fullObject?.icon || obj.objectType.icon;
+            
+            const isRectangularIcon =
+              obj.objectType.id === 'neutral-insert' || obj.objectType.id === 'auto-brake-test';
+            
+            const iconSize = obj.iconSize || getIconSize();
+            const baseIconWidth = (isRectangularIcon ? getRectangularIconWidth() : iconSize) * scaleX;
+            const baseIconHeight = (isRectangularIcon ? getRectangularIconHeight() : iconSize) * scaleY;
+            
+            // Создаем временный div для рендеринга React-элемента в SVG
+            const tempDiv = document.createElement('div');
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-99999px';
+            tempDiv.style.width = `${baseIconWidth}px`;
+            tempDiv.style.height = `${baseIconHeight}px`;
+            document.body.appendChild(tempDiv);
+
+            // Рендерим иконку
+            const iconElement = React.cloneElement(canvasIcon as React.ReactElement, {
+              style: { width: '100%', height: '100%' },
+            });
+            
+            const root = (await import('react-dom/client')).createRoot(tempDiv);
+            await new Promise<void>((resolve) => {
+              root.render(iconElement);
+              setTimeout(resolve, 50);
+            });
+
+            // Конвертируем SVG в изображение
+            const svgElement = tempDiv.querySelector('svg');
+            if (svgElement) {
+              // Получаем оригинальные размеры SVG из viewBox или атрибутов
+              const viewBox = svgElement.getAttribute('viewBox');
+              let svgAspectRatio = 1;
+              
+              if (viewBox) {
+                const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
+                svgAspectRatio = vbWidth / vbHeight;
+              } else {
+                const svgWidth = parseFloat(svgElement.getAttribute('width') || '1');
+                const svgHeight = parseFloat(svgElement.getAttribute('height') || '1');
+                svgAspectRatio = svgWidth / svgHeight;
+              }
+
+              // Вычисляем финальные размеры с сохранением пропорций
+              let finalIconWidth = baseIconWidth;
+              let finalIconHeight = baseIconHeight;
+
+              if (svgAspectRatio > 1) {
+                // Широкая иконка
+                finalIconHeight = baseIconWidth / svgAspectRatio;
+              } else if (svgAspectRatio < 1) {
+                // Высокая иконка
+                finalIconWidth = baseIconHeight * svgAspectRatio;
+              }
+
+              // Клонируем SVG для модификации
+              const svgClone = svgElement.cloneNode(true) as SVGElement;
+              
+              // Получаем computed color из className (например, text-red-600)
+              const computedColor = window.getComputedStyle(svgElement).color;
+              
+              // Заменяем currentColor на конкретный цвет во всех элементах
+              const replaceCurrentColor = (element: Element) => {
+                ['stroke', 'fill'].forEach(attr => {
+                  if (element.getAttribute(attr) === 'currentColor') {
+                    element.setAttribute(attr, computedColor);
+                  }
+                });
+                Array.from(element.children).forEach(child => replaceCurrentColor(child));
+              };
+              
+              replaceCurrentColor(svgClone);
+
+              const svgData = new XMLSerializer().serializeToString(svgClone);
+              const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+              const url = URL.createObjectURL(svgBlob);
+              
+              const iconImg = new Image();
+              await new Promise<void>((resolve, reject) => {
+                iconImg.onload = () => resolve();
+                iconImg.onerror = reject;
+                iconImg.src = url;
+              });
+
+              // Рисуем иконку на canvas с правильными пропорциями (центрируем по x, y)
+              ctx.drawImage(iconImg, x - finalIconWidth / 2, y - finalIconHeight / 2, finalIconWidth, finalIconHeight);
+              
+              URL.revokeObjectURL(url);
+            }
+
+            root.unmount();
+            document.body.removeChild(tempDiv);
+
+            // Рисуем дополнительную ножку если нужна
+            const extraLegHeight = getExtraLegHeight() * scaleY;
+            if (extraLegHeight > 0) {
+              const legWidth = Math.max(1.5, iconSize * 0.06) * scaleX;
+              ctx.fillStyle = '#000';
+              ctx.fillRect(x - legWidth / 2, y + baseIconHeight / 2, legWidth, extraLegHeight);
+            }
+
+            // Рисуем название станции
+            const isStation = obj.objectType.id === 'station';
+            if (isStation && obj.stationName) {
+              ctx.fillStyle = '#000';
+              ctx.font = `bold ${iconSize * 0.36 * scaleY}px sans-serif`;
+              ctx.textAlign = 'center';
+              ctx.fillText(obj.stationName, x, y - baseIconHeight / 2 - 5 * scaleY);
+            }
+          } catch (err) {
+            console.error('[PDF Export] ⚠️ Ошибка при отрисовке иконки:', obj.objectType.id, err);
+          }
+        }
+
+        console.log('[PDF Export] ✅ Все иконки отрисованы');
+
+        // ================================================================
+        // ГЕНЕРАЦИЯ PDF
+        // ================================================================
+        const pdf = new jsPDF({
+          unit: 'px',
+          format: 'a4',
+          orientation: 'landscape',
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 20;
+        const availableHeight = pageHeight - margin * 2;
+        const availableWidth = pageWidth - margin * 2;
+
+        // Масштабируем по высоте
+        const scale = availableHeight / imgNaturalHeight;
+        const scaledWidth = imgNaturalWidth * scale;
+
+        // Название участка
+        const trackSectionName =
+          chart?.workflow?.trackSection?.name ??
+          (typeof chart?.workflow?.trackSection === 'string' ||
+          typeof chart?.workflow?.trackSection === 'number'
+            ? String(chart?.workflow?.trackSection)
+            : undefined);
+
+        const headerPx = trackSectionName ? 24 : 0;
+
+        // ================================================================
+        // ОДНОСТРАНИЧНЫЙ PDF (если помещается)
+        // ================================================================
+        if (scaledWidth <= availableWidth) {
           const canvasWithHeader = document.createElement('canvas');
-          canvasWithHeader.width = canvas.width;
-          canvasWithHeader.height = canvas.height + headerPx;
-          
+          canvasWithHeader.width = fullCanvas.width;
+          canvasWithHeader.height = fullCanvas.height + headerPx;
+
           const ctxHeader = canvasWithHeader.getContext('2d');
           if (!ctxHeader) throw new Error('Failed to get canvas context');
-          
+
           ctxHeader.fillStyle = '#ffffff';
           ctxHeader.fillRect(0, 0, canvasWithHeader.width, canvasWithHeader.height);
-          ctxHeader.fillStyle = '#000000';
-          ctxHeader.font = '16px sans-serif';
-          ctxHeader.fillText(trackSectionName, 8, 16);
-          ctxHeader.drawImage(canvas, 0, headerPx);
+
+          if (trackSectionName) {
+            ctxHeader.fillStyle = '#000000';
+            ctxHeader.font = '16px sans-serif';
+            ctxHeader.fillText(trackSectionName, 8, 16);
+          }
+
+          ctxHeader.drawImage(fullCanvas, 0, headerPx);
 
           const imgData = canvasWithHeader.toDataURL('image/png', 1.0);
           const drawW = canvasWithHeader.width * scale;
@@ -528,43 +486,95 @@ export default function CanvasScreenshot({
           const x = margin + (availableWidth - drawW) / 2;
 
           pdf.addImage(imgData, 'PNG', x, margin, drawW, drawH);
-        } else {
-          const imgData = canvas.toDataURL('image/png', 1.0);
+          pdf.setFontSize(10);
+          pdf.text('Page 1 of 1', pageWidth / 2, pageHeight - margin / 2, { align: 'center' });
+
+          pdf.save(filename);
+          console.log('[PDF Export] ✅ Single page exported');
+          return;
+        }
+
+        // ================================================================
+        // МНОГОСТРАНИЧНЫЙ PDF (с перекрытием 20%)
+        // ================================================================
+        const overlapPercent = 0.2;
+        const cropWidthPx = availableWidth / scale;
+        const overlapPx = cropWidthPx * overlapPercent;
+        const stepPx = cropWidthPx - overlapPx;
+        const pages = Math.ceil((imgNaturalWidth - cropWidthPx) / stepPx) + 1;
+
+        console.log('[PDF Export] 📄 Многостраничный экспорт:', {
+          pages,
+          totalWidth: imgNaturalWidth,
+          cropWidth: Math.round(cropWidthPx),
+          overlap: Math.round(overlapPx),
+          step: Math.round(stepPx),
+        });
+
+        for (let i = 0; i < pages; i++) {
+          const sx = Math.round(i * stepPx);
+          let sw = Math.round(cropWidthPx);
+
+          // Последняя страница - до конца
+          if (sx + sw > imgNaturalWidth) {
+            sw = imgNaturalWidth - sx;
+          }
+
+          // Создаём canvas для фрагмента
+          const pageCanvas = document.createElement('canvas');
+          const finalHeight = imgNaturalHeight + (i === 0 && trackSectionName ? headerPx : 0);
+          pageCanvas.width = sw;
+          pageCanvas.height = finalHeight;
+
+          const pageCtx = pageCanvas.getContext('2d');
+          if (!pageCtx) throw new Error('Failed to get canvas context');
+
+          pageCtx.fillStyle = '#ffffff';
+          pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+
+          // Первая страница - с заголовком
+          if (i === 0 && trackSectionName) {
+            pageCtx.fillStyle = '#000000';
+            pageCtx.font = '16px sans-serif';
+            pageCtx.fillText(trackSectionName, 8, 16);
+            pageCtx.drawImage(fullCanvas, sx, 0, sw, imgNaturalHeight, 0, headerPx, sw, imgNaturalHeight);
+          } else {
+            pageCtx.drawImage(fullCanvas, sx, 0, sw, imgNaturalHeight, 0, 0, sw, imgNaturalHeight);
+          }
+
+          if (i > 0) pdf.addPage();
+
+          const imgData = pageCanvas.toDataURL('image/png', 1.0);
           const drawW = sw * scale;
-          const drawH = imgHeight * scale;
+          const drawH = finalHeight * scale;
           const x = margin + (availableWidth - drawW) / 2;
 
           pdf.addImage(imgData, 'PNG', x, margin, drawW, drawH);
+
+          // Номер страницы
+          pdf.setFontSize(10);
+          pdf.text(`Page ${i + 1} of ${pages}`, pageWidth / 2, pageHeight - margin / 2, {
+            align: 'center',
+          });
         }
 
-        // Номер страницы
-        pdf.setFontSize(10);
-        pdf.text(
-          `Page ${i + 1} of ${pages}`,
-          pageWidth / 2,
-          pageHeight - margin / 2,
-          { align: 'center' }
-        );
+        pdf.save(filename);
+        console.log(`[PDF Export] ✅ Экспортировано ${pages} страниц: ${filename}`);
+      } catch (err) {
+        console.error('[PDF Export] ❌ Ошибка экспорта:', err);
+        alert('Не удалось экспортировать PDF. Проверьте консоль для деталей.');
+        throw err;
       }
+    };
 
-      pdf.save(filename);
-      console.log(`[PDF Export] ✅ Exported ${pages} pages: ${filename}`);
-
-    } catch (err) {
-      console.error('[PDF Export] ❌ Export failed:', err);
-      alert('Не удалось экспортировать PDF. Проверьте консоль для деталей.');
-      throw err;
-    }
-  };
-
-  return () => {
-    try {
-      win.__exportCanvasScreenshotToPdf = undefined;
-    } catch {
-      /* ignore */
-    }
-  };
-}, [imageRef, containerRef, chart]);
+    return () => {
+      try {
+        win.__exportCanvasScreenshotToPdf = undefined;
+      } catch {
+        /* ignore */
+      }
+    };
+  }, [imageRef, containerRef, chart, placedObjects, visibleLayers]);
 
   const [zoom, setZoom] = useState(1);
   const [isDraggingCanvas, setIsDraggingCanvas] = useState(false);

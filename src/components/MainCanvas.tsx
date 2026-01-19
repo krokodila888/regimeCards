@@ -114,6 +114,11 @@ export default function MainCanvas({
   };
 
   const handleUpdateChartData = (updates: Partial<ChartData>) => {
+    console.debug('[MainCanvas] handleUpdateChartData called', {
+      keys: Object.keys(updates),
+      canvasObjects: (updates as any).canvasObjects ? (updates as any).canvasObjects.length : undefined,
+      timestamp: Date.now(),
+    });
     if (updates.workflow && 'regimeArrows' in updates.workflow) {
       const updatedWorkflow: any = {
         ...activeChart?.workflow,
