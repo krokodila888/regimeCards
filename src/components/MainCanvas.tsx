@@ -183,7 +183,12 @@ export default function MainCanvas({
 
           {/* Canvas или Editor */}
           {user?.role === 'admin' ? (
-            <ChartEditor chartData={activeChart} onUpdateChartData={handleUpdateChartData} />
+            <ChartEditor 
+              chartData={activeChart} 
+              onUpdateChartData={handleUpdateChartData}
+              selectedObjectId={selectedObjectId}
+              onSelectObject={onSelectObject}
+            />
           ) : (
             user?.role === 'user' &&
             activeChart.workflow?.arrivalStation &&

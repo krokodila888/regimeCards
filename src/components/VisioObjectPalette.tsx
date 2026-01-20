@@ -13,35 +13,22 @@ import {
 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 
+import { staticObjectCategories } from '@/data/visioObjectPaletteData';
+import { generateTractionModeObjects, getPaletteObjectById } from '@/utils/visioObjectPaletteUtils';
+
 import { LOCOMOTIVES } from '../data/consts';
 import { ObjectCategory, PaletteObject, PlacedObject } from '../types/types';
 
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { staticObjectCategories } from '@/data/visioObjectPaletteData';
-import { generateTractionModeObjects } from '@/utils/visioObjectPaletteUtils';
+
 
 const getAllCategories = (): ObjectCategory[] => {
   return staticObjectCategories;
 };
 
 const OBJECT_CATEGORIES = getAllCategories();
-
-export function getPaletteObjectById(objectId: string): PaletteObject | null {
-  for (const category of staticObjectCategories) {
-    const object = category.objects.find((obj) => obj.id === objectId);
-    if (object) return object;
-  }
-
-  for (const locomotive of LOCOMOTIVES) {
-    const tractionObjects = generateTractionModeObjects(locomotive);
-    const object = tractionObjects.find((obj) => obj.id === objectId);
-    if (object) return object;
-  }
-
-  return null;
-}
 
 interface VisioObjectPaletteProps {
   selectedObjectId?: string | null;

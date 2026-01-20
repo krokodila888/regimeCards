@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { layers } from '@/types/types';
 
 import { chartDataByID1 } from '../data/consts';
+import { useAuth } from '../contexts/AuthContext';
 import { useAppDispatch } from '../store/hooks';
 import { setCurrentChartData } from '../store/workflowSlice';
 import type { ChartData } from '../types/chart-data';
@@ -37,6 +38,7 @@ interface WorkspaceProps {
 }
 
 export default function Workspace({ onLogout }: WorkspaceProps) {
+  const { user } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(330);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -177,6 +179,53 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
     }
   };
 
+  // Admin-specific handlers for ChartEditor canvas objects
+  const handleDeleteCanvasObject = (id: string) => {
+    if (!activeChart) return;
+    console.debug('[Workspace] Admin delete canvas object', {
+      id,
+      beforeCount: activeChart.canvasObjects?.length,
+    });
+    const updatedObjects = (activeChart.canvasObjects || []).filter((obj) => obj.id !== id);
+    handleUpdateChartData({ canvasObjects: updatedObjects });
+    if (selectedObjectId === id) {
+      const remaining = updatedObjects;
+      setSelectedObjectId(remaining.length > 0 ? remaining[remaining.length - 1].id : null);
+    }
+  };
+
+  const handleSelectCanvasObject = (id: string | null) => {
+    console.debug('[Workspace] Admin select canvas object', { id });
+    setSelectedObjectId(id);
+  };
+
+  const handleUpdateCanvasObject = (id: string, updates: Partial<any>) => {
+    if (!activeChart) return;
+    console.debug('[Workspace] Admin update canvas object', { id, updates });
+    const updatedObjects = (activeChart.canvasObjects || []).map((obj) =>
+      obj.id === id ? { ...obj, ...updates } : obj
+    );
+    handleUpdateChartData({ canvasObjects: updatedObjects });
+  };
+
+  // Convert activeChart.canvasObjects to PlacedObject format for VisioObjectPalette
+  const getCanvasObjectsAsPlacedObjects = () => {
+    if (!activeChart?.canvasObjects) return [];
+    return activeChart.canvasObjects.map((obj) => ({
+      id: obj.id,
+      objectType: {
+        id: obj.subtype || obj.type,
+        name: obj.label || obj.type,
+        nameRu: obj.label || obj.type,
+        category: 'other' as const,
+        icon: <div />,
+      },
+      position: { x: obj.x, y: obj.y },
+      coordinate: obj.x,
+      stationName: obj.label || '',
+    }));
+  };
+
   return (
     <>
       <LoadingOverlay isVisible={isLoading} message={loadingMessage} />
@@ -229,10 +278,10 @@ export default function Workspace({ onLogout }: WorkspaceProps) {
         {activeChart && (
           <VisioObjectPalette
             selectedObjectId={selectedObjectId}
-            placedObjects={placedObjects}
-            onDeleteObject={handleDeleteObject}
-            onSelectObject={handleSelectObject}
-            onUpdateObject={handleUpdateObject}
+            placedObjects={user?.role === 'admin' ? getCanvasObjectsAsPlacedObjects() : placedObjects}
+            onDeleteObject={user?.role === 'admin' ? handleDeleteCanvasObject : handleDeleteObject}
+            onSelectObject={user?.role === 'admin' ? handleSelectCanvasObject : handleSelectObject}
+            onUpdateObject={user?.role === 'admin' ? handleUpdateCanvasObject : handleUpdateObject}
             collapsed={paletteCollapsed}
             onToggleCollapse={() => setPaletteCollapsed(!paletteCollapsed)}
           />

@@ -1,7 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { GitBranch, ZoomIn, ZoomOut, Settings } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
-import { getPaletteObjectById } from './VisioObjectPalette';
 
 // Color conversion helpers
 function clamp01(v: number) {
@@ -109,10 +108,13 @@ import { Checkbox } from './ui/checkbox';
 import { ContextMenu, ContextMenuContent, ContextMenuItem } from './ui/context-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Label } from './ui/label';
+import { getPaletteObjectById } from '@/utils/visioObjectPaletteUtils';
 
 interface ChartEditorProps {
   chartData: ChartData;
   onUpdateChartData: (updates: Partial<ChartData>) => void;
+  selectedObjectId?: string | null;
+  onSelectObject?: (id: string | null) => void;
 }
 
 // ИСПРАВЛЕНИЕ: Вынесли функции ДО использования в компоненте
@@ -138,140 +140,6 @@ const drawFallbackIcon = (
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     ctx.fillText(obj.label, obj.x, obj.y + (dotSize + 4) / zoom);
-  }
-};
-
-// Функция для отрисовки canvas объектов с SVG иконками
-const drawCanvasObjects = async (
-  ctx: CanvasRenderingContext2D,
-  canvasObjects: any[],
-  zoom: number,
-  getPaletteObjectById: (id: string) => any
-) => {
-  if (!canvasObjects || canvasObjects.length === 0) return;
-
-  for (const obj of canvasObjects) {
-    ctx.save();
-
-    const baseIconSize = 24;
-    const iconSize = baseIconSize / (zoom || 1);
-
-    // Получаем полный объект из палитры
-    const fullObj = getPaletteObjectById(obj.subtype || obj.type);
-
-    if (fullObj && fullObj.canvasIcon) {
-      try {
-        // Создаем временный div для рендеринга SVG
-        const tempDiv = document.createElement('div');
-        tempDiv.style.position = 'absolute';
-        tempDiv.style.left = '-99999px';
-        tempDiv.style.width = `${iconSize}px`;
-        tempDiv.style.height = `${iconSize}px`;
-        document.body.appendChild(tempDiv);
-
-        // Рендерим React-элемент
-        const { createRoot } = await import('react-dom/client');
-        const root = createRoot(tempDiv);
-        const iconElement = React.cloneElement(fullObj.canvasIcon as React.ReactElement, {
-          style: { width: '100%', height: '100%' },
-        });
-
-        await new Promise<void>((resolve) => {
-          root.render(iconElement);
-          setTimeout(resolve, 50);
-        });
-
-        // Получаем SVG элемент
-        const svgElement = tempDiv.querySelector('svg');
-
-        if (svgElement) {
-          // Получаем размеры из viewBox
-          const viewBox = svgElement.getAttribute('viewBox');
-          let svgAspectRatio = 1;
-
-          if (viewBox) {
-            const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
-            svgAspectRatio = vbWidth / vbHeight;
-          } else {
-            const svgWidth = parseFloat(svgElement.getAttribute('width') || '1');
-            const svgHeight = parseFloat(svgElement.getAttribute('height') || '1');
-            svgAspectRatio = svgWidth / svgHeight;
-          }
-
-          // Вычисляем финальные размеры с сохранением пропорций
-          let finalIconWidth = iconSize;
-          let finalIconHeight = iconSize;
-
-          if (svgAspectRatio > 1) {
-            finalIconHeight = iconSize / svgAspectRatio;
-          } else if (svgAspectRatio < 1) {
-            finalIconWidth = iconSize * svgAspectRatio;
-          }
-
-          // Клонируем SVG для модификации
-          const svgClone = svgElement.cloneNode(true) as SVGElement;
-
-          // Получаем computed color из className
-          const computedColor = window.getComputedStyle(svgElement).color;
-
-          // Заменяем currentColor на конкретный цвет
-          const replaceCurrentColor = (element: Element) => {
-            ['stroke', 'fill'].forEach((attr) => {
-              if (element.getAttribute(attr) === 'currentColor') {
-                element.setAttribute(attr, computedColor);
-              }
-            });
-            Array.from(element.children).forEach((child) => replaceCurrentColor(child));
-          };
-
-          replaceCurrentColor(svgClone);
-
-          // Конвертируем в изображение
-          const svgData = new XMLSerializer().serializeToString(svgClone);
-          const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-          const url = URL.createObjectURL(svgBlob);
-
-          const iconImg = new Image();
-          await new Promise<void>((resolve, reject) => {
-            iconImg.onload = () => resolve();
-            iconImg.onerror = reject;
-            iconImg.src = url;
-          });
-
-          // Рисуем иконку с правильными пропорциями
-          ctx.drawImage(
-            iconImg,
-            obj.x - finalIconWidth / 2,
-            obj.y - finalIconHeight / 2,
-            finalIconWidth,
-            finalIconHeight
-          );
-
-          URL.revokeObjectURL(url);
-        }
-
-        root.unmount();
-        document.body.removeChild(tempDiv);
-
-        // Рисуем label если есть
-        if (obj.label) {
-          ctx.fillStyle = '#1f2937';
-          ctx.font = `${11 / zoom}px sans-serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'top';
-          ctx.fillText(obj.label, obj.x, obj.y + iconSize / 2 + 4);
-        }
-      } catch (error) {
-        console.error('[ChartEditor] Ошибка отрисовки иконки:', error);
-        // Fallback к синему кружку
-        drawFallbackIcon(ctx, obj, iconSize, zoom);
-      }
-    } else {
-      // Fallback к синему кружку
-      drawFallbackIcon(ctx, obj, iconSize, zoom);
-    }
-
-    ctx.restore();
   }
 };
 
@@ -312,7 +180,12 @@ const createKmToXConverter = (chart: ChartData, marginLeft: number = 80, pixelsP
   };
 };
 
-export default function ChartEditor({ chartData, onUpdateChartData }: ChartEditorProps) {
+export default function ChartEditor({
+  chartData,
+  onUpdateChartData,
+  selectedObjectId,
+  onSelectObject,
+}: ChartEditorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const svgIconCache = useRef<Map<string, HTMLImageElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
@@ -339,6 +212,35 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   }, [chartData, dispatch]);
 
   const updateChartData = (updates: Partial<ChartData>) => {
+    // Log every call with stack trace to track duplication source
+    const updateSource = new Error().stack?.split('\n')[2]?.trim() || 'unknown';
+    console.debug('[ChartEditor] updateChartData ENTRY', {
+      source: updateSource,
+      isPanning,
+      draggedObject: draggedObject?.id,
+      draggedArrow: draggedArrow?.arrowId,
+      hasCanvasObjects: !!updates.canvasObjects,
+      canvasObjectsCount: updates.canvasObjects ? (updates.canvasObjects as any).length : undefined,
+      currentCount: chart.canvasObjects?.length,
+    });
+
+    // DEFENSIVE CHECK: Prevent object modifications during pan-only operations
+    if (isPanning && !draggedObject && !draggedArrow && updates.canvasObjects) {
+      console.error(
+        '[BUG PREVENTED] Attempting to modify canvasObjects during pan-only operation!',
+        {
+          isPanning,
+          draggedObject: !!draggedObject,
+          draggedArrow: !!draggedArrow,
+          objectCount: updates.canvasObjects.length,
+          currentCount: chart.canvasObjects?.length,
+          timestamp: Date.now(),
+          stack: new Error().stack,
+        }
+      );
+      return; // Prevent the update
+    }
+
     // Prefer informing parent (single source of truth). During interactive
     // operations (dragging/panning) debounce rapid updates to avoid
     // duplicate creations caused by multiple update paths.
@@ -348,6 +250,10 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         interactive,
         updates,
         pending: !!pendingUpdatesRef.current,
+        hasCanvasObjects: !!updates.canvasObjects,
+        canvasObjectsLength: updates.canvasObjects
+          ? (updates.canvasObjects as any).length
+          : undefined,
         timestamp: Date.now(),
       });
       if (interactive) {
@@ -378,14 +284,377 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       console.debug('[ChartEditor] no parent handler - dispatching to store', {
         updatesSummary: Object.keys(updates),
         canvasObjects_before: current.canvasObjects ? current.canvasObjects.length : 0,
-        canvasObjects_after: (updates as any).canvasObjects ? (updates as any).canvasObjects.length : undefined,
+        canvasObjects_after: (updates as any).canvasObjects
+          ? (updates as any).canvasObjects.length
+          : undefined,
         timestamp: Date.now(),
       });
       dispatch(setCurrentChartData(merged));
     }
   };
 
+  // ============================================
+  // КЭШ ИКОНОК ДЛЯ СИНХРОННОЙ ОТРИСОВКИ
+  // ============================================
+
+  // Кэш готовых изображений иконок
+  const iconImageCache = useRef<Map<string, HTMLImageElement | 'loading'>>(new Map());
+
+  // Набор иконок, которые не удалось загрузить (чтобы не пытаться снова)
+  const failedIconsRef = useRef<Set<string>>(new Set());
+
+  /**
+   * Асинхронно загружает SVG иконку в кэш как растровое изображение.
+   * После загрузки вызывает triggerRedraw() для перерисовки canvas.
+   */
+  const loadIconToCache = React.useCallback(
+    async (objectType: string, iconSize: number) => {
+      const cacheKey = `${objectType}_${Math.round(iconSize)}`;
+
+      // Проверяем, не загружается ли уже или не загружена
+      if (iconImageCache.current.has(cacheKey) || failedIconsRef.current.has(cacheKey)) {
+        return;
+      }
+
+      // Получаем объект из палитры
+      const fullObj = getPaletteObjectById(objectType);
+      if (!fullObj?.canvasIcon) {
+        failedIconsRef.current.add(cacheKey);
+        return;
+      }
+
+      // Помечаем как "загружается"
+      iconImageCache.current.set(cacheKey, 'loading');
+
+      try {
+        // Создаем временный div для рендеринга React SVG компонента
+        const tempDiv = document.createElement('div');
+        tempDiv.style.position = 'absolute';
+        tempDiv.style.left = '-99999px';
+        tempDiv.style.width = `${iconSize}px`;
+        tempDiv.style.height = `${iconSize}px`;
+        document.body.appendChild(tempDiv);
+
+        // Динамический импорт react-dom/client
+        const { createRoot } = await import('react-dom/client');
+        const root = createRoot(tempDiv);
+
+        // Клонируем иконку с нужными размерами
+        const iconElement = React.cloneElement(fullObj.canvasIcon as React.ReactElement, {
+          style: { width: '100%', height: '100%' },
+        });
+
+        // Рендерим и ждём
+        await new Promise<void>((resolve) => {
+          root.render(iconElement);
+          // Даём время на рендеринг
+          setTimeout(resolve, 50);
+        });
+
+        // Получаем SVG элемент
+        const svgElement = tempDiv.querySelector('svg');
+
+        if (!svgElement) {
+          throw new Error('SVG element not found after render');
+        }
+
+        // Получаем размеры из viewBox для сохранения пропорций
+        const viewBox = svgElement.getAttribute('viewBox');
+        let finalWidth = iconSize;
+        let finalHeight = iconSize;
+
+        if (viewBox) {
+          const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
+          const aspectRatio = vbWidth / vbHeight;
+          if (aspectRatio > 1) {
+            finalHeight = iconSize / aspectRatio;
+          } else if (aspectRatio < 1) {
+            finalWidth = iconSize * aspectRatio;
+          }
+        }
+
+        // Клонируем SVG для модификации
+        const svgClone = svgElement.cloneNode(true) as SVGElement;
+
+        // Устанавливаем размеры
+        svgClone.setAttribute('width', String(finalWidth));
+        svgClone.setAttribute('height', String(finalHeight));
+
+        // Получаем computed color
+        const computedColor = window.getComputedStyle(svgElement).color || '#000000';
+
+        // Рекурсивно заменяем currentColor
+        const replaceCurrentColor = (element: Element) => {
+          ['stroke', 'fill'].forEach((attr) => {
+            const value = element.getAttribute(attr);
+            if (value === 'currentColor') {
+              element.setAttribute(attr, computedColor);
+            }
+          });
+          // Также проверяем style атрибут
+          const style = element.getAttribute('style');
+          if (style && style.includes('currentColor')) {
+            element.setAttribute('style', style.replace(/currentColor/g, computedColor));
+          }
+          Array.from(element.children).forEach((child) => replaceCurrentColor(child));
+        };
+
+        replaceCurrentColor(svgClone);
+
+        // Убираем xmlns если отсутствует
+        if (!svgClone.getAttribute('xmlns')) {
+          svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        }
+
+        // Сериализуем SVG
+        const svgData = new XMLSerializer().serializeToString(svgClone);
+
+        // Заменяем CSS переменные и oklch цвета
+        let sanitizedSvg = replaceVarsInSvg(svgData);
+        sanitizedSvg = replaceOklchInString(sanitizedSvg);
+
+        // Создаём data URL
+        const svgBlob = new Blob([sanitizedSvg], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+
+        // Загружаем как Image
+        const img = new Image();
+
+        await new Promise<void>((resolve, reject) => {
+          img.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve();
+          };
+          img.onerror = (err) => {
+            URL.revokeObjectURL(url);
+            reject(err);
+          };
+          img.src = url;
+        });
+
+        // Сохраняем в кэш
+        iconImageCache.current.set(cacheKey, img);
+
+        // Очищаем временные элементы
+        root.unmount();
+        document.body.removeChild(tempDiv);
+
+        // Перерисовываем canvas
+        triggerRedraw();
+
+        console.debug('[loadIconToCache] Successfully cached icon:', cacheKey);
+      } catch (error) {
+        console.error('[loadIconToCache] Failed to load icon:', objectType, error);
+        // Помечаем как неудачную загрузку
+        failedIconsRef.current.add(cacheKey);
+        iconImageCache.current.delete(cacheKey);
+      }
+    },
+    [triggerRedraw]
+  );
+
   const chart = chartData ?? storeChart;
+
+  /**
+   * Синхронная отрисовка объектов на canvas.
+   * Использует кэшированные изображения или fallback к кругу.
+   */
+  const drawCanvasObjectsSync = React.useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      canvasObjects: CanvasObject[],
+      zoom: number,
+      options?: {
+        skipObjectId?: string; // ID объекта для пропуска (перетаскиваемый)
+        highlightObjectId?: string; // ID объекта для подсветки (выбранный)
+      }
+    ) => {
+      if (!canvasObjects || canvasObjects.length === 0) return;
+
+      const baseIconSize = 24;
+      const iconSize = baseIconSize / (zoom || 1);
+      const { skipObjectId, highlightObjectId } = options || {};
+
+      for (const obj of canvasObjects) {
+        // Пропускаем перетаскиваемый объект (он рисуется отдельно)
+        if (skipObjectId && obj.id === skipObjectId) continue;
+
+        ctx.save();
+
+        const cacheKey = `${obj.subtype || obj.type}_${Math.round(iconSize)}`;
+        const cachedItem = iconImageCache.current.get(cacheKey);
+
+        let iconDrawn = false;
+
+        if (cachedItem && cachedItem !== 'loading' && cachedItem.complete) {
+          // Используем закэшированное изображение
+          try {
+            const imgWidth = cachedItem.naturalWidth || iconSize;
+            const imgHeight = cachedItem.naturalHeight || iconSize;
+
+            // Масштабируем с сохранением пропорций
+            const scale = Math.min(iconSize / imgWidth, iconSize / imgHeight);
+            const drawWidth = imgWidth * scale;
+            const drawHeight = imgHeight * scale;
+
+            ctx.drawImage(
+              cachedItem,
+              obj.x - drawWidth / 2,
+              obj.y - drawHeight / 2,
+              drawWidth,
+              drawHeight
+            );
+            iconDrawn = true;
+          } catch (e) {
+            console.warn('[drawCanvasObjectsSync] Failed to draw cached image:', cacheKey);
+          }
+        }
+
+        if (!iconDrawn) {
+          // Fallback: рисуем круг
+          const dotSize = 12 / (zoom || 1);
+          ctx.fillStyle = '#3b82f6';
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2 / (zoom || 1);
+          ctx.beginPath();
+          ctx.arc(obj.x, obj.y, dotSize, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          // Запускаем загрузку иконки в фоне (если ещё не загружается)
+          if (!cachedItem && !failedIconsRef.current.has(cacheKey)) {
+            loadIconToCache(obj.subtype || obj.type, iconSize);
+          }
+        }
+
+        // Подсветка выбранного объекта
+        if (highlightObjectId && obj.id === highlightObjectId) {
+          ctx.strokeStyle = '#f59e0b'; // Amber
+          ctx.lineWidth = 3 / (zoom || 1);
+          ctx.beginPath();
+          ctx.arc(obj.x, obj.y, (iconSize / 2 + 4) / (zoom || 1), 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        // Label
+        if (obj.label) {
+          ctx.fillStyle = '#1f2937';
+          ctx.font = `${11 / (zoom || 1)}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(obj.label, obj.x, obj.y + iconSize / 2 + 4 / (zoom || 1));
+        }
+
+        ctx.restore();
+      }
+    },
+    [loadIconToCache]
+  );
+
+  /**
+   * Синхронная отрисовка перетаскиваемого объекта поверх всех.
+   */
+  const drawDraggedObject = React.useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      obj: CanvasObject,
+      position: { x: number; y: number },
+      zoom: number
+    ) => {
+      ctx.save();
+
+      const baseIconSize = 24;
+      const iconSize = baseIconSize / (zoom || 1);
+      const dotSize = iconSize / 2;
+
+      // Тень для визуального отделения
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+
+      const objectType = obj.subtype || obj.type;
+
+      // ============================================
+      // ОТЛАДКА: Проверяем что приходит и что в кэше
+      // ============================================
+      console.debug('[drawDraggedObject] DEBUG', {
+        objectId: obj.id,
+        objectType,
+        subtype: obj.subtype,
+        type: obj.type,
+        iconSize: Math.round(iconSize),
+        cacheSize: iconImageCache.current.size,
+        cacheKeys: Array.from(iconImageCache.current.keys()),
+        failedKeys: Array.from(failedIconsRef.current),
+      });
+
+      // Пытаемся использовать кэшированную иконку
+      const cacheKey = `${obj.subtype || obj.type}_${Math.round(iconSize)}`;
+      const cachedItem = iconImageCache.current.get(cacheKey);
+
+      let iconDrawn = false;
+
+      if (cachedItem && cachedItem !== 'loading' && cachedItem.complete) {
+        try {
+          const imgWidth = cachedItem.naturalWidth || iconSize;
+          const imgHeight = cachedItem.naturalHeight || iconSize;
+          const scale = Math.min(iconSize / imgWidth, iconSize / imgHeight);
+          const drawWidth = imgWidth * scale;
+          const drawHeight = imgHeight * scale;
+
+          ctx.drawImage(
+            cachedItem,
+            position.x - drawWidth / 2,
+            position.y - drawHeight / 2,
+            drawWidth,
+            drawHeight
+          );
+          iconDrawn = true;
+        } catch (e) {
+          // Fallback to circle
+        }
+      }
+
+      if (!iconDrawn) {
+        // Fallback: круг
+        ctx.fillStyle = '#3b82f6';
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2 / (zoom || 1);
+        ctx.beginPath();
+        ctx.arc(position.x, position.y, dotSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      // Сбрасываем тень для текста
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+
+      // Label
+      if (obj.label) {
+        ctx.fillStyle = '#1f2937';
+        ctx.font = `${11 / (zoom || 1)}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(obj.label, position.x, position.y + dotSize + 4 / (zoom || 1));
+      }
+
+      // Обводка выделения при перетаскивании
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2 / (zoom || 1);
+      ctx.setLineDash([4 / (zoom || 1), 4 / (zoom || 1)]);
+      ctx.beginPath();
+      ctx.arc(position.x, position.y, (iconSize / 2 + 6) / (zoom || 1), 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.restore();
+    },
+    []
+  );
 
   // PDF Export function
   useEffect(() => {
@@ -539,9 +808,12 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     y: number;
   } | null>(null);
   const [draggedObject, setDraggedObject] = useState<CanvasObject | null>(null);
-  const [draggingObjectPosition, setDraggingObjectPosition] = useState<
-    { x: number; y: number } | null
-  >(null);
+  const [draggingObjectPosition, setDraggingObjectPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null);
+  const [hasDragMoved, setHasDragMoved] = useState(false);
   const placementCooldownRef = useRef<number>(0);
   // Pending update debounce refs for interactive updates
   const pendingUpdatesRef = useRef<Partial<ChartData> | null>(null);
@@ -592,6 +864,36 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
   const slopeAreaTop = 450;
   const slopeAreaBottom = 550;
 
+  // Track canvasObjects changes for debugging duplication issues
+  const prevObjectsLengthRef = useRef<number>(0);
+  const prevObjectsIdsRef = useRef<string[]>([]);
+  useEffect(() => {
+    if (chart.canvasObjects) {
+      const currentLength = chart.canvasObjects.length;
+      const currentIds = chart.canvasObjects.map((o) => o.id);
+
+      if (
+        prevObjectsLengthRef.current !== currentLength ||
+        JSON.stringify(prevObjectsIdsRef.current) !== JSON.stringify(currentIds)
+      ) {
+        console.warn('[ChartEditor] ⚠️ canvasObjects CHANGED', {
+          from: prevObjectsLengthRef.current,
+          to: currentLength,
+          previousIds: prevObjectsIdsRef.current,
+          currentIds: currentIds,
+          isPanning,
+          draggedObject: draggedObject?.id,
+          draggedArrow: draggedArrow?.arrowId,
+          placingObject: !!placingObject,
+          hasDragMoved,
+          stack: new Error().stack?.split('\n').slice(1, 5).join('\n'),
+        });
+        prevObjectsLengthRef.current = currentLength;
+        prevObjectsIdsRef.current = currentIds;
+      }
+    }
+  }, [chart.canvasObjects, isPanning, draggedObject, draggedArrow, placingObject, hasDragMoved]);
+
   useEffect(() => {
     const trackLength = chart.workflow?.trackSection?.length || 200;
 
@@ -613,696 +915,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
   const lineWidth = (base: number) => base;
   const fontSize = (base: number) => `${base}px sans-serif`;
-
-  // ИСПРАВЛЕНИЕ: Сделали draw async
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let isDrawing = false;
-
-    const draw = async () => {
-      // ИСПРАВЛЕНИЕ: async
-      if (isDrawing) return;
-
-      isDrawing = true;
-
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      try {
-        if (chartData.workflow?.trackSection) {
-          await drawWorkflowCanvas(ctx, baseWidth, baseHeight, zoom); // ИСПРАВЛЕНИЕ: await
-        } else {
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, baseWidth, baseHeight);
-          ctx.fillStyle = '#6b7280';
-          ctx.font = '20px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(
-            'Выберите участок пути в боковой панели для начала работы',
-            baseWidth / 2,
-            baseHeight / 2
-          );
-        }
-      } catch (error) {
-        console.error('Ошибка при отрисовке:', error);
-      } finally {
-        isDrawing = false;
-      }
-    };
-
-    const debouncedDraw = () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      animationFrameId = requestAnimationFrame(draw);
-    };
-
-    debouncedDraw();
-
-    const handleResize = () => {
-      debouncedDraw();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [
-    chartData.workflow?.trackSection?.id,
-    chartData.canvasObjects,
-    displaySettings,
-    panX,
-    panY,
-    zoom,
-    baseWidth,
-    baseHeight,
-    redrawTrigger,
-    marqueeStart,
-    marqueeEnd,
-    pixelsPerKm,
-  ]);
-
-  const throttledLog = (message: string, interval: number = 1000) => {
-    const now = Date.now();
-    const win = window as unknown as { lastLogTime?: Record<string, number> };
-    if (!win.lastLogTime) {
-      win.lastLogTime = {};
-    }
-    if (!win.lastLogTime[message] || now - win.lastLogTime[message] > interval) {
-      console.log(message);
-      win.lastLogTime[message] = now;
-    }
-  };
-
-  // VisioObjectPalette collapse state
-  const [paletteCollapsed, setPaletteCollapsed] = useState(true);
-
-  // Screenshot state variables (currently unused but kept for future use)
-  // const [screenshotImage, setScreenshotImage] = useState<HTMLImageElement | null>(null);
-  // const [screenshotLoadError, setScreenshotLoadError] = useState(false);
-
-  // Сброс выделения стрелок при смене участка или локомотива
-  useEffect(() => {
-    setSelectedArrow(null);
-    setDraggedArrow(null);
-  }, [chart.workflow?.trackSection?.id, chart.workflow?.locomotive?.id]);
-
-  // Расчёт базовой высоты (using fixed 4-layer structure)
-  const calculateBaseHeight = () => {
-    // Fixed 4-layer structure: 800px total
-    // Layer 1: Force Dynamics (0-160px)
-    // Layer 2: Speed Curves (160-480px)
-    // Layer 3: Track Profile (480-640px)
-    // Layer 4: Regime Bands (640-800px)
-    return 800;
-  };
-
-  // Re-render tracking for debugging
-  const renderCountRef = useRef(0);
-  const lastRenderTimeRef = useRef(Date.now());
-
-  // Обновление ширины холста по длине участка
-  useEffect(() => {
-    const trackLength = chart.workflow?.trackSection?.length || 200;
-
-    if (!isFinite(trackLength) || trackLength <= 0 || trackLength > 10000) {
-      if (baseWidth !== 2400) {
-        setBaseWidth(2400);
-      }
-      return;
-    }
-
-    const marginLeft = 100;
-    const marginRight = 100;
-    const calculatedWidth = Math.max(2400, marginLeft + trackLength * pixelsPerKm + marginRight);
-
-    if (calculatedWidth !== baseWidth) {
-      setBaseWidth(calculatedWidth);
-    }
-  }, [chart.workflow?.trackSection?.length, baseWidth, pixelsPerKm]); // Добавить pixelsPerKm в зависимости
-
-  // ==========================
-  // ФУНКЦИЯ ОПРЕДЕЛЕНИЯ ОБЛАСТИ ХОЛСТА ПО ОСИ Y
-  // (верхняя и нижняя граница рисуемой области)
-  // ==========================
-  const getCanvasContentYBounds = React.useCallback(() => {
-    // Границы рабочей области в "мировых" координатах (до translate/scale)
-    // Эти значения синхронизированы с drawWorkflowCanvas:
-    const marginTop = 50; // ВЕРХНЯЯ ГРАНИЦА ОБЛАСТИ ХОЛСТА
-    const marginBottom = 40;
-
-    // Ниже основной диаграммы находятся:
-    // - продольный профиль в виде полосы
-    // - стрелки режимов
-    // - шкала "км"
-    // - идеальные и фактические режимы + легенда
-    // Мы уже учли это в calculateBaseHeight, поэтому нижняя "интересная" граница — весь baseHeight
-    const topY = marginTop;
-    const bottomY = baseHeight; // НИЖНЯЯ ГРАНИЦА ОБЛАСТИ ХОЛСТА (всё, что рисуем, находится в этом диапазоне)
-
-    return { topY, bottomY, marginTop, marginBottom };
-  }, [baseHeight]);
-
-  const resetToInitialView = React.useCallback(() => {
-    if (!containerRef.current) return;
-
-    // Параметры, которые дают правильный вид
-    /*const marginLeft = 80;
-    const leftPadding = 30;
-    const marginTop = 50;
-    const topOffset = 20;*/
-
-    // Устанавливаем значения, которые работают в первом случае
-    setZoom(1);
-    setPanX(-30); // zoom = 1
-  }, []);
-
-  // Обработчик колесика: только горизонтальный масштаб, вертикальный зум заблокирован
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-
-    if (e.shiftKey) {
-      // Shift + колесо — горизонтальная панорама
-      setPanX((prev) => prev - e.deltaY);
-    } else if (e.ctrlKey || e.metaKey) {
-      // Ctrl/Cmd + колесо — ТОЖЕ горизонтальная панорама (более быстрая)
-      setPanX((prev) => prev - e.deltaY * 2);
-    }
-    // Обычное колесо — игнорируем
-  };
-
-  // ZOOM DISABLED - Рамка масштабирования (marquee) закомментирована
-  const handleMarqueeZoomStart = (e: React.MouseEvent) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    setMarqueeStart({ x, y });
-    setMarqueeEnd({ x, y });
-  };
-
-  const handleMarqueeZoomMove = (e: React.MouseEvent) => {
-    if (!marqueeStart) return;
-
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    const x = e.clientX - rect.left;
-    const y = marqueeStart.y; // ФИКСИРУЕМ Y (только горизонтальное выделение)
-
-    setMarqueeEnd({ x, y });
-  };
-
-  const handleMarqueeZoomEnd = () => {
-    if (!marqueeStart || !marqueeEnd) {
-      setMarqueeStart(null);
-      setMarqueeEnd(null);
-      setIsMarqueeZoom(false);
-      return;
-    }
-
-    const width = Math.abs(marqueeEnd.x - marqueeStart.x);
-
-    // Минимальная ширина выделения
-    if (width > 20) {
-      const trackSection = chart.workflow?.trackSection;
-      if (!trackSection) return;
-
-      // Параметры карты
-      const marginLeft = 80;
-      const marginRight = 50;
-      const chartWidth = baseWidth - marginLeft - marginRight;
-
-      // Координаты выделения В ЭКРАННЫХ ПИКСЕЛЯХ (без учёта panX)
-      const leftEdge = Math.min(marqueeStart.x, marqueeEnd.x);
-      const rightEdge = Math.max(marqueeStart.x, marqueeEnd.x);
-
-      // Преобразуем в МИРОВЫЕ координаты (учитываем panX)
-      const leftWorldX = leftEdge - panX - marginLeft;
-      const rightWorldX = rightEdge - panX - marginLeft;
-
-      // Вычисляем километры (используем текущий масштаб)
-      const displayStartCoord = 1782;
-      const displayEndCoord = 1610;
-      const totalKm = Math.abs(displayEndCoord - displayStartCoord);
-
-      // Нормализуем позиции [0..1]
-      const leftNormalized = leftWorldX / chartWidth;
-      const rightNormalized = rightWorldX / chartWidth;
-
-      // Вычисляем выбранный диапазон в км
-      const selectedKmRange = Math.abs(rightNormalized - leftNormalized) * totalKm;
-
-      console.log('[MARQUEE ZOOM]', {
-        leftEdge,
-        rightEdge,
-        leftWorldX,
-        rightWorldX,
-        leftNormalized,
-        rightNormalized,
-        selectedKmRange,
-        currentPixelsPerKm: pixelsPerKm,
-      });
-
-      // Вычисляем новый масштаб
-      const containerWidth = containerRef.current?.clientWidth || 800;
-      const availableWidth = containerWidth - 160; // margins
-      const newPixelsPerKm = availableWidth / selectedKmRange;
-
-      // Ограничиваем диапазон (10-160 px/км)
-      const clampedPixelsPerKm = Math.max(10, Math.min(160, newPixelsPerKm));
-
-      console.log('[MARQUEE ZOOM] New scale:', {
-        availableWidth,
-        newPixelsPerKm,
-        clampedPixelsPerKm,
-      });
-
-      setPixelsPerKm(clampedPixelsPerKm);
-      setPanX(0); // Сброс панорамы
-    }
-
-    // Сбрасываем marquee
-    setMarqueeStart(null);
-    setMarqueeEnd(null);
-    setIsMarqueeZoom(false);
-  };
-
-  // Панорамирование — только по X (вертикальная панорама заблокирована)
-  const handlePanStart = (e: React.MouseEvent) => {
-    if (isMarqueeZoom || placingObject) return;
-
-    if (!hoveredArrow && !hoveredObject) {
-      setSelectedArrow(null);
-    }
-
-    setIsPanning(true);
-    setPanStart({
-      x: e.clientX - panX,
-      y: e.clientY - panY,
-    });
-  };
-
-   const handlePanMove = (e: React.MouseEvent) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    // Расчёт мировой позиции мыши в ЕДИНОЙ системе координат
-    const newMousePosX = e.clientX - rect.left - panX;
-    const newMousePosY = e.clientY - rect.top - panY;
-
-    setMousePos({
-      x: newMousePosX,
-      y: newMousePosY,
-    });
-
-    setScreenMousePos({
-      x: e.clientX,
-      y: e.clientY,
-    });
-
-
-    //const rect = canvasRef.current?.getBoundingClientRect();
-    //if (!rect) return;
-
-    // Расчёт мировой позиции мыши в ЕДИНОЙ системе координат
-    //const newMousePosX = (e.clientX - rect.left - panX) / zoom;
-    //const newMousePosY = e.clientY - rect.top - panY;
-
-    /*setMousePos({
-      x: newMousePosX,
-      y: newMousePosY,
-    });
-
-    setScreenMousePos({
-      x: e.clientX,
-      y: e.clientY,
-    });*/
-
-    // Hover по стрелкам и др. элементы — ВСЕ используют одни и те же мировые координаты (без альтернативных transform)
-    if (
-      !draggedArrow &&
-      !draggedObject &&
-      chart.workflow?.regimeArrows &&
-      chart.workflow?.trackSection
-    ) {
-      const marginLeft = 80;
-      //const marginRight = 50;
-      const marginBottom = 240;
-      const arrowY = baseHeight - marginBottom + 180;
-      /*const trackLength = chart.workflow.trackSection.length;
-      const chartWidth = baseWidth - marginLeft - marginRight;
-
-      let gridInterval;*/
-
-      let foundHover: {
-        arrowId: string;
-        handle?: 'start' | 'end';
-      } | null = null;
-
-      // Create kmToX converter for this interaction
-      const kmToX = createKmToXConverter(chartData, marginLeft, pixelsPerKm);
-
-      for (let i = 0; i < chart.workflow.regimeArrows.length; i++) {
-        const arrow = chart.workflow.regimeArrows[i];
-        const startX = kmToX(arrow.startKm);
-        const endX = kmToX(arrow.endKm);
-        const handleRadius = 8;
-
-        if (selectedArrow === arrow.id) {
-          if (i > 0) {
-            const distToStart = Math.sqrt(
-              Math.pow(newMousePosX - startX, 2) + Math.pow(newMousePosY - arrowY, 2)
-            );
-            if (distToStart <= handleRadius) {
-              foundHover = {
-                arrowId: arrow.id,
-                handle: 'start',
-              };
-              break;
-            }
-          }
-
-          const distToEnd = Math.sqrt(
-            Math.pow(newMousePosX - endX, 2) + Math.pow(newMousePosY - arrowY, 2)
-          );
-          if (distToEnd <= handleRadius) {
-            foundHover = { arrowId: arrow.id, handle: 'end' };
-            break;
-          }
-        }
-
-        const hitAreaTop = arrowY - 20;
-        const hitAreaBottom = arrowY + 10;
-
-        if (
-          newMousePosX >= startX &&
-          newMousePosX <= endX &&
-          newMousePosY >= hitAreaTop &&
-          newMousePosY <= hitAreaBottom
-        ) {
-          foundHover = { arrowId: arrow.id };
-          break;
-        }
-      }
-
-      setHoveredArrow(foundHover);
-    }
-
-    // Перетаскивание концов стрелок — тоже в мировой системе координат
-    if (draggedArrow && chart.workflow?.regimeArrows && chart.workflow?.trackSection) {
-      const trackLength = chart.workflow.trackSection.length;
-      const marginLeft = 80;
-      const marginRight = 50;
-      const chartWidth = baseWidth - marginLeft - marginRight;
-
-      const mouseKm = Math.max(
-        0,
-        Math.min(
-          trackLength,
-          (newMousePosX - marginLeft) / pixelsPerKm // Фиксированный масштаб
-        )
-      );
-
-      const minArrowLength = 1;
-      const updatedArrows = [...chart.workflow.regimeArrows];
-      const currentIndex = updatedArrows.findIndex((a) => a.id === draggedArrow.arrowId);
-
-      let limitReached = false;
-
-      if (currentIndex !== -1) {
-        const currentArrow = updatedArrows[currentIndex];
-        const leftNeighbor = currentIndex > 0 ? updatedArrows[currentIndex - 1] : null;
-        const rightNeighbor =
-          currentIndex < updatedArrows.length - 1 ? updatedArrows[currentIndex + 1] : null;
-
-        if (draggedArrow.handle === 'start') {
-          if (currentIndex === 0) return;
-
-          let minStartKm = currentArrow.startKm;
-          let maxStartKm = currentArrow.endKm - minArrowLength;
-
-          if (leftNeighbor) {
-            minStartKm = leftNeighbor.startKm + minArrowLength;
-          }
-
-          if (mouseKm <= minStartKm || mouseKm >= maxStartKm) {
-            limitReached = true;
-          }
-
-          const constrainedStartKm = Math.max(minStartKm, Math.min(maxStartKm, mouseKm));
-
-          updatedArrows[currentIndex] = {
-            ...currentArrow,
-            startKm: constrainedStartKm,
-          };
-
-          if (leftNeighbor) {
-            updatedArrows[currentIndex - 1] = {
-              ...leftNeighbor,
-              endKm: constrainedStartKm,
-            };
-          }
-        } else {
-          let minEndKm = currentArrow.startKm + minArrowLength;
-          let maxEndKm = trackLength;
-
-          if (rightNeighbor) {
-            maxEndKm = rightNeighbor.endKm - minArrowLength;
-          }
-
-          if (mouseKm <= minEndKm || mouseKm >= maxEndKm) {
-            limitReached = true;
-          }
-
-          const constrainedEndKm = Math.max(minEndKm, Math.min(maxEndKm, mouseKm));
-
-          updatedArrows[currentIndex] = {
-            ...currentArrow,
-            endKm: constrainedEndKm,
-          };
-
-          if (rightNeighbor) {
-            updatedArrows[currentIndex + 1] = {
-              ...rightNeighbor,
-              startKm: constrainedEndKm,
-            };
-          }
-        }
-      }
-
-      setResizeLimitReached(limitReached);
-
-      console.debug('[ChartEditor] updating regimeArrows', {
-        arrowId: draggedArrow?.arrowId,
-        updatedCount: updatedArrows.length,
-        sample: updatedArrows.slice(0, 3),
-      });
-      updateChartData({
-        workflow: {
-          ...chart.workflow,
-          regimeArrows: updatedArrows,
-        },
-      });
-    } else if (draggedObject && !isPanning) {
-      // Перетаскивание объектов — обновляем только локальное состояние позиции.
-      // Это предотвращает множественные быстрые вызовы updateChartData и появление дубликатов.
-      const currentObj = chart.canvasObjects.find((o) => o.id === draggedObject.id);
-      if (currentObj) {
-        const dx = Math.abs(currentObj.x - newMousePosX);
-        const dy = Math.abs(currentObj.y - newMousePosY);
-        if (dx < 0.5 && dy < 0.5) {
-          return;
-        }
-      }
-
-      setDraggingObjectPosition({ x: newMousePosX, y: newMousePosY });
-      console.debug('[ChartEditor] interactive drag (local) - setDraggingObjectPosition', {
-        draggedId: draggedObject.id,
-        x: newMousePosX,
-        y: newMousePosY,
-      });
-    } else if (isPanning && !draggedObject && !draggedArrow) {
-      // Панорама с ограничениями
-      const newPanX = e.clientX - panStart.x;
-      //const newPanY = e.clientY - panStart.y;
-
-      // ОГРАНИЧЕНИЯ: не более 100px вправо/влево, 60px вверх/вниз
-      const maxPanX = 100;
-      const minPanX = -baseWidth + (containerRef.current?.clientWidth || 800) - 100;
-      //const maxPanY = 60;
-      //const minPanY = -baseHeight + (containerRef.current?.clientHeight || 600) - 60;
-
-      setPanX(Math.max(minPanX, Math.min(maxPanX, newPanX)));
-      //setPanY(Math.max(minPanY, Math.min(maxPanY, newPanY)));
-    }
-  };
-
-  const handlePanEnd = () => {
-    if (draggedObject) {
-      // Use the local dragging position if available, otherwise fallback to mousePos
-      const finalX = draggingObjectPosition ? draggingObjectPosition.x : mousePos.x;
-      let finalY = draggingObjectPosition ? draggingObjectPosition.y : mousePos.y;
-      finalY = finalY >= xAxisY ? xAxisY - 30 : finalY;
-
-      const stackedPosition = getStackedPosition(finalX, finalY);
-
-      const newObjects = chart.canvasObjects.map((obj) =>
-        obj.id === draggedObject.id ? { ...obj, x: finalX, y: stackedPosition } : obj
-      );
-      console.debug('[ChartEditor] finalizing drag - update canvasObjects', {
-        length: chart.canvasObjects.length,
-        draggedId: draggedObject.id,
-      });
-      updateChartData({ canvasObjects: newObjects });
-      // Ensure any debounced interactive updates are flushed immediately
-      flushPendingUpdates();
-
-      // clear local dragging position
-      setDraggingObjectPosition(null);
-    }
-    setIsPanning(false);
-    setDraggedObject(null);
-    setDraggedArrow(null);
-    setResizeLimitReached(false);
-  };
-
-  const getStackedPosition = (x: number, y: number): number => {
-    const tolerance = 20;
-    const stackSpacing = 30;
-
-    const objectsAtSameX = chart.canvasObjects.filter((obj) => {
-      return Math.abs(obj.x - x) < tolerance;
-    });
-
-    if (objectsAtSameX.length === 0) {
-      return y;
-    }
-
-    const sorted = [...objectsAtSameX].sort((a, b) => a.y - b.y);
-
-    let finalY = y;
-    for (const obj of sorted) {
-      if (Math.abs(finalY - obj.y) < stackSpacing) {
-        finalY = obj.y - stackSpacing;
-      }
-    }
-
-    finalY = Math.max(50, finalY);
-
-    return finalY;
-  };
-
-  // Размещение нового объекта
-  const handleCanvasClick = (e: React.MouseEvent) => {
-    if (placingObject) {
-      const rect = canvasRef.current?.getBoundingClientRect();
-      if (!rect) return;
-
-      let x = (e.clientX - rect.left - panX) / zoom;
-      let y = e.clientY - rect.top - panY;
-
-      if (y >= xAxisY) {
-        y = xAxisY - 30;
-      }
-
-      y = getStackedPosition(x, y);
-
-      const [objectType, subtype] = placingObject.split(':');
-
-      const newObject: CanvasObject = {
-        id: Date.now().toString(),
-        type: objectType as any,
-        subtype: subtype || undefined,
-        label: (window as any).__placingObjectLabel || undefined,
-        x,
-        y,
-      };
-
-      const now = Date.now();
-      if (now - placementCooldownRef.current < 250) {
-        console.debug('[ChartEditor] placement cooldown - ignoring duplicate placement');
-      } else {
-        placementCooldownRef.current = now;
-        console.debug('[ChartEditor] placing new object', { id: newObject.id, x, y });
-        updateChartData({
-          canvasObjects: [...chart.canvasObjects, newObject],
-        });
-      }
-
-      setPlacingObject(null);
-      (window as any).__placingObjectLabel = undefined;
-    }
-  };
-
-  // Handle drop from Visio palette
-  const handleCanvasDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-
-    try {
-      // Support different drag data formats: application/json (existing) and palette-specific keys
-      let objectDataJson = e.dataTransfer.getData('application/json');
-      if (!objectDataJson) {
-        objectDataJson = e.dataTransfer.getData('application/x-palette-object-data');
-      }
-
-      if (!objectDataJson) return;
-
-      const objectData = JSON.parse(objectDataJson);
-      const rect = canvasRef.current?.getBoundingClientRect();
-      if (!rect) return;
-
-      let x = (e.clientX - rect.left - panX) / zoom;
-      let y = e.clientY - rect.top - panY;
-
-      if (y >= xAxisY) {
-        y = xAxisY - 30;
-      }
-
-      y = getStackedPosition(x, y);
-
-      const newObject: CanvasObject = {
-        id: Date.now().toString(),
-        type: (objectData.category || objectData.type) as any,
-        subtype: objectData.id,
-        label: objectData.nameRu || objectData.name,
-        x,
-        y,
-      };
-
-      console.debug('[ChartEditor] drop -> placing new object', { id: newObject.id, x, y });
-      updateChartData({
-        canvasObjects: [...chart.canvasObjects, newObject],
-      });
-    } catch (error) {
-      // ignore malformed data
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-  };
-
-  const handleContextMenuSelect = () => {
-    setShowPalette(true);
-  };
-
-  // ==========
-  // Helper‑функции для толщины линий и шрифта (чтобы всё выглядело единообразно при зуме по X)
-  // ==========
 
   // ОСНОВНАЯ ОТРИСОВКА WORKFLOW-ГРАФИКА
   const drawWorkflowCanvas = React.useCallback(
@@ -1398,7 +1010,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           const layer1Center = (layer1Top + layer1Bottom) / 2;
           const layer1Height = layer1Bottom - layer1Top;
 
-
           // Draw layer border
           ctx.strokeStyle = '#d1d5db';
           ctx.lineWidth = lineWidth(1);
@@ -1452,7 +1063,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
           // Draw force curves from longitudinalForces
           if (longitudinalForces && longitudinalForces.length > 0) {
-
             // Проверяем, попадают ли данные в диапазон отображения
             const firstDataKm = longitudinalForces[0].distance;
             const lastDataKm = longitudinalForces[longitudinalForces.length - 1].distance;
@@ -1460,7 +1070,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
             const dataInRange = longitudinalForces.filter(
               (point) => point.distance <= displayStartCoord && point.distance >= displayEndCoord
             );
-
 
             // Если данных в диапазоне нет — возможно проблема с координатами
             if (dataInRange.length === 0) {
@@ -1506,7 +1115,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                 tensionPointsDrawn++;
 
                 // Логирование для отладки
-                if (index < 3 || index === longitudinalForces.length - 1) {
+                /*if (index < 3 || index === longitudinalForces.length - 1) {
                   console.log('[LAYER 1] Точка растяжения:', {
                     index,
                     distanceKm,
@@ -1514,7 +1123,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
                     x,
                     y,
                   });
-                }
+                }*/
               }
             });
 
@@ -1549,11 +1158,11 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
             ctx.stroke();
 
-            console.log('[LAYER 1] Статистика отрисовки:', {
+            /*console.log('[LAYER 1] Статистика отрисовки:', {
               totalPoints: longitudinalForces.length,
               tensionPointsDrawn,
               compressionPointsDrawn,
-            });
+            });*/
 
             // Если данных нет в видимом диапазоне
             if (tensionPointsDrawn === 0 && compressionPointsDrawn === 0) {
@@ -1783,7 +1392,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
               // Горизонтальная линия до конца сегмента
               ctx.lineTo(endX, y);
               lastSpeed = limit.limit;
-
             });
 
             ctx.stroke();
@@ -1876,7 +1484,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.textAlign = 'left'; // Подпись справа от штриха
           ctx.textBaseline = 'middle';
           ctx.fillText(`${km}`, x + 3, rulerY - 8); // +3px вправо, +9px вниз
-
         });
 
         ctx.restore();
@@ -1978,7 +1585,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
         // Station markers (vertical lines in Layer 2)
         // ОТОБРАЖЕНИЕ СТАНЦИЙ (вертикальные линии, иконки, подписи)
         if (trackSection && trackSection.stations && trackSection.stations.length > 0) {
-
           trackSection.stations.forEach((station, index) => {
             // Используем startCoord как основную координату станции
             let stationKm = station.startCoord;
@@ -2775,132 +2381,7 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
 
           const swatchSize = 15;
           let currentX = marginLeft;
-
-          /*const legendItems = [
-            { color: '#3b82f6', label: 'разгон' },
-            { color: '#eab308', label: 'стабильная скорость' },
-            { color: '#22c55e', label: 'выбег' },
-            { color: '#ef4444', label: 'торможение' },
-            { color: '#a855f7', label: 'огр. скор. (тяга)' },
-            { color: '#f97316', label: 'огр. скор. (торм.)' },
-          ];
-
-          ctx.font = fontSize(13);
-          ctx.textAlign = 'left';
-
-          legendItems.forEach((item) => {
-            ctx.fillStyle = item.color;
-            ctx.fillRect(currentX, legendY, swatchSize, swatchSize);
-            ctx.strokeStyle = '#1f2937';
-            ctx.lineWidth = lineWidth(1);
-            ctx.strokeRect(currentX, legendY, swatchSize, swatchSize);
-
-            ctx.fillStyle = '#6b7280';
-            ctx.fillText(item.label, currentX + swatchSize + 5, legendY + swatchSize - 3);
-
-            const textWidth = ctx.measureText(item.label).width;
-            currentX += swatchSize + 5 + textWidth + 20;
-          });*/
         }
-
-        // Рисуем размещенные объекты из палитры — предпочитаем canvasIcon (SVG) рендерить в raster и отрисовать на canvas
-        /*if (
-          displaySettings.objectMarkers &&
-          chartData.canvasObjects &&
-          chartData.canvasObjects.length > 0
-        ) {
-          chartData.canvasObjects.forEach((obj) => {
-            ctx.save();
-
-            // Determine desired icon pixel size (basic fallback)
-            const baseIconSize = 24; // px — default raster icon size
-            const iconSize = baseIconSize / (zoom || 1);
-            const iconW = iconSize;
-            const iconH = iconSize;
-
-            // Try to get full object definition from palette
-            const fullObj = getPaletteObjectById(obj.subtype || obj.type);
-
-            let drewSvg = false;
-            if (fullObj && fullObj.canvasIcon) {
-              try {
-                const key = `${obj.subtype || obj.type}_${Math.round(iconW)}x${Math.round(iconH)}`;
-                const cache = svgIconCache.current;
-                const cached = cache.get(key);
-                if (cached && cached.complete) {
-                  // draw centered
-                  ctx.drawImage(cached, obj.x - iconW / 2, obj.y - iconH / 2, iconW, iconH);
-                  drewSvg = true;
-                } else if (!cached) {
-                  // create raster image from SVG markup and cache it
-                  const svgString = renderToStaticMarkup(fullObj.canvasIcon as any);
-                  // ensure width/height and xmlns attributes exist so rendered image scales predictably
-                  const svgWithSize = svgString.replace(/<svg(.*?)>/, (m, g1) => {
-                    let attrs = g1 || '';
-                    if (!/xmlns=/.test(attrs)) attrs += ' xmlns="http://www.w3.org/2000/svg"';
-                    return `<svg${attrs} width="${Math.round(iconW)}" height="${Math.round(
-                      iconH
-                    )}">`;
-                  });
-
-                  // Resolve CSS variables to fallbacks and replace oklch/oklab with rgb so the SVG is self-contained
-                  let svgSanitized = replaceVarsInSvg(svgWithSize);
-                  svgSanitized = replaceOklchInString(svgSanitized);
-
-                  const data =
-                    'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSanitized);
-                  const img = new Image();
-                  img.crossOrigin = 'anonymous';
-                  img.onload = () => {
-                    try {
-                      triggerRedraw();
-                    } catch (e) {
-                      // ignore
-                    }
-                  };
-                  img.onerror = () => {
-                    // ignore
-                  };
-                  cache.set(key, img);
-                  img.src = data;
-                }
-              } catch (e) {
-                // fall back to simple marker
-              }
-            }
-
-            if (!drewSvg) {
-              // Fallback: simple circle marker (previous behavior)
-              let iconColor = '#3b82f6';
-              let dotSize = 12;
-              ctx.fillStyle = iconColor;
-              ctx.strokeStyle = '#ffffff';
-              ctx.lineWidth = lineWidth(2);
-              ctx.beginPath();
-              ctx.arc(obj.x, obj.y, dotSize / zoom, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.stroke();
-
-              if (obj.label) {
-                ctx.fillStyle = '#1f2937';
-                ctx.font = fontSize(11);
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'top';
-                ctx.fillText(obj.label, obj.x, obj.y + (dotSize + 4) / zoom);
-              }
-
-              if (hoveredObject && hoveredObject.id === obj.id) {
-                ctx.strokeStyle = '#3b82f6';
-                ctx.lineWidth = lineWidth(3);
-                ctx.beginPath();
-                ctx.arc(obj.x, obj.y, (dotSize + 4) / zoom, 0, Math.PI * 2);
-                ctx.stroke();
-              }
-            }
-
-            ctx.restore();
-          });
-        }*/
 
         const drawCanvasObjects = async (
           ctx: CanvasRenderingContext2D,
@@ -3034,43 +2515,61 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           }
         };
 
-        // Функция для отрисовки fallback иконки (синий кружок)
-        const drawFallbackIcon = (
-          ctx: CanvasRenderingContext2D,
-          obj: any,
-          iconSize: number,
-          zoom: number
-        ) => {
+        if (displaySettings.objectMarkers && chartData.canvasObjects) {
+          // Синхронная отрисовка всех объектов (кроме перетаскиваемого)
+          drawCanvasObjectsSync(ctx, chartData.canvasObjects, zoom, {
+            skipObjectId: draggedObject?.id,
+            highlightObjectId: selectedObjectId || undefined,
+          });
+        }
+
+        // Always render the dragged object on top synchronously to ensure it's visible during drag
+        if (draggedObject && draggingObjectPosition) {
+          ctx.save();
           const dotSize = 12;
           ctx.fillStyle = '#3b82f6';
           ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 2;
+          ctx.lineWidth = 2 / zoom;
           ctx.beginPath();
-          ctx.arc(obj.x, obj.y, dotSize / zoom, 0, Math.PI * 2);
+          ctx.arc(
+            draggingObjectPosition.x,
+            draggingObjectPosition.y,
+            dotSize / zoom,
+            0,
+            Math.PI * 2
+          );
           ctx.fill();
           ctx.stroke();
 
-          if (obj.label) {
+          if (draggedObject.label) {
             ctx.fillStyle = '#1f2937';
             ctx.font = `${11 / zoom}px sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
-            ctx.fillText(obj.label, obj.x, obj.y + (dotSize + 4) / zoom);
-          }
-        };
-        if (displaySettings.objectMarkers && chartData.canvasObjects) {
-          // Merge local dragging position for rendering so the dragged object
-          // follows the cursor smoothly without mutating chartData until drop.
-          let objectsToRender = chartData.canvasObjects;
-          if (draggedObject && draggingObjectPosition) {
-            objectsToRender = chartData.canvasObjects.map((obj) =>
-              obj.id === draggedObject.id ? { ...obj, x: draggingObjectPosition.x, y: draggingObjectPosition.y } : obj
+            ctx.fillText(
+              draggedObject.label,
+              draggingObjectPosition.x,
+              draggingObjectPosition.y + (dotSize + 4) / zoom
             );
           }
-          await drawCanvasObjects(ctx, objectsToRender, zoom, getPaletteObjectById);
+          ctx.restore();
         }
 
         ctx.restore(); // ВОЗВРАТ К ИСХОДНОЙ (НЕМАСШТАБИРОВАННОЙ) СИСТЕМЕ
+
+        // Синхронная отрисовка перетаскиваемого объекта поверх всех остальных
+        if (draggedObject && draggingObjectPosition) {
+          console.debug('[drawWorkflowCanvas] WILL draw dragged object', {
+            draggedObjectId: draggedObject.id,
+            position: draggingObjectPosition,
+          });
+          drawDraggedObject(ctx, draggedObject, draggingObjectPosition, zoom);
+        } else {
+          console.debug('[drawWorkflowCanvas] NOT drawing dragged object', {
+            draggedObject: !!draggedObject,
+            draggingObjectPosition: !!draggingObjectPosition,
+          });
+        }
 
         // Рисуем рамку выделения (marquee) в экранных координатах
         if (marqueeStart && marqueeEnd) {
@@ -3110,7 +2609,6 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
           ctx.lineTo(endX, endY);
           ctx.stroke();
           ctx.setLineDash([]);
-
           ctx.restore();
         }
       } catch (error) {
@@ -3142,8 +2640,741 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
       draggedArrow,
       resizeLimitReached,
       trainForceData,
+      selectedObjectId,
+      pixelsPerKm,
+      draggingObjectPosition,
+      selectedObjectId,
+      drawDraggedObject,
+      draggedObject, // <-- ЕСТЬ?
+      drawCanvasObjectsSync, // <-- ЕСТЬ?
     ]
   );
+
+  // ИСПРАВЛЕНИЕ: Сделали draw async
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let isDrawing = false;
+    let isCancelled = false; // Добавляем флаг отмены
+
+    const draw = async () => {
+      if (isDrawing || isCancelled) return;
+
+      isDrawing = true;
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      try {
+        if (chartData.workflow?.trackSection) {
+          await drawWorkflowCanvas(ctx, baseWidth, baseHeight, zoom);
+        } else {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, baseWidth, baseHeight);
+          ctx.fillStyle = '#6b7280';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(
+            'Выберите участок пути в боковой панели для начала работы',
+            baseWidth / 2,
+            baseHeight / 2
+          );
+        }
+      } catch (error) {
+        console.error('Ошибка при отрисовке:', error);
+      } finally {
+        isDrawing = false;
+      }
+    };
+
+    const debouncedDraw = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    debouncedDraw();
+
+    return () => {
+      isCancelled = true; // Отменяем асинхронные операции
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [
+    chartData.workflow?.trackSection?.id,
+    chartData.canvasObjects,
+    displaySettings,
+    panX,
+    panY,
+    zoom,
+    baseWidth,
+    baseHeight,
+    redrawTrigger,
+    marqueeStart,
+    marqueeEnd,
+    pixelsPerKm,
+    // ДОБАВЛЯЕМ недостающие зависимости:
+    draggedObject?.id, // Только id, чтобы избежать лишних перерисовок
+    draggingObjectPosition,
+    selectedObjectId,
+    draggedObject?.id,
+    draggingObjectPosition,
+    selectedObjectId,
+    drawWorkflowCanvas,
+  ]);
+
+  const throttledLog = (message: string, interval: number = 1000) => {
+    const now = Date.now();
+    const win = window as unknown as { lastLogTime?: Record<string, number> };
+    if (!win.lastLogTime) {
+      win.lastLogTime = {};
+    }
+    if (!win.lastLogTime[message] || now - win.lastLogTime[message] > interval) {
+      console.log(message);
+      win.lastLogTime[message] = now;
+    }
+  };
+
+  // VisioObjectPalette collapse state
+  const [paletteCollapsed, setPaletteCollapsed] = useState(true);
+
+  // Screenshot state variables (currently unused but kept for future use)
+  // const [screenshotImage, setScreenshotImage] = useState<HTMLImageElement | null>(null);
+  // const [screenshotLoadError, setScreenshotLoadError] = useState(false);
+
+  // Сброс выделения стрелок при смене участка или локомотива
+  useEffect(() => {
+    setSelectedArrow(null);
+    setDraggedArrow(null);
+  }, [chart.workflow?.trackSection?.id, chart.workflow?.locomotive?.id]);
+
+  // Расчёт базовой высоты (using fixed 4-layer structure)
+  const calculateBaseHeight = () => {
+    // Fixed 4-layer structure: 800px total
+    // Layer 1: Force Dynamics (0-160px)
+    // Layer 2: Speed Curves (160-480px)
+    // Layer 3: Track Profile (480-640px)
+    // Layer 4: Regime Bands (640-800px)
+    return 800;
+  };
+
+  // Re-render tracking for debugging
+  const renderCountRef = useRef(0);
+  const lastRenderTimeRef = useRef(Date.now());
+
+  // Обновление ширины холста по длине участка
+  useEffect(() => {
+    const trackLength = chart.workflow?.trackSection?.length || 200;
+
+    if (!isFinite(trackLength) || trackLength <= 0 || trackLength > 10000) {
+      if (baseWidth !== 2400) {
+        setBaseWidth(2400);
+      }
+      return;
+    }
+
+    const marginLeft = 100;
+    const marginRight = 100;
+    const calculatedWidth = Math.max(2400, marginLeft + trackLength * pixelsPerKm + marginRight);
+
+    if (calculatedWidth !== baseWidth) {
+      setBaseWidth(calculatedWidth);
+    }
+  }, [chart.workflow?.trackSection?.length, baseWidth, pixelsPerKm]); // Добавить pixelsPerKm в зависимости
+
+  // ==========================
+  // ФУНКЦИЯ ОПРЕДЕЛЕНИЯ ОБЛАСТИ ХОЛСТА ПО ОСИ Y
+  // (верхняя и нижняя граница рисуемой области)
+  // ==========================
+  const getCanvasContentYBounds = React.useCallback(() => {
+    // Границы рабочей области в "мировых" координатах (до translate/scale)
+    // Эти значения синхронизированы с drawWorkflowCanvas:
+    const marginTop = 50; // ВЕРХНЯЯ ГРАНИЦА ОБЛАСТИ ХОЛСТА
+    const marginBottom = 40;
+
+    // Ниже основной диаграммы находятся:
+    // - продольный профиль в виде полосы
+    // - стрелки режимов
+    // - шкала "км"
+    // - идеальные и фактические режимы + легенда
+    // Мы уже учли это в calculateBaseHeight, поэтому нижняя "интересная" граница — весь baseHeight
+    const topY = marginTop;
+    const bottomY = baseHeight; // НИЖНЯЯ ГРАНИЦА ОБЛАСТИ ХОЛСТА (всё, что рисуем, находится в этом диапазоне)
+
+    return { topY, bottomY, marginTop, marginBottom };
+  }, [baseHeight]);
+
+  const resetToInitialView = React.useCallback(() => {
+    if (!containerRef.current) return;
+
+    // Параметры, которые дают правильный вид
+    /*const marginLeft = 80;
+    const leftPadding = 30;
+    const marginTop = 50;
+    const topOffset = 20;*/
+
+    // Устанавливаем значения, которые работают в первом случае
+    setZoom(1);
+    setPanX(-30); // zoom = 1
+  }, []);
+
+  // Обработчик колесика: только горизонтальный масштаб, вертикальный зум заблокирован
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+
+    if (e.shiftKey) {
+      // Shift + колесо — горизонтальная панорама
+      setPanX((prev) => prev - e.deltaY);
+    } else if (e.ctrlKey || e.metaKey) {
+      // Ctrl/Cmd + колесо — ТОЖЕ горизонтальная панорама (более быстрая)
+      setPanX((prev) => prev - e.deltaY * 2);
+    }
+    // Обычное колесо — игнорируем
+  };
+
+  // ZOOM DISABLED - Рамка масштабирования (marquee) закомментирована
+  const handleMarqueeZoomStart = (e: React.MouseEvent) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setMarqueeStart({ x, y });
+    setMarqueeEnd({ x, y });
+  };
+
+  const handleMarqueeZoomMove = (e: React.MouseEvent) => {
+    if (!marqueeStart) return;
+
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = e.clientX - rect.left;
+    const y = marqueeStart.y; // ФИКСИРУЕМ Y (только горизонтальное выделение)
+
+    setMarqueeEnd({ x, y });
+  };
+
+  const handleMarqueeZoomEnd = () => {
+    if (!marqueeStart || !marqueeEnd) {
+      setMarqueeStart(null);
+      setMarqueeEnd(null);
+      setIsMarqueeZoom(false);
+      return;
+    }
+
+    const width = Math.abs(marqueeEnd.x - marqueeStart.x);
+
+    // Минимальная ширина выделения
+    if (width > 20) {
+      const trackSection = chart.workflow?.trackSection;
+      if (!trackSection) return;
+
+      // Параметры карты
+      const marginLeft = 80;
+      const marginRight = 50;
+      const chartWidth = baseWidth - marginLeft - marginRight;
+
+      // Координаты выделения В ЭКРАННЫХ ПИКСЕЛЯХ (без учёта panX)
+      const leftEdge = Math.min(marqueeStart.x, marqueeEnd.x);
+      const rightEdge = Math.max(marqueeStart.x, marqueeEnd.x);
+
+      // Преобразуем в МИРОВЫЕ координаты (учитываем panX)
+      const leftWorldX = leftEdge - panX - marginLeft;
+      const rightWorldX = rightEdge - panX - marginLeft;
+
+      // Вычисляем километры (используем текущий масштаб)
+      const displayStartCoord = 1782;
+      const displayEndCoord = 1610;
+      const totalKm = Math.abs(displayEndCoord - displayStartCoord);
+
+      // Нормализуем позиции [0..1]
+      const leftNormalized = leftWorldX / chartWidth;
+      const rightNormalized = rightWorldX / chartWidth;
+
+      // Вычисляем выбранный диапазон в км
+      const selectedKmRange = Math.abs(rightNormalized - leftNormalized) * totalKm;
+
+      console.log('[MARQUEE ZOOM]', {
+        leftEdge,
+        rightEdge,
+        leftWorldX,
+        rightWorldX,
+        leftNormalized,
+        rightNormalized,
+        selectedKmRange,
+        currentPixelsPerKm: pixelsPerKm,
+      });
+
+      // Вычисляем новый масштаб
+      const containerWidth = containerRef.current?.clientWidth || 800;
+      const availableWidth = containerWidth - 160; // margins
+      const newPixelsPerKm = availableWidth / selectedKmRange;
+
+      // Ограничиваем диапазон (10-160 px/км)
+      const clampedPixelsPerKm = Math.max(10, Math.min(160, newPixelsPerKm));
+
+      console.log('[MARQUEE ZOOM] New scale:', {
+        availableWidth,
+        newPixelsPerKm,
+        clampedPixelsPerKm,
+      });
+
+      setPixelsPerKm(clampedPixelsPerKm);
+      setPanX(0); // Сброс панорамы
+    }
+
+    // Сбрасываем marquee
+    setMarqueeStart(null);
+    setMarqueeEnd(null);
+    setIsMarqueeZoom(false);
+  };
+
+  // Панорамирование — только по X (вертикальная панорама заблокирована)
+  const handlePanStart = (e: React.MouseEvent) => {
+    if (isMarqueeZoom || placingObject) return;
+
+    // Проверяем ref для избежания race condition
+    if (interactionStateRef.current.type !== 'none') {
+      console.debug(
+        '[ChartEditor] handlePanStart blocked - interaction in progress',
+        interactionStateRef.current
+      );
+      return;
+    }
+
+    if (!hoveredArrow && !hoveredObject) {
+      setSelectedArrow(null);
+    }
+
+    interactionStateRef.current = { type: 'panning' };
+    setIsPanning(true);
+    setPanStart({
+      x: e.clientX - panX,
+      y: e.clientY - panY,
+    });
+  };
+
+  const handlePanMove = (e: React.MouseEvent) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    // Расчёт мировой позиции мыши в ЕДИНОЙ системе координат
+    const newMousePosX = e.clientX - rect.left - panX;
+    const newMousePosY = e.clientY - rect.top - panY;
+
+    setMousePos({
+      x: newMousePosX,
+      y: newMousePosY,
+    });
+
+    setScreenMousePos({
+      x: e.clientX,
+      y: e.clientY,
+    });
+
+    // ============================================
+    // ПРИОРИТЕТ 1: Перетаскивание объекта
+    // ============================================
+    if (draggedObject) {
+      // Track drag movement distance for click vs drag detection
+      if (dragStartPos && !hasDragMoved) {
+        const dx = Math.abs(newMousePosX - dragStartPos.x);
+        const dy = Math.abs(newMousePosY - dragStartPos.y);
+        const DRAG_THRESHOLD = 5;
+        if (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD) {
+          setHasDragMoved(true);
+        }
+      }
+
+      // Обновляем позицию только если превышен порог движения
+      if (hasDragMoved) {
+        // Проверяем, изменилась ли позиция значительно
+        if (draggingObjectPosition) {
+          const dx = Math.abs(draggingObjectPosition.x - newMousePosX);
+          const dy = Math.abs(draggingObjectPosition.y - newMousePosY);
+          if (dx < 0.5 && dy < 0.5) {
+            return; // Позиция почти не изменилась
+          }
+        }
+
+        setDraggingObjectPosition({ x: newMousePosX, y: newMousePosY });
+        console.debug('[ChartEditor] dragging object - updating position', {
+          draggedId: draggedObject.id,
+          x: newMousePosX,
+          y: newMousePosY,
+        });
+      }
+
+      // ВАЖНО: Выходим здесь, чтобы не обрабатывать панорамирование или hover
+      return;
+    }
+
+    // ============================================
+    // ПРИОРИТЕТ 2: Перетаскивание стрелок
+    // ============================================
+    if (draggedArrow && chart.workflow?.regimeArrows && chart.workflow?.trackSection) {
+      const trackLength = chart.workflow.trackSection.length;
+      const marginLeft = 80;
+
+      const mouseKm = Math.max(0, Math.min(trackLength, (newMousePosX - marginLeft) / pixelsPerKm));
+
+      const minArrowLength = 1;
+      const updatedArrows = [...chart.workflow.regimeArrows];
+      const currentIndex = updatedArrows.findIndex((a) => a.id === draggedArrow.arrowId);
+
+      let limitReached = false;
+
+      if (currentIndex !== -1) {
+        const currentArrow = updatedArrows[currentIndex];
+        const leftNeighbor = currentIndex > 0 ? updatedArrows[currentIndex - 1] : null;
+        const rightNeighbor =
+          currentIndex < updatedArrows.length - 1 ? updatedArrows[currentIndex + 1] : null;
+
+        if (draggedArrow.handle === 'start') {
+          if (currentIndex === 0) return;
+
+          let minStartKm = currentArrow.startKm;
+          let maxStartKm = currentArrow.endKm - minArrowLength;
+
+          if (leftNeighbor) {
+            minStartKm = leftNeighbor.startKm + minArrowLength;
+          }
+
+          if (mouseKm <= minStartKm || mouseKm >= maxStartKm) {
+            limitReached = true;
+          }
+
+          const constrainedStartKm = Math.max(minStartKm, Math.min(maxStartKm, mouseKm));
+
+          updatedArrows[currentIndex] = {
+            ...currentArrow,
+            startKm: constrainedStartKm,
+          };
+
+          if (leftNeighbor) {
+            updatedArrows[currentIndex - 1] = {
+              ...leftNeighbor,
+              endKm: constrainedStartKm,
+            };
+          }
+        } else {
+          let minEndKm = currentArrow.startKm + minArrowLength;
+          let maxEndKm = trackLength;
+
+          if (rightNeighbor) {
+            maxEndKm = rightNeighbor.endKm - minArrowLength;
+          }
+
+          if (mouseKm <= minEndKm || mouseKm >= maxEndKm) {
+            limitReached = true;
+          }
+
+          const constrainedEndKm = Math.max(minEndKm, Math.min(maxEndKm, mouseKm));
+
+          updatedArrows[currentIndex] = {
+            ...currentArrow,
+            endKm: constrainedEndKm,
+          };
+
+          if (rightNeighbor) {
+            updatedArrows[currentIndex + 1] = {
+              ...rightNeighbor,
+              startKm: constrainedEndKm,
+            };
+          }
+        }
+      }
+
+      setResizeLimitReached(limitReached);
+
+      updateChartData({
+        workflow: {
+          ...chart.workflow,
+          regimeArrows: updatedArrows,
+        },
+      });
+
+      return;
+    }
+
+    // ============================================
+    // ПРИОРИТЕТ 3: Панорамирование
+    // ============================================
+    if (isPanning) {
+      const newPanX = e.clientX - panStart.x;
+
+      const maxPanX = 100;
+      const minPanX = -baseWidth + (containerRef.current?.clientWidth || 800) - 100;
+
+      setPanX(Math.max(minPanX, Math.min(maxPanX, newPanX)));
+
+      // НЕ обрабатываем hover во время панорамирования
+      return;
+    }
+
+    // ============================================
+    // ПРИОРИТЕТ 4: Hover (только когда нет активного взаимодействия)
+    // ============================================
+    if (chart.workflow?.regimeArrows && chart.workflow?.trackSection) {
+      const marginLeft = 80;
+      const marginBottom = 240;
+      const arrowY = baseHeight - marginBottom + 180;
+
+      let foundHover: {
+        arrowId: string;
+        handle?: 'start' | 'end';
+      } | null = null;
+
+      const kmToX = createKmToXConverter(chartData, marginLeft, pixelsPerKm);
+
+      for (let i = 0; i < chart.workflow.regimeArrows.length; i++) {
+        const arrow = chart.workflow.regimeArrows[i];
+        const startX = kmToX(arrow.startKm);
+        const endX = kmToX(arrow.endKm);
+        const handleRadius = 8;
+
+        if (selectedArrow === arrow.id) {
+          if (i > 0) {
+            const distToStart = Math.sqrt(
+              Math.pow(newMousePosX - startX, 2) + Math.pow(newMousePosY - arrowY, 2)
+            );
+            if (distToStart <= handleRadius) {
+              foundHover = {
+                arrowId: arrow.id,
+                handle: 'start',
+              };
+              break;
+            }
+          }
+
+          const distToEnd = Math.sqrt(
+            Math.pow(newMousePosX - endX, 2) + Math.pow(newMousePosY - arrowY, 2)
+          );
+          if (distToEnd <= handleRadius) {
+            foundHover = { arrowId: arrow.id, handle: 'end' };
+            break;
+          }
+        }
+
+        const hitAreaTop = arrowY - 20;
+        const hitAreaBottom = arrowY + 10;
+
+        if (
+          newMousePosX >= startX &&
+          newMousePosX <= endX &&
+          newMousePosY >= hitAreaTop &&
+          newMousePosY <= hitAreaBottom
+        ) {
+          foundHover = { arrowId: arrow.id };
+          break;
+        }
+      }
+
+      setHoveredArrow(foundHover);
+    }
+  };
+
+  const handlePanEnd = () => {
+    const interactionType = interactionStateRef.current.type;
+
+    console.debug('[ChartEditor] handlePanEnd', {
+      interactionType,
+      draggedObject: draggedObject?.id,
+      hasDragMoved,
+      currentObjectsCount: chart.canvasObjects?.length,
+    });
+
+    if (interactionType === 'dragging-object' && draggedObject) {
+      if (hasDragMoved && draggingObjectPosition) {
+        // Объект был перемещён - обновляем позицию
+        let finalY = draggingObjectPosition.y;
+        finalY = finalY >= xAxisY ? xAxisY - 30 : finalY;
+        const stackedPosition = getStackedPosition(draggingObjectPosition.x, finalY);
+
+        const newObjects = chart.canvasObjects.map((obj) =>
+          obj.id === draggedObject.id
+            ? { ...obj, x: draggingObjectPosition.x, y: stackedPosition }
+            : obj
+        );
+
+        console.debug('[ChartEditor] finalizing drag', {
+          objectId: draggedObject.id,
+          newPosition: { x: draggingObjectPosition.x, y: stackedPosition },
+        });
+
+        updateChartData({ canvasObjects: newObjects });
+        flushPendingUpdates();
+      }
+      // Если не было движения - это был клик, selection уже установлен
+    }
+
+    // Сброс всех состояний
+    interactionStateRef.current = { type: 'none' };
+    setIsPanning(false);
+    setDraggedObject(null);
+    setDraggingObjectPosition(null);
+    setDraggedArrow(null);
+    setResizeLimitReached(false);
+    setDragStartPos(null);
+    setHasDragMoved(false);
+  };
+
+  const getStackedPosition = (x: number, y: number): number => {
+    const tolerance = 20;
+    const stackSpacing = 30;
+
+    const objectsAtSameX = chart.canvasObjects.filter((obj) => {
+      return Math.abs(obj.x - x) < tolerance;
+    });
+
+    if (objectsAtSameX.length === 0) {
+      return y;
+    }
+
+    const sorted = [...objectsAtSameX].sort((a, b) => a.y - b.y);
+
+    let finalY = y;
+    for (const obj of sorted) {
+      if (Math.abs(finalY - obj.y) < stackSpacing) {
+        finalY = obj.y - stackSpacing;
+      }
+    }
+
+    finalY = Math.max(50, finalY);
+
+    return finalY;
+  };
+
+  // Размещение нового объекта
+  const handleCanvasClick = (e: React.MouseEvent) => {
+    // Prevent placing objects during panning or dragging operations
+    if (isPanning || draggedObject || draggedArrow) {
+      console.debug('[ChartEditor] Ignoring click during interaction', {
+        isPanning,
+        draggedObject: !!draggedObject,
+        draggedArrow: !!draggedArrow,
+      });
+      return;
+    }
+
+    if (placingObject) {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      let x = (e.clientX - rect.left - panX) / zoom;
+      let y = e.clientY - rect.top - panY;
+
+      if (y >= xAxisY) {
+        y = xAxisY - 30;
+      }
+
+      y = getStackedPosition(x, y);
+
+      const [objectType, subtype] = placingObject.split(':');
+
+      const newObject: CanvasObject = {
+        id: Date.now().toString(),
+        type: objectType as any,
+        subtype: subtype || undefined,
+        label: (window as any).__placingObjectLabel || undefined,
+        x,
+        y,
+      };
+
+      const now = Date.now();
+      if (now - placementCooldownRef.current < 250) {
+        console.debug('[ChartEditor] placement cooldown - ignoring duplicate placement');
+      } else {
+        placementCooldownRef.current = now;
+        console.debug('[ChartEditor] placing new object', {
+          id: newObject.id,
+          x,
+          y,
+          objectsCount: chart.canvasObjects.length,
+        });
+        updateChartData({
+          canvasObjects: [...chart.canvasObjects, newObject],
+        });
+      }
+
+      setPlacingObject(null);
+      (window as any).__placingObjectLabel = undefined;
+    }
+  };
+
+  // Handle drop from Visio palette
+  const handleCanvasDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+
+    try {
+      // Support different drag data formats: application/json (existing) and palette-specific keys
+      let objectDataJson = e.dataTransfer.getData('application/json');
+      if (!objectDataJson) {
+        objectDataJson = e.dataTransfer.getData('application/x-palette-object-data');
+      }
+
+      if (!objectDataJson) return;
+
+      const objectData = JSON.parse(objectDataJson);
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      let x = (e.clientX - rect.left - panX) / zoom;
+      let y = e.clientY - rect.top - panY;
+
+      if (y >= xAxisY) {
+        y = xAxisY - 30;
+      }
+
+      y = getStackedPosition(x, y);
+
+      const newObject: CanvasObject = {
+        id: Date.now().toString(),
+        type: (objectData.category || objectData.type) as any,
+        subtype: objectData.id,
+        label: objectData.nameRu || objectData.name,
+        x,
+        y,
+      };
+
+      console.debug('[ChartEditor] drop -> placing new object', {
+        id: newObject.id,
+        x,
+        y,
+        beforeCount: chart.canvasObjects.length,
+      });
+      updateChartData({
+        canvasObjects: [...chart.canvasObjects, newObject],
+      });
+      console.debug('[ChartEditor] drop -> after updateChartData call', {
+        afterCount: chart.canvasObjects.length,
+      });
+    } catch (error) {
+      // ignore malformed data
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  };
+
+  const handleContextMenuSelect = () => {
+    setShowPalette(true);
+  };
+
+  // ==========
+  // Helper‑функции для толщины линий и шрифта (чтобы всё выглядело единообразно при зуме по X)
+  // ==========
 
   // Анализ режимов движения
   const analyzeOperationModes = (
@@ -3525,12 +3756,42 @@ export default function ChartEditor({ chartData, onUpdateChartData }: ChartEdito
     baseHeight,
   ]);*/
 
+  const interactionStateRef = useRef<{
+    type: 'none' | 'panning' | 'dragging-object' | 'dragging-arrow';
+    objectId?: string;
+  }>({ type: 'none' });
+
   const handleObjectMouseDown = (e: React.MouseEvent) => {
     if (hoveredObject && !placingObject && !isMarqueeZoom) {
-      console.debug('[ChartEditor] handleObjectMouseDown, start dragging', { id: hoveredObject.id });
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      // Устанавливаем состояние через ref (синхронно)
+      interactionStateRef.current = {
+        type: 'dragging-object',
+        objectId: hoveredObject.id,
+      };
+
+      console.debug('[ChartEditor] handleObjectMouseDown', {
+        id: hoveredObject.id,
+        interactionState: interactionStateRef.current,
+      });
+
+      // Обновляем selection
+      if (onSelectObject) {
+        onSelectObject(hoveredObject.id);
+      }
+
       setDraggedObject(hoveredObject);
+      setDragStartPos({
+        x: e.clientX - rect.left - panX,
+        y: e.clientY - rect.top - panY,
+      });
+      setHasDragMoved(false);
       setIsPanning(false);
+
       e.stopPropagation();
+      e.preventDefault(); // Предотвращаем дефолтное поведение
     }
   };
 
