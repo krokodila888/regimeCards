@@ -2523,37 +2523,7 @@ export default function ChartEditor({
           });
         }
 
-        // Always render the dragged object on top synchronously to ensure it's visible during drag
-        if (draggedObject && draggingObjectPosition) {
-          ctx.save();
-          const dotSize = 12;
-          ctx.fillStyle = '#3b82f6';
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 2 / zoom;
-          ctx.beginPath();
-          ctx.arc(
-            draggingObjectPosition.x,
-            draggingObjectPosition.y,
-            dotSize / zoom,
-            0,
-            Math.PI * 2
-          );
-          ctx.fill();
-          ctx.stroke();
 
-          if (draggedObject.label) {
-            ctx.fillStyle = '#1f2937';
-            ctx.font = `${11 / zoom}px sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'top';
-            ctx.fillText(
-              draggedObject.label,
-              draggingObjectPosition.x,
-              draggingObjectPosition.y + (dotSize + 4) / zoom
-            );
-          }
-          ctx.restore();
-        }
 
         ctx.restore(); // ВОЗВРАТ К ИСХОДНОЙ (НЕМАСШТАБИРОВАННОЙ) СИСТЕМЕ
 
